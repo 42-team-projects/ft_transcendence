@@ -13,65 +13,103 @@
 
 body{
     height: 100vh;
-    border: 1px solid rgb(0, 225, 255);
     background: linear-gradient(73deg, #00142ba8 10%,#003347a8 100%), 
         url(./images/top.svg), 
         url(./images/bottom.svg), 
         url(./images/background.svg);
     background-size: cover, contain, contain, cover;
-    background-position: center, center 3vh, center 93vh, center;
+    background-position: center, center 60px, center 1330px, center;
     background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
     font-family: 'Sansation';
-
 }
 
 header{
-    position: relative;
     display: flex;
-    justify-content: center;
-    border: 1px solid rgb(64, 255, 0);
     width: 100%;
     height: 15%;
 }
 
 #pingpong-logo{
-    position: absolute;
-    padding: 4vh;
-    left: 2vw;
+    width: 110px;
+    height: 110px;
+    margin-left: 85px;
+    margin-top: 65px;
 }
 
-.container{
-    border: 1px solid rgb(255, 0, 0);
-    width: 100%;
-    height: 100%;
-}
 
 .search-bar{
-    width: 43%;
-    height: 45%;
-    border: 1px solid rgb(255, 0, 0);
-    position: relative;
-    display: flex;
-    margin: 1.7vh;
-    align-items: center;
+    /* border: 1px solid rgb(255, 0, 0); */
+    height: 110px;
+    width: 1070px;
+    margin-top: 30px;
+    margin-left: 500px;
+    border-radius: 10px;
 }
 
 .search-input{
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 13px;
     border: 2px solid #00FFFC;
     background: transparent;
-    padding-left: 8%;
-    font-size: 2vw;
-    color: #00FFFC;
-}
-.search-icon{
-    position: absolute;
-    width: 2.5rem;
-    left: 1vw;
+    padding-left: 135px;
+    font-size: 25px;
+    color: #ffffff;
 }
 
+.search-input::placeholder{
+    color: #ffffff;
+    font-family: 'Sansation';
+}
+.search-icon{
+    /* border: 1px solid rgb(255, 0, 0); */
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    margin-top: 33px;
+    margin-left: 33px;
+}
+
+.vertical-line{
+    position: absolute;
+    background-color: #00FFFC;
+    width: 3px;
+    height: 46px;
+    margin-top: 32px;
+    margin-left: 105px;
+}
+
+.alarm-icon{
+    width: 64px;
+    height: 64px;
+    margin-top: 55px;
+    margin-left: 40px;
+}
+
+.profile-item{
+    position: relative;
+    width: 120px;
+    height: 70px;
+    /* border: 5px solid #00FFFC; */
+    background-color: #00FFFC;
+    margin-left: 500px;
+    margin-top: 100px;
+}
+.profile-item:before, .profile-item::after{
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+}
+.profile-item:before{
+    border-bottom: 35px solid #00FFFC;
+    bottom: 100%;
+}
+.profile-item:after{
+    border-top: 35px solid #00FFFC;
+    top: 100%;
+}
 img{
     max-width: 100%;
 }
