@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'Sansation';
+    src: url('./sansation/Sansation_Regular.ttf');
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0%;
+    padding: 0%;
+    list-style: none;
+    text-decoration: none;
+    /* border: 1px solid #ff0000; */
+}
+
+body{
+    height: 100vh;
+    background: linear-gradient(73deg, #00142ba8 10%,#003347a8 100%), 
+        url(./images/top.svg), 
+        url(./images/bottom.svg), 
+        url(./images/background.svg);
+    background-size: cover, contain, contain, cover;
+    background-position: center, center 60px, center 1330px, center;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    font-family: 'Sansation';
+}
+
+img{
+    max-width: 100%;
+}
