@@ -10,6 +10,7 @@
 }
 
 .items{
+    position: relative;
     border: 1px solid red;
     display: flex;
     height: 155px;
@@ -17,9 +18,28 @@
     align-items: center;
 }
 
+
 .side-bar img{
+    position: absolute;
     border: 1px solid red;
     margin-left: 40px;
     width: 60px;
     height: 60px;
+    z-index: 1;
 }
+
+.on-click{
+    position: absolute;
+    background: linear-gradient(65deg, #00fffc7d 10%, transparent);
+    height: 100%;
+    width: 100%;
+    clip-path: polygon(100px 25px, 435px 25px, 360px 130px, 25px 130px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.on-click h1{
+    color: #ffffff;
+    font-size: 40px;
+}
+
