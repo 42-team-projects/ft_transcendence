@@ -1,0 +1,116 @@
+header{
+    display: flex;
+    width: 100%;
+    height: 270px;
+}
+
+#pingpong-logo{
+    width: 110px;
+    height: 110px;
+    margin-left: 85px;
+    margin-top: 80px;
+}
+
+
+.search-bar{
+    height: 110px;
+    width: 1070px;
+    margin-top: 45px;
+    margin-left: 500px;
+    border-radius: 10px;
+}
+
+.search-input{
+    width: 100%;
+    height: 100%;
+    border-radius: 13px;
+    border: 2px solid #00FFFC;
+    background: transparent;
+    padding-left: 135px;
+    font-size: 25px;
+    color: #ffffff;
+}
+
+.search-input::placeholder{
+    color: #ffffff;
+    font-family: 'Sansation';
+}
+.search-icon{
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    margin-top: 33px;
+    margin-left: 33px;
+}
+
+.vertical-line{
+    position: absolute;
+    background-color: #00FFFC;
+    width: 3px;
+    height: 46px;
+    margin-top: 32px;
+    margin-left: 105px;
+}
+
+.alarm-icon{
+    width: 64px;
+    height: 64px;
+    margin-top: 70px;
+    margin-left: 40px;
+}
+
+
+.profile-relative{
+    position: relative;
+    width: 140px;
+    margin-top: 55px;
+    margin-left: 500px;
+    height: 230px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+
+.profile-absoulut{
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    background-color: #00FFFC;
+    clip-path: polygon(10px 40px, 70px 0, 130px 40px, 130px 100px, 70px 140px, 10px 100px);
+    top: 0;
+    z-index: 1;
+}
+
+
+.profile-absoulut img {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    clip-path: polygon(12px 41px, 70px 3px, 128px 41px, 128px 99px, 70px 137px, 12px 99px);
+}
+
+.profile-rank-border{
+    position: absolute;
+    background-color: #00FFFC;
+    width: 100px;
+    height: 125px;
+    top: 102px;
+    clip-path: polygon(0px 2px, 50px 35px ,100px 2px, 100px 80px, 50px 125px,0px 80px);
+}
+
+.profile-rank{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background:linear-gradient(0deg, #134C84 0%, #09213A 70%);
+    width: 100px;
+    height: 125px;
+    clip-path: polygon(2px 2px, 50px 35px ,98px 2px, 98px 79px, 50px 122px,2px 79px);
+}
+.profile-rank h1{
+    color: #ffffff;
+}

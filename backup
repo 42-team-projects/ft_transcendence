@@ -87,29 +87,49 @@ header{
 }
 
 .profile-item{
+    border: 1px solid #00FFFC;
     position: relative;
-    width: 120px;
-    height: 70px;
-    /* border: 5px solid #00FFFC; */
-    background-color: #00FFFC;
-    margin-left: 500px;
-    margin-top: 100px;
+    width: 150px;
+    height: auto;
+    display: flex;
+    align-items: center;
 }
-.profile-item:before, .profile-item::after{
+.profile-item img {
+    border: 1px solid #00FFFC;
+    position: absolute;
+    /* border-left: 20px solid; */
+    /* padding: 10px 10px; */
+    /* margin: 10px; */
+    /* width: auto; */
+    /* width: 100px; */
+    /* width: 150px; */
+    /* height: auto; */
+    /* display: flex; */
+    /* align-items: center; */
+}
+
+/* .profile-item:before, .profile-item::after{
     content: "";
     position: absolute;
     width: 0;
-    border-left: 60px solid transparent;
-    border-right: 60px solid transparent;
+    border-left: 58px solid transparent;
+    border-right: 58px solid transparent;
 }
 .profile-item:before{
-    border-bottom: 35px solid #00FFFC;
+    border-bottom: 30px solid #00FFFC;
     bottom: 100%;
 }
 .profile-item:after{
-    border-top: 35px solid #00FFFC;
+    border-top: 30px solid #00FFFC;
     top: 100%;
-}
+} */
 img{
     max-width: 100%;
 }
+
+/* .profile-item img {
+    background-color: #00FFFC;
+    border: 1px solid #00FFFC;
+    object-fit: cover;
+    clip-path: polygon(
+} */

@@ -1,0 +1,25 @@
+.side-bar{
+    border: 1px solid red;
+    margin-top: 120px;
+    margin-left: 25px;
+    width: 440px;
+    height: 920px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.items{
+    border: 1px solid red;
+    display: flex;
+    height: 155px;
+    width: auto;
+    align-items: center;
+}
+
+.side-bar img{
+    border: 1px solid red;
+    margin-left: 40px;
+    width: 60px;
+    height: 60px;
+}
