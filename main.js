@@ -44,27 +44,29 @@ function Header()
 
 function sideBar()
 {
-    fetch('side-bar.html')
+    fetch('side-bar-component.html')
     .then((respons)=>{
         if(respons.ok)
         return respons.text()
     else
     console.log('error')
 }).then((html) => {
-    sidebar_element.innerHTML = html;
-    const component = sidebar_element.querySelector('.items')
-    sidebar_element.innerHTML = ``
-    sidebar_container.forEach((element) =>{
-        let item = component;
-        console.log(item);
-        item.q
+    parser = new DOMParser()
+    sidebar_container.forEach(element => {
+        content = parser.parseFromString(html, 'text/html')
+        imgDocument = parser.parseFromString(element.img, 'text/html')
+        let img = imgDocument.body.firstChild;
+        div = content.querySelector(".items")
+        div.querySelector('h1').innerHTML = element.content
+        div.insertBefore(img, div.firstChild)
+        sidebar_element.appendChild(div)
     })
 })
 }
 
-sidebar_element.addEventListener('click', ()=>{
-    console.log('hiiii')
-})
+// sidebar_element.addEventListener('click', ()=>{
+//     console.log('hiiii')
+// })
 
 
 Header()
