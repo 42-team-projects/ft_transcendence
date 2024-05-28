@@ -24,6 +24,18 @@ body{
     font-family: 'Sansation';
 }
 
+@media only screen and (max-height: 1400px) {
+    body{
+        background-position: center, center 50px, center 1260px, center;
+    }
+    @media only screen and (min-height: 1300px) {
+        body{
+            background-position: center, center 50px, center 1260px, center;
+        }
+    }
+}
+
+
 img{
     max-width: 100%;
 }
