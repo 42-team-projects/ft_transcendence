@@ -10,7 +10,7 @@
     list-style: none;
     text-decoration: none;
 }
-/*  */
+
 body{
     position: relative;
     height: 100vh;
@@ -27,7 +27,7 @@ body::before{
     position: absolute;
     background: url(./images/top.svg);
     background-size: contain;
-    background-position: center calc(3.6%);
+    background-position: center 50px;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
@@ -45,6 +45,7 @@ body::after{
     height: 100%;
     background-repeat: no-repeat;
     z-index: -1;
+    top: 0;
 }
 
 img{
