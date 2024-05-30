@@ -3,28 +3,32 @@ const sidebar_element = document.querySelector('.side-bar')
 
 const sidebar_container = [
     {
-        img : '<img draggable="false" src="./images/Home.svg" alt="Home">',
-        content : 'HOME' 
+        img : '<img draggable="false" src="./images/Home.svg" alt="Home" class="images">',
+        content : 'HOME',
     },
     {
-        img : '<img draggable="false" src="./images/Game.svg" alt="Game">',
-        content : 'GAME' 
+        img : '<img draggable="false" src="./images/Game.svg" alt="Game" class="images">',
+        content : 'GAME',
     },
     {
-        img : '<img draggable="false" src="./images/Chat.svg" alt="Chat">',
-        content : 'CHAT' 
+        img : '<img draggable="false" src="./images/Chat.svg" alt="Chat" class="images">',
+        content : 'CHAT',
     },
     {
-        img : '<img draggable="false" src="./images/friends.svg" alt="Friends">',
-        content : 'FRIENDS' 
+        img : '<img draggable="false" src="./images/friends.svg" alt="Friends" class="images">',
+        content : 'FRIENDS',
     },
     {
-        img : '<img draggable="false" src="./images/leaderboard.svg" alt="Leaderboard">',
-        content : 'LEADERBOARD' 
+        img : '<img draggable="false" src="./images/leaderboard.svg" alt="Leaderboard" class="images">',
+        content : 'LEADERBOARD',
     },
     {
-        img : '<img draggable="false" src="./images/settings.svg" alt="Settings"></img>',
-        content : 'SETTINGS' 
+        img : '<img draggable="false" src="./images/settings.svg" alt="Settings" class="images">',
+        content : 'SETTINGS',
+    },
+    {
+        img : '<img draggable="false" src="./images/settings.svg" alt="Settings" class="images">',
+        content : 'SETTINGS',
     }
 ]
 
@@ -57,17 +61,32 @@ function sideBar()
         imgDocument = parser.parseFromString(element.img, 'text/html')
         let img = imgDocument.body.firstChild;
         div = content.querySelector(".items")
-        div.querySelector('h1').innerHTML = element.content
+        div.id = sidebar_container.indexOf(element)
+        // div.querySelector('h1').innerHTML = element.content
         div.insertBefore(img, div.firstChild)
         sidebar_element.appendChild(div)
     })
+    let elements = sidebar_element.querySelectorAll(".items");
+    elements.forEach((element) =>{
+        element.addEventListener('click', function(){
+            elements.forEach((element_tmp) => {
+                element_tmp.querySelector('.images').className = 'images'
+                element_tmp.querySelector('.Click').className = 'Click'
+                element_tmp.querySelector('h1').innerHTML = ``
+            })
+            element.querySelector('.images').classList.toggle('on')
+            element.querySelector('.Click').classList.toggle('on')
+            element.querySelector('h1').innerHTML = element.querySelector('img').alt;
+        })
+    })
+    elements[0].querySelector('.images').classList.toggle('on')
+    elements[0].querySelector('h1').innerHTML = elements[0].querySelector('img').alt;
+    elements[0].querySelector('.Click').classList.toggle('on')
 })
 }
 
-// sidebar_element.addEventListener('click', ()=>{
-//     console.log('hiiii')
-// })
 
 
 Header()
 sideBar()
+
