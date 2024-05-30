@@ -1,6 +1,6 @@
 header{
     width: 100%;
-    position: absolute;
+    /* position: absolute; */
     height: 20%;
 }
 
@@ -12,18 +12,17 @@ header{
 }
 
 #pingpong-logo{
-    position: absolute;
     width: 110px;
     height: 110px;
     margin-left: 85px;
-    margin-top: calc(100% * 0.22);
+    margin-top: 64px;
 }
 
 
 .search-bar{
     height: 110px;
     width: 1070px;
-    margin-top: 45px;
+    margin-top: 30px;
     margin-left: 500px;
     border-radius: 10px;
 }
@@ -63,7 +62,7 @@ header{
 .alarm-icon{
     width: 64px;
     height: 64px;
-    margin-top: 70px;
+    margin-top: 55px;
     margin-left: 40px;
 }
 
@@ -71,7 +70,7 @@ header{
 .profile-relative{
     position: relative;
     width: 140px;
-    margin-top: 55px;
+    margin-top: 45px;
     margin-left: 500px;
     height: 230px;
     display: flex;

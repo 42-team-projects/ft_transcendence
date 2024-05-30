@@ -1,46 +1,64 @@
 .side-bar{
+    position: relative;
     /* border: 1px solid red; */
-    margin-top: 120px;
-    margin-left: 25px;
-    width: 440px;
-    height: 920px;
+    margin-top: 90px;
+    margin-left: 20px;
+    width: 380px;
+    height: 840px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
+
 
 .items{
     position: relative;
-    /* border: 1px solid red; */
+    border: 1px solid red;
     display: flex;
-    height: 155px;
-    width: auto;
+    height: 120px;
+    width: 100%;
     align-items: center;
 }
 
-
-.side-bar img{
+.images{
     position: absolute;
     /* border: 1px solid red; */
     margin-left: 40px;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     z-index: 1;
     opacity: 0.5;
 }
 
-.on-click{
+.images.on{
     position: absolute;
-    background: linear-gradient(65deg, #00fffc7d 10%, transparent);
+    /* border: 1px solid red; */
+    margin-left: 40px;
+    width: 50px;
+    height: 50px;
+    z-index: 1;
+    /* opacity: 0.5; */
+}
+
+.Click{
     height: 100%;
     width: 100%;
-    clip-path: polygon(100px 25px, 435px 25px, 360px 130px, 25px 130px);
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.on-click h1{
+
+.Click.on {
+    background: linear-gradient(65deg, #00fffc7d 10%, transparent);
+    clip-path: polygon(100px 15px, 380px 15px, 300px 110px, 20px 110px);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Click.on h1{
     color: #ffffff;
     font-size: 40px;
 }
-
