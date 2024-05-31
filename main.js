@@ -61,27 +61,38 @@ function sideBar()
         imgDocument = parser.parseFromString(element.img, 'text/html')
         let img = imgDocument.body.firstChild;
         div = content.querySelector(".items")
-        div.id = sidebar_container.indexOf(element)
         // div.querySelector('h1').innerHTML = element.content
+        div.id = sidebar_container.indexOf(element)
         div.insertBefore(img, div.firstChild)
         sidebar_element.appendChild(div)
     })
     let elements = sidebar_element.querySelectorAll(".items");
     elements.forEach((element) =>{
-        element.addEventListener('click', function(){
+        elements[0].querySelector('.images').classList.toggle('on')
+        // elements[0].querySelector('h1').innerHTML = elements[0].querySelector('img').alt;
+        elements[0].querySelector('.Click').classList.toggle('on')
+        // elements[0].querySelector('.Shadow').classList.toggle('on')
+        elements[0].querySelector('.Content').classList.toggle('on')
+        element.addEventListener('click', function() {
             elements.forEach((element_tmp) => {
-                element_tmp.querySelector('.images').className = 'images'
-                element_tmp.querySelector('.Click').className = 'Click'
-                element_tmp.querySelector('h1').innerHTML = ``
+                console.log(element_tmp.querySelector('.images.on'))
+                if(element_tmp.querySelector('.images.on'))
+                    element_tmp.querySelector('.images').classList.toggle('on')
+                if(element_tmp.querySelector('.Click.on'))
+                    element_tmp.querySelector('.Click').classList.toggle('on')
+                if(element_tmp.querySelector('.Content.on'))
+                    element_tmp.querySelector('.Content').classList.toggle('on')
+                // if(element_tmp.querySelector('.Shadow.on'))
+                    // element_tmp.querySelector('.Shadow').classList.toggle('on')
+                // element_tmp.querySelector('h1').innerHTML = ``
             })
+            // element.querySelector('.Shadow').classList.toggle('on')
             element.querySelector('.images').classList.toggle('on')
             element.querySelector('.Click').classList.toggle('on')
-            element.querySelector('h1').innerHTML = element.querySelector('img').alt;
+            element.querySelector('.Content').classList.toggle('on')
+            // element.querySelector('h1').innerHTML = element.querySelector('img').alt;
         })
     })
-    elements[0].querySelector('.images').classList.toggle('on')
-    elements[0].querySelector('h1').innerHTML = elements[0].querySelector('img').alt;
-    elements[0].querySelector('.Click').classList.toggle('on')
 })
 }
 

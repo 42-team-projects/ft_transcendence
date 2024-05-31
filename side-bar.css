@@ -1,8 +1,8 @@
 .side-bar{
     position: relative;
     /* border: 1px solid red; */
-    margin-top: 90px;
-    margin-left: 20px;
+    margin-top: 100px;
+    margin-left: 45px;
     width: 380px;
     height: 840px;
     display: flex;
@@ -12,51 +12,113 @@
 
 
 .items{
+    margin-top: 20px;
     position: relative;
-    border: 1px solid red;
+    /* border: 1px solid red; */
     display: flex;
-    height: 120px;
+    height: 100px;
     width: 100%;
-    align-items: center;
+    /* align-items: center; */
 }
+
 
 .images{
     position: absolute;
-    /* border: 1px solid red; */
-    margin-left: 40px;
-    width: 50px;
-    height: 50px;
-    z-index: 1;
-    opacity: 0.5;
-}
-
-.images.on{
-    position: absolute;
-    /* border: 1px solid red; */
-    margin-left: 40px;
-    width: 50px;
-    height: 50px;
-    z-index: 1;
+    margin-left: 20px;
+    margin-top: 35px;
+    width: 40px;
+    height: 40px;
+    z-index: 2;
     /* opacity: 0.5; */
 }
 
-.Click{
-    height: 100%;
-    width: 100%;
+
+.images.on{
+    position: absolute;
+    margin-left: 20px;
+    margin-top: 35px;
+    width: 50px;
+    height: 50px;
+    z-index: 2;
+    /* opacity: 1; */
+}
+
+.Shadow-relative{
+    position: absolute;
+    margin-left: 40px;
+    z-index: 1;
+    width: 38px;
+    height: 38px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+
+.Shadow.on{
+    /* border: 1px solid red; */
+    position: absolute;
+    z-index: 1;
+    box-shadow: 0px 0px 52px 32px #00FFFC;
+}
+
+.Click{
+    position: relative;
+    /* border: 1px solid red; */
+    background-color: #00fffb43;
+    /* background: linear-gradient(65deg, #00fffc7d 10%, transparent); */
+    /* clip-path: polygon(100px 15px, 380px 15px, 300px 110px, 20px 110px); */
+    height: 95%;
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    /* box-shadow: 0px 0px 13px 0px #00FFFC; */
+}
+
+
+
 .Click.on {
-    background: linear-gradient(65deg, #00fffc7d 10%, transparent);
-    clip-path: polygon(100px 15px, 380px 15px, 300px 110px, 20px 110px);
+    position: relative;
+    /* border: 1px solid red; */
+    background-color: #00fffb68;
+    /* background: linear-gradient(65deg, #00fffc7d 10%, transparent); */
+    /* clip-path: polygon(100px 15px, 380px 15px, 300px 110px, 20px 110px); */
     height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
+    box-shadow: 0px 0px 13px 0px #00FFFC;
 }
+
+.Content{
+    
+    position: absolute;
+    /* border: 1px solid rgb(0, 204, 255); */
+    width: 100%;
+    background: linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
+    height: 100%;
+    clip-path: polygon(30px 6px, 354px 6px, 354px 90px,190px 90px, 180px 85px, 95px 85px);
+}
+
+.Content.on{
+    
+    position: absolute;
+    /* border: 1px solid rgb(0, 204, 255); */
+    width: 100%;
+    background: linear-gradient(48deg, #09213a 25%, #093967 59%,#09213a 92%);
+    height: 100%;
+    clip-path: polygon(40px 7px, 368px 7px, 368px 92px,190px 92px, 180px 85px, 115px 85px);
+}
+
+.Click h1{
+    color: #ffffff;
+    font-size: 30px;
+}
+
 
 .Click.on h1{
     color: #ffffff;
