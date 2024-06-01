@@ -3,33 +3,29 @@ const sidebar_element = document.querySelector('.side-bar')
 
 const sidebar_container = [
     {
-        img : '<img draggable="false" src="./images/Home.svg" alt="Home" class="images">',
-        content : 'HOME',
-    },
-    {
-        img : '<img draggable="false" src="./images/Game.svg" alt="Game" class="images">',
-        content : 'GAME',
-    },
-    {
-        img : '<img draggable="false" src="./images/Chat.svg" alt="Chat" class="images">',
-        content : 'CHAT',
-    },
-    {
-        img : '<img draggable="false" src="./images/friends.svg" alt="Friends" class="images">',
-        content : 'FRIENDS',
-    },
-    {
-        img : '<img draggable="false" src="./images/leaderboard.svg" alt="Leaderboard" class="images">',
-        content : 'LEADERBOARD',
-    },
-    {
-        img : '<img draggable="false" src="./images/settings.svg" alt="Settings" class="images">',
-        content : 'SETTINGS',
-    },
-    {
-        img : '<img draggable="false" src="./images/settings.svg" alt="Settings" class="images">',
-        content : 'SETTINGS',
+        // img : '<img draggable="false" src="./images/Home.svg" alt="Home" class="images">',
+        content : 'Home',
     }
+    // {
+    //     img : '<img draggable="false" src="./images/Game.svg" alt="Game" class="images">',
+    //     content : 'Game',
+    // },
+    // {
+    //     img : '<img draggable="false" src="./images/Chat.svg" alt="Chat" class="images">',
+    //     content : 'Chat',
+    // },
+    // {
+    //     img : '<img draggable="false" src="./images/friends.svg" alt="Friends" class="images">',
+    //     content : 'Friends',
+    // },
+    // {
+    //     img : '<img draggable="false" src="./images/settings.svg" alt="Tournament" class="images">',
+    //     content : 'Tournament',
+    // },
+    // {
+    //     img : '<img draggable="false" src="./images/settings.svg" alt="Settings" class="images">',
+    //     content : 'Settings',
+    // }
 ]
 
 function Header()
@@ -59,35 +55,48 @@ function sideBar()
     sidebar_container.forEach(element => {
         content = parser.parseFromString(html, 'text/html')
         imgDocument = parser.parseFromString(element.img, 'text/html')
-        let img = imgDocument.body.firstChild;
+        // let img = imgDocument.body.firstChild;
         div = content.querySelector(".items")
         // div.querySelector('h1').innerHTML = element.content
         div.id = sidebar_container.indexOf(element)
-        div.insertBefore(img, div.firstChild)
+        // div.insertBefore(img, div.firstChild)
         sidebar_element.appendChild(div)
     })
     let elements = sidebar_element.querySelectorAll(".items");
+
+    // images = elements[0].querySelector('.images')
+    h1 = elements[0].querySelector('h1')
+    Click = elements[0].querySelector('.Click')
+    Shadow = elements[0].querySelector('.Shadow')
+    Content = elements[0].querySelector('.Content')
+
+    images.classList.toggle('on')
+    // h1.innerHTML = images.alt;
+    Click.classList.toggle('on')
+    Shadow.classList.toggle('on')
+    Content.classList.toggle('on')
+
     elements.forEach((element) =>{
-        elements[0].querySelector('.images').classList.toggle('on')
-        // elements[0].querySelector('h1').innerHTML = elements[0].querySelector('img').alt;
-        elements[0].querySelector('.Click').classList.toggle('on')
-        // elements[0].querySelector('.Shadow').classList.toggle('on')
-        elements[0].querySelector('.Content').classList.toggle('on')
         element.addEventListener('click', function() {
             elements.forEach((element_tmp) => {
-                console.log(element_tmp.querySelector('.images.on'))
-                if(element_tmp.querySelector('.images.on'))
-                    element_tmp.querySelector('.images').classList.toggle('on')
-                if(element_tmp.querySelector('.Click.on'))
-                    element_tmp.querySelector('.Click').classList.toggle('on')
-                if(element_tmp.querySelector('.Content.on'))
-                    element_tmp.querySelector('.Content').classList.toggle('on')
-                // if(element_tmp.querySelector('.Shadow.on'))
-                    // element_tmp.querySelector('.Shadow').classList.toggle('on')
-                // element_tmp.querySelector('h1').innerHTML = ``
+                // images = element_tmp.querySelector('.images.on')
+                h1 = element_tmp.querySelector('h1')
+                Click = element_tmp.querySelector('.Click.on')
+                Shadow = element_tmp.querySelector('.Shadow.on')
+                Content = element_tmp.querySelector('.Content.on')
+                // h1.innerHTML = images.alt.toLowerCase();
+
+                if(images)
+                    images.classList.toggle('on')
+                if(Click)
+                    Click.classList.toggle('on')
+                if(Content)
+                    Content.classList.toggle('on')
+                if(Shadow)
+                    Shadow.classList.toggle('on')
             })
-            // element.querySelector('.Shadow').classList.toggle('on')
-            element.querySelector('.images').classList.toggle('on')
+            element.querySelector('.Shadow').classList.toggle('on')
+            // element.querySelector('.images').classList.toggle('on')
             element.querySelector('.Click').classList.toggle('on')
             element.querySelector('.Content').classList.toggle('on')
             // element.querySelector('h1').innerHTML = element.querySelector('img').alt;

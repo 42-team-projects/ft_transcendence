@@ -20,10 +20,10 @@ header{
 
 
 .search-bar{
-    height: 110px;
-    width: 1070px;
-    margin-top: 30px;
-    margin-left: 500px;
+    height: 80px;
+    width: 700px;
+    margin-top: 35px;
+    margin-left: 730px;
     border-radius: 10px;
 }
 
@@ -44,26 +44,26 @@ header{
 }
 .search-icon{
     position: absolute;
-    width: 45px;
-    height: 45px;
-    margin-top: 33px;
-    margin-left: 33px;
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: 30px;
 }
 
 .vertical-line{
     position: absolute;
     background-color: #00FFFC;
-    width: 3px;
-    height: 46px;
-    margin-top: 32px;
-    margin-left: 105px;
+    width: 2px;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: 100px;
 }
 
 .alarm-icon{
-    width: 64px;
-    height: 64px;
-    margin-top: 55px;
-    margin-left: 40px;
+    width: 50px;
+    height: 50px;
+    margin-top: 60px;
+    margin-left: 55px;
 }
 
 
@@ -71,7 +71,7 @@ header{
     position: relative;
     width: 140px;
     margin-top: 45px;
-    margin-left: 500px;
+    margin-left: 650px;
     height: 230px;
     display: flex;
     align-items: center;
@@ -86,7 +86,7 @@ header{
     width: 140px;
     height: 140px;
     background-color: #00FFFC;
-    clip-path: polygon(10px 40px, 70px 0, 130px 40px, 130px 100px, 70px 140px, 10px 100px);
+    clip-path: polygon(18px 42px, 70px 7px, 122px 42px, 122px 98px, 70px 133px, 18px 98px);
     top: 0;
     z-index: 1;
 }
@@ -97,7 +97,7 @@ header{
     position: absolute;
     width: 140px;
     height: 140px;
-    clip-path: polygon(12px 41px, 70px 3px, 128px 41px, 128px 99px, 70px 137px, 12px 99px);
+    clip-path: polygon(20px 43px, 70px 10px, 120px 43px, 120px 97px, 70px 130px, 20px 97px);
 }
 
 .profile-rank-border{
@@ -106,7 +106,7 @@ header{
     width: 100px;
     height: 125px;
     top: 102px;
-    clip-path: polygon(0px 2px, 50px 35px ,100px 2px, 100px 80px, 50px 125px,0px 80px);
+    clip-path: polygon(10px 1px, 50px 27px ,90px 0px, 90px 60px, 50px 95px,10px 60px);
 }
 
 .profile-rank{
@@ -116,9 +116,9 @@ header{
     position: absolute;
     background:linear-gradient(0deg, #134C84 0%, #09213A 70%);
     width: 100px;
-    height: 125px;
-    clip-path: polygon(2px 2px, 50px 35px ,98px 2px, 98px 79px, 50px 122px,2px 79px);
+    height: 95px;
+    clip-path: polygon(12px 1px, 50px 27px ,88px 0px, 88px 59px, 50px 92px,12px 59px);
 }
-.profile-rank h1{
+.profile-rank h2{
     color: #ffffff;
 }
