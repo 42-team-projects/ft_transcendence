@@ -5,27 +5,27 @@ const sidebar_container = [
     {
         img : '<img draggable="false" src="./images/Home.svg" alt="Home" class="images">',
         content : 'Home',
+    },
+    {
+        img : '<img draggable="false" src="./images/Game.svg" alt="Game" class="images">',
+        content : 'Game',
+    },
+    {
+        img : '<img draggable="false" src="./images/Chat.svg" alt="Chat" class="images">',
+        content : 'Chat',
+    },
+    {
+        img : '<img draggable="false" src="./images/friends.svg" alt="Friends" class="images">',
+        content : 'Friends',
+    },
+    {
+        img : '<img draggable="false" src="./images/settings.svg" alt="Tournament" class="images">',
+        content : 'Tournament',
+    },
+    {
+        img : '<img draggable="false" src="./images/settings.svg" alt="Settings" class="images">',
+        content : 'Settings',
     }
-    // {
-    //     img : '<img draggable="false" src="./images/Game.svg" alt="Game" class="images">',
-    //     content : 'Game',
-    // },
-    // {
-    //     img : '<img draggable="false" src="./images/Chat.svg" alt="Chat" class="images">',
-    //     content : 'Chat',
-    // },
-    // {
-    //     img : '<img draggable="false" src="./images/friends.svg" alt="Friends" class="images">',
-    //     content : 'Friends',
-    // },
-    // {
-    //     img : '<img draggable="false" src="./images/settings.svg" alt="Tournament" class="images">',
-    //     content : 'Tournament',
-    // },
-    // {
-    //     img : '<img draggable="false" src="./images/settings.svg" alt="Settings" class="images">',
-    //     content : 'Settings',
-    // }
 ]
 
 function Header()
@@ -58,49 +58,38 @@ function sideBar()
         let img = imgDocument.body.firstChild;
         div = content.querySelector(".items")
         div1 = div.querySelector(".Content")
-        // div.querySelector('h1').innerHTML = element.content
+        div.querySelector('h1').innerHTML = element.content
         div.id = sidebar_container.indexOf(element)
         div1.insertBefore(img, div1.firstChild)
         sidebar_element.appendChild(div)
     })
     let elements = sidebar_element.querySelectorAll(".items");
 
-    // images = elements[0].querySelector('.images')
-    h1 = elements[0].querySelector('h1')
-    Click = elements[0].querySelector('.Click')
-    Shadow = elements[0].querySelector('.Shadow')
-    Content = elements[0].querySelector('.Content')
-
-    images.classList.toggle('on')
-    // h1.innerHTML = images.alt;
-    Click.classList.toggle('on')
-    Shadow.classList.toggle('on')
-    Content.classList.toggle('on')
-
+    text = elements[0].querySelector('.text-tag')
+    img = elements[0].querySelector('.images')
+    trasparentItem = elements[0].querySelector('.trasparentItem')
+    trasparentItem.classList.toggle('on')
+    text.classList.toggle('on')
+    img.classList.toggle('on')
     elements.forEach((element) =>{
         element.addEventListener('click', function() {
             elements.forEach((element_tmp) => {
-                images = element_tmp.querySelector('.images.on')
-                h1 = element_tmp.querySelector('h1')
-                Click = element_tmp.querySelector('.Click.on')
-                Shadow = element_tmp.querySelector('.Shadow.on')
-                Content = element_tmp.querySelector('.Content.on')
-                // h1.innerHTML = images.alt.toLowerCase();
-
-                if(images)
-                    images.classList.toggle('on')
-                if(Click)
-                    Click.classList.toggle('on')
-                if(Content)
-                    Content.classList.toggle('on')
-                if(Shadow)
-                    Shadow.classList.toggle('on')
+                tmp_text = element_tmp.querySelector('.text-tag.on')
+                if(tmp_text)
+                    tmp_text.classList.toggle('on')
+                tmp_img = element_tmp.querySelector('.images.on')
+                if(tmp_img)
+                    tmp_img.classList.toggle('on')
+                tmp_trasparentItem = element_tmp.querySelector('.trasparentItem.on')
+                if(tmp_trasparentItem)
+                    tmp_trasparentItem.classList.toggle('on')
             })
-            element.querySelector('.Shadow').classList.toggle('on')
-            element.querySelector('.images').classList.toggle('on')
-            element.querySelector('.Click').classList.toggle('on')
-            element.querySelector('.Content').classList.toggle('on')
-            // element.querySelector('h1').innerHTML = element.querySelector('img').alt;
+            text = element.querySelector('.text-tag')
+            text.classList.toggle('on')
+            img = element.querySelector('.images')
+            img.classList.toggle('on')
+            trasparentItem = element.querySelector('.trasparentItem')
+            trasparentItem.classList.toggle('on')
         })
     })
 })
