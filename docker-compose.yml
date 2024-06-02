@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=djangodb
+      - POSTGRES_USER=ogorfti
+      - POSTGRES_PASSWORD=1337
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    container_name: adminer
+    depends_on:
+      - db
+
+networks:
+  default:
+    driver: bridge
+    name: my-network
