@@ -3,7 +3,7 @@ const sidebar_element = document.querySelector('.side-bar')
 
 const sidebar_container = [
     {
-        // img : '<img draggable="false" src="./images/Home.svg" alt="Home" class="images">',
+        img : '<img draggable="false" src="./images/Home.svg" alt="Home" class="images">',
         content : 'Home',
     }
     // {
@@ -55,11 +55,12 @@ function sideBar()
     sidebar_container.forEach(element => {
         content = parser.parseFromString(html, 'text/html')
         imgDocument = parser.parseFromString(element.img, 'text/html')
-        // let img = imgDocument.body.firstChild;
+        let img = imgDocument.body.firstChild;
         div = content.querySelector(".items")
+        div1 = div.querySelector(".Content")
         // div.querySelector('h1').innerHTML = element.content
         div.id = sidebar_container.indexOf(element)
-        // div.insertBefore(img, div.firstChild)
+        div1.insertBefore(img, div1.firstChild)
         sidebar_element.appendChild(div)
     })
     let elements = sidebar_element.querySelectorAll(".items");
@@ -79,7 +80,7 @@ function sideBar()
     elements.forEach((element) =>{
         element.addEventListener('click', function() {
             elements.forEach((element_tmp) => {
-                // images = element_tmp.querySelector('.images.on')
+                images = element_tmp.querySelector('.images.on')
                 h1 = element_tmp.querySelector('h1')
                 Click = element_tmp.querySelector('.Click.on')
                 Shadow = element_tmp.querySelector('.Shadow.on')
@@ -96,7 +97,7 @@ function sideBar()
                     Shadow.classList.toggle('on')
             })
             element.querySelector('.Shadow').classList.toggle('on')
-            // element.querySelector('.images').classList.toggle('on')
+            element.querySelector('.images').classList.toggle('on')
             element.querySelector('.Click').classList.toggle('on')
             element.querySelector('.Content').classList.toggle('on')
             // element.querySelector('h1').innerHTML = element.querySelector('img').alt;

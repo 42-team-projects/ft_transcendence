@@ -1,15 +1,10 @@
 header{
-    width: 100%;
-    /* position: absolute; */
-    height: 20%;
+    position: relative;
+    grid-area: head;
+    border: 1px solid #00FFFC;
+    display: flex;
 }
 
-.relative-header{
-    display: flex;
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
 
 #pingpong-logo{
     width: 110px;
