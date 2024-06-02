@@ -1,15 +1,4 @@
-.side-bar{
-    position: relative;
-    grid-area: sidebar;
-    border: 1px solid red;
-    margin-top: 100px;
-    margin-left: 40px;
-    /* width: 380px; */
-    /* height: 840px; */
-    display: flex;
-    flex-direction: column;
-    /* justify-content: space-between; */
-}
+
 
 
 .items{
@@ -30,11 +19,47 @@
     width: 40px;
     height: 40px;
     z-index: 2;
-    filter:drop-shadow(1px 2px 3px #00fffb);;
+    filter:drop-shadow(1px 2px 3px #00fffb);
+    transform: rotate(90deg);
     /* opacity: 0.5; */
 }
 
+.trasparentItem{
+    position: relative;
+    display: flex;
+    background: transparent;
+    /* background: red; */
+    height: 70px;
+    width: 70px;
+    transform: rotate(270deg);
+    justify-content: center;
+}
 
+.trasparentItem::before{
+    content: "";
+    width: 35px;
+    height: 40px;
+    background: rgb(255, 255, 255);
+    clip-path: polygon(24px 5px, 29.6px 5px, 6.6px 19.2px, 6.4px 38px, 3.4px 33px, 3.4px 17.3px);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+}
+
+.trasparentItem::after{
+    content: "";
+    width: 35px;
+    height: 40px;
+    background: rgb(255, 255, 255);
+    clip-path: polygon(24px 5px, 29.6px 5px, 6.6px 19.2px, 6.5px 38px, 3.4px 33px, 3.4px 17.3px);
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    z-index: 2;
+    transform: rotate(180deg);
+    /* filter:drop-shadow(0px 0px red); */
+}
 /* .images.on{
     position: absolute;
     margin-left: 25px;
@@ -79,8 +104,19 @@
     /* border-radius: 5px; */
     /* box-shadow: 0px 0px 5px 0px #00FFFC; */
     clip-path: polygon(0px 18px, 30px 0px, 60px 18px, 60px 52px, 30px 70px, 0px 52px);
+    z-index: 1;
 }
 
+/* .Click::after{
+    position: absolute;
+    background: red;
+    border: 1px solid rgb(255, 0, 0);
+    content: "";
+    width: 10px;
+    height: 10px;
+    right: 0;
+    top: 0;
+} */
 
 
 .Click.on {
@@ -111,7 +147,7 @@
     width: 100%;
     background: linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
     height: 100%;
-    clip-path: polygon(2px 19px, 30px 2px, 58px 19px, 58px 51px, 30px 68px, 2px 51px);
+    clip-path: polygon(1.5px 19px, 30px 1.7px, 58.5px 19px, 58.5px 51.3px, 30px 68.4px, 1.3px 51px);
 }
 
 /* .Content.on{

@@ -58,3 +58,30 @@ body::after{
 img{
     max-width: 100%;
 }
+
+
+.side-bar{
+    position: relative;
+    grid-area: sidebar;
+    border: 1px solid red;
+    margin-top: 100px;
+    margin-left: 40px;
+    /* width: 380px; */
+    /* height: 840px; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+
+header{
+    position: relative;
+    grid-area: head;
+    /* border: 1px solid #00FFFC; */
+    display: flex;
+}
+
+.root{
+    border: 1px solid red;
+    grid-area: contnet;
+}
