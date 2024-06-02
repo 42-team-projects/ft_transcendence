@@ -9,9 +9,16 @@
     padding: 0%;
     list-style: none;
     text-decoration: none;
+    /* border: 1px solid red; */
 }
 
 body{
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    grid-template-rows: 15% 1fr;
+    grid-template-areas: 
+        "head head"
+        "sidebar contnet";
     position: relative;
     height: 100vh;
     background: url(./images/background.svg);

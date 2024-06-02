@@ -1,10 +1,11 @@
 .side-bar{
     position: relative;
-    /* border: 1px solid red; */
+    grid-area: sidebar;
+    border: 1px solid red;
     margin-top: 100px;
-    margin-left: 45px;
-    width: 380px;
-    height: 840px;
+    margin-left: 40px;
+    /* width: 380px; */
+    /* height: 840px; */
     display: flex;
     flex-direction: column;
     /* justify-content: space-between; */
@@ -24,24 +25,25 @@
 
 .images{
     position: absolute;
-    margin-left: 20px;
-    margin-top: 35px;
+    /* margin-left: 20px; */
+    /* margin-top: 35px; */
     width: 40px;
     height: 40px;
     z-index: 2;
+    filter:drop-shadow(1px 2px 3px #00fffb);;
     /* opacity: 0.5; */
 }
 
 
-.images.on{
+/* .images.on{
     position: absolute;
     margin-left: 25px;
     margin-top: 35px;
     width: 50px;
     height: 50px;
     z-index: 2;
-    /* opacity: 1; */
-}
+    filter: drop-shadow(5px 5px red);
+} */
 
 .Shadow-relative{
     position: absolute;
@@ -66,22 +68,23 @@
 .Click{
     position: relative;
     /* border: 1px solid red; */
-    background-color: #00fffb43;
+    background-color: #00fffb;
     /* background: linear-gradient(65deg, #00fffb89 10%, transparent); */
     /* clip-path: polygon(100px 15px, 380px 15px, 300px 110px, 20px 110px); */
-    height: 100px;
-    width: 100px;
+    height: 70px;
+    width: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
     /* border-radius: 5px; */
     /* box-shadow: 0px 0px 5px 0px #00FFFC; */
-    clip-path: polygon(10px 30px, 50px 3px, 90px 30px, 90px 75px, 50px 97px, 10px 75px);
+    clip-path: polygon(0px 18px, 30px 0px, 60px 18px, 60px 52px, 30px 70px, 0px 52px);
 }
 
 
 
 .Click.on {
+    border: 1px solid red;
     position: relative;
     /* border: 1px solid red; */
     background-color: #00fffb68;
@@ -95,19 +98,21 @@
     /* border-radius: 5px; */
     /* box-shadow: 0px 0px 15px 1px #00FFFC; */
     margin-left: 5px;
+    filter:drop-shadow(5px 5px red);
 }
 
-/* .Content{
+.Content{
+    border: 1px solid red;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: relative;
     border: 1px solid rgb(0, 204, 255);
     width: 100%;
     background: linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
     height: 100%;
-    clip-path: polygon(30px 6px, 354px 6px, 354px 90px,190px 90px, 180px 85px, 95px 85px);
-} */
+    clip-path: polygon(2px 19px, 30px 2px, 58px 19px, 58px 51px, 30px 68px, 2px 51px);
+}
 
 /* .Content.on{
     
@@ -128,4 +133,11 @@
 .Click.on h1{
     color: #ffffff;
     font-size: 38px;
+}
+
+
+.button-container{
+    border: 1px solid red;
+    width: 100%;
+    height: 75px;
 }
