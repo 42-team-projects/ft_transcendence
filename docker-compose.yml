@@ -8,14 +8,15 @@ services:
       - POSTGRES_DB=djangodb
       - POSTGRES_USER=ogorfti
       - POSTGRES_PASSWORD=1337
-  adminer:
-    image: adminer
+# to visualize the database you need to add a server with postgre container ip
+  pgadmin4:
+    image: dpage/pgadmin4
     ports:
-      - 8080:8080
-    container_name: adminer
-    depends_on:
-      - db
-
+      - 5050:80 # 
+    container_name: pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=jodegi7270@hutov.com
+      - PGADMIN_DEFAULT_PASSWORD=hutov
 networks:
   default:
     driver: bridge
