@@ -63,23 +63,28 @@ img{
 .side-bar{
     position: relative;
     grid-area: sidebar;
-    border: 1px solid red;
-    margin-top: 15rem;
+    /* border: 1px solid red; */
+    margin-top: 14rem;
     margin-left: 3rem;
     display: flex;
+    height: 650px;
     flex-direction: column;
-    /* justify-content: space-between; */
+    justify-content: space-between;
 }
 
 
 header{
-    position: relative;
     grid-area: head;
-    border: 1px solid red;
-    display: flex;
+    display: grid;
+    grid-template-columns: 200px 850px 200px;
+    grid-template-areas: 
+    "logo alarm-search profile";
+    /* border: 1px solid red; */
+    justify-content: space-between;
+    
 }
 
 .root{
-    border: 1px solid red;
+    /* border: 1px solid red; */
     grid-area: content;
 }
