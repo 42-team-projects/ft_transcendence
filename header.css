@@ -1,22 +1,30 @@
 
 
 #pingpong-logo{
-    width: 110px;
-    height: 110px;
-    /* margin-left: 5.5rem;
-    margin-top: 4rem; */
+    /* border: 1px solid red; */
+    grid-area: logo;
 }
 
+#pingpong-logo img{
+    grid-area: logo;
+    width: 7rem;
+    height: 7rem;
+    margin-left: 5.5rem;
+    margin-top: 3.5rem;
+    object-fit: cover;
+}
 
 .search-bar{
+    position: relative;
+    /* border: 1px solid red; */
+    grid-area:search;
     height: 80px;
-    width: 700px;
-    margin-top: 35px;
-    margin-left: 730px;
+    margin-top: 40px;
     border-radius: 10px;
 }
 
 .search-input{
+    position: absolute;
     width: 100%;
     height: 100%;
     border-radius: 13px;
@@ -49,41 +57,52 @@
 }
 
 .alarm-icon{
-    width: 50px;
-    height: 50px;
-    margin-top: 60px;
-    margin-left: 55px;
+    display: flex;
+    justify-content: end;
+    grid-area: alarm;
+    /* border: 1px solid red; */
 }
 
+.alarm-icon img{
+    margin-top: 4.5rem;
+    /* border: 1px solid red; */
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.profil-container{
+    /* border: 1px solid red; */
+    /* display: flex; */
+    height: 150px;
+    /* height: 40px; */
+    /* align-items: end; */
+    /* justify-content: start; */
+}
 
 .profile-relative{
     position: relative;
-    width: 100vw;
-    margin-top: 45px;
-    margin-left: 650px;
-    height: 230px;
+    /* border: 1px solid red; */
+    width: 100%;
+    height: 100%;
+    margin-top: 25px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    justify-content: center;
-
 }
 
 
 .profile-absoulut{
-    position: absolute;
     width: 140px;
     height: 140px;
     background-color: #00FFFC;
     clip-path: polygon(18px 42px, 70px 7px, 122px 42px, 122px 98px, 70px 133px, 18px 98px);
-    top: 0;
     z-index: 1;
 }
 
 
 .profile-absoulut img {
     
-    position: absolute;
     width: 140px;
     height: 140px;
     clip-path: polygon(20px 43px, 70px 10px, 120px 43px, 120px 97px, 70px 130px, 20px 97px);
@@ -92,9 +111,9 @@
 .profile-rank-border{
     position: absolute;
     background-color: #00FFFC;
+    top: 6.5rem;
     width: 100px;
     height: 125px;
-    top: 102px;
     clip-path: polygon(10px 1px, 50px 27px ,90px 0px, 90px 60px, 50px 95px,10px 60px);
 }
 
@@ -102,7 +121,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
     background:linear-gradient(0deg, #134C84 0%, #09213A 70%);
     width: 100px;
     height: 95px;
@@ -110,4 +128,14 @@
 }
 .profile-rank h2{
     color: #ffffff;
+}
+
+
+.alarm-search{
+    display: grid;
+    grid-template-columns: 700px 150px;
+    grid-template-areas: 
+    "search alarm";
+    /* border: 1px solid red; */
+    justify-content: space-between;
 }
