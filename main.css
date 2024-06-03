@@ -9,9 +9,16 @@
     padding: 0%;
     list-style: none;
     text-decoration: none;
+    /* border: 1px solid red; */
 }
 
 body{
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    grid-template-rows: 15% 1fr;
+    grid-template-areas: 
+        "head head"
+        "sidebar contnet";
     position: relative;
     height: 100vh;
     background: url(./images/background.svg);
@@ -50,4 +57,31 @@ body::after{
 
 img{
     max-width: 100%;
+}
+
+
+.side-bar{
+    position: relative;
+    grid-area: sidebar;
+    border: 1px solid red;
+    margin-top: 100px;
+    margin-left: 40px;
+    /* width: 380px; */
+    /* height: 840px; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+
+header{
+    position: relative;
+    grid-area: head;
+    /* border: 1px solid #00FFFC; */
+    display: flex;
+}
+
+.root{
+    border: 1px solid red;
+    grid-area: contnet;
 }
