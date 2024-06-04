@@ -52,7 +52,9 @@ function sideBar()
     console.log('error')
 }).then((html) => {
     parser = new DOMParser()
+    
     sidebar_container.forEach(element => {
+
         content = parser.parseFromString(html, 'text/html')
         imgDocument = parser.parseFromString(element.img, 'text/html')
         let img = imgDocument.body.firstChild;
