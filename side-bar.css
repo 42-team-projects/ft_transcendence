@@ -30,17 +30,6 @@
     width: 70px;
     transform: rotate(270deg);
     justify-content: center;
-
-
-
-}
-
-.trasparentItem::before{
-
-}
-
-.trasparentItem::after{
-
 }
 
 .trasparentItem.on{
