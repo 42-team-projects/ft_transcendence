@@ -1,5 +1,6 @@
 const header_element = document.querySelector('header')
 const sidebar_element = document.querySelector('.side-bar')
+const root = document.querySelector('.root')
 
 const sidebar_container = [
     {
@@ -47,10 +48,10 @@ function sideBar()
     fetch('side-bar-component.html')
     .then((respons)=>{
         if(respons.ok)
-        return respons.text()
-    else
-    console.log('error')
-}).then((html) => {
+            return respons.text()
+        else
+            console.log('error')
+    }).then((html) => {
     parser = new DOMParser()
     sidebar_container.forEach(element => {
         content = parser.parseFromString(html, 'text/html')
@@ -63,6 +64,7 @@ function sideBar()
         div1.insertBefore(img, div1.firstChild)
         sidebar_element.appendChild(div)
     })
+
     let elements = sidebar_element.querySelectorAll(".items");
 
     text = elements[0].querySelector('.text-tag')
@@ -96,7 +98,21 @@ function sideBar()
 }
 
 
+function gamePlay()
+{
+    fetch('Game-play.html')
+    .then((respons)=>{
+        if(respons.ok)
+            return respons.text()
+        else
+            console.log('error')
+    }).then((html) => {
+        root.innerHTML = html
+    })
+}
+
+
 
 Header()
 sideBar()
-
+gamePlay()
