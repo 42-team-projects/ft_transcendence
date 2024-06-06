@@ -79,12 +79,17 @@ header{
     grid-template-columns: 200px 850px 200px;
     grid-template-areas: 
     "logo alarm-search profile";
-    /* border: 1px solid red; */
     justify-content: space-between;
     
 }
 
 .root{
-    /* border: 1px solid red; */
+    border: 1px solid rgb(0, 255, 204);
     grid-area: content;
+    display: grid;
+    grid-template-columns: repeat(3, 430px);
+    grid-template-areas: 
+    "single multiple online";
+    justify-content: space-around;
 }
+
