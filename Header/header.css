@@ -16,7 +16,6 @@
 
 .search-bar{
     position: relative;
-    /* border: 1px solid red; */
     grid-area:search;
     height: 80px;
     margin-top: 40px;
@@ -131,11 +130,15 @@
 }
 
 
-.alarm-search{
+.notification-search{
     display: grid;
     grid-template-columns: 700px 150px;
     grid-template-areas: 
-    "search alarm";
+    "search notification";
     /* border: 1px solid red; */
     justify-content: space-between;
+}
+
+h1{
+    color: #ffffff;
 }
