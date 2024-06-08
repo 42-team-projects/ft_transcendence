@@ -14,7 +14,7 @@
 
 body{
     display: grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 20% 1fr;
     grid-template-rows: 15% 1fr;
     grid-template-areas: 
         "head head"
@@ -73,7 +73,7 @@ img{
 }
 
 
-header{
+header-bar{
     grid-area: head;
     display: grid;
     grid-template-columns: 200px 850px 200px;
