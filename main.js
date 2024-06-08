@@ -1,6 +1,6 @@
 const header_element = document.querySelector('header')
 const sidebar_element = document.querySelector('.side-bar')
-const root = document.querySelector('.root')
+// const root = document.querySelector('.root')
 
 const sidebar_container = [
     {
@@ -115,4 +115,4 @@ function gamePlay()
 
 Header()
 sideBar()
-gamePlay()
+// gamePlay()
