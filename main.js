@@ -4,7 +4,7 @@ const root = document.querySelector('.root')
 
 const sidebar_container = [
     {
-        img : '<img draggable="false" src="./images/Home.svg" alt="Home" class="images">',
+        img : '',
         content : 'Home',
     },
     {
