@@ -1,5 +1,5 @@
 const UserRankTemplate = document.createElement('template')
-UserRankTemplate.innerHTML = `
+UserRankTemplate.innerHTML = /*html*/`
     <style>
         .child{
             display: flex;

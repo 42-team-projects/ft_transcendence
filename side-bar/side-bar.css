@@ -1,10 +1,11 @@
 
 
 
-.items{
+sb-button{
+
+    border: 1px solid red;
     margin-top: 20px;
     position: relative;
-    /* border: 1px solid red; */
     display: flex;
     height: 70px;
     width: 100%;
@@ -43,7 +44,7 @@
     transform: rotate(270deg);
     justify-content: center;
 }
-.trasparentItem.on::before{
+.trasparentItem::before{
     content: "";
     width: 35px;
     height: 40px;
@@ -55,7 +56,7 @@
     z-index: 2;
 }
 
-.trasparentItem.on::after{
+.trasparentItem::after{
     content: "";
     width: 35px;
     height: 40px;
