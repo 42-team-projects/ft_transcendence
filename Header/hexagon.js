@@ -4,6 +4,9 @@ const HexagonTemplate = document.createElement('template')
 HexagonTemplate.innerHTML = /*html*/`
     <style>
         .child{
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 95%;
             height: 95%;
             background : linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
