@@ -4,7 +4,7 @@ const SB_ButtonTemplate = document.createElement('template')
 
 SB_ButtonTemplate.innerHTML = /*html*/`
     <div class="trasparentItem">
-        <c-hexagon width="80px" height="80px" apply="true">
+        <c-hexagon width="100%" height="100%" apply="true">
             <style>
                 .images
                 {

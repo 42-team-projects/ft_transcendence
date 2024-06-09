@@ -20,8 +20,8 @@ sb-button{
     display: flex;
     background: transparent;
     /* background: red; */
-    height: 85px;
-    width: 85px;
+    height: 90px;
+    width: 90px;
     transform: rotate(270deg);
     justify-content: center;
 }
@@ -39,13 +39,13 @@ sb-button{
 }
 .trasparentItem::before{
     content: "";
-    width: 35px;
-    height: 40px;
+    width: 100%;
+    height: 100%;
     background: rgb(255, 255, 255);
-    clip-path: polygon(22.6px 5px, 28.2px 4.9px, 6.6px 19.2px, 6.1px 38px, 3.2px 33px, 3.4px 17.3px);
+    clip-path: polygon(24.5% 1%, 31% 1.7%, 5.6% 18.6%, 5.1% 38%, 1.5% 33%, 2% 16%);
     position: absolute;
-    top: 6px;
-    left: 9px;
+    top: 12.8%;
+    left: 10.8%;
     z-index: 2;
     /* transform: rotate(179deg); */
     position: absolute;
@@ -53,13 +53,13 @@ sb-button{
 
 .trasparentItem::after{
     content: "";
-    width: 35px;
-    height: 40px;
+    width: 100%;
+    height: 100%;
     background: rgb(255, 255, 255);
-    clip-path: polygon(24px 5px, 29.6px 4.9px, 6.6px 19.2px, 6.3px 38px, 3.4px 33px, 3.4px 17.3px);
+    clip-path: polygon(24.5% 2%, 31% 2.7%, 5.6% 18.6%, 5.3% 38%, 1.5% 33%, 2% 16%);
     position: absolute;
-    bottom: 10.8px;
-    right: 8.6px;
+    bottom: 12.1%;
+    right: 10.5%;
     z-index: 2;
     transform: rotate(179deg);
     position: absolute;
