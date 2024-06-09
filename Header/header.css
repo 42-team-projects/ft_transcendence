@@ -1,6 +1,5 @@
 header-bar
 {
-    border: 1px solid red;
     display: flex;
     flex-direction: row;
     height: 100px;
@@ -8,11 +7,11 @@ header-bar
     margin: 30px;
     margin-top: 20px;
     justify-content: space-between;
+    z-index: 2;
 }
 
 #pingpong-logo
 {
-    border: 1px solid red;
     height: 80px;
     width: 80px;
     margin: 30px;
@@ -27,7 +26,6 @@ header-bar
 
 .notification-search
 {
-    border: 1px solid red;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -91,7 +89,6 @@ search-bar
 
 .notification-icon
 {
-    border: 1px solid red;
     display: flex;
     height: 80px;
     width: 80px;
@@ -100,7 +97,6 @@ search-bar
 }
 
 c-profile{
-    border: 1px solid red;
     position: relative;
     margin-top: 2px;
     display: flex;
@@ -110,7 +106,6 @@ c-profile{
 
 
 c-hexagon{
-    border: 1px solid red;
     position: relative;
     display: flex;
     align-items: center;
@@ -120,7 +115,6 @@ c-hexagon{
 }
 
 user-rank{
-    border: 1px solid red;
     position: absolute;
     display: flex;
     justify-content: center;
