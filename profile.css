@@ -4,6 +4,11 @@
     height: 100%;
     padding-right: 50px;
     padding-left: 50px;
+    overflow-y: scroll;
+}
+
+.root::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 .main-profile-container
@@ -16,6 +21,7 @@
     height: 100%;
 }
 
+/*
 .profile-image
 {
     position: absolute;
@@ -36,6 +42,7 @@
     height: 11%;
     background-color: white;
 }
+*/
 
 
 .profile-cover
@@ -60,44 +67,55 @@
 {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
     width: 100%;
-    height: 65%;
+    flex: 1;
+    height: 100%;
     background-color: blanchedalmond;
 }
 
 .profile-data-infos
 {
-    width: 25%;
+    flex: 1;
     height: 100%;
-    background-color: beige;
+    min-width: 500px;
+    background-color: rgb(176, 52, 52);
 }
 
 .profile-data-stats
 {
-    width: 75%;
+    flex: 3;
+    min-width: 700px;
     height: 100%;
-    background-color: yellow;
+    display: flex;
+    flex-direction: column;
+    /* background-color: rgb(181, 181, 53); */
 }
 
 .profile-data-stats-1
 {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    flex: 4;
     width: 100%;
-    height: 80%;
-    background-color: violet;
+    background-color: rgb(129, 29, 129);
 }
+
 
 .profile-data-stats-league
 {
     display: flex;
-    flex-direction: column;
-    width: 60%;
+    flex-direction: row;
+    flex: 3;
     height: 100%;
-    background-color: thistle;
+    min-width: 600px;
+    background-color: rgb(41, 41, 140);
 }
 
-.profile-data-stats-league-stats-1
+/* .profile-data-stats-league-stats-1
 {
     width: 100%;
     height: 65%;
@@ -110,17 +128,27 @@
     height: 35%;
     background-color: white;
 }
+ */
 
 .profile-data-stats-graph
 {
-    width: 40%;
+    flex: 1;
     height: 100%;
-    background-color: yellowgreen;
+    min-width: 400px;
+    background-color: rgb(174, 215, 92);
 }
 
 .profile-data-stats-2
 {
     width: 100%;
-    height: 20%;
-    background-color: turquoise;
+    flex: 1;
+    background-color: rgb(85, 179, 170);
 }
+
+/* 
+.profile-rouali
+{
+    border: solid 1px rgb(0, 13, 255);
+    height: 100px;
+    background-color: brown;
+} */
