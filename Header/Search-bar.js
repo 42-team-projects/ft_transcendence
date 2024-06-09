@@ -1,11 +1,9 @@
 // const SearchTemplate = document.createElement('template');
 
 const SearchTemplate = `
-    <div class="search-bar">
-        <img draggable="false" class="search-icon" src="./images/svg-header/search.svg">
-        <div class="vertical-line"></div>
-        <input type="text" class="search-input" placeholder="SEARCH">
-    </div>
+    <img draggable="false" class="search-icon" src="./images/svg-header/search.svg">
+    <div class="vertical-line"></div>
+    <input type="text" class="search-input" placeholder="SEARCH">
 `;
 
 class SearchBar extends HTMLElement {
@@ -18,5 +16,3 @@ class SearchBar extends HTMLElement {
 }
 
 customElements.define('search-bar', SearchBar);
-
-export { SearchBar };
