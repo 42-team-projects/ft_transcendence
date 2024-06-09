@@ -1,7 +1,7 @@
 
 const HexagonTemplate = document.createElement('template')
 
-HexagonTemplate.innerHTML = `
+HexagonTemplate.innerHTML = /*html*/`
     <style>
         .child{
             width: 95%;
@@ -22,17 +22,25 @@ class Hexagon extends HTMLElement{
         const width = this.getAttribute('width') || '140px';
         const height = this.getAttribute('height') || '140px';
         const Bcolor = this.getAttribute('Bcolor') || '#00FFFC';
+        const apply = this.getAttribute('apply') || 'flase';
         
         this.style.width = width;
         this.style.height = height;
         this.style.background = Bcolor
         const tmp_content =  this.innerHTML
         this.innerHTML = ''
-        const shadow = this.attachShadow({mode: 'open'})
-        shadow.appendChild(HexagonTemplate.content)
-
-        if(tmp_content)
-            shadow.querySelector('.child').innerHTML = tmp_content;
+        if(apply === 'true')
+        {
+            const shadow = this.attachShadow({
+                mode: 'open'
+            })
+            shadow.appendChild(HexagonTemplate.content.cloneNode(true))
+            if(tmp_content.trim(' '))
+            {
+                console.log(tmp_content.trim(' '))
+                shadow.querySelector('.child').innerHTML = tmp_content;
+            }
+        }
     }
 }
 

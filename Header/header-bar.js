@@ -2,7 +2,7 @@
 
 const HeaderTemplate =  document.createElement('template');
 
-HeaderTemplate.innerHTML = `
+HeaderTemplate.innerHTML = /*html*/`
     <div id="pingpong-logo">
         <img draggable="false" src="./images/svg-header/pingpong-icon.svg">
     </div>

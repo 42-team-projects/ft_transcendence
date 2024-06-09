@@ -3,8 +3,8 @@
 const ProfileTemplate =  document.createElement('template');
 
 
-ProfileTemplate.innerHTML = `
-    <c-hexagon width="140px" height="140px" Bcolor="#00FFFC">
+ProfileTemplate.innerHTML = /*html*/`
+    <c-hexagon width="140px" height="140px" Bcolor="#00FFFC" apply="true">
         <img draggable="false" class="search-icon" src="./images/svg-header/profile.jpeg">
     </c-hexagon>
     <user-rank> 
