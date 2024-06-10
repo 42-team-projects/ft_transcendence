@@ -3,6 +3,11 @@
     src: url('./sansation/Sansation_Regular.ttf');
 }
 
+@font-face {
+    font-family: 'Sansation Bold';
+    src: url('./sansation/Sansation_Bold.ttf');
+}
+
 *{
     box-sizing: border-box;
     margin: 0%;
@@ -24,12 +29,13 @@ body{
         "sidebar content";
     position: relative;
     height: 100vh;
+    width: 100%;
     background: url(./images/background.svg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     font-family: 'Sansation';
-    border: 1px solid red;
+    border: 1px solid rgb(255, 0, 170);
 }
 
 
