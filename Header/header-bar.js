@@ -1,3 +1,14 @@
+import {} from './ImagesContainer.js'
+import {SearchBar} from './Search-bar.js'
+import {UserRank} from './UserRank.js'
+import {Hexagon} from './hexagon.js'
+import {Profile} from './profile.js'
+
+
+customElements.define('c-hexagon',Hexagon)
+customElements.define('search-bar', SearchBar);
+customElements.define('c-profile', Profile)
+customElements.define('user-rank',UserRank)
 
 
 const HeaderTemplate =  document.createElement('template');

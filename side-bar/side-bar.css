@@ -9,7 +9,6 @@ sb-button{
     height: 80px;
     width: 100%;
     align-items: center;
-    --height: 80px;
 }
 
 
@@ -20,8 +19,8 @@ sb-button{
     display: flex;
     background: transparent;
     /* background: red; */
-    height: var(--height);
-    width: var(--height);
+    width: 25%; 
+    aspect-ratio: 1;
     transform: rotate(270deg);
     justify-content: center;
 }

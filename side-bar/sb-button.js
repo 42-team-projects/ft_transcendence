@@ -8,8 +8,8 @@ SB_ButtonTemplate.innerHTML = /*html*/`
                 .images
                 {
                     position: absolute;
-                    width: 40px;
-                    height: 40px;
+                    width: 50%;
+                    height: 50%;
                     z-index: 2;
                     transform: rotate(90deg);
                 }
@@ -24,8 +24,6 @@ class SideBarButton extends HTMLElement{
         super();
         this.appendChild(SB_ButtonTemplate.content.cloneNode(true))
         // console.log(this.querySelector('c-hexagon'));
-
-
     }
 }
 

@@ -81,7 +81,11 @@ header-bar{
     grid-template-areas: 
     "logo alarm-search profile";
     justify-content: space-between;
-    
+    margin: 30px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
 
 /* .root{

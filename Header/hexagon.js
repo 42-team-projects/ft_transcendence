@@ -16,37 +16,55 @@ HexagonTemplate.innerHTML = /*html*/`
             max-width:100%;
         }
     </style>
-    <div class="child"></div>
+    <div class="child">
+        <slot name="content"></slot>
+    </div>
 `
 
-class Hexagon extends HTMLElement{
+export class Hexagon extends HTMLElement{
     constructor(){
         super();
-        const width = this.getAttribute('width') || '140px';
-        const height = this.getAttribute('height') || '140px';
-        const Bcolor = this.getAttribute('Bcolor') || '#00FFFC';
-        const apply = this.getAttribute('apply') || 'flase';
-        
-        this.style.width = width;
-        this.style.height = height;
-        this.style.background = Bcolor
-        const tmp_content =  this.innerHTML
-        this.innerHTML = ''
-        if(apply === 'true')
-        {
-            const shadow = this.attachShadow({
-                mode: 'open'
-            })
-            shadow.appendChild(HexagonTemplate.content.cloneNode(true))
-            if(tmp_content.trim(' '))
-            {
-                console.log(tmp_content.trim(' '))
-                shadow.querySelector('.child').innerHTML = tmp_content;
-            }
-        }
+        const shadow = this.attachShadow({
+            mode: 'open'
+        })
+        shadow.appendChild(HexagonTemplate.content.cloneNode(true))
+    }
+
+    update()
+    {
+        console.log(this.height);
+        console.log(this.Bcolor);
+        this.style.width = this.width;
+        this.style.height = this.height;
+        this.style.background = this.Bcolor;
+    }
+    attributeChangedCallback(attribut, oldV, newV)
+    {
+        console.log('hi');
+        if(attribut === 'width' || attribut === 'height' || attribut === 'Bcolor')
+            this.update()
+    }
+    static get observedAttributes()
+    {
+        return ['width', 'height', 'Bcolor', 'apply']
+    }
+    get width(){
+        return this.getAttribute('width')
+    }
+    get height(){
+        return this.getAttribute('height')
+    }
+    get Bcolor(){
+        return this.getAttribute('Bcolor')
+    }
+    get apply(){
+        return this.getAttribute('apply')
+    }
+    connectedCallback(){
+        if(this.apply == 'true')
+            this.update()
     }
 }
 
-customElements.define('c-hexagon',Hexagon)
 
 
