@@ -6,7 +6,7 @@ const SearchTemplate = /*html*/`
     <input type="text" class="search-input" placeholder="SEARCH">
 `;
 
-class SearchBar extends HTMLElement {
+export class SearchBar extends HTMLElement {
     constructor() {
         super();
         this.innerHTML = SearchTemplate;
@@ -15,4 +15,3 @@ class SearchBar extends HTMLElement {
     }
 }
 
-customElements.define('search-bar', SearchBar);

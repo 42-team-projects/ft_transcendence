@@ -18,7 +18,7 @@ UserRankTemplate.innerHTML = /*html*/`
     </div>
 `
 
-class UserRank extends HTMLElement{
+export class UserRank extends HTMLElement{
     constructor(){
         super();
         const width = this.getAttribute('width') || '100px';
@@ -40,4 +40,3 @@ class UserRank extends HTMLElement{
     }
 }
 
-customElements.define('user-rank',UserRank)
