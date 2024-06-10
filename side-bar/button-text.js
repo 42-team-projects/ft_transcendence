@@ -2,6 +2,7 @@ const ButtontextElement = document.createElement('template')
 
 ButtontextElement.innerHTML = /*html*/ `
 
+    <slot name="content"> </slot>
 
 `
 

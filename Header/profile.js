@@ -4,7 +4,7 @@ const ProfileTemplate =  document.createElement('template');
 
 
 ProfileTemplate.innerHTML = /*html*/`
-    <c-hexagon width="120px" height="120px" Bcolor="#00FFFC" apply="true">
+    <c-hexagon width="140px" height="140px" apply="true">
         <img slot="content" draggable="false" src="./images/svg-header/profile.jpeg">
     </c-hexagon>
     <user-rank> 

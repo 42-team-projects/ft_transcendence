@@ -3,8 +3,6 @@ const SideBarTemplate = document.createElement('template')
 
 SideBarTemplate.innerHTML = /*html*/`
         <sb-button> </sb-button>
-        <button-text> </button-text>
-
 `
 
 class SideBar extends HTMLElement {

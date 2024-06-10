@@ -12,9 +12,6 @@ HexagonTemplate.innerHTML = /*html*/`
             background : linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
             clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
         }
-        img{
-            max-width:100%;
-        }
     </style>
     <div class="child">
         <slot name="content"></slot>
@@ -32,11 +29,9 @@ export class Hexagon extends HTMLElement{
 
     update()
     {
-        console.log(this.height);
-        console.log(this.Bcolor);
-        this.style.width = this.width;
-        this.style.height = this.height;
-        this.style.background = this.Bcolor;
+        this.style.width = this.width || '140px';
+        this.style.height = this.height || '140px';
+        this.style.background = this.Bcolor || '#00FFFC';
     }
     attributeChangedCallback(attribut, oldV, newV)
     {
