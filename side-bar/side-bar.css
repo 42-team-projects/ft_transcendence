@@ -4,12 +4,12 @@
 sb-button{
 
     border: 1px solid red;
-    margin-top: 20px;
     position: relative;
     display: flex;
-    height: 70px;
+    height: 80px;
     width: 100%;
-    /* align-items: center; */
+    align-items: center;
+    --height: 80px;
 }
 
 
@@ -20,8 +20,8 @@ sb-button{
     display: flex;
     background: transparent;
     /* background: red; */
-    height: 90px;
-    width: 90px;
+    height: var(--height);
+    width: var(--height);
     transform: rotate(270deg);
     justify-content: center;
 }

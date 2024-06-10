@@ -1,5 +1,4 @@
 
-
 const SB_ButtonTemplate = document.createElement('template')
 
 SB_ButtonTemplate.innerHTML = /*html*/`
@@ -23,7 +22,7 @@ SB_ButtonTemplate.innerHTML = /*html*/`
 class SideBarButton extends HTMLElement{
     constructor(){
         super();
-        this.appendChild(SB_ButtonTemplate.content)
+        this.appendChild(SB_ButtonTemplate.content.cloneNode(true))
         // console.log(this.querySelector('c-hexagon'));
 
 
