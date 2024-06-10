@@ -13,8 +13,9 @@ HeaderTemplate.innerHTML = /*html*/`
         </div>
     </div>
     <c-profile></c-profile>
-`
+    `
 
+        
 class HeaderBar extends HTMLElement{
     constructor(){
         super();

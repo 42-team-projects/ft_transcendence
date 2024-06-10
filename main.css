@@ -84,7 +84,7 @@ header-bar{
     
 }
 
-.root{
+/* .root{
     border: 1px solid rgb(0, 255, 204);
     grid-area: content;
     display: grid;
@@ -92,5 +92,5 @@ header-bar{
     grid-template-areas: 
     "single multiple online";
     justify-content: space-around;
-}
+} */
 
