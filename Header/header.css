@@ -94,15 +94,6 @@ c-profile{
 }
 
 
-c-hexagon{
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
-    z-index: 1;
-}
-
 user-rank{
     position: absolute;
     display: flex;
