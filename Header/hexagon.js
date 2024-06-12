@@ -3,6 +3,14 @@ const HexagonTemplate = document.createElement('template')
 
 HexagonTemplate.innerHTML = /*html*/`
     <style>
+        :host{
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
+            z-index: 1;
+        }
         .child{
             display: flex;
             justify-content: center;
@@ -35,7 +43,6 @@ export class Hexagon extends HTMLElement{
     }
     attributeChangedCallback(attribut, oldV, newV)
     {
-        console.log('hi');
         if(attribut === 'width' || attribut === 'height' || attribut === 'Bcolor')
             this.update()
     }
