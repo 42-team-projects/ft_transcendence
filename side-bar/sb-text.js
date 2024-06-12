@@ -18,7 +18,7 @@ ButtontextElement.innerHTML = /*html*/ `
     </div>
 `
 
-export class ButtonText extends HTMLElement {
+export class SideBarButtonText extends HTMLElement {
     constructor(){
         super();
         const shadow = this.attachShadow({

@@ -1,23 +1,24 @@
 
-import {ButtonText} from './button-text.js'
-customElements.define('button-text',ButtonText)
+import {SideBarButtonIcons} from './sb-icon.js'
+import {SideBarButtonText} from './sb-text.js'
+customElements.define('sb-text',SideBarButtonText)
+customElements.define('sb-icon',SideBarButtonIcons)
 
 const SB_ButtonTemplate = document.createElement('template')
 
 SB_ButtonTemplate.innerHTML = /*html*/`
     <style>
-        .trasparentItem{
+        sb-icon{
             position: relative;
             display: flex;
             background: transparent;
-            /* background: red; */
             width: 25%; 
             aspect-ratio: 1;
             transform: rotate(270deg);
             justify-content: center;
         }
 
-        .trasparentItem::before{
+        sb-icon::before{
             content: "";
             width: 100%;
             height: 100%;
@@ -30,7 +31,7 @@ SB_ButtonTemplate.innerHTML = /*html*/`
             position: absolute;
         }
 
-        .trasparentItem::after{
+        sb-icon::after{
             content: "";
             width: 100%;
             height: 100%;
@@ -43,7 +44,7 @@ SB_ButtonTemplate.innerHTML = /*html*/`
             transform: rotate(179deg);
             position: absolute;
         }
-        button-text{
+        sb-text{
             position: absolute;
             width: 83%;
             aspect-ratio: 8 / 2;
@@ -57,14 +58,12 @@ SB_ButtonTemplate.innerHTML = /*html*/`
         }
 
     </style>
-    <div class="trasparentItem">
-        <c-hexagon width="100%" height="100%" apply="true">
-            <slot name="image" slot="content"></slot>
-        </c-hexagon>
-    </div>
-    <button-text> 
+    <sb-icon>
+        <slot name="image" slot="content"></slot>
+    </sb-icon>
+    <sb-text> 
         <slot name="text" slot="content"></slot>
-    </button-text>
+    </sb-text>
 
 `
 
