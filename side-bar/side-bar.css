@@ -1,76 +1,7 @@
 
 
 
-sb-button{
 
-    border: 1px solid red;
-    position: relative;
-    display: flex;
-    height: 80px;
-    width: 100%;
-    align-items: center;
-}
-
-.images
-{
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    z-index: 2;
-    transform: rotate(90deg);
-}
-
-
-.trasparentItem{
-    position: relative;
-    display: flex;
-    background: transparent;
-    /* background: red; */
-    width: 25%; 
-    aspect-ratio: 1;
-    transform: rotate(270deg);
-    justify-content: center;
-}
-
-.trasparentItem.on{
-
-    position: relative;
-    display: flex;
-    background: transparent;
-    /* background: red; */
-    height: 80px;
-    width: 80px;
-    transform: rotate(270deg);
-    justify-content: center;
-}
-.trasparentItem::before{
-    content: "";
-    width: 100%;
-    height: 100%;
-    background: rgb(255, 255, 255);
-    clip-path: polygon(24.5% 1%, 31% 1.7%, 5.6% 18.6%, 5.1% 38%, 1.5% 33%, 2% 16%);
-    position: absolute;
-    top: 12.8%;
-    left: 10.8%;
-    z-index: 2;
-    /* transform: rotate(179deg); */
-    position: absolute;
-}
-
-.trasparentItem::after{
-    content: "";
-    width: 100%;
-    height: 100%;
-    background: rgb(255, 255, 255);
-    clip-path: polygon(24.5% 2%, 31% 2.7%, 5.6% 18.6%, 5.3% 38%, 1.5% 33%, 2% 16%);
-    position: absolute;
-    bottom: 12.1%;
-    right: 10.5%;
-    z-index: 2;
-    transform: rotate(179deg);
-    position: absolute;
-    /* filter: drop-shadow(0px 0px red);
-}
 
 .images.on{
     position: absolute;
@@ -135,18 +66,13 @@ sb-button{
 }
 
 
-.text-tag h1{
-    /* text-shadow: 0px 0px 20px #00fffb; */
-    color: #f9f9f9ad;
-    font-size: 30px;
-}
+/* h1{
+    color: #ffffffad;
+    font-size: 10px;
+} */
 
 
-.text-tag.on h1{
-    text-shadow: 0px 0px 20px #00fffb;
-    color: #ffffff;
-    font-size: 32px;
-}
+
 
 
 .button-container{
@@ -156,28 +82,4 @@ sb-button{
 }
 
 
-button-text{
-    position: absolute;
-    width: 90%;
-    height: 100%;
-    left: 18%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #00fffb;
-    clip-path: polygon(8% 15%, 79% 15%, 90% 50%, 79% 93%, 0.5% 93%,7% 50%, 4.5% 36%,4.5% 33%);
-    border: 1px solid red;
-}
 
-.text-tag{
-    position: absolute;
-    width: 98.7%;
-    height: 96.5%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* background-color: #00f0ff; */
-    background: linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
-    clip-path: polygon(7.7% 15%, 79% 15%, 90% 50%, 79% 93%, 0.5% 93%,7% 50%, 4.5% 36%,4.5% 33%);
-    border: 1px solid red;
-}

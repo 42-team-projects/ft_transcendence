@@ -69,8 +69,9 @@ side-bar{
     border: 1px solid red;
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between; */
-    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 4%;
 }
 
 
