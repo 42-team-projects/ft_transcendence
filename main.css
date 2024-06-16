@@ -66,12 +66,12 @@ img{
 
 side-bar{
     grid-area: sidebar;
-    border: 1px solid red;
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100%;
     gap: 4%;
+    margin-left: 4%;
 }
 
 

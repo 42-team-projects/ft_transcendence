@@ -21,8 +21,8 @@ UserRankTemplate.innerHTML = /*html*/`
 export class UserRank extends HTMLElement{
     constructor(){
         super();
-        const width = this.getAttribute('width') || '100px';
-        const height = this.getAttribute('height') || '120px';
+        const width = this.getAttribute('width') || '80px';
+        const height = this.getAttribute('height') || '110px';
         const Bcolor = this.getAttribute('Bcolor') || '#00FFFC';
         
         this.style.width = width;
