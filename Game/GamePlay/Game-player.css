@@ -1,11 +1,44 @@
-.SinglePlayer{
+single-player{
+    position: relative;
     grid-area : single;
     display: flex;
     align-items: center;
+    background-image: url(../../images/Single.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100%;
+    aspect-ratio: 0.55;
     /* border: 1px solid red; */
 }
 
+
+single-player::before{
+    position: absolute;
+    content: "";
+    background: url(../../images/green-form.svg);
+    width: 2%;
+    height: 22%;
+    background-size: contain;
+    top: 23.5%;
+    background-repeat: no-repeat;
+    /* border: 1px solid red; */
+
+}
+single-player::after{
+    position: absolute;
+    content: "";
+    background: url(../../images/green-form2.svg);
+    width: 3%;
+    height: 22.5%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    right: 0;
+    bottom: 26.7%;
+    /* border: 1px solid red; */
+}
 .multiPlayer{
+    transform: translateY(-20px);
     grid-area : multiple;
 }
 .online{
@@ -88,6 +121,7 @@
     border-radius: 5px;
 }
 .style-2{
+    display: flex;
     position: relative;
     width: 98%;
     height: 100%;
@@ -95,7 +129,7 @@
 .style-2::before{
     position: absolute;
     content: "";
-    background: url(./images/RectangleS.svg);
+    background: url(../../images/RectangleS.svg);
     width: 17%;
     height: 100%;
     background-size: contain;
@@ -104,7 +138,7 @@
 .style-2::after{
     position: absolute;
     content: "";
-    background: url(./images/circle.svg);
+    background: url(../../images/circle.svg);
     width: 10%;
     height: 5%;
     background-size: contain;
@@ -120,27 +154,7 @@
     height: 100%;
     /* border: 1px solid rgb(0, 255, 251); */
 }
-.style-3::before{
-    position: absolute;
-    content: "";
-    background: url(./images/green-form.svg);
-    width: 10%;
-    height: 22.1%;
-    background-size: contain;
-    top: 10.85rem;
-    background-repeat: no-repeat;
-}
-.style-3::after{
-    position: absolute;
-    content: "";
-    background: url(./images/green-form2.svg);
-    width: 2.8%;
-    height: 22.5%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    right: 0rem;
-    bottom: 12.75rem;
-}
+
 
 .style-3 img{
     position: absolute;
@@ -186,7 +200,7 @@
 .style-2_1::before{
     position: absolute;
     content: "";
-    background: url(./images/borderBottom-img.svg);
+    background: url(../../images/borderBottom-img.svg);
     width: 96.6%;
     height: 11.5%;
     z-index: 1;
@@ -199,7 +213,7 @@
 .style-2_1::after{
     position: absolute;
     content: "";
-    background: url(./images/borderBottom-h1.svg);
+    background: url(../../images/borderBottom-h1.svg);
     width: 100%;
     height: 10.1%;
     z-index: 1;
@@ -212,4 +226,52 @@
 
 .style-2_1 h1{
     color: white;
+}
+.buttonC {
+    position: relative;
+    border: 1px solid red;
+    width: 100%;
+    height: 47%;
+    top: 50%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.buttonC p{
+    width: 74%;
+    font-size: 1.3rem;
+    text-align: center;
+    text-wrap:wrap ;
+    color: wheat;
+}
+
+.buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 55%;
+    height: 22%;
+    clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
+    background-color: #47AF56;
+}
+.buttons-content{
+    position: absolute;
+    width: 97%;
+    height: 92%;
+    clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
+    background-color: #0000004a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons-content h1{
+    font-size: 2.8rem;
+    text-align: center;
+    text-wrap:wrap ;
+    color: wheat;
 }
