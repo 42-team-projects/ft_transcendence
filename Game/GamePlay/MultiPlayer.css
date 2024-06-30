@@ -1,53 +1,52 @@
-single-player{
+multi-player{
     position: relative;
-    grid-area : single;
+    grid-area : multiple;
     width: 100%;
-    aspect-ratio: 0.55;
-    /* border: 1px solid red; */
+    aspect-ratio: 0.555;
+    border: 1px solid red;
     transition: transform 0.3s ease;
+    transform: translateY(-10%);
 }
 
 single-player:hover{
     transform: scale(1.03);
 }
-.GreenCartImg{
+.BlueCartImg{
     position: absolute;
     width: 100%;
-    clip-path: polygon(20% 0px, 99.8% 0px, 99.8% 74%, 83.6% 99.6%, 21% 99.6%, 3.5% 73.5% ,3.5% 63%, 0% 58.5%, 0% 29.4%);
     z-index: 0;
 }
 
-.GreenCart{
+.BlueCart{
     position: absolute;
     width: 100%;
     z-index: 1;
 }
 
-single-player::before{
+multi-player::before{
     position: absolute;
     content: "";
-    background: url(../../images/green-form.svg);
-    width: 3%;
-    height: 22.5%;
+    background: url(../../images/BlueRectangle.svg);
+    width: 15%;
+    height: 100%;
     background-size: contain;
-    top: 22.5%;
+    top: 0%;
     background-repeat: no-repeat;
     /* border: 1px solid red; */
 
 }
-single-player::after{
+multi-player::after{
     position: absolute;
     content: "";
-    background: url(../../images/green-form2.svg);
-    width: 3%;
-    height: 22.5%;
+    background: url(../../images/shape1.svg);
+    width: 57%;
+    height: 10%;
     background-size: contain;
     background-repeat: no-repeat;
-    right: 0;
-    bottom: 27.5%;
+    right: 7%;
+    top: 91.6%;
 }
 .multiPlayer{
-    transform: translateY(-20px);
     grid-area : multiple;
 }
 .online{
@@ -66,36 +65,34 @@ single-player::after{
 }
 
 
-.style-0{
+.shapes2-3{
     /* border: 1px solid red; */
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-.style-0::before{
+.shapes2-3::before{
     position: absolute;
     content: "";
-    background: #47AF56;
-    width: 0.7%;
-    height: 6%;
+    background: url(../../images/shape2.svg);
+    width: 50%;
+    height: 100%;
+    right: 0;
+    /* top: 0.5%; */
     background-size: contain;
-    bottom: 13%;
-    left: 101%;
     background-repeat: no-repeat;
-    border-radius: 5px;
 }
-.style-0::after{
+.shapes2-3::after{
     position: absolute;
     content: "";
-    background: #47AF56;
-    width: 0.7%;
-    height: 4.5%;
+    background: url(../../images/shape3.svg);
+    width: 14%;
+    height: 40%;
     background-size: contain;
-    bottom: 19.5%;
-    left: 101%;
     background-repeat: no-repeat;
-    border-radius: 5px;
+    right: 0%;
+    bottom: 4%;
 }
 
 .style-1{
