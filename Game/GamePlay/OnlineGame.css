@@ -1,49 +1,50 @@
-multi-player{
+online-game{
+    background-image: url(../../images/OrangeCart/OrangeCart.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
     position: relative;
-    grid-area : multiple;
+    grid-area : online;
+    display: flex;
+    justify-content: center;
     width: 100%;
-    aspect-ratio: 0.56;
+    aspect-ratio: 0.561;
     transition: transform 0.3s ease;
-    transform: translateY(-7%);
+    /* border: 1px solid red; */
 }
 
-multi-player:hover{
-    transform: translateY(-7%) scale(1.03);
+online-game:hover{
+    transform: scale(1.03);
 }
-.BlueCartImg{
+.OrangeCartImg{
     position: absolute;
-    width: 100%;
+    top: 0.5%;
+    width: 98%;
     z-index: 0;
 }
 
-.BlueCart{
-    position: absolute;
-    width: 100%;
-    z-index: 1;
-}
-
-multi-player::before{
+online-game::before{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/BlueRectangle.svg);
-    width: 15%;
-    height: 30%;
+    background: url(../../images/OrangeCart/BorderShapes.svg);
+    width: 100%;
+    height: 100%;
     background-size: contain;
     top: 0%;
     background-repeat: no-repeat;
     /* border: 1px solid red; */
+    z-index: 1;
 
 }
-multi-player::after{
+online-game::after{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape1.svg);
-    width: 57%;
-    height: 10%;
+    background: url(../../images/OrangeCart/RL-Lines.svg);
+    width:  99%;
+    height: 100%;
     background-size: contain;
     background-repeat: no-repeat;
-    right: 7%;
-    top: 92.4%;
+    top: 15.5%;
 }
 .multiPlayer{
     grid-area : multiple;
@@ -64,60 +65,29 @@ multi-player::after{
 }
 
 
-.shapes2-3{
+.shapes3-4{
     /* border: 1px solid red; */
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-.shapes2-3::before{
+.shapes3-4::before{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape2.svg);
-    width: 50%;
-    height: 100%;
-    right: 0;
-    /* top: 0.5%; */
+    background: url(../../images/OrangeCart/shape3.svg);
+    width: 45%;
+    height: 13%;
+    left: 5%;
+    top: -1.5%;
     background-size: contain;
     background-repeat: no-repeat;
 }
-.shapes2-3::after{
-    position: absolute;
-    content: "";
-    background: url(../../images/BlueCart/shape3.svg);
-    width: 12%;
-    height: 35%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    right: 0%;
-    bottom: 4.1%;
-}
 
-.shapes4-5{
-    /* border: 1px solid red; */
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-
-.shapes4-5::before{
-    position: absolute;
-    content: "";
-    background: url(../../images/BlueCart/shape4.svg);
-    width: 13%;
-    height: 8%;
-    left: 2%;
-    bottom: 0;
-    /* top: 0.5%; */
-    background-size: contain;
-    background-repeat: no-repeat;
-}
 /* .shapes4-5::after{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape5.svg);
+    background: url(../../images/OrangeCart/shape5.svg);
     width: 14%;
     height: 40%;
     background-size: contain;
@@ -126,7 +96,7 @@ multi-player::after{
     bottom: 4%;
 } */
 
-.text{
+.Online-text{
     display: flex;
     justify-content: center;
     align-items: end;
@@ -136,37 +106,36 @@ multi-player::after{
     height: 50%;
 }
 
-.text::before{
+.Online-text::before{
     /* border: 1px solid blue; */
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/textSahpe1.svg);
-    width: 100%;
-    height: 100%;
+    background: url(../../images/OrangeCart/shape1.svg);
+    width: 96.5%;
+    height: 23%;
     background-repeat: no-repeat;
     background-size: contain;
-    right: 0;
-    top: 56%;
+    left: 0.2%;
+    top: 52.5%;
 }
 
-.text::after{
+.Online-text::after{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/textShape2.svg);
-    width: 100%;
-    height: 7%;
+    background: url(../../images/OrangeCart/shape2.svg);
+    width: 93.1%;
+    height: 0.5%;
     background-repeat: no-repeat;
-    background-size: contain;
-    right: 0;
-    top: 97%;
+    background-size: cover;
+    top: 100%;
 }
 
 
-.text h1{
+.Online-text h1{
     color: white;
     font-size: clamp(1rem, 1.6vw, 2.3rem);
 }
-.M-buttonC {
+.O-buttonC {
     position: relative;
     width: 100%;
     height: 47%;
@@ -178,14 +147,14 @@ multi-player::after{
     align-items: center;
 }
 
-.M-buttonC p{
+.O-buttonC p{
     width: 75%;
     font-size: clamp(0rem, 1vw, 1.1rem);
     text-align: center;
     color: wheat;
 }
 
-.M-buttons {
+.O-buttons {
     position: relative;
     display: flex;
     justify-content: center;
@@ -193,11 +162,11 @@ multi-player::after{
     width: 55%;
     height: 22%;
     clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
-    background-color: #2EA4E1;
+    background-color: #EB9A45;
     transition: transform 0.3s ease;
     cursor: pointer;
 }
-.M-buttons-content{
+.O-buttons-content{
     position: absolute;
     width: 97%;
     height: 92%;
@@ -208,15 +177,15 @@ multi-player::after{
     align-items: center;
 }
 
-.M-buttons-content h1{
+.O-buttons-content h1{
     font-size: clamp(1rem, 2vw, 2.8rem);
     text-align: center;
     text-wrap:wrap ;
     color: wheat;
 }
 
-.M-buttons:hover{
+.O-buttons:hover{
     transform: scale(1.05);
-    background-color: #408eb5;
+    background-color: #bd7d39;
 
 }

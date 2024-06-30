@@ -2,8 +2,7 @@ single-player{
     position: relative;
     grid-area : single;
     width: 100%;
-    aspect-ratio: 0.55;
-    /* border: 1px solid red; */
+    aspect-ratio: 0.56;
     transition: transform 0.3s ease;
 }
 
@@ -26,11 +25,11 @@ single-player:hover{
 single-player::before{
     position: absolute;
     content: "";
-    background: url(../../images/green-form.svg);
+    background: url(../../images/GreenCart/shape1.svg);
     width: 3%;
     height: 22.5%;
     background-size: contain;
-    top: 22.5%;
+    top: 23%;
     background-repeat: no-repeat;
     /* border: 1px solid red; */
 
@@ -38,13 +37,13 @@ single-player::before{
 single-player::after{
     position: absolute;
     content: "";
-    background: url(../../images/green-form2.svg);
+    background: url(../../images/GreenCart/shape2.svg);
     width: 3%;
     height: 22.5%;
     background-size: contain;
     background-repeat: no-repeat;
     right: 0;
-    bottom: 27.5%;
+    bottom: 26.5%;
 }
 .multiPlayer{
     transform: translateY(-20px);
@@ -80,7 +79,7 @@ single-player::after{
     width: 0.7%;
     height: 6%;
     background-size: contain;
-    bottom: 13%;
+    bottom: 11.5%;
     left: 101%;
     background-repeat: no-repeat;
     border-radius: 5px;
@@ -92,7 +91,7 @@ single-player::after{
     width: 0.7%;
     height: 4.5%;
     background-size: contain;
-    bottom: 19.5%;
+    bottom: 18%;
     left: 101%;
     background-repeat: no-repeat;
     border-radius: 5px;
@@ -113,7 +112,7 @@ single-player::after{
     height: 0.5%;
     background-size: contain;
     left: 1.5%;
-    bottom: 0;
+    top: 101%;
     background-repeat: no-repeat;
     border-radius: 5px;
 }
@@ -125,7 +124,7 @@ single-player::after{
     height: 0.5%;
     background-size: contain;
     left: 14%;
-    bottom: 0;
+    top: 101%;
     background-repeat: no-repeat;
     border-radius: 5px;
 }
@@ -133,25 +132,24 @@ single-player::after{
     display: flex;
     position: relative;
     width: 100%;
-    height: 99%;
+    height: 100%;
     /* border: 1px solid rgb(0,  255, 251); */
 }
 
 .style-2::before{
     position: absolute;
     content: "";
-    background: url(../../images/RectangleS.svg);
+    background: url(../../images/GreenCart/shape3.svg);
     width: 17%;
     height: 100%;
-    /* top: 0.5%; */
     background-size: contain;
     background-repeat: no-repeat;
 }
 .style-2::after{
     position: absolute;
     content: "";
-    background: url(../../images/circle.svg);
-    width: 10%;
+    background: url(../../images/GreenCart/shape4.svg);
+    width: 9%;
     height: 5%;
     background-size: contain;
     background-repeat: no-repeat;
@@ -206,31 +204,31 @@ single-player::after{
 .style-2_1::before{
     position: absolute;
     content: "";
-    background: url(../../images/borderBottom-img.svg);
+    background: url(../../images/GreenCart/shape5.svg);
     width: 96.9%;
     height: 20.6%;
     background-repeat: no-repeat;
     background-size: contain;
     right: 0;
-    top: 55%;
+    top: 56%;
 }
 
 .style-2_1::after{
     position: absolute;
     content: "";
-    background: url(../../images/borderBottom-h1.svg);
+    background: url(../../images/GreenCart/shape6.svg);
     width: 100%;
     height: 7%;
     background-repeat: no-repeat;
     background-size: contain;
     right: 0;
-    top: 95%;
+    top: 96%;
 }
 
 
 .style-2_1 h1{
     color: white;
-    font-size: clamp(1rem, 1.8vw, 2.3rem);
+    font-size: clamp(1rem, 1.6vw, 2.3rem);
 }
 .buttonC {
     position: relative;
