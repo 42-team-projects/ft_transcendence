@@ -1,12 +1,15 @@
 import {SinglePlayer} from './GamePlay/SinglePlayerCart.js'
+import {MultiPlayer} from './GamePlay/MultiPlayerCart.js'
 
 customElements.define("single-player", SinglePlayer)
+customElements.define("multi-player", MultiPlayer)
 
 const game_selection = document.createElement('template')
 
 game_selection.innerHTML = /*html*/ `
     <style>
         :host {
+            position:relative;
             align-items: center;
             width:100%;
             height:100%;
@@ -20,6 +23,7 @@ game_selection.innerHTML = /*html*/ `
         }
     </style>
     <single-player></single-player>
+    <multi-player></multi-player>
 `
 export class GameSelection extends HTMLElement{
 
