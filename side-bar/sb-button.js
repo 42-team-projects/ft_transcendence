@@ -16,7 +16,8 @@ SB_ButtonTemplate.innerHTML = /*html*/`
             aspect-ratio: 1;
             transform: rotate(270deg);
             justify-content: center;
-        }
+        }    
+
 
         sb-icon::before{
             content: "";
