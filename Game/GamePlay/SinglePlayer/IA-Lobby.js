@@ -1,3 +1,8 @@
+import { PageName } from "./PageName.js";
+
+import { PlayerBorder } from "./PlayerBorder.js";
+customElements.define('page-name',PageName)
+customElements.define('player-border',PlayerBorder)
 
 const ia_lobby = document.createElement('template');
 
@@ -11,18 +16,8 @@ ia_lobby.innerHTML =  /* html */ `
             align-items: center;
             width : 72%;
             aspect-ratio: 1.7;
-            
             border-radius: 10px;
             background-color: #e6ffff14;
-        }
-        .player{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            width: 36.4%;
-            aspect-ratio: 1;
-            overflow: hidden;
         }
         .lines{
             position : absolute;
@@ -58,6 +53,7 @@ ia_lobby.innerHTML =  /* html */ `
             position : absolute;
             width: 100%;
             height: 100%;
+            z-index: 2;
         }
         .VS::before{
             content: '';
@@ -72,8 +68,17 @@ ia_lobby.innerHTML =  /* html */ `
             transform: translateY(-100%);
         }
         @keyframes moveV {
-            to {
+
+            100%{
                 transform: translateY(106%);
+            }
+        }
+        @keyframes pulseShadow {
+            0%, 100% {
+                filter: drop-shadow(0px 0px 5px white);
+            }
+            50% {
+                filter: drop-shadow(0px 0px 10px white);
             }
         }
         .VS::after{
@@ -105,10 +110,22 @@ ia_lobby.innerHTML =  /* html */ `
             aspect-ratio: 1;
             transform: scaleX(-1) scaleY(-1);
         }
-        .opponent h1{
+        .Player{
             color: white;
             font-size: clamp(1rem, 9vw, 10rem);
-            transform: scaleX(-1) scaleY(-1);
+        }
+
+        .pageNameText{
+            width: var(--width);
+            height: 90%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            left:4%;
+        }
+        .pageNameText h1{
+            font-size: clamp(0.5rem, 2vw, 2.3rem);
+            color: white;
         }
         .playerImg{
             position: absolute;
@@ -117,46 +134,62 @@ ia_lobby.innerHTML =  /* html */ `
             z-index: 0;
             border-radius: 2%;
         }
-        .playerborder{
+        .Name{
+            z-index: 0;
             position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+            font-size: clamp(0.3rem, 1.5vw, 2rem);
+            color: white;
+            top:100%;
+            margin: 0;
+            animation: moveName 1s forwards;
+            transform: translateY(-200%);
         }
-        .page-name{
-            display: flex;
-            justify-content: center;
-            align-items: start;
-            position: absolute;
-            clip-path: polygon(0% 0%, 100% 0%, 84% 80%, 7% 80%, 7% 100%, 0% 80%);
-            width: 35%;
-            height: 11%;
-            gr: #00fffc45;
-            background: linear-gradient(62deg, #00fffc66 0%, #00fffc1f 61%);
-            top: -0.2%;
-            left: -2%;
-        }
-        .page-name h1{
-            color : white;
-            
+        @keyframes moveName {
+            to{
+                transform: translateY(0%);
+            }
         }
     </style>
-    <div class="player">
-    <img class="playerborder" src="../../../images/GreenCart/lobby-border.svg" alt="">
-    <img class="playerImg" src="../../images/svg-header/profile.jpeg" alt="">
-    </div>
-    <div class="opponent">
-    <h1>AI</h1>
-    </div>
+    <page-name width="35%">
+        <div slot="text" class="pageNameText">
+            <h1>MATCH MAKING</h1>
+        </div>
+    </page-name>
+    <player-border revers="false">
+        <img class="playerImg" slot="Player" src="../../images/svg-header/profile.jpeg" alt="">
+        <h1 class="Name" slot="Name" >NOUAKHRO</h1>
+    </player-border>
+    <player-border revers="true">
+        <h1 class="Player" slot="Player" >AI</h1>
+        <h1 class="Name" slot="Name" >AI</h1>
+    </player-border>
+
     <div class="VS">
     </div>
     <div class="lines"></div>
     `
-    // <div class="page-name">
-    //     <h1>
-    //         MATCH MAKING
-    //     </h1>
-    // </div>
+    /*
+            border: 1px solid red;
+            :host{
+            position: relative;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width : 72%;
+            aspect-ratio: 1.7;
+            border-radius: 10px;
+            background-color: #e6ffff14;
+        }
+        
+        :host::before{
+
+        }
+            .page-name h1{
+            color : white;
+            
+        }
+    */
+    // <!--  -->
 
 export class IaLobby extends HTMLElement{
 
@@ -168,5 +201,6 @@ export class IaLobby extends HTMLElement{
         // Clone the template content and append it to the shadow DOM
         this.shadowRoot.appendChild(ia_lobby.content.cloneNode(true));
     }
+
 }
 
