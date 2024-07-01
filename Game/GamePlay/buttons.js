@@ -61,7 +61,6 @@ export class Buttons extends HTMLElement{
         this.style.height = this.height || '22%';
         this.style.background = this.Bcolor || '#47AF56';
         this.style.setProperty('--hover-background-color', this.Hcolor);
-        // this.style.hover = this.Hcolor || '#47AF56';
     }
     connectedCallback(){
         this.update()
