@@ -1,6 +1,6 @@
-import {SinglePlayer} from './GamePlay/SinglePlayerCart.js'
-import {MultiPlayer} from './GamePlay/MultiPlayerCart.js'
-import {OnlineGame} from './GamePlay/OnlineGameCart.js'
+import {SinglePlayer} from './GamePlay/SinglePlayer/SinglePlayerCart.js'
+import {MultiPlayer} from './GamePlay/MultiPlayer/MultiPlayerCart.js'
+import {OnlineGame} from './GamePlay/GameOnline/OnlineGameCart.js'
 
 customElements.define("single-player", SinglePlayer)
 customElements.define("multi-player", MultiPlayer)
@@ -27,15 +27,15 @@ game_selection.innerHTML = /*html*/ `
     <single-player></single-player>
     <multi-player></multi-player>
     <online-game></online-game>
-`
+    `
 export class GameSelection extends HTMLElement{
 
     constructor()
     {
         super();
-        this.attachShadow({
+        const shadow = this.attachShadow({
             mode : 'open'            
         })
-        this.shadowRoot.appendChild(game_selection.content.cloneNode(true))
+        shadow.appendChild(game_selection.content.cloneNode(true))
     }
 }

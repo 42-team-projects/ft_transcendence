@@ -41,15 +41,6 @@ export class Hexagon extends HTMLElement{
         this.style.height = this.height || '140px';
         this.style.background = this.Bcolor || '#00FFFC';
     }
-    attributeChangedCallback(attribut, oldV, newV)
-    {
-        if(attribut === 'width' || attribut === 'height' || attribut === 'Bcolor')
-            this.update()
-    }
-    static get observedAttributes()
-    {
-        return ['width', 'height', 'Bcolor', 'apply']
-    }
     get width(){
         return this.getAttribute('width')
     }

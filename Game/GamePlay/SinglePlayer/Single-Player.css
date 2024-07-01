@@ -25,7 +25,7 @@ single-player:hover{
 single-player::before{
     position: absolute;
     content: "";
-    background: url(../../images/GreenCart/shape1.svg);
+    background: url(../../../images/GreenCart/shape1.svg);
     width: 3%;
     height: 22.5%;
     background-size: contain;
@@ -37,7 +37,7 @@ single-player::before{
 single-player::after{
     position: absolute;
     content: "";
-    background: url(../../images/GreenCart/shape2.svg);
+    background: url(../../../images/GreenCart/shape2.svg);
     width: 3%;
     height: 22.5%;
     background-size: contain;
@@ -139,7 +139,7 @@ single-player::after{
 .style-2::before{
     position: absolute;
     content: "";
-    background: url(../../images/GreenCart/shape3.svg);
+    background: url(../../../images/GreenCart/shape3.svg);
     width: 17%;
     height: 100%;
     background-size: contain;
@@ -148,7 +148,7 @@ single-player::after{
 .style-2::after{
     position: absolute;
     content: "";
-    background: url(../../images/GreenCart/shape4.svg);
+    background: url(../../../images/GreenCart/shape4.svg);
     width: 9%;
     height: 5%;
     background-size: contain;
@@ -204,7 +204,7 @@ single-player::after{
 .style-2_1::before{
     position: absolute;
     content: "";
-    background: url(../../images/GreenCart/shape5.svg);
+    background: url(../../../images/GreenCart/shape5.svg);
     width: 96.9%;
     height: 20.6%;
     background-repeat: no-repeat;
@@ -216,7 +216,7 @@ single-player::after{
 .style-2_1::after{
     position: absolute;
     content: "";
-    background: url(../../images/GreenCart/shape6.svg);
+    background: url(../../../images/GreenCart/shape6.svg);
     width: 100%;
     height: 7%;
     background-repeat: no-repeat;
@@ -249,38 +249,9 @@ single-player::after{
     color: wheat;
 }
 
-.buttons {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 55%;
-    height: 22%;
-    clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
-    background-color: #47AF56;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
-.buttons-content{
-    position: absolute;
-    width: 97%;
-    height: 92%;
-    clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
-    background-color: #050a2c63;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.buttons-content h1{
+.buttonC h1{
     font-size: clamp(1rem, 2vw, 2.8rem);
     text-align: center;
     text-wrap:wrap ;
     color: wheat;
-}
-
-.buttons:hover{
-    transform: scale(1.05);
-    background-color: #3a9c49;
-
 }

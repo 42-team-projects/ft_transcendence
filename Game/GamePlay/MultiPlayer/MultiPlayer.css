@@ -25,7 +25,7 @@ multi-player:hover{
 multi-player::before{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/BlueRectangle.svg);
+    background: url(../../../images/BlueCart/BlueRectangle.svg);
     width: 15%;
     height: 30%;
     background-size: contain;
@@ -37,7 +37,7 @@ multi-player::before{
 multi-player::after{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape1.svg);
+    background: url(../../../images/BlueCart/shape1.svg);
     width: 57%;
     height: 10%;
     background-size: contain;
@@ -74,7 +74,7 @@ multi-player::after{
 .shapes2-3::before{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape2.svg);
+    background: url(../../../images/BlueCart/shape2.svg);
     width: 50%;
     height: 100%;
     right: 0;
@@ -85,7 +85,7 @@ multi-player::after{
 .shapes2-3::after{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape3.svg);
+    background: url(../../../images/BlueCart/shape3.svg);
     width: 12%;
     height: 35%;
     background-size: contain;
@@ -105,7 +105,7 @@ multi-player::after{
 .shapes4-5::before{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape4.svg);
+    background: url(../../../images/BlueCart/shape4.svg);
     width: 13%;
     height: 8%;
     left: 2%;
@@ -117,7 +117,7 @@ multi-player::after{
 /* .shapes4-5::after{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/shape5.svg);
+    background: url(../../../images/BlueCart/shape5.svg);
     width: 14%;
     height: 40%;
     background-size: contain;
@@ -140,7 +140,7 @@ multi-player::after{
     /* border: 1px solid blue; */
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/textSahpe1.svg);
+    background: url(../../../images/BlueCart/textSahpe1.svg);
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
@@ -152,7 +152,7 @@ multi-player::after{
 .text::after{
     position: absolute;
     content: "";
-    background: url(../../images/BlueCart/textShape2.svg);
+    background: url(../../../images/BlueCart/textShape2.svg);
     width: 100%;
     height: 7%;
     background-repeat: no-repeat;
@@ -185,38 +185,10 @@ multi-player::after{
     color: wheat;
 }
 
-.M-buttons {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 55%;
-    height: 22%;
-    clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
-    background-color: #2EA4E1;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
-.M-buttons-content{
-    position: absolute;
-    width: 97%;
-    height: 92%;
-    clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
-    background-color: #050a2c63;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.M-buttons-content h1{
+.M-buttonC h1{
     font-size: clamp(1rem, 2vw, 2.8rem);
     text-align: center;
     text-wrap:wrap ;
     color: wheat;
-}
-
-.M-buttons:hover{
-    transform: scale(1.05);
-    background-color: #408eb5;
-
 }
