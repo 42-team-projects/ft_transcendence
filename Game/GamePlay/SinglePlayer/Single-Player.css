@@ -20,6 +20,7 @@ single-player:hover{
     position: absolute;
     width: 100%;
     z-index: 1;
+    /* box-shadow: 0px 0px 5px 5px #47AF56; */
 }
 
 single-player::before{
