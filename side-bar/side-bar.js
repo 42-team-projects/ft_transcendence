@@ -122,9 +122,6 @@ class SideBar extends HTMLElement {
             clone.lastElementChild.setAttribute('id', `${index}`);
             this.setbuttonimages(element.src, clone);
             this.setbuttontext(element.text, clone);
-            clone.lastElementChild.addEventListener('click', () => {
-                this.clickEvent = index;
-            });
             this.shadowRoot.appendChild(clone);
         });
         this.shadowRoot.insertBefore(ButtonStyle, this.shadowRoot.firstChild);
