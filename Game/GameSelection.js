@@ -23,6 +23,33 @@ game_selection.innerHTML = /*html*/ `
             "single multiple online";
             justify-content: space-around;
         }
+        .playerImg{
+            position: absolute;
+            height: 99%;
+            width: 99%;
+            z-index: 0;
+            border-radius: 2%;
+        }
+
+        .Player{
+            color: white;
+            font-size: clamp(1rem, 9vw, 10rem);
+        }
+        .Name{
+            z-index: 0;
+            position: absolute;
+            font-size: clamp(0.3rem, 1.5vw, 2rem);
+            color: white;
+            top:100%;
+            margin: 0;
+            animation: moveName 1s forwards;
+            transform: translateY(-200%);
+        }
+        @keyframes moveName {
+            to{
+                transform: translateY(0%);
+            }
+        }
     </style>
     <single-player></single-player>
     <multi-player></multi-player>

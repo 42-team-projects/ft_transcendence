@@ -14,14 +14,16 @@ player_border.innerHTML =  /* html */ `
         .player{
             display: flex;
             justify-content: center;
+            flex-direction: column;
             align-items: center;
-            position: absolute;
+            position: relative;
             width: 100%;
             aspect-ratio: 1;
             overflow: hidden;
             z-index: 1;
+            border-radius: 3.5%;
         }
-
+        
         .playerborder{
             position: absolute;
             width: 100%;
@@ -32,6 +34,11 @@ player_border.innerHTML =  /* html */ `
     <div class="player">
         <img class="playerborder" src="../../../images/GreenCart/lobby-border.svg" alt="">
         <slot name="Player"></slot>
+        <slot name="Player1"></slot>
+        <slot name="Player2"></slot>
+        <slot name="Player3"></slot>
+        <slot name="Player4"></slot>
+        <slot name="Player5"></slot>
     </div>
     <slot name="Name" class="textName"></slot>
 `
