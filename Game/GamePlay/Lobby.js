@@ -1,12 +1,29 @@
-import { PageName } from "./PageName.js";
+import { PageName } from "./SinglePlayer/PageName.js";
 
-import { PlayerBorder } from "./PlayerBorder.js";
+import { PlayerBorder } from "./SinglePlayer/PlayerBorder.js";
 customElements.define('page-name',PageName)
 customElements.define('player-border',PlayerBorder)
 
-const ia_lobby = document.createElement('template');
+const ai_lobby = document.createElement('template');
+const playerSlot = document.createElement('template');
+const opponentSlot = document.createElement('template');
 
-ia_lobby.innerHTML =  /* html */ `
+playerSlot.innerHTML = /*html*/ `
+    <slot  name="PlayerImg" slot="Player"> </slot>
+    <slot  name="PlayerName" slot="Name"> </slot>
+`
+
+opponentSlot.innerHTML = /*html*/ `
+
+    <slot  name="OpponentImg" slot="Player"> </slot>
+    <slot  name="OpponentName" slot="Name"> </slot>
+    <slot  name="OpponentImg1" slot="Player1"> </slot>
+    <slot  name="OpponentImg2" slot="Player2"> </slot>
+    <slot  name="OpponentImg3" slot="Player3"> </slot>
+    <slot  name="OpponentImg4" slot="Player4"> </slot>
+    <slot  name="OpponentImg5" slot="Player5"> </slot>
+`
+ai_lobby.innerHTML =  /* html */ `
     <style>
 
         :host{
@@ -16,8 +33,10 @@ ia_lobby.innerHTML =  /* html */ `
             align-items: center;
             width : 72%;
             aspect-ratio: 1.7;
-            border-radius: 10px;
+            border-radius: 2%;
             background-color: #e6ffff14;
+            box-shadow: 0px 0px 15px 1px #0000001c;
+            overflow:hidden;
         }
         .lines{
             position : absolute;
@@ -49,7 +68,6 @@ ia_lobby.innerHTML =  /* html */ `
             left: 44.2%;
         }
         .VS{
-            overflow: hidden;
             position : absolute;
             width: 100%;
             height: 100%;
@@ -110,11 +128,7 @@ ia_lobby.innerHTML =  /* html */ `
             aspect-ratio: 1;
             transform: scaleX(-1) scaleY(-1);
         }
-        .Player{
-            color: white;
-            font-size: clamp(1rem, 9vw, 10rem);
-        }
-
+        
         .pageNameText{
             width: var(--width);
             height: 90%;
@@ -127,42 +141,13 @@ ia_lobby.innerHTML =  /* html */ `
             font-size: clamp(0.5rem, 2vw, 2.3rem);
             color: white;
         }
-        .playerImg{
-            position: absolute;
-            height: 99%;
-            width: 99%;
-            z-index: 0;
-            border-radius: 2%;
-        }
-        .Name{
-            z-index: 0;
-            position: absolute;
-            font-size: clamp(0.3rem, 1.5vw, 2rem);
-            color: white;
-            top:100%;
-            margin: 0;
-            animation: moveName 1s forwards;
-            transform: translateY(-200%);
-        }
-        @keyframes moveName {
-            to{
-                transform: translateY(0%);
-            }
-        }
+
     </style>
     <page-name width="35%">
         <div slot="text" class="pageNameText">
             <h1>MATCH MAKING</h1>
         </div>
     </page-name>
-    <player-border revers="false">
-        <img class="playerImg" slot="Player" src="../../images/svg-header/profile.jpeg" alt="">
-        <h1 class="Name" slot="Name" >NOUAKHRO</h1>
-    </player-border>
-    <player-border revers="true">
-        <h1 class="Player" slot="Player" >AI</h1>
-        <h1 class="Name" slot="Name" >AI</h1>
-    </player-border>
 
     <div class="VS">
     </div>
@@ -191,16 +176,22 @@ ia_lobby.innerHTML =  /* html */ `
     */
     // <!--  -->
 
-export class IaLobby extends HTMLElement{
+export class aiLobby extends HTMLElement{
 
     constructor()
     {
         super();
         this.attachShadow({ mode: 'open' });
 
-        // Clone the template content and append it to the shadow DOM
-        this.shadowRoot.appendChild(ia_lobby.content.cloneNode(true));
+        this.shadowRoot.appendChild(ai_lobby.content.cloneNode(true));
+        this.setSlots(playerSlot.content, 'false')
+        this.setSlots(opponentSlot.content, 'true')
     }
-
+    setSlots(template, revers){
+        const border = new PlayerBorder();
+        border.setAttribute('revers', revers);
+        border.appendChild(template.cloneNode(true))
+        this.shadowRoot.appendChild(border.cloneNode(true))
+    }
 }
 
