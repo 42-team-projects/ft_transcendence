@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="../css/register.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+
+<body>
+    <h2>Registration Form</h2>
+    <p id="message"></p>
+    <form id="registerForm">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password1">Password:</label><br>
+        <input type="password" id="password1" name="password1" required><br>
+        <label for="password2">Confirm Password:</label><br>
+        <input type="password" id="password2" name="password2" required><br>
+        <input type="submit" value="Register">
+    </form>
+
+    <script type="module" src="../js/components/register.js"></script>
+</body>
+
+</html>
