@@ -9,6 +9,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class UserRegisterView(generics.GenericAPIView):
@@ -19,8 +20,6 @@ class UserRegisterView(generics.GenericAPIView):
         if (serializer.is_valid(raise_exception=True)):
             user = serializer.save()
             token = custom_token_generator.make_token(user)
-            # print(f"sending token: {token}")
-            # send_otp(request)
             send_confirmation_email(user, request, token)
             return Response({
                 'message': f"Thank you for registering, {user.username}.",
@@ -28,6 +27,7 @@ class UserRegisterView(generics.GenericAPIView):
             }, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class VerifyOTPView(generics.GenericAPIView):
     def post(self, request):
@@ -48,8 +48,10 @@ class LoginUserView(generics.GenericAPIView):
     
     def post(self, request):
         serializer = self.serializer_class(data=request.data, context={'request':request})
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        else:
+            return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class ConfirmEmailView(generics.GenericAPIView):
     serializer_class = ConfirmEmailSerializer
