@@ -34,11 +34,8 @@ player_border.innerHTML =  /* html */ `
     <div class="player">
         <img class="playerborder" src="../../../images/GreenCart/lobby-border.svg" alt="">
         <slot name="Player"></slot>
-        <slot name="Player1"></slot>
-        <slot name="Player2"></slot>
-        <slot name="Player3"></slot>
-        <slot name="Player4"></slot>
-        <slot name="Player5"></slot>
+        <slot name="searching"></slot>
+        
     </div>
     <slot name="Name" class="textName"></slot>
 `
