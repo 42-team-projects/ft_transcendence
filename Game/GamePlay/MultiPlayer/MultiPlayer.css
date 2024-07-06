@@ -3,7 +3,7 @@ multi-player{
     grid-area : multiple;
     width: 100%;
     aspect-ratio: 0.56;
-    transition: transform 0.3s ease;
+    transition: transform 1s ease;
     transform: translateY(-7%);
 }
 
