@@ -44,7 +44,7 @@ player_template.innerHTML = /*html*/ `
     </style>
     <img id='Player' class="Player" slot="PlayerImg" alt="" />
     <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
-    <h1 id='Opponent' class="Opponent" slot="OpponentImg"></h1>
+    <h1 id='Opponent' class="Opponent" slot="searshing"></h1>
     <h1 id='NOpponent' class="Name" slot="OpponentName"></h1>
 `
 
