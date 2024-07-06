@@ -15,14 +15,9 @@ playerSlot.innerHTML = /*html*/ `
 
 opponentSlot.innerHTML = /*html*/ `
 
-    <slot  name="OpponentImg" slot="Player"> </slot>
-    <slot  name="OpponentName" slot="Name"> </slot>
-    <slot  name="OpponentImg1" slot="Player1"> </slot>
-    <slot  name="OpponentImg2" slot="Player2"> </slot>
-    <slot  name="OpponentImg3" slot="Player3"> </slot>
-    <slot  name="OpponentImg4" slot="Player4"> </slot>
-    <slot  name="OpponentImg5" slot="Player5"> </slot>
-`
+    <slot  name="searshing" slot="searching"> </slot>
+    <slot name="OpponentName" slot="Name"></slot>
+    `
 ai_lobby.innerHTML =  /* html */ `
     <style>
 
@@ -36,7 +31,6 @@ ai_lobby.innerHTML =  /* html */ `
             border-radius: 2%;
             background-color: #e6ffff14;
             box-shadow: 0px 0px 15px 1px #0000001c;
-            overflow:hidden;
         }
         .lines{
             position : absolute;
