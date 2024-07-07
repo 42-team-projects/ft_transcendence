@@ -153,16 +153,22 @@ game_mode.innerHTML = /*html*/ `
    			justify-content: space-evenly;
 		}
 		.leftPlayer{
-			width: 24%;
-            aspect-ratio: 4.2;
-			border: 1px solid red;
-			transform: translateY(15%)
+			width: 25%;
+			aspect-ratio: 4.2;
+			border: 2px solid #00b9be;
+			transform: translateY(15%);
+			display: grid;
+			grid-template-areas: "img player_info scor";
+			grid-template-columns: 23.5% 35% 1fr;
 		}
 		.rightPlayer{
-			width: 24%;
-            aspect-ratio: 4.2;
-			border: 1px solid red;
-			transform: translateY(15%)
+			width: 25%;
+			aspect-ratio: 4.2;
+			border: 2px solid #00b9be;
+			transform: translateY(15%) scaleX(-1);
+			display: grid;
+			grid-template-areas: "img player_info scor";
+			grid-template-columns: 23.5% 35% 1fr;
 		}
 		.Play_Pause{
 			border: 1px solid red;
@@ -362,7 +368,7 @@ game_mode.innerHTML = /*html*/ `
     		right: 0;
     		transform: scaleX(-1) scaleY(-1);
 		}
-		.terain_container{
+		.table_container{
 			width:100%;
 			height:100%;
 			position:absolute;
@@ -372,7 +378,7 @@ game_mode.innerHTML = /*html*/ `
 			align-items: center;
 		}
 
-		.terain{
+		.table{
 			width: 85.5%;
    			height: 79.5%;
    			position: absolute;
@@ -381,7 +387,7 @@ game_mode.innerHTML = /*html*/ `
 			justify-content: center;
 			align-items: center;
 		}
-		.terain::before{
+		.table::before{
 			content: '';
 			width: 1px;
    			height: 100%;
@@ -389,7 +395,7 @@ game_mode.innerHTML = /*html*/ `
    			background-color: white;
 			z-index: -1;
 		}
-		.terain::after{
+		.table::after{
 			content: '';
 			width: 9%;
             aspect-ratio: 1;
@@ -398,11 +404,99 @@ game_mode.innerHTML = /*html*/ `
 			border-radius:50%;
 			z-index: -1;
 		}
+		.GamePlayer{
+   			position: absolute;
+   			border : 1px solid #00b9be;
+			grid-area: img;
+		}
+		.GamePlayer1{
+   			position: absolute;
+   			border : 1px solid #00b9be;
+			grid-area: img;
+    		transform: scaleX(-1);
+		}
+		.playerinfo{
+			grid-area: player_info;
+			display:flex;
+			flex-direction: column;
+			justify-content: space-around;
+			align-items: center;
+		}
+		.playerinfo1{
+			grid-area: player_info;
+			display:flex;
+			flex-direction: column;
+			justify-content: space-around;
+			align-items: center;
+    		transform: scaleX(-1);
+		}
+
+		.playerinfo p, .playerinfo1 p{
+			font-size: clamp(0.5rem, 2vw, 1.6rem);
+			color: white;
+		}
+
+		.playerscor{
+			grid-area: scor;
+			display:flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.playerscor1{
+			grid-area: scor;
+			display:flex;
+			justify-content: center;
+			align-items: center;
+    		transform: scaleX(-1);
+		}
+
+		.playerscor h1, .playerscor1 h1{
+			font-size: clamp(0.5rem, 4vw, 4rem);
+			color: white;
+		}
+
+		.rackita {
+			width: 50%;
+			height: 15%;
+			background-color: white;
+		}
+		.rackita1 {
+			width: 50%;
+			height: 15%;
+			background-color: #00b9be;
+		}
 	</style>
 	<div class="game_header">
-		<div class="leftPlayer"></div>
+
+		<div class="leftPlayer">
+			<img class="GamePlayer" src="../../images/svg-header/profile.jpeg" />
+			<div class="playerinfo">
+				<div class="player_number">
+					<p>PLAYER 1</p>
+				</div>
+				<div class="rackita"></div>
+			</div>
+			<div class="playerscor">
+				<h1>10</h1>
+			</div>
+		</div>
+
 		<div class="Play_Pause"></div>
-		<div class="rightPlayer"></div>
+		
+		<div class="rightPlayer">
+			<img class="GamePlayer1" src="../../images/svg-header/profile.jpeg" />
+			<div class="playerinfo1">
+				<div class="player_number">
+					<p>PLAYER 1</p>
+				</div>
+				<div class="rackita1"></div>
+			</div>
+			<div class="playerscor1">
+				<h1>5</h1>
+			</div>
+		</div>
+
 	</div>
 	<div class="c_game">
 	<div class="GameShapes">
@@ -414,8 +508,8 @@ game_mode.innerHTML = /*html*/ `
 				<div class="center_shapes_LB_RB"></div>
 				<div class="center_shapes_MLR"></div>
 			</div>
-			<div class="terain_container">
-				<div class="terain">
+			<div class="table_container">
+				<div class="table">
 			
 				</div>
 			</div>
@@ -432,63 +526,64 @@ export class OnlineGame extends HTMLElement{
 		const button = this.querySelector('c-button')
 		const root = document.querySelector('root-content')
 		button.addEventListener('click', ()=>{
+			document.body.innerHTML = game_mode.innerHTML;
 			
-			const lobby = new aiLobby();
-			const p_img = player_template.content.getElementById('Player')
-			p_img.src = '../../images/svg-header/profile.jpeg';
-			const p_h1 = player_template.content.getElementById('NPlayer')
+			// const lobby = new aiLobby();
+			// const p_img = player_template.content.getElementById('Player')
+			// p_img.src = '../../images/svg-header/profile.jpeg';
+			// const p_h1 = player_template.content.getElementById('NPlayer')
 
-			p_h1.textContent = 'NOUAKHRO'
+			// p_h1.textContent = 'NOUAKHRO'
 
-			const players = player_template.content.querySelectorAll('.PlayerS')
-			console.log(players);
-			players.forEach((element, index)=>{
-				element.style.setProperty('--dest', '400%');
-				element.style.setProperty('--numsec', 1);
-				element.src = sherching_images[index].src;
-			})
-			lobby.appendChild(player_template.content.cloneNode(true))
-			root.innerHTML = ``
-			root.appendChild(lobby)
+			// const players = player_template.content.querySelectorAll('.PlayerS')
+			// console.log(players);
+			// players.forEach((element, index)=>{
+			// 	element.style.setProperty('--dest', '400%');
+			// 	element.style.setProperty('--numsec', 1);
+			// 	element.src = sherching_images[index].src;
+			// })
+			// lobby.appendChild(player_template.content.cloneNode(true))
+			// root.innerHTML = ``
+			// root.appendChild(lobby)
 		
-			setTimeout(() => {
-				const h1 = document.createElement('h1')
-				const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
-				lobbyPlayerS.forEach((element)=>{
-					element.style.setProperty('--numsec', 10);
-					element.style.setProperty('--dest', '400%');
-					element.style.opacity = '1'
-				})
-				h1.id = 'NOpponent'
-				h1.classList = 'Name'
-				h1.slot = 'OpponentName'
-				h1.textContent = sherching_images[0].name
-				lobby.appendChild(h1.cloneNode(true))				
-			}, 5000);
-			setTimeout(() => {
-				const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
-				lobbyPlayerS.forEach((element, index)=>{
-					if(index !== 0)
-						element.remove()
-					else{
-						element.style.animation = 'none';
-						lobby.shadowRoot.appendChild(timer.content.cloneNode(true));
-						const countdown = setInterval(()=>{
-							time--;
-							const desc = lobby.shadowRoot.querySelector('.descounter')
-							const h1 = desc.querySelector('h1')
-							if(time < 0){
-								document.body.innerHTML = game_mode.innerHTML;
-								clearInterval(countdown)
-							}
-							else{
-								h1.textContent = `${time}`
-							}
-						},1000)
-					}
-				})
+			// setTimeout(() => {
+			// 	const h1 = document.createElement('h1')
+			// 	const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
+			// 	lobbyPlayerS.forEach((element)=>{
+			// 		element.style.setProperty('--numsec', 10);
+			// 		element.style.setProperty('--dest', '400%');
+			// 		element.style.opacity = '1'
+			// 	})
+			// 	h1.id = 'NOpponent'
+			// 	h1.classList = 'Name'
+			// 	h1.slot = 'OpponentName'
+			// 	h1.textContent = sherching_images[0].name
+			// 	lobby.appendChild(h1.cloneNode(true))				
+			// }, 5000);
+			// setTimeout(() => {
+			// 	const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
+			// 	lobbyPlayerS.forEach((element, index)=>{
+			// 		if(index !== 0)
+			// 			element.remove()
+			// 		else{
+			// 			element.style.animation = 'none';
+			// 			lobby.shadowRoot.appendChild(timer.content.cloneNode(true));
+			// 			const countdown = setInterval(()=>{
+			// 				time--;
+			// 				const desc = lobby.shadowRoot.querySelector('.descounter')
+			// 				const h1 = desc.querySelector('h1')
+			// 				if(time < 0){
+			// 					document.body.innerHTML = game_mode.innerHTML;
+			// 					clearInterval(countdown)
+			// 				}
+			// 				else{
+			// 					h1.textContent = `${time}`
+			// 				}
+			// 			},1000)
+			// 		}
+			// 	})
 
-			}, 6000);
+			// }, 6000);
 		})
 
 	}
