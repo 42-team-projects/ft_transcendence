@@ -1,6 +1,7 @@
 
 import {Buttons} from '../buttons.js'
 import {aiLobby} from '../Lobby.js'
+import { GamePage } from './GamePage.js'
 
 const OnlineGameTemplate = document.createElement('template')
 
@@ -142,383 +143,6 @@ timer.innerHTML = /*html*/ `
 	</div>
 `
 
-const game_mode = document.createElement('template')
-
-game_mode.innerHTML = /*html*/ `
-	<style>
-		.game_header{
-			grid-area: head;
-   			display: flex;
-			align-items: end;
-   			justify-content: space-evenly;
-		}
-		.leftPlayer{
-			width: 25%;
-			aspect-ratio: 4.2;
-			border: 2px solid #00b9be;
-			transform: translateY(15%);
-			display: grid;
-			grid-template-areas: "img player_info scor";
-			grid-template-columns: 23.5% 35% 1fr;
-		}
-		.rightPlayer{
-			width: 25%;
-			aspect-ratio: 4.2;
-			border: 2px solid #00b9be;
-			transform: translateY(15%) scaleX(-1);
-			display: grid;
-			grid-template-areas: "img player_info scor";
-			grid-template-columns: 23.5% 35% 1fr;
-		}
-		.Play_Pause{
-			border: 1px solid red;
-			width: 7%;
-            aspect-ratio: 1.5;
-		}
-		.c_game{
-			grid-area: 2 / 1 / 4 / 3;
-			border: 1px solid red;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		.GameShapes{
-			position:relative;
-			border: 1px solid red;
-			width: 90%;
-            aspect-ratio: 2.1;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		.shapes_LT_RT{
-			width:100%;
-			height:100%;
-			position:absolute;			
-		}
-		.shapes_LT_RT::before{
-			position: absolute;
-		    content: '';
-		    width: 43%;
-		    height: 16%;
-		    background-image: url(../../images/game-LT.svg);
-		    background-repeat: no-repeat;
-		    background-size: contain;
-		    top: 0;
-		    left: 0;
-		}
-		.shapes_LT_RT::after{
-			position: absolute;
-		    content: '';
-		    width: 43%;
-		    height: 16%;
-		    background-image: url(../../images/game-LT.svg);
-		    background-repeat: no-repeat;
-		    background-size: contain;
-		    top: 0;
-		    right: 0;
-			transform: scaleX(-1);
-		}
-		.shapes_LB_RB{
-			width:100%;
-			height:100%;
-			position:absolute;			
-		}
-		.shapes_LB_RB::before{
-			position: absolute;
-			content: '';
-			width: 43%;
-			height: 16%;
-			background-image: url(../../images/game-LT.svg);
-			background-repeat: no-repeat;
-			background-size: contain;
-			bottom: 0;
-			left: 0;
-			transform: scaleY(-1);
-		}
-		.shapes_LB_RB::after{
-			position: absolute;
-			content: '';
-			width: 43%;
-			height: 16%;
-			background-image: url(../../images/game-LT.svg);
-			background-repeat: no-repeat;
-			background-size: contain;
-			bottom: 0;
-			right: 0;
-			transform: scaleY(-1) scaleX(-1);
-		}
-		.shapes_DT{
-			width:100%;
-			height:100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: space-between;
-		}
-		.shapes_DT::before{
-			margin-top: 0.7%;
-			content: '';
-			width: 25%;
-			height: 7%;
-			background-image: url(../../images/game-DT.svg);
-			background-repeat: no-repeat;
-			background-size: contain;
-		}
-		.shapes_DT::after{
-			content: '';
-			width: 25%;
-			height: 7%;
-			background-image: url(../../images/game-DT.svg);
-			background-repeat: no-repeat;
-			background-size: contain;
-			transform: scaleY(-1) scaleX(-1);
-			margin-bottom: 0.7%;
-		}
-		.shapes_LR_container{
-			position:absolute;
-			width:99.5%;
-			height:65%;
-		}
-		.center_shapes_LT_RT{
-			width:100%;
-			height:100%;
-			position:absolute;
-		}
-		.center_shapes_LT_RT::before{
-			position: absolute;
-    		content: '';
-    		width: 6%;
-    		height: 34%;
-    		background-image: url(../../images/game-LR.svg);
-    		background-repeat: no-repeat;
-    		background-size: contain;
-		    top: 0;
-		    left: 0;
-		}
-		.center_shapes_LT_RT::after{
-			position: absolute;
-    		content: '';
-    		width: 6%;
-    		height: 34%;
-    		background-image: url(../../images/game-LR.svg);
-    		background-repeat: no-repeat;
-    		background-size: contain;
-    		top: 0;
-    		right: 0;
-    		transform: scaleX(-1);
-		}
-
-		.center_shapes_LB_RB{
-			width:100%;
-			height:100%;
-			position:absolute;
-		}
-		.center_shapes_LB_RB::before{
-			position: absolute;
-    		content: '';
-    		width: 6%;
-    		height: 34%;
-    		background-image: url(../../images/game-LR.svg);
-    		background-repeat: no-repeat;
-    		background-size: contain;
-		    bottom: 0;
-		    left: 0;
-    		transform: scaleY(-1);
-		}
-		.center_shapes_LB_RB::after{
-			position: absolute;
-    		content: '';
-    		width: 6%;
-    		height: 34%;
-    		background-image: url(../../images/game-LR.svg);
-    		background-repeat: no-repeat;
-    		background-size: contain;
-    		bottom: 0;
-    		right: 0;
-    		transform: scaleX(-1) scaleY(-1);
-		}
-		.center_shapes_MLR{
-			width:100%;
-			height:100%;
-			position:absolute;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-		.center_shapes_MLR::before{
-    		content: '';
-    		width: 2%;
-    		height: 32%;
-    		background-image: url(../../images/game-MLR.svg);
-    		background-repeat: no-repeat;
-    		background-size: contain;
-		    bottom: 0;
-		    left: 0;
-    		transform: scaleY(-1);
-		}
-		.center_shapes_MLR::after{
-    		content: '';
-    		width: 2%;
-    		height: 32%;
-    		background-image: url(../../images/game-MLR.svg);
-    		background-repeat: no-repeat;
-    		background-size: contain;
-    		bottom: 0;
-    		right: 0;
-    		transform: scaleX(-1) scaleY(-1);
-		}
-		.table_container{
-			width:100%;
-			height:100%;
-			position:absolute;
-			border: 1px solid blue;
-			display:flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.table{
-			width: 85.5%;
-   			height: 79.5%;
-   			position: absolute;
-   			background-color: #00b9be57;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		.table::before{
-			content: '';
-			width: 1px;
-   			height: 100%;
-   			position: absolute;
-   			background-color: white;
-			z-index: -1;
-		}
-		.table::after{
-			content: '';
-			width: 9%;
-            aspect-ratio: 1;
-   			position: absolute;
-   			border : 1px solid white;
-			border-radius:50%;
-			z-index: -1;
-		}
-		.GamePlayer{
-   			position: absolute;
-   			border : 1px solid #00b9be;
-			grid-area: img;
-		}
-		.GamePlayer1{
-   			position: absolute;
-   			border : 1px solid #00b9be;
-			grid-area: img;
-    		transform: scaleX(-1);
-		}
-		.playerinfo{
-			grid-area: player_info;
-			display:flex;
-			flex-direction: column;
-			justify-content: space-around;
-			align-items: center;
-		}
-		.playerinfo1{
-			grid-area: player_info;
-			display:flex;
-			flex-direction: column;
-			justify-content: space-around;
-			align-items: center;
-    		transform: scaleX(-1);
-		}
-
-		.playerinfo p, .playerinfo1 p{
-			font-size: clamp(0.5rem, 2vw, 1.6rem);
-			color: white;
-		}
-
-		.playerscor{
-			grid-area: scor;
-			display:flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.playerscor1{
-			grid-area: scor;
-			display:flex;
-			justify-content: center;
-			align-items: center;
-    		transform: scaleX(-1);
-		}
-
-		.playerscor h1, .playerscor1 h1{
-			font-size: clamp(0.5rem, 4vw, 4rem);
-			color: white;
-		}
-
-		.rackita {
-			width: 50%;
-			height: 15%;
-			background-color: white;
-		}
-		.rackita1 {
-			width: 50%;
-			height: 15%;
-			background-color: #00b9be;
-		}
-	</style>
-	<div class="game_header">
-
-		<div class="leftPlayer">
-			<img class="GamePlayer" src="../../images/svg-header/profile.jpeg" />
-			<div class="playerinfo">
-				<div class="player_number">
-					<p>PLAYER 1</p>
-				</div>
-				<div class="rackita"></div>
-			</div>
-			<div class="playerscor">
-				<h1>10</h1>
-			</div>
-		</div>
-
-		<div class="Play_Pause"></div>
-		
-		<div class="rightPlayer">
-			<img class="GamePlayer1" src="../../images/svg-header/profile.jpeg" />
-			<div class="playerinfo1">
-				<div class="player_number">
-					<p>PLAYER 1</p>
-				</div>
-				<div class="rackita1"></div>
-			</div>
-			<div class="playerscor1">
-				<h1>5</h1>
-			</div>
-		</div>
-
-	</div>
-	<div class="c_game">
-	<div class="GameShapes">
-			<div class="shapes_LT_RT"></div>
-			<div class="shapes_LB_RB"></div>
-			<div class="shapes_DT"></div>
-			<div class="shapes_LR_container">
-				<div class="center_shapes_LT_RT"></div>
-				<div class="center_shapes_LB_RB"></div>
-				<div class="center_shapes_MLR"></div>
-			</div>
-			<div class="table_container">
-				<div class="table">
-			
-				</div>
-			</div>
-		</div>
-	</div>
-`
-
-
-// scaleX(-1) scaleY(-1)
 export class OnlineGame extends HTMLElement{
 	constructor (){
 		super();
@@ -526,65 +150,70 @@ export class OnlineGame extends HTMLElement{
 		const button = this.querySelector('c-button')
 		const root = document.querySelector('root-content')
 		button.addEventListener('click', ()=>{
-			document.body.innerHTML = game_mode.innerHTML;
-			
-			// const lobby = new aiLobby();
-			// const p_img = player_template.content.getElementById('Player')
-			// p_img.src = '../../images/svg-header/profile.jpeg';
-			// const p_h1 = player_template.content.getElementById('NPlayer')
+			const game = new GamePage();
+			document.body.innerHTML = ``;
+			document.body.appendChild(game);
 
-			// p_h1.textContent = 'NOUAKHRO'
+		// 	const lobby = new aiLobby();
+		// 	const p_img = player_template.content.getElementById('Player')
+		// 	p_img.src = '../../images/svg-header/profile.jpeg';
+		// 	const p_h1 = player_template.content.getElementById('NPlayer')
 
-			// const players = player_template.content.querySelectorAll('.PlayerS')
-			// console.log(players);
-			// players.forEach((element, index)=>{
-			// 	element.style.setProperty('--dest', '400%');
-			// 	element.style.setProperty('--numsec', 1);
-			// 	element.src = sherching_images[index].src;
-			// })
-			// lobby.appendChild(player_template.content.cloneNode(true))
-			// root.innerHTML = ``
-			// root.appendChild(lobby)
-		
-			// setTimeout(() => {
-			// 	const h1 = document.createElement('h1')
-			// 	const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
-			// 	lobbyPlayerS.forEach((element)=>{
-			// 		element.style.setProperty('--numsec', 10);
-			// 		element.style.setProperty('--dest', '400%');
-			// 		element.style.opacity = '1'
-			// 	})
-			// 	h1.id = 'NOpponent'
-			// 	h1.classList = 'Name'
-			// 	h1.slot = 'OpponentName'
-			// 	h1.textContent = sherching_images[0].name
-			// 	lobby.appendChild(h1.cloneNode(true))				
-			// }, 5000);
-			// setTimeout(() => {
-			// 	const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
-			// 	lobbyPlayerS.forEach((element, index)=>{
-			// 		if(index !== 0)
-			// 			element.remove()
-			// 		else{
-			// 			element.style.animation = 'none';
-			// 			lobby.shadowRoot.appendChild(timer.content.cloneNode(true));
-			// 			const countdown = setInterval(()=>{
-			// 				time--;
-			// 				const desc = lobby.shadowRoot.querySelector('.descounter')
-			// 				const h1 = desc.querySelector('h1')
-			// 				if(time < 0){
-			// 					document.body.innerHTML = game_mode.innerHTML;
-			// 					clearInterval(countdown)
-			// 				}
-			// 				else{
-			// 					h1.textContent = `${time}`
-			// 				}
-			// 			},1000)
-			// 		}
-			// 	})
+		// 	p_h1.textContent = 'NOUAKHRO'
 
-			// }, 6000);
+		// 	const players = player_template.content.querySelectorAll('.PlayerS')
+		// 	console.log(players);
+		// 	players.forEach((element, index)=>{
+		// 		element.style.setProperty('--dest', '400%');
+		// 		element.style.setProperty('--numsec', 1);
+		// 		element.src = sherching_images[index].src;
+		// 	})
+		// 	lobby.appendChild(player_template.content.cloneNode(true))
+		// 	root.innerHTML = ``
+		// 	root.appendChild(lobby)
+		// 	setTimeout(() => this.setPlayer(lobby), 5000);
+		// 	setTimeout(() => this.gameMode(lobby), 6000);
 		})
+	}
 
+	gameMode(lobby){
+		const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
+		lobbyPlayerS.forEach((element, index)=>{
+			if(index !== 0)
+				element.remove()
+			else{
+				element.style.animation = 'none';
+				lobby.shadowRoot.appendChild(timer.content.cloneNode(true));
+				const countdown = setInterval(()=>{
+					time--;
+					const desc = lobby.shadowRoot.querySelector('.descounter')
+					const h1 = desc.querySelector('h1')
+					if(time < 0){
+						const game = new GamePage();
+						document.body.innerHTML = ``;
+						document.body.appendChild(game);
+						clearInterval(countdown)
+					}
+					else{
+						h1.textContent = `${time}`
+					}
+				},1000)
+			}
+		})
+	}
+
+	setPlayer(lobby){
+		const h1 = document.createElement('h1')
+		const lobbyPlayerS = lobby.querySelectorAll('.PlayerS')
+		lobbyPlayerS.forEach((element)=>{
+			element.style.setProperty('--numsec', 10);
+			element.style.setProperty('--dest', '400%');
+			element.style.opacity = '1'
+		})
+		h1.id = 'NOpponent'
+		h1.classList = 'Name'
+		h1.slot = 'OpponentName'
+		h1.textContent = sherching_images[0].name
+		lobby.appendChild(h1.cloneNode(true))	
 	}
 }
