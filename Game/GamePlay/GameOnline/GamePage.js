@@ -78,7 +78,14 @@ export class GamePage extends HTMLElement{
         player2.style.top = '50%';
         addEventListener('keydown', (event) => this.setMove(event, keys));
         addEventListener('keyup', (event) => this.resetMove(event, keys));
+        const  checkKeys = ()=> {
+            this.movePlayer(keys);
+            requestAnimationFrame(checkKeys);
+        }
+
+        requestAnimationFrame(checkKeys);
     }
+
     movePlayer(keys){
         const player1 = this.querySelector('.rackit_of_p1')
         const player2 = this.querySelector('.rackit_of_p2')
