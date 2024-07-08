@@ -98,3 +98,13 @@ root-content{
     height: 100%;
 }
 
+game-page{
+    grid-area: 1 / 1 / 4 / 3;
+    display: grid;
+    grid-template-rows: 15% 1fr;
+    grid-template-areas: 
+        "head"
+        "content";
+    position: relative;
+    border: 1px solid red;
+}
