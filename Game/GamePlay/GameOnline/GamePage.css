@@ -345,7 +345,6 @@
     width: 1%;
     height: 12%;
     position: absolute;
-    left: 0%;
     background-color: #00b9be;
 }
 
@@ -353,6 +352,13 @@
     width: 1%;
     height: 12%;
     position: absolute;
-    right: 0%;
     background-color: #00b9be;
+}
+
+.ball{
+    position: absolute;
+    width: 2%;
+    aspect-ratio: 1;
+    background-color: white;
+    border-radius: 50%;
 }
