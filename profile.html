@@ -23,11 +23,25 @@
     <side-bar></side-bar>
     <div class="root">
         <div class="main-profile-container">
-            <!-- <div class="profile-image"></div> -->
             <!-- <div class="profile-rank-2"></div> -->
             <div class="profile-cover"></div>
             <div class="profile-data">
-                <div class="profile-data-infos"></div>
+                <div class="profile-data-infos">
+                    <div class="profile-image">
+                        <img src="assets/profile-assets/profile-image.svg" width="250px"/>
+                        <div class="name">
+                            <div class="name-and-online">
+                                <p>ESALIM</p>
+                                <div class="online-logo"></div>
+                            </div>
+                            <div class="joined-date">
+                                <img src="images/Chat.svg" width="20px"/>
+                                <p class="joined-text">joined:</p>
+                                <p class="joined-date-text">27 JUL 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="profile-data-stats">
                     <div class="profile-data-stats-league">
                         <div class="league-bar">
@@ -36,7 +50,7 @@
                                     <p class="title">CURRENT RANK</p>
                                     <hr width="100%">
                                     <p class="league-name">GOLD LEAGUE</p>
-                                    <h1>2</h1>
+                                    <h1>254</h1>
                                 </div>
                                 <div class="league-logo">
                                     <img class="current-league-logo" src="assets/profile-assets/gold_league.svg">
@@ -54,13 +68,172 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="match-record"></div>
+                        <div class="match-record">
+                            <p class="match-record-text">MATCH RECORD</p>
+                            <div class="match-record-stats">
+                                <div class="match-record-stats-box">
+                                    <p class="match-record-stats-box-title">WIN</p>
+                                    <p class="match-record-stats-box-value">56</p>
+                                </div>
+                                <div class="match-record-stats-box">
+                                    <p class="match-record-stats-box-title">LOSS</p>
+                                    <p class="match-record-stats-box-value">14</p>
+                                </div>
+                                <div class="match-record-stats-box">
+                                    <hr>
+                                </div>
+                                <div class="match-record-stats-box">
+                                    <p class="match-record-stats-box-title">WIN RATE</p>
+                                    <p class="match-record-stats-box-value">78%</p>
+                                </div>
+                            </div>
+                            <button class="match-record-button">PLAY NOW</button>
+                        </div>
                     </div>
-                    <div class="profile-data-stats-graph"></div>
-                    <div class="profile-data-stats-history"></div>
+                    <div class="profile-data-stats-graph">
+                        <canvas id="radarChart" width="400" height="400"></canvas>
+                    </div>
+                    <div class="profile-data-stats-history">
+                        <table cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>USER NAME</th>
+                                    <th>PROFILE</th>
+                                    <th>TIME</th>
+                                    <th>SCORE</th>
+                                    <th>RESUALT</th>
+                                    <th>REPLAY</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="table-date">
+                                        <p class="table-date-day">19</p>
+                                        <p class="table-date-month">MAY</p>
+                                    </td>
+                                    <td class="table-username">
+                                        <p>ESALIM</p>
+                                    </td>
+                                    <td class="table-profile">
+                                        <img src="assets/profile-assets/profile-image.svg" width="40"/>
+                                    </td>
+                                    <td class="table-time">
+                                        <p>2 HOURS AGO</p>
+                                    </td>
+                                    <td class="table-score">
+                                        <p>2 - 5</p>
+                                    </td>
+                                    <td class="table-result">
+                                        <p>LOSS</p>
+                                    </td>
+                                    <td class="table-replay">
+                                        <img src="assets/profile-assets/play-button.svg" width="32"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-date">
+                                        <p class="table-date-day">19</p>
+                                        <p class="table-date-month">MAY</p>
+                                    </td>
+                                    <td class="table-username">
+                                        <p>ESALIM</p>
+                                    </td>
+                                    <td class="table-profile">
+                                        <img src="assets/profile-assets/profile-image.svg" width="40"/>
+                                    </td>
+                                    <td class="table-time">
+                                        <p>2 HOURS AGO</p>
+                                    </td>
+                                    <td class="table-score">
+                                        <p>2 - 5</p>
+                                    </td>
+                                    <td class="table-result">
+                                        <p>LOSS</p>
+                                    </td>
+                                    <td class="table-replay">
+                                        <img src="assets/profile-assets/play-button.svg" width="32"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-date">
+                                        <p class="table-date-day">19</p>
+                                        <p class="table-date-month">MAY</p>
+                                    </td>
+                                    <td class="table-username">
+                                        <p>ESALIM</p>
+                                    </td>
+                                    <td class="table-profile">
+                                        <img src="assets/profile-assets/profile-image.svg" width="40"/>
+                                    </td>
+                                    <td class="table-time">
+                                        <p>2 HOURS AGO</p>
+                                    </td>
+                                    <td class="table-score">
+                                        <p>2 - 5</p>
+                                    </td>
+                                    <td class="table-result">
+                                        <p>LOSS</p>
+                                    </td>
+                                    <td class="table-replay">
+                                        <img src="assets/profile-assets/play-button.svg" width="32"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-date">
+                                        <p class="table-date-day">19</p>
+                                        <p class="table-date-month">MAY</p>
+                                    </td>
+                                    <td class="table-username">
+                                        <p>ESALIM</p>
+                                    </td>
+                                    <td class="table-profile">
+                                        <img src="assets/profile-assets/profile-image.svg" width="40"/>
+                                    </td>
+                                    <td class="table-time">
+                                        <p>2 HOURS AGO</p>
+                                    </td>
+                                    <td class="table-score">
+                                        <p>2 - 5</p>
+                                    </td>
+                                    <td class="table-result">
+                                        <p>LOSS</p>
+                                    </td>
+                                    <td class="table-replay">
+                                        <img src="assets/profile-assets/play-button.svg" width="32"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-date">
+                                        <p class="table-date-day">19</p>
+                                        <p class="table-date-month">MAY</p>
+                                    </td>
+                                    <td class="table-username">
+                                        <p>ESALIM</p>
+                                    </td>
+                                    <td class="table-profile">
+                                        <img src="assets/profile-assets/profile-image.svg" width="40"/>
+                                    </td>
+                                    <td class="table-time">
+                                        <p>2 HOURS AGO</p>
+                                    </td>
+                                    <td class="table-score">
+                                        <p>2 - 5</p>
+                                    </td>
+                                    <td class="table-result">
+                                        <p>LOSS</p>
+                                    </td>
+                                    <td class="table-replay">
+                                        <img src="assets/profile-assets/play-button.svg" width="32"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
