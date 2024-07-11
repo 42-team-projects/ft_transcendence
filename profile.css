@@ -428,7 +428,6 @@
 .profile-data-infos-container {
     border: 1px solid #EB9A45;
     height: 100%;
-    display: flex;
 
     margin-top: 20px;
     margin-left: 40px;
@@ -438,9 +437,11 @@
     color: #d9d9d9;
     font-family: 'Sansation';
     font-size: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
-.profile-data-infos-container-item > .title {
+.profile-data-infos-container > .title {
     display: flex;
     font-size: 26px;
     color: white;
@@ -449,7 +450,7 @@
     align-items: center;
 }
 
-.profile-data-infos-container-item > .title > img 
+.profile-data-infos-container > .title > img 
 {
     margin-right: 5px;
     width: 32px;
