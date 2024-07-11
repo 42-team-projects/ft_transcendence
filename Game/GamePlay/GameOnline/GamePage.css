@@ -1,0 +1,364 @@
+.game_header{
+    grid-area: head;
+       display: flex;
+    align-items: end;
+       justify-content: space-evenly;
+}
+.leftPlayer{
+    width: 25%;
+    aspect-ratio: 4.2;
+    border: 2px solid #00b9be;
+    transform: translateY(15%);
+    display: grid;
+    grid-template-areas: "img player_info scor";
+    grid-template-columns: 23.5% 35% 1fr;
+}
+.rightPlayer{
+    width: 25%;
+    aspect-ratio: 4.2;
+    border: 2px solid #00b9be;
+    transform: translateY(15%) scaleX(-1);
+    display: grid;
+    grid-template-areas: "img player_info scor";
+    grid-template-columns: 23.5% 35% 1fr;
+}
+.Play_Pause{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 7%;
+    aspect-ratio: 1.5;
+}
+.c_game{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.GameShapes{
+    position:relative;
+    width: 90%;
+    aspect-ratio: 2.1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.shapes_LT_RT{
+    width:100%;
+    height:100%;
+    position:absolute;			
+}
+.shapes_LT_RT::before{
+    position: absolute;
+    content: '';
+    width: 43%;
+    height: 16%;
+    background-image: url(../../../images/game-LT.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    top: 0;
+    left: 0;
+}
+.shapes_LT_RT::after{
+    position: absolute;
+    content: '';
+    width: 43%;
+    height: 16%;
+    background-image: url(../../../images/game-LT.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    top: 0;
+    right: 0;
+    transform: scaleX(-1);
+}
+.shapes_LB_RB{
+    width:100%;
+    height:100%;
+    position:absolute;			
+}
+.shapes_LB_RB::before{
+    position: absolute;
+    content: '';
+    width: 43%;
+    height: 16%;
+    background-image: url(../../../images/game-LT.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 0;
+    left: 0;
+    transform: scaleY(-1);
+}
+.shapes_LB_RB::after{
+    position: absolute;
+    content: '';
+    width: 43%;
+    height: 16%;
+    background-image: url(../../../images/game-LT.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 0;
+    right: 0;
+    transform: scaleY(-1) scaleX(-1);
+}
+.shapes_DT{
+    width:100%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.shapes_DT::before{
+    margin-top: 0.7%;
+    content: '';
+    width: 25%;
+    height: 7%;
+    background-image: url(../../../images/game-DT.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.shapes_DT::after{
+    content: '';
+    width: 25%;
+    height: 7%;
+    background-image: url(../../../images/game-DT.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    transform: scaleY(-1) scaleX(-1);
+    margin-bottom: 0.7%;
+}
+.shapes_LR_container{
+    position:absolute;
+    width:99.5%;
+    height:65%;
+}
+.center_shapes_LT_RT{
+    width:100%;
+    height:100%;
+    position:absolute;
+}
+.center_shapes_LT_RT::before{
+    position: absolute;
+    content: '';
+    width: 6%;
+    height: 34%;
+    background-image: url(../../../images/game-LR.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    top: 0;
+    left: 0;
+}
+.center_shapes_LT_RT::after{
+    position: absolute;
+    content: '';
+    width: 6%;
+    height: 34%;
+    background-image: url(../../../images/game-LR.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    top: 0;
+    right: 0;
+    transform: scaleX(-1);
+}
+
+.center_shapes_LB_RB{
+    width:100%;
+    height:100%;
+    position:absolute;
+}
+.center_shapes_LB_RB::before{
+    position: absolute;
+    content: '';
+    width: 6%;
+    height: 34%;
+    background-image: url(../../../images/game-LR.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 0;
+    left: 0;
+    transform: scaleY(-1);
+}
+.center_shapes_LB_RB::after{
+    position: absolute;
+    content: '';
+    width: 6%;
+    height: 34%;
+    background-image: url(../../../images/game-LR.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 0;
+    right: 0;
+    transform: scaleX(-1) scaleY(-1);
+}
+.center_shapes_MLR{
+    width:100%;
+    height:100%;
+    position:absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.center_shapes_MLR::before{
+    content: '';
+    width: 2%;
+    height: 32%;
+    background-image: url(../../../images/game-MLR.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 0;
+    left: 0;
+    transform: scaleY(-1);
+}
+.center_shapes_MLR::after{
+    content: '';
+    width: 2%;
+    height: 32%;
+    background-image: url(../../../images/game-MLR.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 0;
+    right: 0;
+    transform: scaleX(-1) scaleY(-1);
+}
+.table_container{
+    width:100%;
+    height:100%;
+    position:absolute;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table{
+    width: 85.5%;
+    height: 79.5%;
+    position: absolute;
+    background-color: #00b9be57;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.table::before{
+    content: '';
+    width: 1px;
+       height: 100%;
+       position: absolute;
+       background-color: white;
+    z-index: -1;
+}
+.table::after{
+    content: '';
+    width: 9%;
+    aspect-ratio: 1;
+       position: absolute;
+       border : 1px solid white;
+    border-radius:50%;
+    z-index: -1;
+}
+.GamePlayer{
+       position: absolute;
+       border : 1px solid #00b9be;
+    grid-area: img;
+}
+.GamePlayer1{
+       position: absolute;
+       border : 1px solid #00b9be;
+    grid-area: img;
+    transform: scaleX(-1);
+}
+.playerinfo{
+    grid-area: player_info;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.playerinfo1{
+    grid-area: player_info;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    transform: scaleX(-1);
+}
+
+.playerinfo p, .playerinfo1 p{
+    font-size: clamp(0.5rem, 2vw, 1.6rem);
+    color: white;
+}
+
+.playerscor{
+    grid-area: scor;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.playerscor1{
+    grid-area: scor;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    transform: scaleX(-1);
+}
+
+.playerscor h1, .playerscor1 h1{
+    font-size: clamp(0.5rem, 4vw, 4rem);
+    color: white;
+}
+
+.rackita {
+    width: 50%;
+    height: 15%;
+    background-color: white;
+}
+.rackita1 {
+    width: 50%;
+    height: 15%;
+    background-color: #00b9be;
+}
+.pause{
+    width:40%;
+    height:50%;
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.pause::before{
+    content:'';
+    width:20%;
+    height:100%;
+    background-color:#00FFFC;
+}
+.pause::after{
+    content:'';
+    width:20%;
+    height:100%;
+    background-color:#00FFFC;
+}
+.status{
+    font-size: clamp(0.5rem, 2vw, 1.6rem);
+    color: white;
+}
+
+.rackit_of_p1{
+    width: 1%;
+    height: 12%;
+    position: absolute;
+    background-color: #00b9be;
+}
+
+.rackit_of_p2{
+    width: 1%;
+    height: 12%;
+    position: absolute;
+    background-color: #00b9be;
+}
+
+.ball{
+    position: absolute;
+    width: 2%;
+    aspect-ratio: 1;
+    background-color: white;
+    border-radius: 50%;
+}
