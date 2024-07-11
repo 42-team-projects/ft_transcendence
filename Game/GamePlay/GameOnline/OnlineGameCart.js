@@ -127,7 +127,6 @@ timer.innerHTML = /*html*/ `
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 1px solid red;
             display: flex;
             align-items: end;
             justify-content: center;
