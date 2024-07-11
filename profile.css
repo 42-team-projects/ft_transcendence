@@ -1,7 +1,7 @@
 .root{
     /* border: 1px solid rgb(0, 255, 204); */
     margin-right: 50px;
-    margin-left: 10px;
+    margin-left: 50px;
     overflow-y: scroll;
     font-family: 'Sansation Bold', 'Sansation';
     background-color: #00ffff10;
@@ -125,7 +125,7 @@
     grid-gap: 5px;
     min-width: 900px;
     max-height: 700px;
-    background-color: #00ffff10;
+    /* background-color: #00ffff10; */
     /* overflow: scroll; */
 }
 
@@ -277,7 +277,7 @@
     width: 98px;
     height: 40px;
     margin: 4px;
-    border-radius: 10px;
+    border-radius: 4px;
 }
 
 .match-record-stats {
@@ -353,7 +353,9 @@
 /* Style of the history table */
 
 .profile-data-stats-history {
-    /* margin: 10px; */
+    margin-left: 20px;
+    margin-right: 20px;
+
 }
 
 .profile-data-stats-history > table {
@@ -368,14 +370,6 @@
     background-image: linear-gradient(to right, #00ffff50 , #00ffff20);
     width: 100%;
     height: 56px;
-}
-
-.profile-data-stats-history > table > thead > tr {
-    /* Head row data */
-}
-
-.profile-data-stats-history > table > thead > tr > th {
-    /* Head row data */
 }
 
 .profile-data-stats-history > table > tbody {
@@ -401,12 +395,20 @@
 
 .table-date-day {
     font-family: 'Sansation';
+    opacity: 0.5;
 }
 
 .table-date-month,
 .table-time > p {
     font-family: 'Sansation';
     font-size: 16px;
+    opacity: 0.5;
+}
+
+.table-score > p,
+.table-username > p,
+.table-result > p {
+    opacity: 0.7;
 }
 
 .table-profile,
@@ -417,4 +419,40 @@
     align-items: top;
     justify-content: center;
     opacity: 1;
+}
+
+
+
+/* Profile data infos container */
+
+.profile-data-infos-container {
+    border: 1px solid #EB9A45;
+    height: 100%;
+    display: flex;
+
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+.profile-data-infos-container-item {
+    color: white;
+}
+
+.profile-data-infos-container-item > .title {
+    display: flex;
+    font-size: 26px;
+    color: white;
+    width: 100%;
+    height: 32px;
+    align-items: center;
+}
+
+.profile-data-infos-container-item > .title > img 
+{
+    margin-right: 5px;
+    width: 32px;
+}
+
+.profile-data-infos-container-item > .content > .content-label {
+
 }
