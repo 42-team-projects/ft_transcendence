@@ -1,5 +1,5 @@
 const UserRankTemplate = document.createElement('template')
-UserRankTemplate.innerHTML = `
+UserRankTemplate.innerHTML = /*html*/`
     <style>
         .child{
             display: flex;
@@ -18,11 +18,11 @@ UserRankTemplate.innerHTML = `
     </div>
 `
 
-class UserRank extends HTMLElement{
+export class UserRank extends HTMLElement{
     constructor(){
         super();
-        const width = this.getAttribute('width') || '100px';
-        const height = this.getAttribute('height') || '120px';
+        const width = this.getAttribute('width') || '80px';
+        const height = this.getAttribute('height') || '110px';
         const Bcolor = this.getAttribute('Bcolor') || '#00FFFC';
         
         this.style.width = width;
@@ -40,4 +40,3 @@ class UserRank extends HTMLElement{
     }
 }
 
-customElements.define('user-rank',UserRank)

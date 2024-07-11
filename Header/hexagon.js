@@ -1,41 +1,63 @@
 
 const HexagonTemplate = document.createElement('template')
 
-HexagonTemplate.innerHTML = `
+HexagonTemplate.innerHTML = /*html*/`
     <style>
+        :host{
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
+            z-index: 1;
+        }
         .child{
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 95%;
             height: 95%;
             background : linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
             clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
         }
-        img{
-            max-width:100%;
-        }
     </style>
-    <div class="child"></div>
+    <div class="child">
+        <slot name="content"></slot>
+    </div>
 `
 
-class Hexagon extends HTMLElement{
+export class Hexagon extends HTMLElement{
     constructor(){
         super();
-        const width = this.getAttribute('width') || '140px';
-        const height = this.getAttribute('height') || '140px';
-        const Bcolor = this.getAttribute('Bcolor') || '#00FFFC';
-        
-        this.style.width = width;
-        this.style.height = height;
-        this.style.background = Bcolor
-        const tmp_content =  this.innerHTML
-        this.innerHTML = ''
-        const shadow = this.attachShadow({mode: 'open'})
-        shadow.appendChild(HexagonTemplate.content)
+        const shadow = this.attachShadow({
+            mode: 'open'
+        })
+        shadow.appendChild(HexagonTemplate.content.cloneNode(true))
+    }
 
-        if(tmp_content)
-            shadow.querySelector('.child').innerHTML = tmp_content;
+    update()
+    {
+        this.style.width = this.width || '140px';
+        this.style.height = this.height || '140px';
+        this.style.background = this.Bcolor || '#00FFFC';
+    }
+    get width(){
+        return this.getAttribute('width')
+    }
+    get height(){
+        return this.getAttribute('height')
+    }
+    get Bcolor(){
+        return this.getAttribute('Bcolor')
+    }
+    get apply(){
+        return this.getAttribute('apply')
+    }
+    connectedCallback(){
+        if(this.apply == 'true')
+            this.update()
     }
 }
 
-customElements.define('c-hexagon',Hexagon)
 
 
