@@ -435,7 +435,9 @@
 }
 
 .profile-data-infos-container-item {
-    color: white;
+    color: #d9d9d9;
+    font-family: 'Sansation';
+    font-size: 16px;
 }
 
 .profile-data-infos-container-item > .title {
@@ -453,6 +455,16 @@
     width: 32px;
 }
 
-.profile-data-infos-container-item > .content > .content-label {
 
+.profile-data-infos-container-item > .content {
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.profile-data-infos-container-item > .content > .content-label > .content-value {
+    font-family: 'Sansation bold';
+    font-style: italic;
+    font-size: 20px;
+    color: white;
+    margin-top: 4px;
 }
