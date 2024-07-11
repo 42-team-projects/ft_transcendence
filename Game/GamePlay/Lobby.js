@@ -28,9 +28,9 @@ ai_lobby.innerHTML =  /* html */ `
             align-items: center;
             width : 72%;
             aspect-ratio: 1.7;
-            border-radius: 2%;
             background-color: #e6ffff14;
             box-shadow: 0px 0px 15px 1px #0000001c;
+            border-radius: 15px 15px 15px 15px;
         }
         .lines{
             position : absolute;
