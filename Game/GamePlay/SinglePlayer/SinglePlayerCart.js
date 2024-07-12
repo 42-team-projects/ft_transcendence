@@ -88,7 +88,7 @@ export class SinglePlayer extends HTMLElement{
         const root = document.querySelector('root-content')
 
         button.addEventListener('click', ()=>{
-			const lobby = document.createElement('ai-lobby')
+			const lobby = new aiLobby()
 			const p_img = player_template.content.getElementById('Player')
 			p_img.src = '../../images/svg-header/profile.jpeg';
 			const p_h1 = player_template.content.getElementById('NPlayer')
