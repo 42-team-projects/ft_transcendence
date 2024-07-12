@@ -86,8 +86,8 @@
     align-content: center;
     width: 100%;
     height: 35%;
-    min-height: 200px;
-    max-height: 400px;
+    min-height: 300px;
+    max-height: 600px;
     color: white;
     /* border: 1px solid white; */
     background-image: url(./images/xxxxxx.png);
@@ -428,58 +428,81 @@
 /* Profile data infos container */
 
 .profile-data-infos-container {
-    /* border: 1px solid #EB9A45; */
+    border: 1px solid #EB9A45;
     /* height: 100%; */
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
     margin-left: 40px;
     gap: 30px;
-    margin-bottom: 20px;
+    padding-bottom: 20px;
+
 }
 
 .profile-data-infos-container-item {
-    /* margin-top: 0; */
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 0px;
+    width: 100%;
 }
 
 
 .profile-data-infos-container-item-content {
+    border: 1px solid #EB9A45;
     color: #d9d9d9;
     font-family: 'Sansation';
     font-size: 16px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    width: 100%;
 }
 
 .profile-data-infos-container-item > .title {
     display: flex;
     font-size: 26px;
     color: white;
-    width: 100%;
     height: auto;
+    border: 1px solid #EB9A45;
     gap: 10px;
+    width: 100%;
     align-items: center;
 }
 
 .profile-data-infos-container > .title > img 
 {
     margin-right: 5px;
-    width: 32px;
+    width: 100%;
 }
 
 
 .profile-data-infos-container-item-content > .content {
     margin-top: 30px;
     margin-left: 30px;
+    width: 100%;
 }
 
+.profile-data-infos-container-item-content > .content > .content-label {
+    width: 100%;
+}
 .profile-data-infos-container-item-content > .content > .content-label > .content-value {
     font-family: 'Sansation bold';
     font-style: italic;
     font-size: 20px;
+    width: 100%;
     color: white;
-    /* margin-top: 4px; */
+}
+
+.profile-data-infos-container-item-content > .content > .content-label > .content-links {
+    display: flex;
+    gap: 20px;
+    height: 16px;
+    width: 100%;
+}
+
+.profile-data-infos-container-item-content > .content > .content-label > .content-league {
+    border: 1px solid #EB9A45;
+    display: table;
+    /* flex-direction: row; */
+    gap: 20px;
+    justify-content: space-between;
+    width: 180%;
 }
