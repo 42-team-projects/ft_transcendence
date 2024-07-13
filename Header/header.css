@@ -3,7 +3,7 @@
 {
     height: 80px;
     width: 80px;
-    margin: 30px;
+    margin-left: 4%;
 }
 
 #pingpong-logo > img
@@ -92,6 +92,7 @@ c-profile{
     align-items: center;
     flex-direction: column;
     grid-area: profile;
+    margin-right: 1%;
 }
 
 
