@@ -70,11 +70,10 @@ ButtonStyle.innerHTML = /*css*/ `
     }
     .buttons{
         width:100%;
-        height:70%;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 3.5rem;
+        gap: 2.5rem;
     }
     .logout{
         width:50%;
@@ -99,11 +98,11 @@ SideBarButtonTemplate.innerHTML = /*html*/`
 SideBarTemplate.innerHTML = /*html*/`
     <nav class="buttons">
     </nav>
-    <div class="logout">
-        <img src="./images/logout.svg" alt="" />
-        <div class="logoutText"> logout </div>
-    </div>
-`
+    `
+    // <div class="logout">
+    //     <img src="./images/logout.svg" alt="" />
+    //     <div class="logoutText"> logout </div>
+    // </div>
 const Sidebar_button_contetn = [
     {
         src : './images/Home.svg',

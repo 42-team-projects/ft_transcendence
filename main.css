@@ -17,26 +17,25 @@
     /* border: 1px solid red; */
 }
 html, body {
-    margin: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width:thin;
+    scrollbar-color: #003347 transparent;
 }
 body{
     display: grid;
-    grid-template-columns: 12% 1fr;
-    grid-template-rows: 15vh 80vh 1fr;
-    grid-template-areas: 
+    grid-template-columns: 14% 1fr;
+    grid-template-rows: 15rem 1fr;
+    grid-template-areas:
         "head head"
         "sidebar content"
         "foter foter";
-    position: relative;
-    height: 100vh;
-    width: 100%;
     background: url(./images/background.svg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     font-family: 'Sansation';
-    border: 1px solid rgb(255, 0, 170);
+    height: 100vh;
 }
 
 
@@ -75,7 +74,7 @@ side-bar{
     grid-area: sidebar;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: center;
     gap: 7rem;
     margin-left: 4%;
 }
@@ -83,10 +82,6 @@ side-bar{
 
 header-bar{
     grid-area: head;
-    display: grid;
-    grid-template-columns: 200px 850px 200px;
-    grid-template-areas: 
-    "logo alarm-search profile";
     justify-content: space-between;
     margin: 30px;
     margin-top: 20px;
