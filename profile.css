@@ -268,7 +268,6 @@ my-table {
     justify-content: center;
     font-size: 28px;
     flex: 1;
-    /* margin-bottom: 10px; */
 }
 
 .match-record > button {
@@ -353,41 +352,6 @@ my-table {
 
 /* Style of the history table */
 
-
-my-table > .profile-data-stats-history > table {
-    width: 100%;
-    height: 100%;
-    font-family: 'Sansation Bold', 'Sansation';
-    font-size: 26px;
-    color: white;
-}
-
-my-table > .profile-data-stats-history > table > thead > tr {
-    background-image: linear-gradient(to right, #00ffff50 , #00ffff20);
-    width: 100%;
-    height: 56px;
-}
-
-my-table > .profile-data-stats-history > table > tbody {
-    background-image: linear-gradient(to right, #00ffff25 , #00ffff10);
-}
-
-my-table > .profile-data-stats-history > table > tbody > tr > td {
-    font-size: 22px;
-    height: 68px;
-    padding: 6px;
-    opacity: 0.9;
-}
-
-/* my-table > .profile-data-stats-history > table > tbody > tr > td > p ,
-my-table > .profile-data-stats-history > table > tbody > tr > td > div ,
-my-table > .profile-data-stats-history > table > tbody > tr > td > img ,
-my-table > .profile-data-stats-history > table > tbody > tr > td > svg {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-} */
 
 .table-time > p {
     font-family: 'Sansation';
