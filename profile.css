@@ -428,7 +428,6 @@
 /* Profile data infos container */
 
 .profile-data-infos-container {
-    border: 1px solid #EB9A45;
     /* height: 100%; */
     display: flex;
     flex-direction: column;
@@ -447,7 +446,6 @@
 
 
 .profile-data-infos-container-item-content {
-    border: 1px solid #EB9A45;
     color: #d9d9d9;
     font-family: 'Sansation';
     font-size: 16px;
@@ -461,7 +459,6 @@
     font-size: 26px;
     color: white;
     height: auto;
-    border: 1px solid #EB9A45;
     gap: 10px;
     width: 100%;
     align-items: center;
@@ -481,7 +478,10 @@
 }
 
 .profile-data-infos-container-item-content > .content > .content-label {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    gap: 10px;
 }
 .profile-data-infos-container-item-content > .content > .content-label > .content-value {
     font-family: 'Sansation bold';
@@ -493,13 +493,21 @@
 
 .profile-data-infos-container-item-content > .content > .content-label > .content-links {
     display: flex;
-    gap: 20px;
-    height: 16px;
-    width: 100%;
+    justify-content: space-between;
+    font-size: 16px;
+    width: 125%;
+}
+
+.profile-data-infos-container-item-content > .content > .content-label > .content-links > a {
+    color: #d9d9d9;
+}
+
+.profile-data-infos-container-item-content > .content > .content-label > .content-links > img {
+    width: 14px;
+    height: 14px;
 }
 
 .profile-data-infos-container-item-content > .content > .content-label > .content-league {
-    border: 1px solid #EB9A45;
     display: table;
     /* flex-direction: row; */
     gap: 20px;
