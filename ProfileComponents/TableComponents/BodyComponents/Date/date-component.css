@@ -1,0 +1,28 @@
+
+
+.table-date {
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0.5;
+    font-size: 24px;
+    font-family: 'Sansation';
+    width: 100%;
+    height: 100%;
+}
+
+
+.table-date-day {
+    border: 1px solid black;
+
+}
+
+.table-date-month {
+    border: 1px solid red;
+
+    font-size: 16px;
+
+}
