@@ -176,7 +176,6 @@ export class aiLobby extends HTMLElement{
     {
         super();
         this.attachShadow({ mode: 'open' });
-
         this.shadowRoot.appendChild(ai_lobby.content.cloneNode(true));
         this.setSlots(playerSlot.content, 'false')
         this.setSlots(opponentSlot.content, 'true')
