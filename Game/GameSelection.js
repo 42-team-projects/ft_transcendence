@@ -15,10 +15,9 @@ game_selection.innerHTML = /*html*/ `
             align-items: center;
             width:100%;
             height:100%;
-            border: 1px solid rgb(0, 255, 204);
             grid-area: content;
             display: grid;
-            grid-template-columns: repeat(3, 23%);
+            grid-template-columns: repeat(3, 21%);
             grid-template-areas: 
             "single multiple online";
             justify-content: space-around;
