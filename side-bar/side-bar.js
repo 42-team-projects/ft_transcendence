@@ -75,21 +75,7 @@ ButtonStyle.innerHTML = /*css*/ `
         justify-content: center;
         gap: 2.5rem;
     }
-    .logout{
-        width:50%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-    }
-    .logout img{
-        width: 25%;
-    }
-    .logoutText{
-        color : white;
-        font-size: clamp(1rem, 1.2vw, 2rem);
 
-    }
 `
 SideBarButtonTemplate.innerHTML = /*html*/`
     <sb-button>
@@ -99,10 +85,6 @@ SideBarTemplate.innerHTML = /*html*/`
     <nav class="buttons">
     </nav>
     `
-    // <div class="logout">
-    //     <img src="./images/logout.svg" alt="" />
-    //     <div class="logoutText"> logout </div>
-    // </div>
 const Sidebar_button_contetn = [
     {
         src : './images/Home.svg',
@@ -170,7 +152,6 @@ class SideBar extends HTMLElement {
             nav.appendChild(clone);
         });
         nav.insertBefore(ButtonStyle, nav.firstChild);
-        
     }
     connectedCallback(){
         this.setbuttons()
