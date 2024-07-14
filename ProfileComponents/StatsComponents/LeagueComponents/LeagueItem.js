@@ -13,7 +13,7 @@ export class LeagueItem extends HTMLElement {
     connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
-                p {
+                .title {
                     text-align: center;
                     align-items: center;
                     font-size: 20px;
@@ -30,12 +30,12 @@ export class LeagueItem extends HTMLElement {
                 .league-name {
                     color: ${this.color};
                     width: 100%;
-
+                    text-align: center;
                 }
             </style>
-            <p class="title">${this.league}</p>
+            <p class="title">${this.title.toUpperCase()}</p>
             <hr width="100%">
-            <p class="league-name">${this.league} LEAGUE</p>
+            <p class="league-name">${this.league.toUpperCase()} LEAGUE</p>
             <slot></slot>
         `;
     }
