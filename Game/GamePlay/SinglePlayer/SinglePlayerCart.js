@@ -86,31 +86,33 @@ export class SinglePlayer extends HTMLElement{
         this.appendChild(singlePlayerTemplate.content.cloneNode(true))
         const button = this.querySelector('c-button')
         const root = document.querySelector('root-content')
+		setTimeout(() => {
 
-        button.addEventListener('click', ()=>{
-			const lobby = new aiLobby()
-			const p_img = player_template.content.getElementById('Player')
-			p_img.src = '../../images/svg-header/profile.jpeg';
-			const p_h1 = player_template.content.getElementById('NPlayer')
+            button.addEventListener('click', ()=>{
+                const lobby = new aiLobby()
+                const p_img = player_template.content.getElementById('Player')
+                p_img.src = '../../images/svg-header/profile.jpeg';
+                const p_h1 = player_template.content.getElementById('NPlayer')
 
-			p_h1.textContent = 'NOUAKHRO'
+                p_h1.textContent = 'NOUAKHRO'
 
-			const o_img = player_template.content.getElementById('Opponent')
-            o_img.textContent = 'AI'
-			const o_h1 = player_template.content.getElementById('NOpponent')
+                const o_img = player_template.content.getElementById('Opponent')
+                o_img.textContent = 'AI'
+                const o_h1 = player_template.content.getElementById('NOpponent')
 
-            o_h1.textContent = 'AI'
+                o_h1.textContent = 'AI'
 
-			lobby.appendChild(player_template.content.cloneNode(true))
-			root.innerHTML = ``
-			root.appendChild(lobby)
-		})
+                lobby.appendChild(player_template.content.cloneNode(true))
+                root.innerHTML = ``
+                root.appendChild(lobby)
+            })
+        }, 4000);
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
         setTimeout(() => {
 			this.classList.toggle('opacity-0', false)
 			this.classList.toggle('opacity-1', true)
-		}, 3000);
+		}, 2000);
     }
     // connectedCallback(){
     //     this.clickEvent()
