@@ -185,9 +185,10 @@ custom-table {
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #d9d9d920;
-    flex: 1.5;
+    background-color: #d9d9d9;
+    flex: 2;
     gap: 20px;
+    justify-content: space-between;
 }
 
 /* .league-info {
@@ -201,12 +202,11 @@ league-info {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    flex: 3;
+    background-color: #EB9A45;
 }
 
 custom-progress-bar {
     width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     /* background-color: rgb(109, 72, 72); */
@@ -220,7 +220,6 @@ custom-progress-bar {
     /* gap: 20px; */
     position: relative;
     width: 100%;
-    height: 100%;
     font-family: 'Sansation Bold', 'Sansation';
     background-color: #d9d9d920;
     color: white;
