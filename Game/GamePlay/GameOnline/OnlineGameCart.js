@@ -148,31 +148,33 @@ export class OnlineGame extends HTMLElement{
 		this.appendChild(OnlineGameTemplate.content.cloneNode(true))
 		const button = this.querySelector('c-button')
 		const root = document.querySelector('root-content')
-		button.addEventListener('click', ()=>{
-			// const game = new GamePage();
-			// document.body.innerHTML = ``;
-			// document.body.appendChild(game);
+		setTimeout(() => {
+			button.addEventListener('click', ()=>{
+				// const game = new GamePage();
+				// document.body.innerHTML = ``;
+				// document.body.appendChild(game);
 
-			const lobby = new aiLobby();
-			const p_img = player_template.content.getElementById('Player')
-			p_img.src = '../../images/svg-header/profile.jpeg';
-			const p_h1 = player_template.content.getElementById('NPlayer')
+				const lobby = new aiLobby();
+				const p_img = player_template.content.getElementById('Player')
+				p_img.src = '../../images/svg-header/profile.jpeg';
+				const p_h1 = player_template.content.getElementById('NPlayer')
 
-			p_h1.textContent = 'NOUAKHRO'
+				p_h1.textContent = 'NOUAKHRO'
 
-			const players = player_template.content.querySelectorAll('.PlayerS')
-			console.log(players);
-			players.forEach((element, index)=>{
-				element.style.setProperty('--dest', '400%');
-				element.style.setProperty('--numsec', 1);
-				element.src = sherching_images[index].src;
+				const players = player_template.content.querySelectorAll('.PlayerS')
+				console.log(players);
+				players.forEach((element, index)=>{
+					element.style.setProperty('--dest', '400%');
+					element.style.setProperty('--numsec', 1);
+					element.src = sherching_images[index].src;
+				})
+				lobby.appendChild(player_template.content.cloneNode(true))
+				root.innerHTML = ``
+				root.appendChild(lobby)
+				setTimeout(() => this.setPlayer(lobby), 5000);
+				setTimeout(() => this.gameMode(lobby), 6000);
 			})
-			lobby.appendChild(player_template.content.cloneNode(true))
-			root.innerHTML = ``
-			root.appendChild(lobby)
-			setTimeout(() => this.setPlayer(lobby), 5000);
-			setTimeout(() => this.gameMode(lobby), 6000);
-		})
+		}, 4000);
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
         setTimeout(() => {
