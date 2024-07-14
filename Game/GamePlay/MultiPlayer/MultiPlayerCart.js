@@ -31,7 +31,6 @@ export class MultiPlayer extends HTMLElement{
 		super();
 		this.appendChild(MultiPlayerTemplate.content.cloneNode(true))
         this.classList.toggle('cart-animation', true)
-        this.classList.toggle('overide-transform', true)
         this.classList.toggle('opacity-0', true)
 		setTimeout(() => {
 			this.classList.toggle('opacity-0', false)
