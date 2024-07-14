@@ -58,6 +58,7 @@ ButtonStyle.innerHTML = /*css*/ `
         width: 95%;
         align-items: center;
         cursor: pointer;
+        transition: width 0.5s ease;
     }
     sb-button.on
     {
