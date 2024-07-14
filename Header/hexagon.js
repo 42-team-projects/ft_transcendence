@@ -24,7 +24,7 @@ HexagonTemplate.innerHTML = /*html*/`
     <div class="child">
         <slot name="content"></slot>
     </div>
-`
+        `
 
 export class Hexagon extends HTMLElement{
     constructor(){
