@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./profile.css">
     <title>ft_transcendence</title>
     <title>ft_transcendence</title>
     <link rel="stylesheet" href="./test.css">
@@ -15,8 +14,9 @@
     <script src="./Header/hexagon.js" defer type="module"></script>
     <script src="./Header/UserRank.js" defer type="module"></script>
     <script src="./Header/profile.js" defer type="module"></script>
-
+    
     <script src="./side-bar/side-bar.js" defer type="module"></script>
+    <link rel="stylesheet" href="./profile.css">
 </head>
 <body>
     <header-bar></header-bar>
@@ -28,7 +28,10 @@
             <div class="profile-data">
                 <div class="profile-data-infos">
                     <div class="profile-image">
-                        <img src="assets/profile-assets/profile-image.svg" width="250px"/>
+                        <!-- <img src="assets/profile-assets/profile-image.svg" width="250px"/> -->
+                        <c-hexagon width="250px" height="250px" apply="true" Bcolor="#EB9A45">
+                            <img slot="content" draggable="false" src="./images/svg-header/profile.jpeg">
+                        </c-hexagon>
                         <div class="name">
                             <div class="name-and-online">
                                 <p>ESALIM</p>
@@ -182,51 +185,12 @@
                     <div class="profile-data-stats-graph">
                         <canvas id="radarChart" width="400" height="400"></canvas>
                     </div>
-                    <div class="profile-data-stats-history">
-                        <table cellspacing="0" cellpadding="0">
-                            <thead>
-                                <tr>
-                                    <th>DATE</th>
-                                    <th>USER NAME</th>
-                                    <th>PROFILE</th>
-                                    <th>TIME</th>
-                                    <th>SCORE</th>
-                                    <th>RESUALT</th>
-                                    <th>REPLAY</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="table-date">
-                                        <p class="table-date-day">19</p>
-                                        <p class="table-date-month">MAY</p>
-                                    </td>
-                                    <td class="table-username">
-                                        <p>ESALIM</p>
-                                    </td>
-                                    <td class="table-profile">
-                                        <img src="assets/profile-assets/profile-image.svg" width="40"/>
-                                    </td>
-                                    <td class="table-time">
-                                        <p>2 HOURS AGO</p>
-                                    </td>
-                                    <td class="table-score">
-                                        <p>2 - 5</p>
-                                    </td>
-                                    <td class="table-result">
-                                        <p>LOSS</p>
-                                    </td>
-                                    <td class="table-replay">
-                                        <img src="assets/profile-assets/play-button.svg" width="32"/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <my-table></my-table>
                 </div>
             </div>
         </div>
     </div>
     <script src="script.js"></script>
+    <script src="./ProfileComponents/app.js" defer type="module"></script>
 </body>
 </html>

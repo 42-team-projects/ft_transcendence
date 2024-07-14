@@ -41,18 +41,27 @@ export class Hexagon extends HTMLElement{
         this.style.height = this.height || '140px';
         this.style.background = this.Bcolor || '#00FFFC';
     }
+
     get width(){
         return this.getAttribute('width')
     }
+    set width(value) {this.setAttribute("width", value);}
+
     get height(){
         return this.getAttribute('height')
     }
+    set height(value) {this.setAttribute("height", value);}
+
     get Bcolor(){
         return this.getAttribute('Bcolor')
     }
+    set Bcolor(value) {this.setAttribute("Bcolor", value);}
+
     get apply(){
         return this.getAttribute('apply')
     }
+    set apply(value) {this.setAttribute("apply", value);}
+    
     connectedCallback(){
         if(this.apply == 'true')
             this.update()
