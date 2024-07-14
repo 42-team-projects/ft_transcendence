@@ -18,6 +18,7 @@ opponentSlot.innerHTML = /*html*/ `
     <slot  name="searshing" slot="searching"> </slot>
     <slot name="OpponentName" slot="Name"></slot>
     `
+
 ai_lobby.innerHTML =  /* html */ `
     <style>
 
@@ -26,7 +27,7 @@ ai_lobby.innerHTML =  /* html */ `
             display: flex;
             justify-content: space-evenly;
             align-items: center;
-            width : 72%;
+            width : 60%;
             aspect-ratio: 1.7;
             background-color: #e6ffff14;
             box-shadow: 0px 0px 15px 1px #0000001c;
@@ -169,7 +170,6 @@ ai_lobby.innerHTML =  /* html */ `
         }
     */
     // <!--  -->
-
 export class aiLobby extends HTMLElement{
 
     constructor()
@@ -179,6 +179,43 @@ export class aiLobby extends HTMLElement{
         this.shadowRoot.appendChild(ai_lobby.content.cloneNode(true));
         this.setSlots(playerSlot.content, 'false')
         this.setSlots(opponentSlot.content, 'true')
+        this.headerAnimation();
+        this.sidebarAnimation();
+        setTimeout(() => {
+            document.body.classList.toggle('body-game-shrink', true);   
+        }, 1000);
+    }
+
+    headerAnimation(){
+        const headerBar = document.body.querySelector('header-bar');
+        const profile = headerBar.querySelector('c-profile');
+        const userRunk = profile.querySelector('user-rank');
+    
+        userRunk.classList.toggle('drop-100', false);
+        userRunk.classList.toggle('game-mode', true);
+        userRunk.classList.toggle('down-60', false);
+        userRunk.classList.toggle('rise-0', true);
+
+        headerBar.classList.toggle('game-mode', true);
+        headerBar.classList.toggle('up-100', true);
+        headerBar.classList.toggle('p-animation', true);
+        setTimeout(() => {
+            headerBar.innerHTML = '';
+        }, 1000);
+    }
+
+    sidebarAnimation(){
+        const sideBar = document.body.querySelector('side-bar');
+        const Buttons = sideBar.shadowRoot.querySelector('.buttons');
+        const clickedButtons = Buttons.querySelector('.on');
+    
+        sideBar.classList.toggle('game-mode', true);
+        sideBar.classList.toggle('left', true);
+        clickedButtons.classList.toggle('on', false);
+        sideBar.classList.toggle('p-animation', true);
+        setTimeout(() => {
+            sideBar.shadowRoot.innerHTML = '';
+        }, 1000);
     }
     setSlots(template, revers){
         const border = new PlayerBorder();

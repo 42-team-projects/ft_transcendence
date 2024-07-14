@@ -3,14 +3,9 @@ online-game{
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    position: relative;
     grid-area : online;
     display: flex;
     justify-content: center;
-    width: 100%;
-    aspect-ratio: 0.561;
-    transition: transform 0.3s ease;
-    /* border: 1px solid red; */
 }
 
 online-game:hover{

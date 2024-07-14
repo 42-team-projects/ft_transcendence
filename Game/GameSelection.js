@@ -22,6 +22,7 @@ game_selection.innerHTML = /*html*/ `
             "single multiple online";
             justify-content: space-around;
         }
+
         .playerImg{
             position: absolute;
             height: 99%;
@@ -32,7 +33,7 @@ game_selection.innerHTML = /*html*/ `
 
         .Player{
             color: white;
-            font-size: clamp(1rem, 9vw, 10rem);
+            font-size: clamp(0.5, 9vw, 10rem);
         }
         .Name{
             z-index: 0;
@@ -49,6 +50,50 @@ game_selection.innerHTML = /*html*/ `
                 transform: translateY(0%);
             }
         }
+
+        .cart-animation{
+            position: relative;
+            width: 100%;
+            aspect-ratio: 0.56;
+            transition: transform 0.3s ease;
+            animation: retate 2s ease;
+        }
+        .opacity-0{
+            opacity: 0;
+        }
+        .opacity-1{
+            opacity: 1;
+        }
+        @keyframes retate{
+            from{
+                top: 100%;
+                transform: rotateY(0deg);
+            }
+            to{
+                top: 0%;
+                opacity: 1;
+                transform: rotateY(360deg);
+            }
+        }
+        .overide-transform{
+            animation: middleCart 2s ease;
+            transition: transform 0.3s ease;
+        }
+        @keyframes middleCart{
+            from{
+                top: 100%;
+                opacity: 0;
+                transform: rotateY(0deg) translateY(-7%);
+            }
+            to{
+                top: 0%;
+                opacity: 1;
+                transform: rotateY(360deg) translateY(-7%) ;
+            }
+        }
+        .cart-animation:nth-child(1) { animation-delay: 0s; }
+        .cart-animation:nth-child(2) { animation-delay: 2s; }
+        .cart-animation:nth-child(3) { animation-delay: 4s; }
     </style>
     <single-player></single-player>
     <multi-player></multi-player>

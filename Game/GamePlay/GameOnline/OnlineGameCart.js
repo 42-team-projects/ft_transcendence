@@ -173,6 +173,12 @@ export class OnlineGame extends HTMLElement{
 			setTimeout(() => this.setPlayer(lobby), 5000);
 			setTimeout(() => this.gameMode(lobby), 6000);
 		})
+        this.classList.toggle('cart-animation', true)
+        this.classList.toggle('opacity-0', true)
+        setTimeout(() => {
+			this.classList.toggle('opacity-0', false)
+			this.classList.toggle('opacity-1', true)
+		}, 1000);
 	}
 
 	gameMode(lobby){

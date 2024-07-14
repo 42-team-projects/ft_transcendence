@@ -102,8 +102,5 @@ user-rank
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 4rem;
-    width: 100px;
-    height: 125px;
     clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 60%, 50% 90%,10% 60%);
 }
