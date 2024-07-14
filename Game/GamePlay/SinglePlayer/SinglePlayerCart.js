@@ -105,7 +105,12 @@ export class SinglePlayer extends HTMLElement{
 			root.innerHTML = ``
 			root.appendChild(lobby)
 		})
-
+        this.classList.toggle('cart-animation', true)
+        this.classList.toggle('opacity-0', true)
+        setTimeout(() => {
+			this.classList.toggle('opacity-0', false)
+			this.classList.toggle('opacity-1', true)
+		}, 3000);
     }
     // connectedCallback(){
     //     this.clickEvent()

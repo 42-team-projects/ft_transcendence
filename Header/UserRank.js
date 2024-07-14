@@ -33,10 +33,8 @@ export class UserRank extends HTMLElement{
         const tmp_content =  this.innerHTML
         if(tmp_content)
             shadow.querySelector('.child').innerHTML = tmp_content;
-        // const tmp_content =  this.innerHTML
-
-        // this.innerHTML = ''
-        // this.innerHTML = UserRankTemplate.innerHTML
+        this.classList.toggle('drop-100', true);
+        this.classList.toggle('down-60', true);
     }
 }
 

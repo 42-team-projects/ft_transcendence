@@ -1,12 +1,8 @@
 multi-player{
     position: relative;
     grid-area : multiple;
-    width: 100%;
-    aspect-ratio: 0.56;
-    transition: transform 1s ease;
     transform: translateY(-7%);
 }
-
 multi-player:hover{
     transform: translateY(-7%) scale(1.03);
 }

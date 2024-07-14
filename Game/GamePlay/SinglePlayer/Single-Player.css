@@ -1,9 +1,6 @@
 single-player{
-    position: relative;
     grid-area : single;
-    width: 100%;
-    aspect-ratio: 0.56;
-    transition: transform 0.3s ease;
+    top: 0%;
 }
 
 single-player:hover{
@@ -256,3 +253,6 @@ single-player::after{
     text-wrap:wrap ;
     color: wheat;
 }
+
+
+
