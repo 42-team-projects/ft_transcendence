@@ -2,14 +2,14 @@ export class DateComponent extends HTMLElement {
 
     constructor() {
         super();
+        this.attachShadow({ mode: "open" });
     }
 
     connectedCallback() {
-        const shadow = this.attachShadow({ mode: "open" });
         const styleSheet = document.createElement("link");
         styleSheet.rel = `stylesheet`;
         styleSheet.href = `ProfileComponents/TableComponents/BodyComponents/Date/date-component.css`;
-        shadow.appendChild(styleSheet);
+        this.shadowRoot.appendChild(styleSheet);
 
         const dateContainer = document.createElement("div");
         dateContainer.className = "table-date";
@@ -23,7 +23,7 @@ export class DateComponent extends HTMLElement {
         monthParag.className = "table-date-month";
         monthParag.textContent = month;
         dateContainer.appendChild(monthParag);
-        shadow.appendChild(dateContainer);
+        this.shadowRoot.appendChild(dateContainer);
     }
 
     static get observedAttributes() {
