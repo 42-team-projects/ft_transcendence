@@ -67,33 +67,17 @@ game_selection.innerHTML = /*html*/ `
         @keyframes retate{
             from{
                 top: 100%;
-                transform: rotateY(0deg);
+                transform: rotateY(0deg) translateY(var(--position, 0));
             }
             to{
                 top: 0%;
                 opacity: 1;
-                transform: rotateY(360deg);
-            }
-        }
-        .overide-transform{
-            animation: middleCart 2s ease;
-            transition: transform 0.3s ease;
-        }
-        @keyframes middleCart{
-            from{
-                top: 100%;
-                opacity: 0;
-                transform: rotateY(0deg) translateY(-7%);
-            }
-            to{
-                top: 0%;
-                opacity: 1;
-                transform: rotateY(360deg) translateY(-7%) ;
+                transform: rotateY(360deg) translateY(var(--position, 0));
             }
         }
         .cart-animation:nth-child(1) { animation-delay: 0s; }
-        .cart-animation:nth-child(2) { animation-delay: 2s; }
-        .cart-animation:nth-child(3) { animation-delay: 4s; }
+        .cart-animation:nth-child(2) { animation-delay: 1s; }
+        .cart-animation:nth-child(3) { animation-delay: 2s; }
     </style>
     <single-player></single-player>
     <multi-player></multi-player>

@@ -2,6 +2,7 @@ multi-player{
     position: relative;
     grid-area : multiple;
     transform: translateY(-7%);
+    --position: -7%;
 }
 multi-player:hover{
     transform: translateY(-7%) scale(1.03);
