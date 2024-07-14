@@ -1,3 +1,14 @@
+const cssStyle = `
+slot {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex: 3;
+}
+
+
+`;
+
 export class StatsContainer extends HTMLElement {
     constructor() {
         super();
@@ -6,8 +17,9 @@ export class StatsContainer extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.innerHTML = `
-            <slot name="league-bar"></slot>
-            <slot name="match-record"></slot>
+            <link rel="stylesheet" href="/ProfileComponents/StatsComponents/StatsContainer.css">
+            <slot class="league-bar" name="league-bar"></slot>
+            <slot classs="match-record" name="match-record"></slot>
         `;
     }
 
