@@ -20,7 +20,7 @@ const fakeData = [
         profile: uri,
         time: "2 HOURS AGO",
         score: "5 - 6",
-        result: "LOSS",
+        result: "WIN",
         replay: ">"
     },
     {
@@ -45,10 +45,11 @@ const fakeData = [
     }
 ];
 
-export class Table extends HTMLElement {
+export class CustomTable extends HTMLElement {
     
     constructor () {
         super();
+        this.attachShadow({mode: "open"});
     }
 
     async getDataFromApi(APIUrl) {
@@ -78,11 +79,7 @@ export class Table extends HTMLElement {
         tableHeader.appendChild(tableRow);
         return tableHeader;
     }
-   /*
-       <c-hexagon width="110px" height="110px" apply="true" >
-        <img slot="content" draggable="false" src="./images/svg-header/profile.jpeg">
-    </c-hexagon>
-   */
+
     getTableBody(data) {
         const tableBody = document.createElement("tbody");
         const keys = Object.keys(data[0]).splice(1);
@@ -145,12 +142,10 @@ export class Table extends HTMLElement {
     }
 
     connectedCallback() {
-        const shadow = this.attachShadow({mode: "open"});
-
         const styleSheet = document.createElement("link");
         styleSheet.rel = `stylesheet`;
-        styleSheet.href = `ProfileComponents/TableComponents/myTable.css`;
-        shadow.appendChild(styleSheet);
+        styleSheet.href = `ProfileComponents/TableComponents/CustomTable.css`;
+        this.shadowRoot.appendChild(styleSheet);
 
         const tableContainer = document.createElement("div");
         tableContainer.className = `profile-data-stats-history`;
@@ -165,7 +160,7 @@ export class Table extends HTMLElement {
             table.appendChild(this.getTableBody(values));
         });
         tableContainer.appendChild(table);
-        shadow.appendChild(tableContainer);
+        this.shadowRoot.appendChild(tableContainer);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
