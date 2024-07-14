@@ -4,11 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ft_transcendence</title>
     <title>ft_transcendence</title>
-    <link rel="stylesheet" href="./test.css">
     <link rel="stylesheet" href="./main.css">
-    <link rel="stylesheet" href="./side-bar/side-bar.css">
     <link rel="stylesheet" href="./Header/header.css">
-    <link rel="stylesheet" href="./Game-player.css">
     <script src="./Header/header-bar.js" defer type="module"></script>
     <script src="./Header/Search-bar.js" defer type="module"></script>
     <script src="./Header/hexagon.js" defer type="module"></script>
@@ -135,32 +132,22 @@
                     </div>
                 </div>
                 <div class="profile-data-stats">
-                    <div class="profile-data-stats-league">
-                        <div class="league-bar">
-                            <div class="league-info">
-                                <div class="current-rank">
-                                    <p class="title">CURRENT RANK</p>
-                                    <hr width="100%">
-                                    <p class="league-name">GOLD LEAGUE</p>
+                    <stats-container>
+                        <div class="league-bar" slot="league-bar">
+                            <league-info>
+                                <league-item slot="current-rank" title="current rank" league="GOLD" color="#EB9A45">
                                     <h1>254</h1>
-                                </div>
-                                <div class="league-logo">
+                                </league-item>
+                                <div class="league-logo" slot="league-logo">
                                     <img class="current-league-logo" src="assets/profile-assets/gold_league.svg">
                                 </div>
-                                <div class="next-league">
-                                    <p class="title">NEXT LEAGUE</p>
-                                    <hr width="100%">
-                                    <p class="league-name">PLATINUM LEAGUE</p>
+                                <league-item slot="next-league" title="next league" league="PLATINUM" color="rgb(85, 146, 226)">
                                     <img class="next-league-logo" src="assets/profile-assets/platinum_league.svg">
-                                </div>
-                            </div>
-                            <div class="league-progress-bar">
-                                <div class="horizontal-scroll-bar">
-                                    <div class="horizontal-scroll-bar-reach"></div>
-                                </div>
-                            </div>
+                                </league-item>
+                            </league-info>
+                            <custom-progress-bar></custom-progress-bar>
                         </div>
-                        <div class="match-record">
+                        <div class="match-record" slot="match-record">
                             <p class="match-record-text">MATCH RECORD</p>
                             <div class="match-record-stats">
                                 <div class="match-record-stats-box">
@@ -181,16 +168,14 @@
                             </div>
                             <button class="match-record-button">PLAY NOW</button>
                         </div>
-                    </div>
-                    <div class="profile-data-stats-graph">
-                        <canvas id="radarChart" width="400" height="400"></canvas>
-                    </div>
-                    <my-table></my-table>
+
+                    </stats-container>
+                    <custom-graph></custom-graph>
+                    <custom-table></custom-table>
                 </div>
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
     <script src="./ProfileComponents/app.js" defer type="module"></script>
 </body>
 </html>

@@ -136,7 +136,7 @@
 }
 
 
-.profile-data-stats-league {
+stats-container {
     grid-area: 1 / 1 / 5 / 5;
     display: flex;
     flex-direction: column;
@@ -145,12 +145,12 @@
 }
 
 
-.profile-data-stats-graph
+custom-graph
 {
     grid-area: 1 / 5 / 5 / 7;
 }
 
-my-table {
+custom-table {
     max-height: 150px;
     grid-area: 5 / 1 / 6 / 7;
 }
@@ -164,14 +164,15 @@ my-table {
         min-width: 600px;
         height: 100%;
     }
-    .profile-data-stats-league { grid-area: 1 / 1 / 2 / 2; max-height: 100%;}    
-    .profile-data-stats-graph { grid-area: 2 / 1 / 3 / 2; max-width: 100%;}
-    my-table { grid-area: 3 / 1 / 4 / 2; max-width: 100%;}
+    stats-container { grid-area: 1 / 1 / 2 / 2; max-height: 100%;}    
+    custom-graph { grid-area: 2 / 1 / 3 / 2; max-width: 100%;}
+    custom-table { grid-area: 3 / 1 / 4 / 2; max-width: 100%;}
 
 }
 
 
 /* ================= profile data stats league section ===================== */
+
 
 
 .match-record {
@@ -189,64 +190,28 @@ my-table {
     gap: 20px;
 }
 
-.league-info {
+/* .league-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex: 3;
+} */
+
+league-info {
     width: 100%;
     display: flex;
     justify-content: space-between;
     flex: 3;
 }
 
-.current-rank,
-.next-league,
-.league-logo {
-    font-family: 'Sansation Bold', 'Sansation';
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    margin: 0px 5%;
-    justify-content: center;
-}
-
-.current-rank > .title,
-.next-league > .title {
-    align-items: center;
-    font-size: 20px;
-    color: white;
-}
-
-.current-rank > .league-name,
-.next-league > .league-name {
-    align-items: center;
-    font-size: 16px;
-    color: #EB9A45;
-}
-
-.next-league > .league-name {color: rgb(85, 146, 226);}
-
-.current-rank > h1 {
-    align-items: center;
-    font-size: 40px;
-    color: white;
-}
-
-.league-logo > .current-league-logo {
-    width: 130px;
-    height: 130px;
-}
-
-.next-league > .next-league-logo {
-    width: 48px;
-    height: 48px;
-}
-
-.league-progress-bar {
+custom-progress-bar {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     /* background-color: rgb(109, 72, 72); */
     flex: 1;
+    margin-bottom: 20px;
 }
 
 .match-record {
@@ -333,7 +298,7 @@ my-table {
 }
 
 
-.profile-data-stats-graph {
+custom-graph {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -341,13 +306,6 @@ my-table {
     width: 100%;
     margin: 0;
 }
-
-.profile-data-stats-graph > canvas {
-    border-radius: 100%;
-    width: 80%;
-    height: 80%;
-}
-
 
 
 /* Style of the history table */
