@@ -1,13 +1,3 @@
-const cssStyle = `
-slot {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex: 3;
-}
-
-
-`;
 
 export class StatsContainer extends HTMLElement {
     constructor() {

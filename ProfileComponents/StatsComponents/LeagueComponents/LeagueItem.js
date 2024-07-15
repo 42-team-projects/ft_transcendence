@@ -13,17 +13,22 @@ export class LeagueItem extends HTMLElement {
     connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
+                :host * {
+                    margin:0;
+                    padding: 0;
+                }
                 .title {
                     text-align: center;
                     align-items: center;
-                    font-size: 20px;
+                    font-size: 26px;
                     color: white;
+                    margin-bottom: 10px;
                 }
-                slot {
+                :host slot {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 20px;
+                    font-size: 26;
                     width: 100%;
                     color: white;
                 }
@@ -31,6 +36,7 @@ export class LeagueItem extends HTMLElement {
                     color: ${this.color};
                     width: 100%;
                     text-align: center;
+                    margin: 20px 0;
                 }
             </style>
             <p class="title">${this.title.toUpperCase()}</p>
