@@ -1,9 +1,11 @@
 const root = document.createElement('template')
 
 import {GameSelection} from '../Game/GameSelection.js'
+import { ProfileComponent } from '../ProfileComponents/ProfileComponent.js'
 customElements.define("game-selection", GameSelection)
 
 const sideBar = document.querySelector('side-bar')
+const header = document.querySelector('header-bar')
 
 
 const rootContent = ['home-page',
@@ -34,9 +36,22 @@ class Root extends HTMLElement{
         buttons.forEach((button, index) => {
             button.addEventListener('click', () => {
                 if(button.classList.length === 0)
+                {
                     this.ChangeRootContent = rootContent[index]
-                sideBar.clickEvent = index;
+                    sideBar.clickEvent = index;
+                    sideBar.activeButton = button;
+
+                }
             });
+        })
+        console.log(sideBar.activeButton)
+        const profile = header.querySelector('c-profile')
+        profile.addEventListener('click', () => {
+            this.ChangeRootContent = 'profile-component'
+
+            sideBar.activeButton.classList.toggle('on')
+            sideBar.activeButton.querySelector('h1').classList.toggle('on')
+            sideBar.activeButton.querySelector('img').classList.toggle('on')
         })
     }
     connectedCallback()

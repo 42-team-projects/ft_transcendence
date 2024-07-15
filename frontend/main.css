@@ -113,7 +113,6 @@ side-bar{
 header-bar{
     grid-area: head;
     justify-content: space-between;
-    margin-top: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
