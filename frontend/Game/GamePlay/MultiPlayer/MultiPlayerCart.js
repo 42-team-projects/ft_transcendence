@@ -5,9 +5,9 @@ const MultiPlayerTemplate = document.createElement('template')
 
 
 MultiPlayerTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="../Game/GamePlay/MultiPlayer/MultiPlayer.css">
-	<img class="BlueCartImg" src="../../images/BlueCart/multi-playerImg.svg" alt="">
-	<img class="BlueCart" src="../../images/BlueCart/multiPlayerCart.svg" alt="">
+	<link rel="stylesheet" href="Game/GamePlay/MultiPlayer/MultiPlayer.css">
+	<img class="BlueCartImg" src="images/BlueCart/multi-playerImg.svg" alt="">
+	<img class="BlueCart" src="images/BlueCart/multiPlayerCart.svg" alt="">
 	<div class="shapes2-3">
 		<div class="shapes4-5">
 			<div class="text">

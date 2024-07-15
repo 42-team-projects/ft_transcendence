@@ -43,7 +43,7 @@ ai_lobby.innerHTML =  /* html */ `
         .lines::before{
             content: '';
             position: absolute;
-            background-image: url(../../../images/GreenCart/smalLine.svg);
+            background-image: url(images/GreenCart/smalLine.svg);
             background-repeat: no-repeat;
             background-size: contain;
             width: 1.5%;
@@ -54,7 +54,7 @@ ai_lobby.innerHTML =  /* html */ `
         .lines::after{
             position: absolute;
             content: '';
-            background-image: url(../../../images/GreenCart/line1.svg);
+            background-image: url(images/GreenCart/line1.svg);
             background-repeat: no-repeat;
             background-size: contain;
             width: 4.4%;
@@ -71,7 +71,7 @@ ai_lobby.innerHTML =  /* html */ `
         .VS::before{
             content: '';
             position: absolute;
-            background-image: url(../../../images/GreenCart/V-Lobby.svg);
+            background-image: url(images/GreenCart/V-Lobby.svg);
             background-repeat: no-repeat;
             background-size: contain;
             width: 12.1%;
@@ -97,7 +97,7 @@ ai_lobby.innerHTML =  /* html */ `
         .VS::after{
             position: absolute;
             content: '';
-            background-image: url(../../../images/GreenCart/s-Lobby.svg);
+            background-image: url(images/GreenCart/s-Lobby.svg);
             background-repeat: no-repeat;
             background-size: contain;
             width: 12.1%;
@@ -116,7 +116,7 @@ ai_lobby.innerHTML =  /* html */ `
             display: flex;
             justify-content: center;
             align-items: center; 
-            background-image: url(../../../images/GreenCart/lobby-border.svg);
+            background-image: url(images/GreenCart/lobby-border.svg);
             background-repeat : no-repeat;
             background-size: contain;
             width: 36.4%;
