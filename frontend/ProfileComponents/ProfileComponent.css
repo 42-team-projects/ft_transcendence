@@ -5,6 +5,16 @@
     /* padding: 0; */
 }
 
+.child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: aqua;
+    clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
+}
+
 .main-profile-container::-webkit-scrollbar { 
     display: none;
 }
@@ -22,66 +32,11 @@
     border-radius: 7px;
 }
 
+
 page-name {
     z-index: 30;
-    /* max-width: 500px; */
 }
 
-.profile-image
-{
-    display: flex;
-    position: relative;
-    margin-left: 30%;
-    margin-top: -155px;
-    width: 500px;
-    height: 250px;
-    z-index: 3;
-}
-
-.profile-image > img {
-    width: 250px;
-    height: 250px;
-}
-
-.profile-image > .name {
-    width: 200px;
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
-    margin-top: 60px;
-}
-
-.name-and-online {
-    width: 100%;
-    color: white;
-    display: flex;
-    align-items: center;
-}
-
-.name-and-online > p {
-    font-size: 40px;
-    margin-right: 10px;
-}
-
-.name-and-online > .online-logo {
-
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
-    align-items: center;
-    justify-content: center;
-    background-color: aqua;
-}
-
-.joined-date {
-    color: #d9d9d9;
-    gap: 10px;
-    display: flex;
-    width: 100%;
-    margin-top: 10px;
-    opacity: 0.7;
-}
 
 .profile-cover
 {
@@ -198,24 +153,6 @@ custom-table {
 }
 
 
-league-info {
-    width: 100%;
-    display: flex;
-    flex: 2;
-    align-items: center;
-    justify-content: center;
-}
-
-custom-progress-bar {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex: 1;
-    /* margin-bottom: 20px; */
-    align-items: center;
-}
-
 .match-record {
     padding: 20px 0;
     margin-top: 20px;
@@ -229,54 +166,6 @@ custom-progress-bar {
     flex-direction: column;
     justify-content: space-between;
 }
-
-.match-record > p {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-}
-
-.match-record > button {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    width: 98px;
-    height: 40px;
-    margin: 4px;
-    border-radius: 4px;
-}
-
-.match-record-stats {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-
-.match-record-stats-box {
-    font-size: 22px;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.match-record-stats-box > hr {
-    height: 70px;
-    width: 2.4px;
-    background-color: white;
-}
-
-.match-record-stats-box-value {
-    color: aqua;
-    font-size: 48px;
-}
-
 
 
 
@@ -295,89 +184,26 @@ custom-graph {
 /* Profile data infos container */
 
 .profile-data-infos-container {
-    /* height: 100%; */
     display: flex;
     flex-direction: column;
-    margin-left: 40px;
     gap: 30px;
     padding-bottom: 20px;
-
-}
-
-.profile-data-infos-container-item {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
     width: 100%;
+
 }
 
 
-.profile-data-infos-container-item-content {
-    color: #d9d9d9;
-    font-family: 'Sansation';
-    font-size: 16px;
+.gridClass {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    width: 100%;
+    row-gap: 20px;
 }
 
-.profile-data-infos-container-item > .title {
+.flexClass {
+    margin: 0;
     display: flex;
-    font-size: 26px;
-    color: white;
-    height: auto;
-    gap: 10px;
-    width: 100%;
-    align-items: center;
-}
-
-.profile-data-infos-container > .title > img 
-{
-    margin-right: 5px;
-    width: 100%;
-}
-
-
-.profile-data-infos-container-item-content > .content {
-    margin-top: 30px;
-    margin-left: 30px;
-    width: 100%;
-}
-
-.profile-data-infos-container-item-content > .content > .content-label {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-}
-.profile-data-infos-container-item-content > .content > .content-label > .content-value {
-    font-family: 'Sansation bold';
-    font-style: italic;
-    font-size: 20px;
-    width: 100%;
-    color: white;
-}
-
-.profile-data-infos-container-item-content > .content > .content-label > .content-links {
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    width: 125%;
-}
-
-.profile-data-infos-container-item-content > .content > .content-label > .content-links > a {
-    color: #d9d9d9;
-}
-
-.profile-data-infos-container-item-content > .content > .content-label > .content-links > img {
-    width: 14px;
-    height: 14px;
-}
-
-.profile-data-infos-container-item-content > .content > .content-label > .content-league {
-    display: table;
-    /* flex-direction: row; */
+    flex-wrap: wrap;
     gap: 20px;
-    justify-content: space-between;
-    width: 180%;
+    margin-right: 70px;
+    
 }
