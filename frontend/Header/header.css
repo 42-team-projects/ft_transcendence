@@ -87,12 +87,12 @@ search-bar
 
 c-profile{
     position: relative;
-    margin-top: 2px;
     display: flex;
     align-items: center;
     flex-direction: column;
     grid-area: profile;
     margin-right: 1%;
+    cursor: pointer;
 }
 
 
