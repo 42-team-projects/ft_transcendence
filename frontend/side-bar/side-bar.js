@@ -6,83 +6,13 @@ const SideBarTemplate = document.createElement('template')
 const SideBarButtonTemplate = document.createElement('template')
 const ButtonStyle = document.createElement('style')
 
-ButtonStyle.innerHTML = /*css*/ ` 
-    #pingpong-logo
-    {
-        height: 80px;
-        width: 80px;
-        margin: 30px;
-    }
 
-    #pingpong-logo > img
-    {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-    }       
-    h1
-    {
-        color: #ffffff8a;
-        font-size: clamp(1rem, 1.2vw, 2rem);
-    }
-    h1.on
-    {
-        text-shadow: 0px 0px 20px #00fffb;
-        color: #ffffff;
-        font-size: clamp(1rem, 1.2vw, 2rem);
-    }
-    .images
-    {
-        position: absolute;
-        width: 50%;
-        height: 50%;
-        z-index: 2;
-        transform: rotate(90deg);
-        opacity : 0.5
-    }
-    .images.on
-    {
-        position: absolute;
-        width: 50%;
-        height: 50%;
-        z-index: 2;
-        transform: rotate(90deg);
-        filter: drop-shadow(0px 0px 4px #00FFFC);
-        opacity : 1
-    }
-    sb-button
-    {
-        position: relative;
-        display: flex;
-        height: 80px;
-        width: 95%;
-        align-items: center;
-        cursor: pointer;
-        transition: width 0.5s ease;
-    }
-    sb-button.on
-    {
-        position: relative;
-        display: flex;
-        height: 80px;
-        width: 100%;
-        align-items: center;
-        cursor: pointer;
-    }
-    .buttons{
-        width:100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 2.5rem;
-    }
-
-`
 SideBarButtonTemplate.innerHTML = /*html*/`
     <sb-button>
     </sb-button>
 `
 SideBarTemplate.innerHTML = /*html*/`
+    <link rel="stylesheet" href="side-bar/side-bar.css"/>
     <nav class="buttons">
     </nav>
     `
@@ -112,12 +42,8 @@ const Sidebar_button_contetn = [
         text : "Settings",
     }
 ]
-// {
-//     src : './images/logout.svg',
-//     text : "Logout",
-// }
 class SideBar extends HTMLElement {
-    static shadow;
+
     constructor (){
         super();
         this.attachShadow({
@@ -152,11 +78,16 @@ class SideBar extends HTMLElement {
             this.setbuttontext(element.text, clone);
             nav.appendChild(clone);
         });
-        nav.insertBefore(ButtonStyle, nav.firstChild);
     }
     connectedCallback(){
         this.setbuttons()
         this.clickEvent = 0;
+    }
+    set activeButton(button){
+        this.active_button = button;
+    }
+    get activeButton(){
+        return this.active_button;
     }
     set clickEvent(id){
         const buttons = this.shadowRoot.querySelectorAll('sb-button')
@@ -181,6 +112,7 @@ class SideBar extends HTMLElement {
                             textClassName.classList.toggle('on')
                     }
                 }
+                this.active_button = button;
             }
             else{
                 if(button.classList.length)
