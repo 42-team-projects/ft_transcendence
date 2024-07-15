@@ -67,12 +67,12 @@ game_selection.innerHTML = /*html*/ `
         @keyframes retate{
             from{
                 top: 100%;
-                transform: rotateY(0deg) translateY(var(--position, 0));
+                transform: translateY(var(--position, 0));
             }
             to{
                 top: 0%;
                 opacity: 1;
-                transform: rotateY(360deg) translateY(var(--position, 0));
+                transform: translateY(var(--position, 0));
             }
         }
         .cart-animation:nth-child(1) { animation-delay: 0s; }

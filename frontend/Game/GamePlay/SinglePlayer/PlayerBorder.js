@@ -32,7 +32,7 @@ player_border.innerHTML =  /* html */ `
         }
 </style>
     <div class="player">
-        <img class="playerborder" src="../../../images/GreenCart/lobby-border.svg" alt="">
+        <img class="playerborder" src="images/GreenCart/lobby-border.svg" alt="">
         <slot name="Player"></slot>
         <slot name="searching"></slot>
         
