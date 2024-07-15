@@ -1,3 +1,8 @@
+:host * {
+    margin:0;
+    padding: 0;
+}
+
 .current-rank,
 .next-league,
 .league-logo {
@@ -41,4 +46,4 @@ slot {
     width: 100%;
     align-items: center;
     justify-content: center;
-}
+} 

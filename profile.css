@@ -185,44 +185,43 @@ custom-table {
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #d9d9d9;
+    background-color: #d9d9d910;
     flex: 2;
-    gap: 20px;
-    justify-content: space-between;
+    gap: 15px;
+    padding: 40px 0;
+    justify-content: center;
 }
 
-/* .league-info {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex: 3;
-} */
 
 league-info {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    background-color: #EB9A45;
+    flex: 2;
+    align-items: center;
+    justify-content: center;
 }
 
 custom-progress-bar {
     width: 100%;
     display: flex;
     justify-content: center;
-    /* background-color: rgb(109, 72, 72); */
+    align-content: center;
     flex: 1;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+    align-items: center;
 }
 
 .match-record {
-    padding: 10px;
+    padding: 20px;
     margin-top: 20px;
-    /* gap: 20px; */
     position: relative;
     width: 100%;
     font-family: 'Sansation Bold', 'Sansation';
     background-color: #d9d9d920;
     color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .match-record > p {
@@ -231,7 +230,6 @@ custom-progress-bar {
     align-items: center;
     justify-content: center;
     font-size: 28px;
-    flex: 1;
 }
 
 .match-record > button {
@@ -246,7 +244,6 @@ custom-progress-bar {
 
 .match-record-stats {
     width: 100%;
-    height: 85%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -256,7 +253,6 @@ custom-progress-bar {
 .match-record-stats-box {
     font-size: 22px;
     display: flex;
-    flex-wrap: wrap;
     flex: 1;
     flex-direction: column;
     align-items: center;
@@ -270,31 +266,12 @@ custom-progress-bar {
     background-color: white;
 }
 
-.match-record-stats-box-title {
-    /* font-family:  'Sansation'; */
-    
-}
-
 .match-record-stats-box-value {
     color: aqua;
     font-size: 48px;
 }
 
 
-.horizontal-scroll-bar {
-
-    background-color: #d9d9d920;
-    width: 75%;
-    height: 16px;
-    border-radius: 200px;
-}
-
-.horizontal-scroll-bar-reach {
-    background-color: #EB9A45;
-    width: 80%;
-    height: 100%;
-    border-radius: 200px;
-}
 
 
 custom-graph {
@@ -306,31 +283,6 @@ custom-graph {
     margin: 0;
 }
 
-
-/* Style of the history table */
-
-
-.table-time > p {
-    font-family: 'Sansation';
-    font-size: 16px;
-    opacity: 0.5;
-}
-
-.table-score > p,
-.table-username > p,
-.table-result > p {
-    opacity: 0.7;
-}
-
-.table-profile,
-.table-replay {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: top;
-    justify-content: center;
-    opacity: 1;
-}
 
 
 
