@@ -1,3 +1,11 @@
+:host {
+    width: 100%;
+    display: flex;
+    flex: 2;
+    align-items: center;
+    justify-content: space-between;
+}
+
 :host * {
     margin:0;
     padding: 0;
