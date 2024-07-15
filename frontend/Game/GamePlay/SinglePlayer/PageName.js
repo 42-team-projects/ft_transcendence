@@ -7,11 +7,22 @@ page_name.innerHTML =  /* html */ `
             position: absolute;
             clip-path: polygon(0% 0%, var(--width) 0%, calc(var(--width) - 4%) 80%, 2% 80%, 2% 100%, 0% 80%);
             width: 100%;
-            height: 10%;
+            height: 80px;
             gr: #00fffc45;
             background: linear-gradient(62deg, #00fffc66 0%, #00fffc00 45%);
             top: -0.2%;
             left: -2%;
+            font-size: 20px;
+            color: white;
+            
+        }
+        :host slot {
+            width: var(--width);
+            height: 90%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            left:4%;
         }
     </style>
     <slot name="text"></slot>

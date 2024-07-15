@@ -1,4 +1,5 @@
 import { CustomGraph } from "./GraphComponent/CustomGraph.js";
+import { ProfileComponent } from "./ProfileComponent.js";
 import { CustomProgressBar } from "./StatsComponents/LeagueComponents/CustomProgressBar.js";
 import { LeagueInfo } from "./StatsComponents/LeagueComponents/LeagueInfo.js";
 import { LeagueItem } from "./StatsComponents/LeagueComponents/LeagueItem.js";
@@ -13,3 +14,4 @@ customElements.define("stats-container", StatsContainer);
 customElements.define("custom-graph", CustomGraph);
 customElements.define("date-component", DateComponent);
 window.customElements.define("custom-table", CustomTable);
+window.customElements.define("profile-component", ProfileComponent);
