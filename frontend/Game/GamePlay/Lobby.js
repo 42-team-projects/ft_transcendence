@@ -123,19 +123,6 @@ ai_lobby.innerHTML =  /* html */ `
             aspect-ratio: 1;
             transform: scaleX(-1) scaleY(-1);
         }
-        
-        .pageNameText{
-            width: var(--width);
-            height: 90%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            left:4%;
-        }
-        .pageNameText h1{
-            font-size: clamp(0.5rem, 2vw, 2.3rem);
-            color: white;
-        }
 
     </style>
     <page-name width="35%">
