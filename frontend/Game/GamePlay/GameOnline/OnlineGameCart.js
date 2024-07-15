@@ -7,23 +7,23 @@ const OnlineGameTemplate = document.createElement('template')
 
 const sherching_images = [
 	{
-		src: '../../images/svg-header/profile.jpeg',
+		src: 'images/svg-header/profile.jpeg',
 		name: 'ESCANOR'
 	},
 	{
-		src: '../../images/OrangeCart/images.png',
+		src: 'images/OrangeCart/images.png',
 		name: 'ITATCHI'
 	},
 	{
-		src: '../../images/OrangeCart/img1.png',
+		src: 'images/OrangeCart/img1.png',
 		name: 'ESALIM'
 	},
 	{
-		src: '../../images/OrangeCart/img2.jpg',
+		src: 'images/OrangeCart/img2.jpg',
 		name: 'KILLUA'
 	},
 	{
-		src: '../../images/OrangeCart/img3.jpg',
+		src: 'images/OrangeCart/img3.jpg',
 		name: 'GOJO'
 	}
 ]
@@ -92,19 +92,19 @@ player_template.innerHTML = /*html*/ `
 	.PlayerS:nth-child(5) { animation-delay: calc(0.4s * var(--numsec)); }
 </style>
 	<div class="searshingImgs" slot="searshing">
-		<img id='Opponent1' class="PlayerS" src="../../images/svg-header/profile.jpeg" />
-		<img id='Opponent2' class="PlayerS" src="../../images/svg-header/profile.jpeg" />
-		<img id='Opponent3' class="PlayerS" src="../../images/svg-header/profile.jpeg" />
-		<img id='Opponent4' class="PlayerS" src="../../images/svg-header/profile.jpeg" />
-		<img id='Opponent5' class="PlayerS" src="../../images/svg-header/profile.jpeg" />
+		<img id='Opponent1' class="PlayerS" />
+		<img id='Opponent2' class="PlayerS" />
+		<img id='Opponent3' class="PlayerS" />
+		<img id='Opponent4' class="PlayerS" />
+		<img id='Opponent5' class="PlayerS" />
 	</div>
 
     <img id='Player' class="Player" slot="PlayerImg" alt="" />
     <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 `
 OnlineGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="../../Game/GamePlay/GameOnline/OnlineGame.css">
-	<img class="OrangeCartImg" src="../../images/OrangeCart/OrangeCartImg.svg" alt="">
+	<link rel="stylesheet" href="Game/GamePlay/GameOnline/OnlineGame.css">
+	<img class="OrangeCartImg" src="images/OrangeCart/OrangeCartImg.svg" alt="">
 	<div class="shapes3-4">
 		<div class="Online-text">
 			<h1>ONLINE GAME</h1>
@@ -156,7 +156,7 @@ export class OnlineGame extends HTMLElement{
 
 				const lobby = new aiLobby();
 				const p_img = player_template.content.getElementById('Player')
-				p_img.src = '../../images/svg-header/profile.jpeg';
+				p_img.src = 'images/svg-header/profile.jpeg';
 				const p_h1 = player_template.content.getElementById('NPlayer')
 
 				p_h1.textContent = 'NOUAKHRO'
