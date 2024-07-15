@@ -49,9 +49,9 @@ player_template.innerHTML = /*html*/ `
 `
 
 singlePlayerTemplate.innerHTML = /*html*/ `
-    <link rel="stylesheet" href="../../Game/GamePlay/SinglePlayer/Single-Player.css">
-    <img class="GreenCartImg" src="../../images/GreenCart/img-singleplayer.svg" alt="">
-    <img class="GreenCart" src="../../images/GreenCart/Single.svg" alt="">
+    <link rel="stylesheet" href="Game/GamePlay/SinglePlayer/Single-Player.css">
+    <img class="GreenCartImg" src="images/GreenCart/img-singleplayer.svg" alt="">
+    <img class="GreenCart" src="images/GreenCart/Single.svg" alt="">
     <div class="style-0">
         <div class="style-1">
             <div class="style-2">
@@ -91,7 +91,7 @@ export class SinglePlayer extends HTMLElement{
             button.addEventListener('click', ()=>{
                 const lobby = new aiLobby()
                 const p_img = player_template.content.getElementById('Player')
-                p_img.src = '../../images/svg-header/profile.jpeg';
+                p_img.src = 'images/svg-header/profile.jpeg';
                 const p_h1 = player_template.content.getElementById('NPlayer')
 
                 p_h1.textContent = 'NOUAKHRO'
