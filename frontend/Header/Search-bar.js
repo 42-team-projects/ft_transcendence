@@ -1,7 +1,7 @@
 // const SearchTemplate = document.createElement('template');
 
 const SearchTemplate = /*html*/`
-    <img draggable="false" class="search-icon" src="./images/svg-header/search.svg">
+    <img draggable="false" class="search-icon" src="./images/svg-header/search.svg" alt="searchIcon">
     <div class="vertical-line"></div>
     <input type="text" class="search-input" placeholder="SEARCH">
 `;
