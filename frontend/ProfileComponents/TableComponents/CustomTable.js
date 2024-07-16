@@ -42,6 +42,186 @@ const fakeData = [
         score: "5 - 6",
         result: "WIN",
         replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 19, month: "MAY"},
+        username: "ESALIM",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "WIN",
+        replay: ">"
     }
 ];
 
@@ -105,7 +285,7 @@ export class CustomTable extends HTMLElement {
                     const profileImage = document.createElement("img");
                     profileImage.slot = "content";
                     profileImage.width = 55;
-                    profileImage.width = 55;
+                    profileImage.height = 55;
                     profileImage.draggable = "false";
                     profileImage.src = val;
                     profile.appendChild(profileImage);
@@ -118,7 +298,6 @@ export class CustomTable extends HTMLElement {
                     parag.textContent = parag.textContent.toUpperCase();
                     tableData.appendChild(parag);
                 } else if (counter == 6)  {
-                    // <img src="assets/profile-assets/play-button.svg" width="32"/>
                     const icon = document.createElement("img");
                     icon.src = "/frontend/assets/profile-assets/play-button.svg";
                     icon.width = 24;
