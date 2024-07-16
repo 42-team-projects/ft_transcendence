@@ -92,11 +92,11 @@ player_template.innerHTML = /*html*/ `
 	.PlayerS:nth-child(5) { animation-delay: calc(0.4s * var(--numsec)); }
 </style>
 	<div class="searshingImgs" slot="searshing">
-		<img id='Opponent1' class="PlayerS" />
-		<img id='Opponent2' class="PlayerS" />
-		<img id='Opponent3' class="PlayerS" />
-		<img id='Opponent4' class="PlayerS" />
-		<img id='Opponent5' class="PlayerS" />
+		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent3' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent4' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent5' class="PlayerS" alt="searchingImg"/>
 	</div>
 
     <img id='Player' class="Player" slot="PlayerImg" alt="" />
@@ -180,7 +180,7 @@ export class OnlineGame extends HTMLElement{
         setTimeout(() => {
 			this.classList.toggle('opacity-0', false)
 			this.classList.toggle('opacity-1', true)
-		}, 1000);
+		}, 2000);
 	}
 
 	gameMode(lobby){

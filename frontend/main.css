@@ -8,7 +8,6 @@
     src: url('./sansation/Sansation_Bold.ttf');
 }
 
-
 *{
     box-sizing: border-box;
     margin: 0%;
@@ -16,11 +15,12 @@
     list-style: none;
     text-decoration: none;
     /* border: 1px solid red; */
+
 }
 html, body {
     overflow-x: hidden;
+    scrollbar-width:none;
     scroll-behavior: smooth;
-    scrollbar-width:thin;
     scrollbar-color: #003347 transparent;
     /* overflow: hidden; */
 }
@@ -240,6 +240,6 @@ profile-component {
     border-radius: 5px;
 }
 
-/* profile-component::-webkit-scrollbar { 
+*::-webkit-scrollbar { 
     display: none;
-} */
+}
