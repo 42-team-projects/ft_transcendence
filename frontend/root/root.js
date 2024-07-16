@@ -45,11 +45,17 @@ class Root extends HTMLElement{
         })
         const profile = header.querySelector('c-profile')
         profile.addEventListener('click', () => {
-            this.ChangeRootContent = 'profile-component'
 
-            sideBar.activeButton.classList.toggle('on')
-            sideBar.activeButton.querySelector('h1').classList.toggle('on')
-            sideBar.activeButton.querySelector('img').classList.toggle('on')
+            if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
+            {
+                this.ChangeRootContent = 'profile-component'
+            }
+            if(sideBar.activeButton.classList.length)
+            {
+                sideBar.activeButton.classList.toggle('on')
+                sideBar.activeButton.querySelector('h1').classList.toggle('on')
+                sideBar.activeButton.querySelector('img').classList.toggle('on')
+            }
         })
     }
     connectedCallback()

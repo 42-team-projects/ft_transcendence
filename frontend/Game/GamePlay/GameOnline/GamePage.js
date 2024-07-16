@@ -8,7 +8,7 @@ game_page.innerHTML = /*html*/ `
 <div class="game_header">
 
 	<div class="leftPlayer">
-		<img class="GamePlayer" src="/frontend/images/svg-header/profile.jpeg" />
+		<img class="GamePlayer" src="/frontend/images/svg-header/profile.jpeg" alt="playerImg" />
 		<div class="playerinfo">
 			<div class="player_number">
 				<p>PLAYER 1</p>
@@ -26,7 +26,7 @@ game_page.innerHTML = /*html*/ `
 	</div>
 	
 	<div class="rightPlayer">
-		<img class="GamePlayer1" src="/frontend/images/svg-header/profile.jpeg" />
+		<img class="GamePlayer1" src="/frontend/images/svg-header/profile.jpeg" alt="playerImg" />
 		<div class="playerinfo1">
 			<div class="player_number">
 				<p>PLAYER 1</p>
