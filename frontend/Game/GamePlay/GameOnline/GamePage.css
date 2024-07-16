@@ -1,11 +1,11 @@
-.game_header{
+game-header{
     grid-area: head;
     display: flex;
     align-items: end;
     justify-content: space-evenly;
 }
 .leftPlayer{
-    width: 25%;
+    width: 20%;
     aspect-ratio: 4.2;
     border: 2px solid #00b9be;
     transform: translateY(0%);
@@ -14,7 +14,7 @@
     grid-template-columns: 23.5% 35% 1fr;
 }
 .rightPlayer{
-    width: 25%;
+    width: 20%;
     aspect-ratio: 4.2;
     border: 2px solid #00b9be;
     transform: translateY(0%) scaleX(-1);
@@ -27,13 +27,15 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    width: 7%;
+    width: 5%;
     aspect-ratio: 1.5;
 }
 .c_game{
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 90%;
+    height: 100%;
 }
 .GameShapes{
     position:relative;
@@ -221,41 +223,39 @@
     transform: scaleX(-1) scaleY(-1);
 }
 .table_container{
-    width:100%;
-    height:100%;
-    position:absolute;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.table{
-    width: 85.5%;
-    height: 79.5%;
+    /* border: 2px solid #00b9be; */
+    width: 84%;
+    height: 83%;
     position: absolute;
     background-color: #00b9be57;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 15px 15px 15px 15px;
-    overflow: hidden;
 }
-.table::before{
+
+.table_container::before{
     content: '';
     width: 1px;
-       height: 100%;
-       position: absolute;
-       background-color: white;
+    height: 100%;
+    position: absolute;
+    background-color: white;
     z-index: -1;
 }
-.table::after{
+.table_container::after{
     content: '';
     width: 9%;
     aspect-ratio: 1;
-       position: absolute;
-       border : 1px solid white;
+    position: absolute;
+    border : 1px solid white;
     border-radius:50%;
     z-index: -1;
+}
+
+
+.pingpongTable{
+    /* max-width: 100%;
+    max-height: 100%; */
 }
 .GamePlayer{
        position: absolute;
@@ -347,10 +347,12 @@
     width: 1%;
     height: 12%;
     position: absolute;
-    background-color: #00b9be;
+    left: 0;
+    background-color: #ffffff;
 }
 
 .rackit_of_p2{
+    right: 0;
     width: 1%;
     height: 12%;
     position: absolute;
@@ -364,3 +366,4 @@
     background-color: white;
     border-radius: 50%;
 }
+
