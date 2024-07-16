@@ -107,12 +107,15 @@ stats-container {
 
 custom-graph
 {
-    grid-area: 1 / 5 / 5 / 7;
+    grid-area: 1 / 5 / 5 / -1;
 }
 
 custom-table {
-    max-height: 150px;
-    grid-area: 5 / 1 / 6 / 7;
+    grid-area: 5 / 1 / 7 / -1;
+}
+
+custom-table::-webkit-scrollbar {
+    display: none;
 }
 
 

@@ -1,7 +1,6 @@
 const root = document.createElement('template')
 
 import {GameSelection} from '../Game/GameSelection.js'
-import { ProfileComponent } from '../ProfileComponents/ProfileComponent.js'
 customElements.define("game-selection", GameSelection)
 
 const sideBar = document.querySelector('side-bar')
@@ -44,7 +43,6 @@ class Root extends HTMLElement{
                 }
             });
         })
-        console.log(sideBar.activeButton)
         const profile = header.querySelector('c-profile')
         profile.addEventListener('click', () => {
             this.ChangeRootContent = 'profile-component'
