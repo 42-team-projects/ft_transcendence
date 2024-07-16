@@ -1,14 +1,6 @@
 const maxRadius = 150; // Maximum radius of the chart
 const numLevels = 3; // Number of levels in the chart
 
-const fakeData = [
-    { key: "WIN", value: 50 },
-    { key: "SCORE", value: 20 },
-    { key: "DRAW", value: 100 },
-    { key: "LOSS", value: 30 },
-    { key: "FRIENDS", value: 0 }
-];
-
 export class CustomGraph extends HTMLElement {
     constructor () {
         super();
@@ -93,7 +85,7 @@ export class CustomGraph extends HTMLElement {
         const values = [];
         const labels = [];
         data.forEach(element => {
-            labels.push(element.key);
+            labels.push(element.label);
             values.push(element.value);
         });
 
@@ -128,14 +120,31 @@ export class CustomGraph extends HTMLElement {
     }
 
     connectedCallback() {
-        const radarChart = document.createElement("canvas");
-        radarChart.width = 400;
-        radarChart.height = 400;
-        this.drawRadarChart(radarChart, fakeData);
-        this.shadowRoot.appendChild(radarChart);
+        
+        // const radarChart = document.createElement("canvas");
+        // radarChart.width = 400;
+        // radarChart.height = 400;
+        // this.drawRadarChart(radarChart, this.dataObject);
+        // this.shadowRoot.appendChild(radarChart);
     }
 
     disconnectedCallback() {
 
     }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        console.log(`Attribute ${name} has changed.`);
+    }
+
+    set dataObject(value) {
+        this.setAttribute("data-object", value);
+        this.shadowRoot.innerHTML = "";
+        const radarChart = document.createElement("canvas");
+        radarChart.width = 400;
+        radarChart.height = 400;
+        this.drawRadarChart(radarChart, value);
+        this.shadowRoot.appendChild(radarChart);
+    }
+    get dataObject() { return this.getAttribute("data-object"); }
+
 }
