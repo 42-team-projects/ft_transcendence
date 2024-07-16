@@ -1,40 +1,49 @@
-const UserRankTemplate = document.createElement('template')
-UserRankTemplate.innerHTML = /*html*/`
-    <style>
-        .child{
-            display: flex;
-            justify-content : center;
-            align-items: center;
-            width: 95%;
-            height: 95%;
-            background : linear-gradient(180deg, #000000e0, transparent);
-            clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 60%, 50% 90%,10% 60%);
-        }
-        h2 {
-            color : white;
-        }
-    </style>
-    <div class="child">
-    </div>
-`
 
 export class UserRank extends HTMLElement{
     constructor(){
         super();
-        const width = this.getAttribute('width') || '80px';
-        const height = this.getAttribute('height') || '110px';
-        const Bcolor = this.getAttribute('Bcolor') || '#00FFFC';
+        this.attachShadow({mode: "open"});
+    }
+
+    set width(value) { this.setAttribute("width", value);}
+    set height(value) { this.setAttribute("height", value);}
+    set bcolor(value) { this.setAttribute("bcolor", value);}
+    get width() { return this.getAttribute("width");}
+    get height() { return this.getAttribute("height");}
+    get bcolor() { return this.getAttribute("bcolor");}
+
+    connectedCallback() {
         
-        this.style.width = width;
-        this.style.height = height;
-        this.style.background = Bcolor
-        const shadow = this.attachShadow({mode: 'open'})
-        shadow.appendChild(UserRankTemplate.content)
-        const tmp_content =  this.innerHTML
-        if(tmp_content)
-            shadow.querySelector('.child').innerHTML = tmp_content;
+        this.style.width = this.width || '80px';
+        this.style.height = this.height  || '110px';
+        this.style.background = this.bcolor || '#00FFFC';
+        this.shadowRoot.innerHTML = /*html*/`
+        <style>
+            :host {
+                position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 66%, 50% 84%,10% 66%);
+            }
+            .child{
+                display: flex;
+                justify-content : center;
+                align-items: center;
+                width: 95%;
+                height: 95%;
+                background : linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 60%);
+                clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 66%, 50% 84%,10% 66%);
+            }
+            slot {
+                color : white;
+            }
+        </style>
+        <div class="child">
+            <slot></slot>
+        </div>
+    `;
         this.classList.toggle('drop-100', true);
         this.classList.toggle('down-60', true);
     }
 }
-

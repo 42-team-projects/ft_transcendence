@@ -74,6 +74,16 @@ const fakeData = {
     }
 };
 
+function getLeagueColor(league) {
+    const leagueColors = new Map();
+    leagueColors.set("bronze", "#B54C1E");
+    leagueColors.set("silver", "#C0C0C0");
+    leagueColors.set("gold", "#EB9A45");
+    leagueColors.set("platinum", "#459BEB");
+    leagueColors.set("legendary", "#EB4545");
+    return leagueColors.get(league);
+}
+
 const emptyGraph = [{label: "", value: 0}];
 
 export class ProfileComponent extends HTMLElement {
@@ -157,7 +167,14 @@ const htmlContent = `
                 </div>
             </page-name>
             <div class="main-profile-container">
-                <div class="profile-rank-2"></div>
+                <div class="profile-rank-2">
+                    <user-rank bcolor="${getLeagueColor(fakeData.stats.league)}" height="140px">
+                        <div class="rank-label">
+                            <h5> RANK </h5>
+                            <h1> 2 </h1>
+                        </div>
+                    </user-rank>
+            </div>
                 <cover-component src="${fakeData.cover}"></cover-component>
                 <div class="profile-data">
                     <div class="profile-data-infos">

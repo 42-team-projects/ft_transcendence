@@ -32,9 +32,34 @@
     overflow-y: scroll;
     width: 100%;
     height: 100%;
-    border-radius: 7px;
 }
 
+.profile-rank-2 {
+    position: absolute;
+    width: 80px;
+    top: -3px;
+    right: -8px;
+    margin: 0;
+    padding: 0;
+    z-index: 99;
+}
+
+.rank-label {
+    padding-top: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rank-label h1 {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 page-name {
     z-index: 30;
