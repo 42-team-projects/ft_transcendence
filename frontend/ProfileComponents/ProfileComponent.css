@@ -12,6 +12,9 @@
 
 .main-profile-container
 {
+    scrollbar-width:none;
+    scroll-behavior: smooth;
+    scrollbar-color: #003347 transparent;
     display: flex;
     position: relative;
     flex-direction: column;
