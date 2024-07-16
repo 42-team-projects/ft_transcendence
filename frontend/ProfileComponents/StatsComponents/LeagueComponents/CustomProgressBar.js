@@ -16,6 +16,15 @@ export class CustomProgressBar extends HTMLElement {
     connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
+                :host {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-content: center;
+                    flex: 1;
+                    align-items: center;
+                }
+            
                 .horizontal-scroll-bar {
 
                     background-color: #d9d9d920;
