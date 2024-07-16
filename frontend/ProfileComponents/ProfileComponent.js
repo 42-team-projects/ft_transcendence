@@ -14,8 +14,7 @@ const fakeData = {
     gender: "Male",
     birthday: "23 JUL 2087",
     win: 89,
-    loss: 11,
-    winrate: 89
+    loss: 11
 };
 
 export class ProfileComponent extends HTMLElement {
@@ -28,7 +27,6 @@ export class ProfileComponent extends HTMLElement {
         this.shadowRoot.innerHTML = htmlContent;
     }
 }
-
 
 const htmlContent = `
             <link rel="stylesheet" href="/frontend/ProfileComponents/ProfileComponent.css">
@@ -75,10 +73,6 @@ const htmlContent = `
                         </div>
                     </div>
 
-
-
-
-
                     <div class="profile-data-stats">
                         <stats-container>
                             <div class="league-bar" slot="league-bar">
@@ -96,7 +90,7 @@ const htmlContent = `
                                 <custom-progress-bar></custom-progress-bar>
                             </div>
                             <div class="match-record" slot="match-record">
-                                <record-component win="${fakeData.win}" loss="${fakeData.loss}" winrate="${fakeData.winrate}" ></record-component>
+                                <record-component win="${fakeData.win}" loss="${fakeData.loss}" winrate="${(100 * fakeData.win) / (fakeData.win + fakeData.loss)}" ></record-component>
                             </div>
                         </stats-container>
                         <custom-graph></custom-graph>
