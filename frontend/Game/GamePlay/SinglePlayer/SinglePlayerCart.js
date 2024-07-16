@@ -42,7 +42,7 @@ player_template.innerHTML = /*html*/ `
         }
     }
     </style>
-    <img id='Player' class="Player" slot="PlayerImg" alt="" />
+    <img id='Player' class="Player" slot="PlayerImg" alt="Player" />
     <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
     <h1 id='Opponent' class="Opponent" slot="searshing"></h1>
     <h1 id='NOpponent' class="Name" slot="OpponentName"></h1>
@@ -50,8 +50,8 @@ player_template.innerHTML = /*html*/ `
 
 singlePlayerTemplate.innerHTML = /*html*/ `
     <link rel="stylesheet" href="Game/GamePlay/SinglePlayer/Single-Player.css">
-    <img class="GreenCartImg" src="images/GreenCart/img-singleplayer.svg" alt="">
-    <img class="GreenCart" src="images/GreenCart/Single.svg" alt="">
+    <img class="GreenCartImg" src="images/GreenCart/img-singleplayer.svg" alt="GreenImg">
+    <img class="GreenCart" src="images/GreenCart/Single.svg" alt="Green">
     <div class="style-0">
         <div class="style-1">
             <div class="style-2">
@@ -112,7 +112,7 @@ export class SinglePlayer extends HTMLElement{
         setTimeout(() => {
 			this.classList.toggle('opacity-0', false)
 			this.classList.toggle('opacity-1', true)
-		}, 2000);
+		}, 3000);
     }
     // connectedCallback(){
     //     this.clickEvent()
