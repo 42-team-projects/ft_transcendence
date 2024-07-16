@@ -77,6 +77,7 @@ export class ProfileInfoComponent extends HTMLElement {
                         <p class="joined-date-text">${this.joindate}</p>
                     </div>
                 </div>
+                <img class="add-friend" src="/frontend/assets/profile-assets/add-friends-icon.svg" width="40"/>
             </div>
 
         `;
@@ -84,29 +85,30 @@ export class ProfileInfoComponent extends HTMLElement {
 }
 
 
-const cssContent = `
-   :host * {
-        margin: 0;
-        padding: 0;
-   }
+const cssContent = /*css*/`
+:host * {
+    margin: 0;
+    padding: 0;
+}
 
-   .profile-image {
-        display: flex;
-        position: relative;
-        margin-left: 30%;
-        margin-top: -155px;
-        width: 500px;
-        height: 250px;
-        z-index: 3;
-   }
-
-.profile-image > img {
-    width: 250px;
+.profile-image {
+    display: flex;
+    position: relative;
+    margin-left: 30%;
+    margin-top: -155px;
     height: 250px;
+    z-index: 3;
+}
+
+.add-friend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+    height: 80%;
 }
 
 .profile-image > .name {
-    width: 200px;
     height: 250px;
     display: flex;
     flex-direction: column;
@@ -118,6 +120,7 @@ const cssContent = `
     width: 100%;
     color: white;
     display: flex;
+    justify-content: space-between;
     gap: 10px;
     align-items: center;
 }
@@ -131,7 +134,7 @@ const cssContent = `
     color: #d9d9d9;
     gap: 10px;
     display: flex;
-    width: 100%;
+    width: max-content;
     margin-top: 10px;
     opacity: 0.7;
 }
