@@ -96,11 +96,11 @@ c-profile{
 }
 
 
-user-rank
+/* user-rank
 {
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 60%, 50% 90%,10% 60%);
-}
+} */
