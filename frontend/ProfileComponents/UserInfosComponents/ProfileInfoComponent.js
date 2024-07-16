@@ -1,25 +1,3 @@
-/*
-
-        <div class="profile-image">
-            <c-hexagon width="250px" height="250px" apply="true" Bcolor="#EB9A45">
-                <img slot="content" draggable="false" src="./images/svg-header/profile.jpeg">
-            </c-hexagon>
-            <div class="name">
-                <div class="name-and-online">
-                    <p>ESALIM</p>
-                    <c-hexagon width="24px" height="24px" apply="true" Bcolor="#00ffff">
-                        <div class="online-logo" slot="content"></div>
-                    </c-hexagon>
-                </div>
-                <div class="joined-date">
-                    <img src="images/Chat.svg" width="20px"/>
-                    <p class="joined-text">joined:</p>
-                    <p class="joined-date-text">27 JUL 2024</p>
-                </div>
-            </div>
-        </div>
-
- */
 
 export class ProfileInfoComponent extends HTMLElement {
     constructor () {
@@ -38,9 +16,6 @@ export class ProfileInfoComponent extends HTMLElement {
 
     get league() { return this.getAttribute("league");}
     set league(value) { this.setAttribute("league", value);}
-    
-
-    // get active() { return this.getAttribute("active");}
 
     getLeagueColor(league) {
         const leagueColors = new Map();
@@ -49,14 +24,13 @@ export class ProfileInfoComponent extends HTMLElement {
         leagueColors.set("gold", "#EB9A45");
         leagueColors.set("platinum", "#459BEB");
         leagueColors.set("legendary", "#EB4545");
-        const color = leagueColors.get(league);
-        console.log("color = " + color);
-        return color;
+        return leagueColors.get(league);
     }
 
     connectedCallback() {
 
         const active = this.hasAttribute("active") ? "#00ffff" : "#d9d9d9";
+        const isFriend = this.hasAttribute("friend") ? "hidden" : "";
 
         this.shadowRoot.innerHTML = /* html */ `
             <style>${cssContent}</style>
@@ -77,7 +51,9 @@ export class ProfileInfoComponent extends HTMLElement {
                         <p class="joined-date-text">${this.joindate}</p>
                     </div>
                 </div>
-                <img class="add-friend" src="/frontend/assets/profile-assets/add-friends-icon.svg" width="40"/>
+                <div class="add-friend">
+                    <img src="/frontend/assets/profile-assets/add-friends-icon.svg" width="32" ${isFriend}/>
+                </div>
             </div>
 
         `;
@@ -106,6 +82,11 @@ const cssContent = /*css*/`
     justify-content: center;
     margin-left: 20px;
     height: 80%;
+}
+
+.add-friend img {
+    width: 32px;
+    height: 32px;
 }
 
 .profile-image > .name {
