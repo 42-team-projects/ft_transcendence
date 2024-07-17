@@ -1,4 +1,5 @@
 import { ChatComponent } from "./ChatComponents/ChatComponent.js";
+import { ChatItemComponent } from "./ChatComponents/ChatItemComponent.js";
 import { ChatListComponent } from "./ChatComponents/ChatListComponent.js";
 import { CoverComponent } from "./ProfileComponents/CoverComponent.js";
 import { CustomGraph } from "./ProfileComponents/GraphComponent/CustomGraph.js";
@@ -16,6 +17,7 @@ import { ProfileInfoComponent } from "./ProfileComponents/UserInfosComponents/Pr
 import { UserInfoComponent } from "./ProfileComponents/UserInfosComponents/UserInfoComponent.js";
 import { UserInfoContainerComponent } from "./ProfileComponents/UserInfosComponents/UserInfoContainer.js";
 
+customElements.define("chat-item", ChatItemComponent);
 customElements.define("chat-list", ChatListComponent);
 customElements.define("chat-page", ChatComponent);
 customElements.define("cover-component", CoverComponent);
