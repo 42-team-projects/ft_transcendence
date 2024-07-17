@@ -263,8 +263,8 @@ game-header{
     grid-area: img;
 }
 .GamePlayer1{
-       position: absolute;
-       border : 1px solid #00b9be;
+    position: absolute;
+    border : 1px solid #00b9be;
     grid-area: img;
     transform: scaleX(-1);
 }
@@ -358,12 +358,3 @@ game-header{
     position: absolute;
     background-color: #00b9be;
 }
-
-.ball{
-    position: absolute;
-    width: 2%;
-    aspect-ratio: 1;
-    background-color: white;
-    border-radius: 50%;
-}
-
