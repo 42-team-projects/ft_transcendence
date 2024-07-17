@@ -20,8 +20,6 @@ game_page.innerHTML = /*html*/ `
 		</div>
 		<div class="table_container">
             <canvas id="table" class="pingpongTable"></canvas>
-            <div class="rackit_of_p1"></div>
-            <div class="rackit_of_p2"></div>
 		</div>
     </div>
 </div>
@@ -50,16 +48,34 @@ export class GamePage extends HTMLElement{
     {
         super();
         this.appendChild(game_page.content.cloneNode(true))
-        this.addEventListener('keydown', (event) => {
-            this.setMove(event, keys);
-        })
-        this.addEventListener('keyup', (event) => {
-            this.resetMove(event, keys);
-        })
-        this.setBoundries(0, 0, 0, 0);
         this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 5, 2);
+        this.setCoordonatesP1(0, CANVAS_HEIGHT / 2);
+        this.setCoordonatesP2(CANVAS_WIDTH - 10, CANVAS_HEIGHT / 2);
         this.setKeys(false, false, false, false);
+
     }
+    setCoordonatesP1(x, y){
+        this.concoordonateP1 = {
+            x: x,
+            y: y,
+            color: 'white',
+            width: 10,
+            height: 100,
+        };
+    }
+    getCoordonatesP1(){
+        return this.concoordonateP1;
+    }
+    setCoordonatesP2(x, y){
+        this.concoordonateP2 = {
+            x: x,
+            y: y,
+            color: '#00b9be',
+            width: 10,
+            height: 100,
+        };
+    }
+    getCoordonatesP2(){return this.concoordonateP2;}
 
     setCoordonates(x, y, dx, dy){
         this.concoordonate = {
@@ -69,21 +85,10 @@ export class GamePage extends HTMLElement{
             dy: dy,
         };
     }
-    getCoordonates(){
-        return this.concoordonate;
-    }
+    getCoordonates(){return this.concoordonate;}
 
-    setBoundries(top, bottom, left, right){
-        this.conBoundries = {
-            top: top,
-            bottom: bottom,
-            left: left,
-            right: right,
-        }
-    }
-    getBoundries(){
-        return this.conBoundries;
-    }
+
+
 
     setKeys(keyS, keyW, keyArrowUp, keyArrowDown){
         this.conKeys = {
@@ -93,11 +98,13 @@ export class GamePage extends HTMLElement{
             keyArrowDown: keyArrowDown,
         }
     }
-    getKeys(){
-        return this.conKeys;
+    getKeys(){return this.conKeys;}
+
+    RanderRackit(ctx, coordonate){
+        const {x, y, color, width, height} = coordonate;
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, width, height);
     }
-
-
     renderBall(ctx){
         const coordonate = this.getCoordonates();
         ctx.fillStyle = 'white';
@@ -107,78 +114,92 @@ export class GamePage extends HTMLElement{
         ctx.closePath();
     }
     gameLoop(ctx){
+        const player1 = this.getCoordonatesP1();
+        const player2 = this.getCoordonatesP2();
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         requestAnimationFrame(() => this.gameLoop(ctx));
-        this.moveBall();
+        this.movePlayer(this.getKeys(), player1, player2);
+        this.moveBall(player1, player2);
         this.renderBall(ctx);
+        this.RanderRackit(ctx, this.getCoordonatesP1());
+        this.RanderRackit(ctx, this.getCoordonatesP2());
     }
     connectedCallback(){
+        addEventListener('keydown', (event) => {
+            this.setMove(event, this.getKeys());
+        })
+        addEventListener('keyup', (event) => {
+            this.resetMove(event, this.getKeys());
+        })
         const container = document.querySelector('.table_container');
-        const containerRect = container.getBoundingClientRect();
         const canvas = document.querySelector('#table');
         const ctx = canvas.getContext('2d');
-        this.setBoundries(containerRect.top, containerRect.bottom, containerRect.left, containerRect.right);
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
-        console.log(CANVAS_WIDTH, CANVAS_HEIGHT);
         this.gameLoop(ctx);
     }
 
-    moveBall(){
-        const coordonate = this.getCoordonates();
-        const containerBoundries = this.getBoundries();
-        console.log(coordonate);
-        console.log(containerBoundries);
-        if(coordonate.y + 10 + coordonate.dy >= CANVAS_HEIGHT || coordonate.y - 10 + coordonate.dy <= 0)
-            coordonate.dy = -coordonate.dy;
-        if(coordonate.x + 10 + coordonate.dx >= CANVAS_WIDTH || coordonate.x - 10 + coordonate.dx <= 0)
-            coordonate.dx = -coordonate.dx;
-        coordonate.x += coordonate.dx;
-        coordonate.y += coordonate.dy;
+    moveBall(player1, player2){
+        let {x, y, dx, dy} = this.getCoordonates();
+        if(y + 10 + dy >= CANVAS_HEIGHT || y - 10 + dy <= 0)
+            dy = -dy;
+        if(x + 10 + dx >= CANVAS_WIDTH || x - 10 + dx <= 0)
+        {
+            x = CANVAS_WIDTH / 2;
+            y = CANVAS_HEIGHT / 2;
+            dx = 5;
+            dy = 2;
+        }
+        if(x + 10 + dx >= player2.x && y >= player2.y && y <= player2.y + player2.height)
+            dx = -dx;
+        if(x - 10 + dx <= player1.x + player1.width && y >= player1.y && y <= player1.y + player1.height)
+            dx = -dx;
+        x += dx;
+        y += dy;
 
-        // coordonate.dx = Math.abs(coordonate.dx) + 0.1;
-        // coordonate.dy = Math.abs(coordonate.dy) + 0.1;
-        this.setCoordonates(coordonate.x, coordonate.y, coordonate.dx, coordonate.dy);
+        // dx = Math.abs(dx) + 0.1;
+        // dy = Math.abs(dy) + 0.1;
+        this.setCoordonates(x, y, dx, dy);
     }
 
     setMove = (event, keys) =>{
-        if(event.key === 'w' || event.key === 'W')
-            keys.keyW = true;
-        if(event.key === 's' || event.key === 'S')
-            keys.keyS = true;
-        if(event.key === 'ArrowUp')
-            keys.keyArrowUp = true;
-        if(event.key === 'ArrowDown')
-            keys.keyArrowDown = true;
-        this.movePlayer(keys);
+        let {keyW, keyS, keyArrowUp, keyArrowDown} = keys;
+
+        if(event.key === 'w' || event.key === 'W') { keyW = true };
+        if(event.key === 's' || event.key === 'S') { keyS = true };
+        if(event.key === 'ArrowUp') { keyArrowUp = true };
+        if(event.key === 'ArrowDown') { keyArrowDown = true };
+
+        this.setKeys(keyS, keyW, keyArrowUp, keyArrowDown);
     }
     resetMove = (event, keys) =>{
-        if(event.key === 'w' || event.key === 'W')
-            keys.keyW = false;
-        if(event.key === 's' || event.key === 'S')
-            keys.keyS = false;
-        if(event.key === 'ArrowUp')
-            keys.keyArrowUp = false;
-        if(event.key === 'ArrowDown')
-            keys.keyArrowDown = false;
+        let {keyW, keyS, keyArrowUp, keyArrowDown} = keys;
+
+        if(event.key === 'w' || event.key === 'W') { keyW = false };
+        if(event.key === 's' || event.key === 'S') { keyS = false };
+        if(event.key === 'ArrowUp') { keyArrowUp = false };
+        if(event.key === 'ArrowDown') { keyArrowDown = false };
+
+        this.setKeys(keyS, keyW, keyArrowUp, keyArrowDown);
     }
 
+    movePlayer(keys, player1, player2){
+        const {keyW, keyS, keyArrowUp, keyArrowDown} = keys;
+        if(keyW === true) { this.moveUp(player1) };
+        if(keyS === true) { this.moveDown(player1) };
+        if(keyArrowUp === true) { this.moveUp(player2) };
+        if(keyArrowDown === true) { this.moveDown(player2) };
+        this.setCoordonatesP1(player1.x, player1.y);
+        this.setCoordonatesP2(player2.x, player2.y);
+    }
+    moveDown(player){
+        if(player.y + player.height + 10 <= CANVAS_HEIGHT)
+            player.y += 10;
+    }
+    moveUp(player){
+        if(player.y - 10 >= 0)
+            player.y -= 10;
+    }
 }
-    // moveDown(player){
-    // }
-    // moveUp(player){
-    // }
 
-    // movePlayer(keys){
-    //     const player1 = this.querySelector('.rackit_of_p1')
-    //     const player2 = this.querySelector('.rackit_of_p2')
-    //     if(keys.keyW === true)
-    //         this.moveUp(player1);
-    //     if(keys.keyS === true)
-    //         this.moveDown(player1);
-    //     if(keys.keyArrowUp === true)
-    //         this.moveUp(player2);
-    //     if(keys.keyArrowDown === true)
-    //         this.moveDown(player2);
-    // }
 customElements.define('game-page', GamePage)
