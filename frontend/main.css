@@ -39,10 +39,7 @@ html, body {
     /* justify-content: center;
     align-items: center; */
 }
-#table {
-    width: 100%;
-    height: 100%;
-}
+
 .body-default-shrink{
     grid-template-columns: 14% 1fr;
     grid-template-rows: 12rem 1fr 4rem;
@@ -145,6 +142,17 @@ game-page{
 }
 
 
+launching-game {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(230, 255, 255, 0.08); 
+}
+
+
 .logout{
     position: absolute;
     display: flex;
@@ -162,16 +170,9 @@ game-page{
     font-size: clamp(1rem, 1.2vw, 1.5rem);
 }
 
-
-
-
-
-
-
-
-
-
-
+.blur{
+    filter: blur(5px);
+}
 
 
 .game-mode
