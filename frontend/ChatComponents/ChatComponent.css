@@ -1,19 +1,15 @@
-:host * {
-    margin: 0;
-    padding: 0;
-}
-
 :host {
     /* background-color: bisque; */
     width: 90%;
     height: 100%;
+    background-color: #d9d9d905;
 }
 
 .main-container {
+    position: relative;
     border: 1px solid red;
     width: 100%;
     height: 100%;
-    margin: 20px 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
