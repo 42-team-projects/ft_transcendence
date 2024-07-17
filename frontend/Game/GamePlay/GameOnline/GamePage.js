@@ -156,7 +156,6 @@ export class GamePage extends HTMLElement{
             dx = -dx;
         x += dx;
         y += dy;
-
         // dx = Math.abs(dx) + 0.1;
         // dy = Math.abs(dy) + 0.1;
         this.setCoordonates(x, y, dx, dy);
@@ -195,9 +194,11 @@ export class GamePage extends HTMLElement{
     moveDown(player){
         if(player.y + player.height + 10 <= CANVAS_HEIGHT)
             player.y += 10;
+        else
+            player.y = CANVAS_HEIGHT - player.height;
     }
     moveUp(player){
-        if(player.y - 10 >= 0)
+        if(player.y >= 0)
             player.y -= 10;
     }
 }

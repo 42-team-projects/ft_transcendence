@@ -3,6 +3,8 @@ import {Buttons} from '../buttons.js'
 import {aiLobby} from '../Lobby.js'
 import { GamePage } from './GamePage.js'
 import { GameHeader } from './GameHeader.js'
+import { LaunchingGame } from './launchingGame.js'
+
 const OnlineGameTemplate = document.createElement('template')
 
 const sherching_images = [
@@ -150,9 +152,6 @@ export class OnlineGame extends HTMLElement{
 		const root = document.querySelector('root-content')
 		// setTimeout(() => {
 			button.addEventListener('click', ()=>{
-				// const game = new GamePage();
-				// document.body.innerHTML = ``;
-				// document.body.appendChild(game);
 				const lobby = new aiLobby();
 				const p_img = player_template.content.getElementById('Player')
 				p_img.src = 'images/svg-header/profile.jpeg';
@@ -194,12 +193,24 @@ export class OnlineGame extends HTMLElement{
 					time--;
 					const desc = lobby.shadowRoot.querySelector('.descounter')
 					const h1 = desc.querySelector('h1')
+
 					if(time < 0){
 						const header = new GameHeader();
 						const game = new GamePage();
+						const LunchingGame = new LaunchingGame();
+
 						document.body.innerHTML = ``;
 						document.body.appendChild(header);
 						document.body.appendChild(game);
+						document.body.appendChild(LunchingGame);
+						document.body.classList.toggle('blur', true)
+						const Lunching = setInterval(() => {
+							RoundTime--;
+							LunchingGame.setTimer(RoundTime)
+							if(RoundTime < 0)
+								clearInterval(Lunching);
+							
+						}, 1000);
 						clearInterval(countdown)
 					}
 					else{
