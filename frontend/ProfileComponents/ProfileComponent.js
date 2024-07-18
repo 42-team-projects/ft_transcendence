@@ -174,7 +174,7 @@ const htmlContent = `
                             <h1> 2 </h1>
                         </div>
                     </user-rank>
-            </div>
+                </div>
                 <cover-component src="${fakeData.cover}"></cover-component>
                 <div class="profile-data">
                     <div class="profile-data-infos">
