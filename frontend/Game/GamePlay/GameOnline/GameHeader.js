@@ -2,7 +2,7 @@
 const HeaderTemplate = document.createElement('template');
 
 HeaderTemplate.innerHTML = /*html*/ `
-<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GamePage.css">
+<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GameTable.css">
 <div class="leftPlayer">
 <img class="GamePlayer" src="/frontend/images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo">
