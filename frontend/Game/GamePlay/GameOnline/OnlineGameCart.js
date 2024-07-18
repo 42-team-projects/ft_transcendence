@@ -1,9 +1,8 @@
 
 import {Buttons} from '../buttons.js'
 import {aiLobby} from '../Lobby.js'
-import { GamePage } from './GamePage.js'
+import { GameTable } from './GameTable.js'
 import { GameHeader } from './GameHeader.js'
-import { LaunchingGame } from './launchingGame.js'
 
 const OnlineGameTemplate = document.createElement('template')
 
@@ -121,7 +120,7 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 		</div>
 	</div>
 	`
-let time = 0;
+let time = 3;
 const timer = document.createElement('template')
 timer.innerHTML = /*html*/ `
 	<style>
@@ -169,8 +168,8 @@ export class OnlineGame extends HTMLElement{
 				lobby.appendChild(player_template.content.cloneNode(true))
 				root.innerHTML = ``
 				root.appendChild(lobby)
-				setTimeout(() => this.setPlayer(lobby), 50);
-				setTimeout(() => this.gameMode(lobby), 60);
+				setTimeout(() => this.setPlayer(lobby), 5000);
+				setTimeout(() => this.gameMode(lobby), 6000);
 			})
 		// }, 4000);
         this.classList.toggle('cart-animation', true)
@@ -196,21 +195,10 @@ export class OnlineGame extends HTMLElement{
 
 					if(time < 0){
 						const header = new GameHeader();
-						const game = new GamePage();
-						const LunchingGame = new LaunchingGame();
-
+						const game = new GameTable();
 						document.body.innerHTML = ``;
 						document.body.appendChild(header);
 						document.body.appendChild(game);
-						document.body.appendChild(LunchingGame);
-						document.body.classList.toggle('blur', true)
-						const Lunching = setInterval(() => {
-							RoundTime--;
-							LunchingGame.setTimer(RoundTime)
-							if(RoundTime < 0)
-								clearInterval(Lunching);
-							
-						}, 1000);
 						clearInterval(countdown)
 					}
 					else{
