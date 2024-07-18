@@ -57,7 +57,6 @@ export class PlayerBorder extends HTMLElement{
         if(this.revers == 'true')
         {
             const revers = this.shadowRoot.querySelector('.playerborder')
-            console.log(revers);
             revers.style.transform = 'scaleX(-1) scaleY(-1)';
         }
     }
