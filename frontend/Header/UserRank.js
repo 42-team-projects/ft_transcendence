@@ -24,7 +24,7 @@ export class UserRank extends HTMLElement{
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 66%, 50% 84%,10% 66%);
+                clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 70%, 50% 90%,10% 70%);
             }
             .child{
                 display: flex;
@@ -33,7 +33,7 @@ export class UserRank extends HTMLElement{
                 width: 95%;
                 height: 95%;
                 background : linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 60%);
-                clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 66%, 50% 84%,10% 66%);
+                clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 70%, 50% 90%,10% 70%);
             }
             slot {
                 color : white;

@@ -56,7 +56,8 @@ game_selection.innerHTML = /*html*/ `
             width: 100%;
             aspect-ratio: 0.56;
             transition: transform 0.3s ease;
-            animation: retate 2s ease;
+            animation: retate 1s ease;
+            opacity: 1 !important;
         }
         .opacity-0{
             opacity: 0;
@@ -75,14 +76,15 @@ game_selection.innerHTML = /*html*/ `
                 transform: translateY(var(--position, 0));
             }
         }
-        .cart-animation:nth-child(1) { animation-delay: 0s; }
-        .cart-animation:nth-child(2) { animation-delay: 1s; }
-        .cart-animation:nth-child(3) { animation-delay: 2s; }
+
     </style>
     <single-player></single-player>
     <multi-player></multi-player>
     <online-game></online-game>
     `
+    // .cart-animation:nth-child(1) { animation-delay: 0s; }
+    // .cart-animation:nth-child(2) { animation-delay: 1s; }
+    // .cart-animation:nth-child(3) { animation-delay: 2s; }
 export class GameSelection extends HTMLElement{
 
     constructor()
