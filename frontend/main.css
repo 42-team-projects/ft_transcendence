@@ -130,7 +130,7 @@ root-content{
     height: 100%;
 }
 
-game-page{
+game-table{
     position: relative;
     border: 1px solid red;
     width: 100%;
@@ -145,6 +145,7 @@ game-page{
 launching-game {
     position: absolute;
     display: flex;
+    flex-direction: column  ;
     justify-content: center;
     align-items: center;
     height: 100vh;
