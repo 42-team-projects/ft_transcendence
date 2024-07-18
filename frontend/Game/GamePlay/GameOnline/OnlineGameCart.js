@@ -3,7 +3,6 @@ import {Buttons} from '../buttons.js'
 import {aiLobby} from '../Lobby.js'
 import { GameTable } from './GameTable.js'
 import { GameHeader } from './GameHeader.js'
-
 const OnlineGameTemplate = document.createElement('template')
 
 const sherching_images = [
@@ -159,7 +158,6 @@ export class OnlineGame extends HTMLElement{
 				p_h1.textContent = 'NOUAKHRO'
 
 				const players = player_template.content.querySelectorAll('.PlayerS')
-				console.log(players);
 				players.forEach((element, index)=>{
 					element.style.setProperty('--dest', '400%');
 					element.style.setProperty('--numsec', 1);

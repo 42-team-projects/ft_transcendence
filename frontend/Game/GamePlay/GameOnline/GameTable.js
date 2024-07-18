@@ -4,7 +4,10 @@ const game_page = document.createElement('template');
 import { LaunchingGame } from './launchingGame.js'
 
 
-
+let score = {
+    player1: 0,
+    player2: 0,
+}
 
 
 game_page.innerHTML = /*html*/ `
@@ -25,6 +28,7 @@ game_page.innerHTML = /*html*/ `
     </div>
 </div>
 `
+
 
 
 let viewportWidth = window.innerWidth;
@@ -53,7 +57,7 @@ export class GameTable extends HTMLElement{
         this.setCoordonatesP1(0, CANVAS_HEIGHT / 2);
         this.setCoordonatesP2(CANVAS_WIDTH - 10, CANVAS_HEIGHT / 2);
         this.setKeys(false, false, false, false);
-
+        this.stopLoop = false;
     }
     setCoordonatesP1(x, y){
         this.concoordonateP1 = {
@@ -88,10 +92,10 @@ export class GameTable extends HTMLElement{
     }
     getCoordonates(){return this.concoordonate;}
 
-
     LuncheGame(ctx){
-        console.log('Lunching Game');
-        let RoundTime = 5;
+        // if(score.player1 === 5 || score.player2 === 5)
+        //     this.GameOver(ctx);
+        let RoundTime = 3;
         const LunchingGame = new LaunchingGame(RoundTime, 1);
 		document.body.appendChild(LunchingGame);
 		document.body.querySelector('game-header').classList.toggle('blur', true)
@@ -99,16 +103,17 @@ export class GameTable extends HTMLElement{
 		const Lunching = setInterval(() => {
 			RoundTime--;
 			if(RoundTime < 0)
-				clearInterval(Lunching);
+            {
+                clearInterval(Lunching);
+                document.body.querySelector('game-header').classList.toggle('blur', false)
+                document.body.querySelector('game-table').classList.toggle('blur', false)
+                document.body.querySelector('launching-game').remove();
+                this.stopLoop = true;
+                this.gameLoop(ctx);
+            }
 			else
-				LunchingGame.updateTimer(RoundTime)
+                LunchingGame.updateTimer(RoundTime, 1);
 		}, 1000);
-        setTimeout(() => {
-            document.body.querySelector('game-header').classList.toggle('blur', false)
-            document.body.querySelector('game-table').classList.toggle('blur', false)
-            document.body.querySelector('launching-game').remove();
-            this.gameLoop(ctx);
-        } , 5000);
     }
 
     setKeys(keyS, keyW, keyArrowUp, keyArrowDown){
@@ -135,12 +140,14 @@ export class GameTable extends HTMLElement{
         ctx.closePath();
     }
     gameLoop(ctx){
+        if(this.stopLoop === false)
+            return;
         const player1 = this.getCoordonatesP1();
         const player2 = this.getCoordonatesP2();
+        requestAnimationFrame(() => this.gameLoop(ctx));
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        // requestAnimationFrame(() => this.gameLoop(ctx));
         this.movePlayer(this.getKeys(), player1, player2);
-        this.moveBall(player1, player2);
+        this.moveBall(player1, player2, ctx);
         this.renderBall(ctx);
         this.RanderRackit(ctx, this.getCoordonatesP1());
         this.RanderRackit(ctx, this.getCoordonatesP2());
@@ -162,28 +169,36 @@ export class GameTable extends HTMLElement{
         this.RanderRackit(ctx, this.getCoordonatesP2());
         this.LuncheGame(ctx);
     }
-
-    moveBall(player1, player2){
+    RoundOver(ctx){
+        let {x, y, dx, dy} = this.getCoordonates();
+        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 5, 2);
+        this.stopLoop = false;
+        this.LuncheGame(ctx);
+        document.querySelector('game-header').updateScore(score);
+    }
+    moveBall(player1, player2, ctx){
         let {x, y, dx, dy} = this.getCoordonates();
         if(y + 10 + dy >= CANVAS_HEIGHT || y - 10 + dy <= 0)
             dy = -dy;
-        if(x + 10 + dx >= CANVAS_WIDTH || x - 10 + dx <= 0)
-        {
-            x = CANVAS_WIDTH / 2;
-            y = CANVAS_HEIGHT / 2;
-            dx = 5;
-            dy = 2;
-            this.LuncheGame();
-        }
         if(x + 10 + dx >= player2.x && y >= player2.y && y <= player2.y + player2.height)
             dx = -dx;
         if(x - 10 + dx <= player1.x + player1.width && y >= player1.y && y <= player1.y + player1.height)
-            dx = -dx;
+        dx = -dx;
         x += dx;
         y += dy;
-        // dx = Math.abs(dx) + 0.1;
-        // dy = Math.abs(dy) + 0.1;
         this.setCoordonates(x, y, dx, dy);
+
+        //round over reset coordonates and update score
+        if(x - 10 + dx <= 0)
+        {
+            score.player2++;
+            this.RoundOver(ctx);
+        }
+        if(x + 10 + dx >= CANVAS_WIDTH)
+        {
+            score.player1++;
+            this.RoundOver(ctx);
+        }
     }
 
     setMove = (event, keys) =>{

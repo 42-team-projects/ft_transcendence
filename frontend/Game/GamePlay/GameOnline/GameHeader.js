@@ -40,6 +40,10 @@ export class GameHeader extends HTMLElement{
         super();
         this.appendChild(HeaderTemplate.content.cloneNode(true))
     }
+    updateScore(score){
+        this.querySelector('.playerscor h1').textContent = score.player1
+        this.querySelector('.playerscor1 h1').textContent = score.player2
+    }
 }
 
 customElements.define('game-header', GameHeader)
