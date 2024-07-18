@@ -1,13 +1,14 @@
 
 const game_page = document.createElement('template');
 
+import { LaunchingGame } from './launchingGame.js'
 
 
 
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GamePage.css">
+<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GameTable.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>
@@ -42,7 +43,7 @@ let tableContainerHeight = 0.83 * gameShapesHeight;
 let CANVAS_WIDTH = tableContainerWidth;
 let CANVAS_HEIGHT = tableContainerHeight;
 
-export class GamePage extends HTMLElement{
+export class GameTable extends HTMLElement{
 
     constructor()
     {
@@ -88,7 +89,27 @@ export class GamePage extends HTMLElement{
     getCoordonates(){return this.concoordonate;}
 
 
-
+    LuncheGame(ctx){
+        console.log('Lunching Game');
+        let RoundTime = 5;
+        const LunchingGame = new LaunchingGame(RoundTime, 1);
+		document.body.appendChild(LunchingGame);
+		document.body.querySelector('game-header').classList.toggle('blur', true)
+		document.body.querySelector('game-table').classList.toggle('blur', true)
+		const Lunching = setInterval(() => {
+			RoundTime--;
+			if(RoundTime < 0)
+				clearInterval(Lunching);
+			else
+				LunchingGame.updateTimer(RoundTime)
+		}, 1000);
+        setTimeout(() => {
+            document.body.querySelector('game-header').classList.toggle('blur', false)
+            document.body.querySelector('game-table').classList.toggle('blur', false)
+            document.body.querySelector('launching-game').remove();
+            this.gameLoop(ctx);
+        } , 5000);
+    }
 
     setKeys(keyS, keyW, keyArrowUp, keyArrowDown){
         this.conKeys = {
@@ -117,7 +138,7 @@ export class GamePage extends HTMLElement{
         const player1 = this.getCoordonatesP1();
         const player2 = this.getCoordonatesP2();
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        requestAnimationFrame(() => this.gameLoop(ctx));
+        // requestAnimationFrame(() => this.gameLoop(ctx));
         this.movePlayer(this.getKeys(), player1, player2);
         this.moveBall(player1, player2);
         this.renderBall(ctx);
@@ -133,10 +154,13 @@ export class GamePage extends HTMLElement{
         })
         const container = document.querySelector('.table_container');
         const canvas = document.querySelector('#table');
-        const ctx = canvas.getContext('2d');
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
-        this.gameLoop(ctx);
+        const ctx = canvas.getContext('2d');
+        this.renderBall(ctx);
+        this.RanderRackit(ctx, this.getCoordonatesP1());
+        this.RanderRackit(ctx, this.getCoordonatesP2());
+        this.LuncheGame(ctx);
     }
 
     moveBall(player1, player2){
@@ -149,6 +173,7 @@ export class GamePage extends HTMLElement{
             y = CANVAS_HEIGHT / 2;
             dx = 5;
             dy = 2;
+            this.LuncheGame();
         }
         if(x + 10 + dx >= player2.x && y >= player2.y && y <= player2.y + player2.height)
             dx = -dx;
@@ -203,4 +228,4 @@ export class GamePage extends HTMLElement{
     }
 }
 
-customElements.define('game-page', GamePage)
+customElements.define('game-table', GameTable)
