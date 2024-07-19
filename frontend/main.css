@@ -142,6 +142,7 @@ game-table{
 }
 
 
+
 launching-game {
     position: absolute;
     display: flex;
@@ -153,6 +154,15 @@ launching-game {
     background-color: rgba(230, 255, 255, 0.08); 
 }
 
+game-over{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+}
 
 .logout{
     position: absolute;
