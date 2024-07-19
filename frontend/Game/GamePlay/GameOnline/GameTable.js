@@ -1,3 +1,4 @@
+import { GameOver } from './GameOver.js';
 
 const game_page = document.createElement('template');
 
@@ -92,14 +93,27 @@ export class GameTable extends HTMLElement{
     }
     getCoordonates(){return this.concoordonate;}
 
+    GameOver(ctx, status_player1, status_player2){
+        this.stopLoop = false;
+        const gameOver = new GameOver(status_player1, status_player2, 'NOUKHRO', 'ESCANOR');
+        document.body.appendChild(gameOver);
+    }
     LuncheGame(ctx){
-        // if(score.player1 === 5 || score.player2 === 5)
-        //     this.GameOver(ctx);
+        document.body.querySelector('game-header').classList.toggle('blur', true)
+		document.body.querySelector('game-table').classList.toggle('blur', true)
+        if(score.player1 === 5  )
+        {
+            this.GameOver(ctx, 'win', 'lose');
+            return;
+        }
+        if(score.player2 === 5  )
+        {
+            this.GameOver(ctx, 'lose', 'win');
+            return;
+        }
         let RoundTime = 3;
         const LunchingGame = new LaunchingGame(RoundTime, 1);
 		document.body.appendChild(LunchingGame);
-		document.body.querySelector('game-header').classList.toggle('blur', true)
-		document.body.querySelector('game-table').classList.toggle('blur', true)
 		const Lunching = setInterval(() => {
 			RoundTime--;
 			if(RoundTime < 0)
@@ -183,9 +197,12 @@ export class GameTable extends HTMLElement{
         if(x + 10 + dx >= player2.x && y >= player2.y && y <= player2.y + player2.height)
             dx = -dx;
         if(x - 10 + dx <= player1.x + player1.width && y >= player1.y && y <= player1.y + player1.height)
-        dx = -dx;
+            dx = -dx;
         x += dx;
         y += dy;
+        // dx = dx + 0.1;
+        // dy = dy + 0.1;
+        console.log(dx, dy);
         this.setCoordonates(x, y, dx, dy);
 
         //round over reset coordonates and update score
