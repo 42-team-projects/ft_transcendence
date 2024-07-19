@@ -9,7 +9,7 @@ export class LaunchingGame extends HTMLElement{
                 p{
                     font-size: clamp(0.5rem, 5vw, 4rem);
                     color: white;
-                    text-shadow: 0 0 1px #00b9be;
+                    text-shadow: 0 0 5px #00b9be;
                 }
             </style>
             <p id="round">Round ${RoundNumber}</p>
