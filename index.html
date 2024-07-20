@@ -7,7 +7,7 @@ const game_page = document.createElement('template');
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GamePage.css">
+<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GameTable.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>
@@ -42,7 +42,7 @@ let tableContainerHeight = 0.83 * gameShapesHeight;
 let CANVAS_WIDTH = tableContainerWidth;
 let CANVAS_HEIGHT = tableContainerHeight;
 
-export class GamePage extends HTMLElement{
+export class GameTable extends HTMLElement{
 
     constructor()
     {
@@ -179,4 +179,4 @@ export class GamePage extends HTMLElement{
     //     if(keys.keyArrowDown === true)
     //         this.moveDown(player2);
     // }
-customElements.define('game-page', GamePage)
+customElements.define('game-table', GameTable)
