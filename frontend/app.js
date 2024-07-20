@@ -1,6 +1,11 @@
 import { ChatComponent } from "./ChatComponents/ChatComponent.js";
-import { ChatItemComponent } from "./ChatComponents/ChatItemComponent.js";
-import { ChatListComponent } from "./ChatComponents/ChatListComponent.js";
+import { ChatItemComponent } from "./ChatComponents/ChatList/ChatItemComponent.js";
+import { ChatListComponent } from "./ChatComponents/ChatList/ChatListComponent.js";
+import { ChatFooterComponent } from "./ChatComponents/ChatRoom/ChatFooterComponent.js";
+import { ChatHeaderComponent } from "./ChatComponents/ChatRoom/ChatHeaderComponent.js";
+import { ChatRoomComponent } from "./ChatComponents/ChatRoom/ChatRoomComponent.js";
+import { FriendItemComponent } from "./ChatComponents/Friends/FriendItemComponent.js";
+import { FriendsListComponent } from "./ChatComponents/Friends/FriendsListComponent.js";
 import { CoverComponent } from "./ProfileComponents/CoverComponent.js";
 import { CustomGraph } from "./ProfileComponents/GraphComponent/CustomGraph.js";
 import { ProfileComponent } from "./ProfileComponents/ProfileComponent.js";
@@ -17,6 +22,11 @@ import { ProfileInfoComponent } from "./ProfileComponents/UserInfosComponents/Pr
 import { UserInfoComponent } from "./ProfileComponents/UserInfosComponents/UserInfoComponent.js";
 import { UserInfoContainerComponent } from "./ProfileComponents/UserInfosComponents/UserInfoContainer.js";
 
+customElements.define("chat-footer", ChatFooterComponent);
+customElements.define("chat-header", ChatHeaderComponent);
+customElements.define("chat-room", ChatRoomComponent);
+customElements.define("friend-item", FriendItemComponent);
+customElements.define("friends-list", FriendsListComponent);
 customElements.define("chat-item", ChatItemComponent);
 customElements.define("chat-list", ChatListComponent);
 customElements.define("chat-page", ChatComponent);
