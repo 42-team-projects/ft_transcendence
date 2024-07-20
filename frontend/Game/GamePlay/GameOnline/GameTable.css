@@ -22,6 +22,11 @@ game-header{
     grid-template-areas: "img player_info scor";
     grid-template-columns: 23.5% 35% 1fr;
 }
+#table {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
 .Play_Pause{
     display:flex;
     justify-content: space-between;
