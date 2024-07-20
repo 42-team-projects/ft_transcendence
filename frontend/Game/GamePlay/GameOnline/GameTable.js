@@ -1,13 +1,18 @@
+import { GameOver } from './GameOver.js';
 
 const game_page = document.createElement('template');
 
+import { LaunchingGame } from './launchingGame.js'
 
 
-
+let score = {
+    player1: 0,
+    player2: 0,
+}
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GamePage.css">
+<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GameTable.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>
@@ -26,6 +31,7 @@ game_page.innerHTML = /*html*/ `
 `
 
 
+
 let viewportWidth = window.innerWidth;
 let remInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
 let viewportHeight = window.innerHeight - (14 * remInPixels);
@@ -42,7 +48,7 @@ let tableContainerHeight = 0.83 * gameShapesHeight;
 let CANVAS_WIDTH = tableContainerWidth;
 let CANVAS_HEIGHT = tableContainerHeight;
 
-export class GamePage extends HTMLElement{
+export class GameTable extends HTMLElement{
 
     constructor()
     {
@@ -52,7 +58,7 @@ export class GamePage extends HTMLElement{
         this.setCoordonatesP1(0, CANVAS_HEIGHT / 2);
         this.setCoordonatesP2(CANVAS_WIDTH - 10, CANVAS_HEIGHT / 2);
         this.setKeys(false, false, false, false);
-
+        this.stopLoop = false;
     }
     setCoordonatesP1(x, y){
         this.concoordonateP1 = {
@@ -87,8 +93,42 @@ export class GamePage extends HTMLElement{
     }
     getCoordonates(){return this.concoordonate;}
 
-
-
+    GameOver(ctx, status_player1, status_player2){
+        this.stopLoop = false;
+        const gameOver = new GameOver(status_player1, status_player2, 'NOUKHRO', 'ESCANOR');
+        document.body.appendChild(gameOver);
+    }
+    LuncheGame(ctx){
+        document.body.querySelector('game-header').classList.toggle('blur', true)
+		document.body.querySelector('game-table').classList.toggle('blur', true)
+        if(score.player1 === 5  )
+        {
+            this.GameOver(ctx, 'win', 'lose');
+            return;
+        }
+        if(score.player2 === 5  )
+        {
+            this.GameOver(ctx, 'lose', 'win');
+            return;
+        }
+        let RoundTime = 3;
+        const LunchingGame = new LaunchingGame(RoundTime, 1);
+		document.body.appendChild(LunchingGame);
+		const Lunching = setInterval(() => {
+			RoundTime--;
+			if(RoundTime < 0)
+            {
+                clearInterval(Lunching);
+                document.body.querySelector('game-header').classList.toggle('blur', false)
+                document.body.querySelector('game-table').classList.toggle('blur', false)
+                document.body.querySelector('launching-game').remove();
+                this.stopLoop = true;
+                this.gameLoop(ctx);
+            }
+			else
+                LunchingGame.updateTimer(RoundTime, 1);
+		}, 1000);
+    }
 
     setKeys(keyS, keyW, keyArrowUp, keyArrowDown){
         this.conKeys = {
@@ -114,12 +154,14 @@ export class GamePage extends HTMLElement{
         ctx.closePath();
     }
     gameLoop(ctx){
+        if(this.stopLoop === false)
+            return;
         const player1 = this.getCoordonatesP1();
         const player2 = this.getCoordonatesP2();
-        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         requestAnimationFrame(() => this.gameLoop(ctx));
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         this.movePlayer(this.getKeys(), player1, player2);
-        this.moveBall(player1, player2);
+        this.moveBall(player1, player2, ctx);
         this.renderBall(ctx);
         this.RanderRackit(ctx, this.getCoordonatesP1());
         this.RanderRackit(ctx, this.getCoordonatesP2());
@@ -133,33 +175,47 @@ export class GamePage extends HTMLElement{
         })
         const container = document.querySelector('.table_container');
         const canvas = document.querySelector('#table');
-        const ctx = canvas.getContext('2d');
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
-        this.gameLoop(ctx);
+        const ctx = canvas.getContext('2d');
+        this.renderBall(ctx);
+        this.RanderRackit(ctx, this.getCoordonatesP1());
+        this.RanderRackit(ctx, this.getCoordonatesP2());
+        this.LuncheGame(ctx);
     }
-
-    moveBall(player1, player2){
+    RoundOver(ctx){
+        let {x, y, dx, dy} = this.getCoordonates();
+        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 5, 2);
+        this.stopLoop = false;
+        this.LuncheGame(ctx);
+        document.querySelector('game-header').updateScore(score);
+    }
+    moveBall(player1, player2, ctx){
         let {x, y, dx, dy} = this.getCoordonates();
         if(y + 10 + dy >= CANVAS_HEIGHT || y - 10 + dy <= 0)
             dy = -dy;
-        if(x + 10 + dx >= CANVAS_WIDTH || x - 10 + dx <= 0)
-        {
-            x = CANVAS_WIDTH / 2;
-            y = CANVAS_HEIGHT / 2;
-            dx = 5;
-            dy = 2;
-        }
         if(x + 10 + dx >= player2.x && y >= player2.y && y <= player2.y + player2.height)
             dx = -dx;
         if(x - 10 + dx <= player1.x + player1.width && y >= player1.y && y <= player1.y + player1.height)
             dx = -dx;
         x += dx;
         y += dy;
-
-        // dx = Math.abs(dx) + 0.1;
-        // dy = Math.abs(dy) + 0.1;
+        // dx = dx + 0.1;
+        // dy = dy + 0.1;
+        console.log(dx, dy);
         this.setCoordonates(x, y, dx, dy);
+
+        //round over reset coordonates and update score
+        if(x - 10 + dx <= 0)
+        {
+            score.player2++;
+            this.RoundOver(ctx);
+        }
+        if(x + 10 + dx >= CANVAS_WIDTH)
+        {
+            score.player1++;
+            this.RoundOver(ctx);
+        }
     }
 
     setMove = (event, keys) =>{
@@ -195,11 +251,13 @@ export class GamePage extends HTMLElement{
     moveDown(player){
         if(player.y + player.height + 10 <= CANVAS_HEIGHT)
             player.y += 10;
+        else
+            player.y = CANVAS_HEIGHT - player.height;
     }
     moveUp(player){
-        if(player.y - 10 >= 0)
+        if(player.y >= 0)
             player.y -= 10;
     }
 }
 
-customElements.define('game-page', GamePage)
+customElements.define('game-table', GameTable)
