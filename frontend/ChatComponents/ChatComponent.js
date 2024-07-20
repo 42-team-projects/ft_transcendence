@@ -15,8 +15,8 @@ export class ChatComponent extends HTMLElement {
                     </div>
                 </page-name>
                 <chat-list></chat-list>
-                <div class="chat-room"></div>
-                <div class="friend-list"></div>
+                <chat-room></chat-room>
+                <friends-list></friends-list>
             </div>
         `;
     }
