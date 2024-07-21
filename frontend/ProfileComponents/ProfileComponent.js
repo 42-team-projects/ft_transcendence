@@ -1,6 +1,6 @@
 var fakeData;
 
-const APIUrl = "http://localhost:8080/api/v1/profile";
+const APIUrl = "http://localhost:8080/api/v1/users/153";
 
 function getLeagueColor(league) {
     const leagueColors = new Map();
@@ -12,12 +12,86 @@ function getLeagueColor(league) {
     return leagueColors.get(league.toLowerCase());
 }
 
+function getLeagueImage(league) {
+    const leagueColors = new Map();
+    leagueColors.set("bronze", "/frontend/assets/profile-assets/bronze-league.svg");
+    leagueColors.set("silver", "/frontend/assets/profile-assets/silver-league.svg");
+    leagueColors.set("gold", "/frontend/assets/profile-assets/gold-league.svg");
+    leagueColors.set("platinum", "/frontend/assets/profile-assets/platinum-league.svg");
+    leagueColors.set("legendary", "/frontend/assets/profile-assets/legendary-league.svg");
+    return leagueColors.get(league.toLowerCase());
+}
+
 const emptyGraph = [{label: "", value: 0}];
 
 export class ProfileComponent extends HTMLElement {
+
+    setUpStats() {
+        if (!fakeData.stats)
+            return ;
+        const userRank = this.shadowRoot.querySelector("user-rank");
+        userRank.bcolor = getLeagueColor(fakeData.stats.league);
+        const rank = userRank.querySelector("h1");
+        rank.textContent = fakeData.stats.rank;
+        const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
+        profileInfoComponent.setAttribute("league", fakeData.stats.league);
+
+
+        const leagueBar = this.shadowRoot.querySelector(".league-bar");
+
+        const leagueInfo = document.createElement("league-info");
+        const leagueItem1 = document.createElement("league-item");
+        leagueItem1.slot = "current-rank";
+        leagueItem1.title = "current rank";
+        leagueItem1.league = fakeData.stats.league;
+        leagueItem1.color = getLeagueColor(fakeData.stats.league);
+        const h1 = document.createElement("h1");
+        h1.style.margin = 0;
+        h1.className = "league-rank";
+        h1.textContent = fakeData.stats.rank;
+        leagueItem1.appendChild(h1);
+        leagueInfo.appendChild(leagueItem1);
+        
+        const div = document.createElement("div");
+        div.className = "league-logo";
+        div.slot = "league-logo";
+        
+        const img1 = document.createElement("img");
+        img1.style.margin = 0;
+        img1.className = "current-league-logo";
+        img1.src = getLeagueImage(fakeData.stats.league);
+        div.appendChild(img1);
+        leagueInfo.appendChild(div);
+        
+        const leagueItem2 = document.createElement("league-item");
+        leagueItem2.slot = "next-league";
+        leagueItem2.title = "next league";
+        leagueItem2.league = fakeData.stats.nextLeague;
+        leagueItem2.color = getLeagueColor(fakeData.stats.nextLeague);
+        const img2 = document.createElement("img");
+        img2.style.margin = 0;
+        img2.className = "next-league-logo";
+        img2.src = getLeagueImage(fakeData.stats.nextLeague);
+        leagueItem2.appendChild(img2);
+        leagueInfo.appendChild(leagueItem2);
+
+        leagueBar.appendChild(leagueInfo);
+        const progressBar = document.createElement("custom-progress-bar");
+        progressBar.value = fakeData.stats.progressBar;
+        leagueBar.appendChild(progressBar);
+
+        const recordComponent = document.createElement("record-component");
+        recordComponent.loss = fakeData.stats.loss;
+        recordComponent.win = fakeData.stats.win;
+        recordComponent.winrate = Math.round((100 * fakeData.stats.win) / (fakeData.stats.win + fakeData.stats.loss) * 10) / 10;
+        this.shadowRoot.querySelector(".match-record").appendChild(recordComponent);
+    
+    }
+
     constructor () {
         super();
         this.attachShadow({mode: "open"});
+
     }
     
 
@@ -75,11 +149,11 @@ export class ProfileComponent extends HTMLElement {
               throw new Error(`Response status: ${response.status}`);
             }
             const json = await response.json();
-            if (json.length)
-                fakeData = json[0];
+            fakeData = json;
         } catch (error) {
             console.error(error.message);
         }
+        console.log(fakeData);
 
         this.shadowRoot.innerHTML = `
         <link rel="stylesheet" href="/frontend/ProfileComponents/ProfileComponent.css">
@@ -90,7 +164,7 @@ export class ProfileComponent extends HTMLElement {
         </page-name>
         <div class="main-profile-container">
             <div class="profile-rank-2">
-                <user-rank bcolor="${getLeagueColor(fakeData.stats.league)}" height="140px">
+                <user-rank id="user-rank" bcolor="bronze" height="140px">
                     <div class="rank-label">
                         <h5> RANK </h5>
                         <h1> 2 </h1>
@@ -100,7 +174,7 @@ export class ProfileComponent extends HTMLElement {
             <cover-component src="${fakeData.cover}"></cover-component>
             <div class="profile-data">
                 <div class="profile-data-infos">
-                    <profile-info-component src="${fakeData.profileImage}" username="${fakeData.userName}" joindate="${fakeData.joinDate}" league="${fakeData.stats.league}" ${fakeData.active && "active" } ${fakeData.friend && "friend"}></profile-info-component>
+                    <profile-info-component src="${fakeData.profileImage}" username="${fakeData.userName}" joindate="${fakeData.joinDate}" league="bronze" ${fakeData.active && "active" } ${fakeData.friend && "friend"}></profile-info-component>
 
                     <div class="profile-data-infos-container">
 
@@ -115,23 +189,8 @@ export class ProfileComponent extends HTMLElement {
 
                 <div class="profile-data-stats">
                     <stats-container>
-                        <div class="league-bar" slot="league-bar">
-                            <league-info>
-                                <league-item slot="current-rank" title="current rank" league="${fakeData.stats.league}" color="#EB9A45">
-                                    <h1 class="league-rank">${fakeData.stats.rank}</h1>
-                                </league-item>
-                                <div class="league-logo" slot="league-logo">
-                                    <img class="current-league-logo" src="assets/profile-assets/gold_league.svg">
-                                </div>
-                                <league-item slot="next-league" title="next league" league="${fakeData.stats.nextLeague}" color="rgb(85, 146, 226)">
-                                    <img class="next-league-logo" src="assets/profile-assets/platinum_league.svg">
-                                </league-item>
-                            </league-info>
-                            <custom-progress-bar></custom-progress-bar>
-                        </div>
-                        <div class="match-record" slot="match-record">
-                            <record-component win="${fakeData.stats.win}" loss="${fakeData.stats.loss}" winrate="${(100 * fakeData.stats.win) / (fakeData.stats.win + fakeData.stats.loss)}" ></record-component>
-                        </div>
+                        <div class="league-bar" slot="league-bar"></div>
+                        <div class="match-record" slot="match-record"></div>
                     </stats-container>
                     <custom-graph id="graph">
                     </custom-graph>
@@ -139,16 +198,17 @@ export class ProfileComponent extends HTMLElement {
                 </div>
             </div>
         </div>
-`;
+    `;
 
         this.setUpUserInfo();
 
-        this.setUpGraph();
+        // this.setUpGraph();
 
-        this.setUpLinks();
+        // this.setUpLinks();
 
-        this.setUpAchievements();
+        // this.setUpAchievements();
 
+        this.setUpStats();
 
     }
 

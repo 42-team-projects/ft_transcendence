@@ -5,9 +5,9 @@ export class UserRank extends HTMLElement{
         this.attachShadow({mode: "open"});
     }
 
-    set width(value) { this.setAttribute("width", value);}
-    set height(value) { this.setAttribute("height", value);}
-    set bcolor(value) { this.setAttribute("bcolor", value);}
+    set width(value) { this.setAttribute("width", value); this.connectedCallback();}
+    set height(value) { this.setAttribute("height", value); this.connectedCallback();}
+    set bcolor(value) { this.setAttribute("bcolor", value); this.connectedCallback();}
     get width() { return this.getAttribute("width");}
     get height() { return this.getAttribute("height");}
     get bcolor() { return this.getAttribute("bcolor");}

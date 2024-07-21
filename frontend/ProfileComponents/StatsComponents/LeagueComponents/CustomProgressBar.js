@@ -13,6 +13,9 @@ export class CustomProgressBar extends HTMLElement {
         this.attachShadow({mode: "open"});
     }
 
+    set value(val) { this.setAttribute("value", val); }
+    get value() { return this.getAttribute("value"); }
+
     connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
@@ -35,7 +38,7 @@ export class CustomProgressBar extends HTMLElement {
 
                 .horizontal-scroll-bar-reach {
                     background-color: #EB9A45;
-                    width: 80%;
+                    width: ${this.value || 0}%;
                     height: 100%;
                     border-radius: 200px;
                 }
