@@ -4,7 +4,7 @@ export class RecordComponent extends HTMLElement {
         this.attachShadow({mode: "open"});
     }
 
-    connectedCallback() {
+    render() {
         this.shadowRoot.innerHTML = `
         <link rel="stylesheet" href="/frontend/ProfileComponents/StatsComponents/RecordMatchesComponents/RecordComponent.css">
         <p class="match-record-text">RECORD MATCHES</p>
@@ -27,12 +27,15 @@ export class RecordComponent extends HTMLElement {
         </div>
     `;
     }
-
+    connectedCallback() {
+        this.render();
+    }
+    
     get win() { return this.getAttribute("win"); }
     get loss() { return this.getAttribute("loss"); }
     get winrate() { return this.getAttribute("winrate"); }
 
-    set win(value) { this.setAttribute("win", value); }
-    set loss(value) { this.setAttribute("loss", value); }
-    set winrate(value) { this.setAttribute("winrate", value); }
+    set win(value) { this.setAttribute("win", value); this.render();}
+    set loss(value) { this.setAttribute("loss", value); this.render();}
+    set winrate(value) { this.setAttribute("winrate", value); this.render();}
 }
