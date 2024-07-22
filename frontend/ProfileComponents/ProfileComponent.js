@@ -100,13 +100,11 @@ const emptyGraph = [{ label: "", value: 0 }];
 
 export class ProfileComponent extends HTMLElement {
 
-
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
 
     }
-
 
     setUpLinks() {
         const linksContainer = this.shadowRoot.getElementById("links");

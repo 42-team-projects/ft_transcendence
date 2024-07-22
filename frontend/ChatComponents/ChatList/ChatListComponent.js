@@ -1,3 +1,60 @@
+const fakeAPI = [
+    {
+        id: 1,
+        userId: 1,
+        userName: "ESALIM",
+        targetUserId: 2,
+        lastMessage: "last message ...",
+        time: "12:58 PM",
+        numberOfMessage: 1
+    },
+    {
+        id: 2,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    },
+    {
+        id: 2,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    },
+    {
+        id: 2,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    },
+    {
+        id: 2,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    },
+    {
+        id: 2,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    }
+];
+
 export class ChatListComponent extends HTMLElement {
     constructor () {
         super();
@@ -14,35 +71,20 @@ export class ChatListComponent extends HTMLElement {
             </div>
         `;
         const list = this.shadowRoot.getElementById("list-items");
-        const chatItem = document.createElement("chat-item");
-        chatItem.setAttribute("background-color", "#051d31");
-        list.appendChild(chatItem.cloneNode());
-        chatItem.setAttribute("background-color", "transparent");
-        chatItem.setAttribute("opacity", 0.6);
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode());
-        list.appendChild(chatItem.cloneNode()); 
+
+
+        // chatItem.setAttribute("background-color", "#051d31");
+        fakeAPI.forEach((item) => {
+            const chatItem = document.createElement("chat-item");
+            chatItem.backgroundColor = "transparent";
+            chatItem.opacity = 0.6;
+            chatItem.userName = item.userName;
+            chatItem.lastMessage = item.lastMessage;
+            chatItem.time = item.time;
+            chatItem.numberOfMessage = item.numberOfMessage;
+            list.appendChild(chatItem);
+        });
+
     }
 }
 
