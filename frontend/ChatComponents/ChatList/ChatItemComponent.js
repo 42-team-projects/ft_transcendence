@@ -8,6 +8,20 @@ export class ChatItemComponent extends HTMLElement {
     get opacity() { return this.getAttribute("opacity");}
     set backgroundColor(val) { this.setAttribute("background-color", val);}
     get backgroundColor() { return this.getAttribute("background-color");}
+    
+    set userName(val) { this.setAttribute("user-name", val);}
+    get userName() { return this.getAttribute("user-name");}
+    
+    set lastMessage(val) { this.setAttribute("last-message", val);}
+    get lastMessage() { return this.getAttribute("last-message");}
+    
+    set time(val) { this.setAttribute("time", val);}
+    get time() { return this.getAttribute("time");}
+    
+    set numberOfMessage(val) { this.setAttribute("number-of-message", val);}
+    get numberOfMessage() { return this.getAttribute("number-of-message");}
+
+
 
     connectedCallback() {
         this.shadowRoot.innerHTML = `
@@ -108,12 +122,12 @@ export class ChatItemComponent extends HTMLElement {
                     </div>
                 </div>
                 <div class="userNameAndLastMessageContainer">
-                    <h2>esalim</h2>
-                    <p>The different background images are ...</p>
+                    <h2>${this.userName}</h2>
+                    <p>${this.lastMessage}</p>
                 </div>
                 <div class="numberOfMessageAndTimeContainer">
-                    <p>12:05 PM</p>
-                    <div class="numberOfMessage">655</div>
+                    <p>${this.time}</p>
+                    <div class="numberOfMessage">${this.numberOfMessage}</div>
                 </div>
             </div>
         `;
