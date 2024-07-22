@@ -30,3 +30,12 @@ Endpoints: is the URL of the API you can call to get the data you want e.g
 > Authorization is asking for permission to do stuff. Authentication is about proving you are the correct person because you know things.
 
 > The bare bones is the absolute minimum, the plain essential elements or facts, or the most basic framework of something. Bare often means uncovered, but in this case it means unadorned, plain, or scarcely or just sufficient.
+
+### django orm:
++ Tables / Fields
++ QuerySets
++ Managers
++ Backends (Databases Systems)
+
+<model>.<manager>.<method>() # manager is an object that is used to query the database for the model
+Student.objects.all() # SELECT * FROM student

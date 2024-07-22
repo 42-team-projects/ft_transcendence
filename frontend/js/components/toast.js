@@ -2,7 +2,7 @@
 export function showToast(message, isError) {
     Toastify({
         text: message,
-        duration: 10000,
+        duration: 20000,
         close: true,
         gravity: "top", // `top` or `bottom`
         position: 'center', // `left`, `center` or `right`

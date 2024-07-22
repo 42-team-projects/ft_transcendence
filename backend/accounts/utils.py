@@ -1,22 +1,11 @@
-from django.core.mail import send_mail, EmailMessage
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.template.loader import render_to_string
 from django.conf import settings
 from .models import User, OTP
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 import random
-import six
-
-class CustomTokenGenerator(PasswordResetTokenGenerator):
-    def _make_hash_value(self, user, timestamp):
-        return (
-            six.text_type(user.pk) + six.text_type(timestamp) + six.text_type(user.is_active)
-        )
-
-custom_token_generator = CustomTokenGenerator()
+import jwt
 
 def send_otp(request):
     if request.method == 'POST':
@@ -43,15 +32,22 @@ def send_otp(request):
         # not raise an exception
         message.send(fail_silently=True)
 
+def gen_email_token(user):
+    payload = {
+        'user_id': user.id,
+        'email': user.email,
+        'exp': datetime.now(timezone.utc) + timedelta(seconds=10)
+    }
+    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+    return token
+
 def send_confirmation_email(user, request, token):
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
     current_site = get_current_site(request)
     
     mail_subject = 'Activate your account.'
     context = {
         'username': user.username,
         'domain': current_site.domain,
-        'uid': uid,
         'token': token,
     }
     body = render_to_string('mail.html', context)
