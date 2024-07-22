@@ -18,7 +18,7 @@ const fakeAPI = [
         numberOfMessage: 12
     },
     {
-        id: 2,
+        id: 3,
         userId: 1,
         userName: "nouakhro",
         targetUserId: 3,
@@ -27,7 +27,7 @@ const fakeAPI = [
         numberOfMessage: 12
     },
     {
-        id: 2,
+        id: 4,
         userId: 1,
         userName: "nouakhro",
         targetUserId: 3,
@@ -36,7 +36,7 @@ const fakeAPI = [
         numberOfMessage: 12
     },
     {
-        id: 2,
+        id: 5,
         userId: 1,
         userName: "nouakhro",
         targetUserId: 3,
@@ -45,7 +45,34 @@ const fakeAPI = [
         numberOfMessage: 12
     },
     {
-        id: 2,
+        id: 6,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    },
+    {
+        id: 7,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    },
+    {
+        id: 8,
+        userId: 1,
+        userName: "nouakhro",
+        targetUserId: 3,
+        lastMessage: "hello test ...",
+        time: "12:08 PM",
+        numberOfMessage: 12
+    },
+    {
+        id: 9,
         userId: 1,
         userName: "nouakhro",
         targetUserId: 3,
@@ -60,6 +87,10 @@ export class ChatListComponent extends HTMLElement {
         super();
         this.attachShadow({mode: "open"});
     }
+
+    selectItem;
+
+    get selectItem() { return this.selectItem; }
 
     connectedCallback() {
         this.shadowRoot.innerHTML = `
@@ -76,6 +107,7 @@ export class ChatListComponent extends HTMLElement {
         // chatItem.setAttribute("background-color", "#051d31");
         fakeAPI.forEach((item) => {
             const chatItem = document.createElement("chat-item");
+            chatItem.id = item.id;
             chatItem.backgroundColor = "transparent";
             chatItem.opacity = 0.6;
             chatItem.userName = item.userName;
@@ -84,7 +116,24 @@ export class ChatListComponent extends HTMLElement {
             chatItem.numberOfMessage = item.numberOfMessage;
             list.appendChild(chatItem);
         });
+        this.eventListener();
+    }
 
+    eventListener() {
+        const chatItems = this.shadowRoot.querySelectorAll("chat-item");
+        chatItems.forEach(item => {
+            item.addEventListener("click", (e) => {
+                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
+                if (selectItemcomponent)
+                {
+                    selectItemcomponent.backgroundColor = "transparent";
+                    selectItemcomponent.opacity = 0.6;
+                }
+                item.backgroundColor = "#051d31";
+                item.opacity = 1;
+                this.selectItem = item.id;
+            });
+        });
     }
 }
 
@@ -116,19 +165,6 @@ const cssContent = /*css*/`
     }
 
     .list-item::-webkit-scrollbar {
-        opacity: 0.7;
-        background-color: transparent;
-        width: 1.5px;
-    }
-    
-    .list-item::-webkit-scrollbar-track {
-        opacity: 0.7;
-        border-radius: 100px;
-    }
-    
-    .list-item::-webkit-scrollbar-thumb {
-        opacity: 0.7;
-        background-color: aqua;
-        border-radius: 100px;
+        display: none;
     }
 `;

@@ -4,6 +4,9 @@ export class ChatItemComponent extends HTMLElement {
         this.attachShadow({mode: "open"});
     }
 
+    set id(val) { this.setAttribute("id", val);}
+    get id() { return this.getAttribute("id");}
+
     set opacity(val) { this.setAttribute("opacity", val);}
     get opacity() { return this.getAttribute("opacity");}
     set backgroundColor(val) { this.setAttribute("background-color", val);}
@@ -23,7 +26,7 @@ export class ChatItemComponent extends HTMLElement {
 
 
 
-    connectedCallback() {
+    render() {
         this.shadowRoot.innerHTML = `
             <style>
             :host {
@@ -131,6 +134,18 @@ export class ChatItemComponent extends HTMLElement {
                 </div>
             </div>
         `;
+    }
 
+    connectedCallback() {
+        this.render();
+
+    }
+
+    static get observedAttributes() {
+        return ["opacity", "background-color", "user-name", "last-message", "time", "number-of-message"];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        this.render();
     }
 }
