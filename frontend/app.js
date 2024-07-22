@@ -4,6 +4,10 @@ import { ChatListComponent } from "./ChatComponents/ChatList/ChatListComponent.j
 import { ChatFooterComponent } from "./ChatComponents/ChatRoom/ChatFooterComponent.js";
 import { ChatHeaderComponent } from "./ChatComponents/ChatRoom/ChatHeaderComponent.js";
 import { ChatRoomComponent } from "./ChatComponents/ChatRoom/ChatRoomComponent.js";
+import { ReceiverMessageContainerComponent } from "./ChatComponents/ChatRoom/MessageComponents/ReceiverMessageContainer.js";
+import { SenderMessageContainerComponent } from "./ChatComponents/ChatRoom/MessageComponents/SenderMessageContainerComponent.js";
+import { ReceiverComponent } from "./ChatComponents/ChatRoom/ReceiverComponent.js";
+import { SenderComponent } from "./ChatComponents/ChatRoom/SenderComponent.js";
 import { FriendItemComponent } from "./ChatComponents/Friends/FriendItemComponent.js";
 import { FriendsListComponent } from "./ChatComponents/Friends/FriendsListComponent.js";
 import { CoverComponent } from "./ProfileComponents/CoverComponent.js";
@@ -22,6 +26,10 @@ import { ProfileInfoComponent } from "./ProfileComponents/UserInfosComponents/Pr
 import { UserInfoComponent } from "./ProfileComponents/UserInfosComponents/UserInfoComponent.js";
 import { UserInfoContainerComponent } from "./ProfileComponents/UserInfosComponents/UserInfoContainer.js";
 
+customElements.define("sender-component", SenderComponent);
+customElements.define("receiver-component", ReceiverComponent);
+customElements.define("receiver-message-container", ReceiverMessageContainerComponent);
+customElements.define("sender-message-container", SenderMessageContainerComponent);
 customElements.define("chat-footer", ChatFooterComponent);
 customElements.define("chat-header", ChatHeaderComponent);
 customElements.define("chat-room", ChatRoomComponent);
