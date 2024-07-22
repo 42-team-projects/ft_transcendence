@@ -3,6 +3,11 @@ body {
     color: #ffffff;
 }
 
-#signup-link {
+#resend a {
     color: skyblue;
+}
+
+#message {
+    color: skyblue;
+    font-size: 20px;
 }

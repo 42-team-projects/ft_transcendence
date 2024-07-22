@@ -11,12 +11,11 @@ document
         var username = document.getElementById("username").value;
         var password1 = document.getElementById("password1").value;
         var password2 = document.getElementById("password2").value;
-        const tmp = document.getElementById('message');
 
 
         try {
             const response = await fetch(
-                "http://0.0.0.0:8000/api/v1/auth/register/",
+                "http://127.0.0.1:8000/api/v1/auth/register/",
                 {
                     method: "POST",
                     headers: {
@@ -41,9 +40,9 @@ document
             }
             else
             {
-                tmp.textContent = data.message
                 // showToast(data.message, false);
-            }
+                window.location.href = "../html/confirm-message.html";
+        }
         } catch (error) {
             console.error("Error:", error);
             showToast("An error occurred", true);
