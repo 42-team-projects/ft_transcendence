@@ -35,7 +35,15 @@ export class RecordComponent extends HTMLElement {
     get loss() { return this.getAttribute("loss"); }
     get winrate() { return this.getAttribute("winrate"); }
 
-    set win(value) { this.setAttribute("win", value); this.render();}
-    set loss(value) { this.setAttribute("loss", value); this.render();}
-    set winrate(value) { this.setAttribute("winrate", value); this.render();}
+    set win(value) { this.setAttribute("win", value); }
+    set loss(value) { this.setAttribute("loss", value); }
+    set winrate(value) { this.setAttribute("winrate", value); }
+
+    static get observedAttributes() {
+        return ["win", "loss", "winrate"];
+    }
+
+    attributeChangedCallback(attrname, oldValue, newValue) {
+        // this.render();
+    }
 }
