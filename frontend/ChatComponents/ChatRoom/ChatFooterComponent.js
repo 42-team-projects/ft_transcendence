@@ -11,49 +11,44 @@ export class ChatFooterComponent extends HTMLElement {
                 ${cssContent}
             </style>
             <div class="container">
-                <div class="container-two">
-                    <textarea row="1" style="border:0" placeholder="Write a message ..."></textarea>
-                    <img src="/frontend/assets/profile-assets/send-icon.svg" width="32">
-                </div>
+                <input type="text" placeholder="write your message ..." />
+                <img src="/frontend/assets/profile-assets/send-icon.svg" width="32">
             </div>
-        `;
+            <div class="corner" ></div>
+            `;
     }
 }
 
 const cssContent = /*css*/ `
     :host {
         display: flex;
-        flex: 1;
+        flex: 0.7;
         justify-content: space-between;
-        align-items: center;
         font-family: 'Sansation bold';
-        height: 100%;
         width: 100%;
+        margin: 15px 0px;
     }
-
+    
     .container {
-        width: 100%;
-        height: 100%;
         display: flex;
+        background-color: #d9d9d920;
         align-items: center;
-        justify-content: center;
+        color: white;
+        font-size: 14px;
+        width: 100%;
+        margin-left: 40px;
+        border-radius: 10px 0px 10px 10px;
     }
     
-    .container-two {
-        border-radius: 10px;
-        margin: 10px 40px;
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
-        border: 1px solid white;
+    .corner {
+        border-bottom: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 15px solid #d9d9d920;
+        margin-right: 40px;
     }
     
-    textarea {
+    input {
         width: 100%;
-        height: 100%;
-        max-height: 400px;
-        max-width: 1200px;
         border-radius: 10px;
         border: none;
         background-color: transparent;
@@ -62,12 +57,11 @@ const cssContent = /*css*/ `
         font-size: 16px;
         color: #ffffff;
         outline: none;
-        margin: 5px 20px;
+        padding: 10px 20px;
     }
     
     img {
         width: 24px;
-        height: 24px;
-        margin-right: 20px; 
+        padding: 0 20px;
     }
 `;
