@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Email Confirmation</title>
+    <link rel="stylesheet" href="../css/confirm-email.css">
+</head>
+
+<body>
+    <h2>Email Confirmation</h2>
+    <p id="message">Confirming your email...</p>
+    <button id="continue" style="display: none;" onclick="window.location.href='http://localhost:3000/html/login.html'">Continue</button>
+    <p id="resend" style="display: none;">
+        This e-mail confirmation link expired or is invalid. 
+        <a href="#" onclick="resendConfirmation(); return false;">
+            Please issue a new e-mail confirmation request.
+        </a>
+    </p>
+    <script src="../js/components/confirm_email.js"></script>
+</body>
+
+</html>

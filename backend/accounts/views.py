@@ -1,16 +1,14 @@
+from .models import OTP, User
 from rest_framework import generics
-from .serializers import UserRegisterSerializer, LoginSerializer, ConfirmEmailSerializer
+from .serializers import UserRegisterSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from .utils import send_otp, send_confirmation_email, custom_token_generator
-from .models import OTP, User
-# from datetime import timedelta, datetime
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import AuthenticationFailed
-
+from .utils import send_otp, send_confirmation_email, gen_email_token
+from rest_framework.decorators import api_view, permission_classes
+from django_ratelimit.decorators import ratelimit
+from rest_framework.permissions import AllowAny
+from django.conf import settings
+import jwt
 
 class UserRegisterView(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
@@ -19,10 +17,10 @@ class UserRegisterView(generics.GenericAPIView):
         serializer=self.serializer_class(data=request.data)
         if (serializer.is_valid(raise_exception=True)):
             user = serializer.save()
-            token = custom_token_generator.make_token(user)
+            token = gen_email_token(user)
             send_confirmation_email(user, request, token)
             return Response({
-                'message': f"Thank you for registering, {user.username}.",
+                'message': f"Thank you for registering, {user.username}. A confirmation email has been sent to your email address.",
                 'data': UserRegisterSerializer(user).data,
             }, status=status.HTTP_201_CREATED)
         
@@ -53,10 +51,45 @@ class LoginUserView(generics.GenericAPIView):
         else:
             return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-class ConfirmEmailView(generics.GenericAPIView):
-    serializer_class = ConfirmEmailSerializer
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def confirm_email_view(request, token):
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        user = User.objects.get(id=payload['user_id'])
+        if user.is_verified:
+            return Response(
+                {'status': 'success', 'message': 'Email is already confirmed'}, 
+                status=status.HTTP_200_OK
+            )
+        elif user.email == payload['email']:
+            user.is_verified = True
+            user.save()
+            return Response(
+                {'status': 'success', 'message': 'Email confirmed successfully'}, 
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response({'status': 'error', 'message': 'Email could not be confirmed'}, status=status.HTTP_400_BAD_REQUEST)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):
+        return Response({'status': 'error', 'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, uidb64, token):
-        serializer = self.get_serializer(data={'uidb64': uidb64, 'token': token})
-        serializer.is_valid(raise_exception=True)
-        return Response({'status': 'success', 'message': 'Email confirmed successfully'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@ratelimit(key='ip', rate='2/d', block=True)
+def resend_confirmation_email(request):
+    token = request.data.get('token')    
+    
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'], options={'verify_exp': False})
+        email = payload['email']
+        user = User.objects.get(email=email)
+        if user.is_verified:
+            return Response({'status': 'success', 'message': 'Email is already confirmed'}, status=status.HTTP_200_OK)
+
+        new_token = gen_email_token(user)
+        send_confirmation_email(user, request, new_token)
+        return Response({'status': 'success', 'message': 'Confirmation email sent'}, status=status.HTTP_200_OK)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):
+        return Response({'status': 'error', 'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)

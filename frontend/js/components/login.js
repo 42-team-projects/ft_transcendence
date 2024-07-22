@@ -7,7 +7,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     var password = document.getElementById('loginPassword').value;
 
     try {
-        const response = await fetch('http://0.0.0.0:8000/api/v1/auth/login/', {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/auth/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -21,8 +21,8 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         const data = await response.json();
         console.log(data)
         if (response.status === 200) {
-            showToast("Login successful", false);
-            // window.location.href = '../html/home.html';
+            // showToast("Login successful", false);
+            window.location.href = '../html/home.html';
         } else if (data.detail) {
             showToast(data.detail, true);
         } else {
