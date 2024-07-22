@@ -115,8 +115,6 @@ page-name {
     grid-gap: 5px;
     min-width: 900px;
     max-height: 700px;
-    /* background-color: #00ffff10; */
-    /* overflow: scroll; */
 }
 
 .profile-data-stats::-webkit-scrollbar { 
@@ -124,28 +122,10 @@ page-name {
 }
 
 
-stats-container {
-    grid-area: 1 / 1 / 5 / 5;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    padding: 20px;
-}
-
-
 custom-graph
 {
     grid-area: 1 / 5 / 5 / -1;
 }
-
-custom-table {
-    grid-area: 5 / 1 / 7 / -1;
-}
-
-custom-table::-webkit-scrollbar {
-    display: none;
-}
-
 
 @media only screen and (max-width: 1600px) {
 
