@@ -85,8 +85,6 @@ export class ChatRoomComponent extends HTMLElement {
                         Lorem ipsum dolor sit amet. Aut illo quia sit dolore perferendis At voluptate repudiandae sit culpa galisum et voluptas animi qui doloribus fuga. Cum praesentium galisum et laborum consequatur qui accusantium iusto ea similique dolore et odio quia. Aut omnis quia eum commodi deleniti eum 
                         hello world tet ads send, diff 😀 where.
                     </receiver-message-container>
-                </receiver-component>
-                <receiver-component>
                     <receiver-message-container>
                     The different background images are test Lorem ipsum dolor sit amet. Aut illo quia sit dolore perferendis At voluptate repudiandae sit culpa galisum et voluptas animi qui doloribus fuga. Cum praesentium galisum et laborum consequatur qui accusantium iusto ea similique dolore et odio quia. Aut omnis quia eum commodi deleniti eum 
                         hello world tet ads send, diff 😀 where.
@@ -97,8 +95,6 @@ export class ChatRoomComponent extends HTMLElement {
                         Lorem ipsum dolor sit amet. Aut illo quia sit dolore perferendis At voluptate repudiandae sit culpa galisum et voluptas animi qui doloribus fuga. Cum praesentium galisum et laborum consequatur qui accusantium iusto ea similique dolore et odio quia. Aut omnis quia eum commodi deleniti eum 
                         hello world tet ads send, diff 😀 where.
                     </receiver-message-container>
-                </receiver-component>
-                <receiver-component>
                     <receiver-message-container>
                     The different background images are test Lorem ipsum dolor sit amet. Aut illo quia sit dolore perferendis At voluptate repudiandae sit culpa galisum et voluptas animi qui doloribus fuga. Cum praesentium galisum et laborum consequatur qui accusantium iusto ea similique dolore et odio quia. Aut omnis quia eum commodi deleniti eum 
                         hello world tet ads send, diff 😀 where.
