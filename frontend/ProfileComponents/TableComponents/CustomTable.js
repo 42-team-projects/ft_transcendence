@@ -81,7 +81,7 @@ export class CustomTable extends HTMLElement {
                     profile.width = "55px";
                     profile.height = "55px";
                     profile.apply = true;
-                    profile.Bcolor = "#EB9A45";
+                    profile.bcolor = "#EB9A45";
                     const profileImage = document.createElement("img");
                     profileImage.slot = "content";
                     profileImage.width = 55;

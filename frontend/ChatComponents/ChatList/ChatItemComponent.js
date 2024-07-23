@@ -116,10 +116,10 @@ export class ChatItemComponent extends HTMLElement {
             <div class="container">
                 <div class="profileAndOnlineContainer">
                     <div class="profileAndOnline">
-                        <c-hexagon class="profile" width="90px" height="87px" apply="true" Bcolor="aqua">
+                        <c-hexagon class="profile" width="90px" height="87px" apply="true" bcolor="aqua">
                             <img slot="content" draggable="false" src="/frontend/images/svg-header/profile.jpeg" width="100%">
                         </c-hexagon>
-                        <c-hexagon class="online" width="20px" height="20px" apply="true" Bcolor="aqua" >
+                        <c-hexagon class="online" width="20px" height="20px" apply="true" bcolor="aqua" >
                             <div style="width: 100%; height: 100%; background-color: aqua;" slot="content"></div>
                         </c-hexagon>
                     </div>
