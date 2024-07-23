@@ -36,7 +36,7 @@ const cssContent = /*css*/`
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    padding-left: 30px;
+    padding-left: 20px;
 }
 
 slot {
@@ -47,7 +47,7 @@ slot {
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 

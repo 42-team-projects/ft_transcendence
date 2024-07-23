@@ -22,11 +22,11 @@ export class UserInfoComponent extends HTMLElement {
 }
 
 const cssContent = /*css*/`
-:host * {
+
+p {
     margin: 0;
     padding: 0;
 }
-
 
 .content-label {
     display: flex;
@@ -40,6 +40,7 @@ const cssContent = /*css*/`
     font-size: 22px;
     width: auto;
     color: white;
+    margin-right: 10px;
 }
 
 `;

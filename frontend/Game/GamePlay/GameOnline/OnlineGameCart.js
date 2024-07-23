@@ -113,7 +113,7 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 			<p>
 			Lorem ipsum dolor sit amet. Ut facere consequatur est dolore placeat rem accusamus quae est odit dolore. Id impedit molestiae vel voluptates repellendus ut perferendis libero et blanditiis dolor est dolorum molestiae. 
 			</p>
-			<c-button Bcolor="#EB9A45" Hcolor="#e98f2f"> 
+			<c-button bcolor="#EB9A45" Hcolor="#e98f2f"> 
 				<h1 slot="text">START</h1>
 			</c-button>
 		</div>
