@@ -50,8 +50,8 @@ export class Buttons extends HTMLElement{
     get height(){
         return this.getAttribute('height')
     }
-    get Bcolor(){
-        return this.getAttribute('Bcolor')
+    get bcolor(){
+        return this.getAttribute('bcolor')
     }
     get Hcolor(){
         return this.getAttribute('Hcolor')
@@ -59,7 +59,7 @@ export class Buttons extends HTMLElement{
     update(){
         this.style.width = this.width || '55%';
         this.style.height = this.height || '22%';
-        this.style.background = this.Bcolor || '#47AF56';
+        this.style.background = this.bcolor || '#47AF56';
         this.style.setProperty('--hover-background-color', this.Hcolor);
     }
     connectedCallback(){

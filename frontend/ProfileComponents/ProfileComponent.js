@@ -74,7 +74,7 @@ let fakeData = {
     }
 };
 
-const APIUrl = "http://localhost:8080/api/v1/users/1";
+const APIUrl = "http://localhost:8080/api/v1/users/4";
 
 function getLeagueColor(league) {
     const leagueColors = new Map();
@@ -104,6 +104,46 @@ export class ProfileComponent extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
 
+        this.shadowRoot.innerHTML = `
+                <link rel="stylesheet" href="/frontend/ProfileComponents/ProfileComponent.css">
+                <page-name width="17%">
+                    <div slot="text" class="pageNameText">
+                        <h1>PROFILE</h1>
+                    </div>
+                </page-name>
+                <div class="main-profile-container">
+                    <div class="profile-rank-2">
+                        <user-rank id="user-rank" bcolor="bronze" height="140px">
+                            <div class="rank-label">
+                                <h5> RANK </h5>
+                                <h1> </h1>
+                            </div>
+                        </user-rank>
+                    </div>
+                    <cover-component ></cover-component>
+                    <div class="profile-data">
+                        <div class="profile-data-infos">
+                            <profile-info-component></profile-info-component>
+
+                            <div class="profile-data-infos-container">
+                                <user-info-container id="userInfo" label="Account Information" icon="assets/profile-assets/account-icon.svg"></user-info-container>
+                                <user-info-container id="links" label="Links" icon="assets/profile-assets/chain-for-links.svg"></user-info-container>
+                                <user-info-container id="achievements" label="Achievements" icon="assets/profile-assets/trophy.svg"> </user-info-container>
+                            </div>
+
+                        </div>
+
+                        <div class="profile-data-stats">
+                            <stats-container>
+                                <div class="league-bar" slot="league-bar"></div>
+                                <div class="match-record" slot="match-record"></div>
+                            </stats-container>
+                            <custom-graph id="graph"></custom-graph>
+                            <custom-table></custom-table>
+                        </div>
+                    </div>
+                </div>
+            `;
     }
 
     setUpLinks() {
@@ -123,9 +163,7 @@ export class ProfileComponent extends HTMLElement {
 
     setUpAchievements() {
         const achievements = this.shadowRoot.getElementById("achievements");
-        console.log(achievements);
         if (fakeData.achievements) {
-            console.log("hello");
             const achievementsContainer = document.createElement("div");
             achievementsContainer.className = "flexClass";
             fakeData.achievements.forEach((achievement) => {
@@ -168,6 +206,7 @@ export class ProfileComponent extends HTMLElement {
     }
 
     async connectedCallback() {
+
         try {
             const response = await fetch(APIUrl);
             if (!response.ok) {
@@ -178,51 +217,8 @@ export class ProfileComponent extends HTMLElement {
         } catch (error) {
             console.error(error.message);
         }
-        console.log(fakeData);
 
-        this.shadowRoot.innerHTML = `
-        <link rel="stylesheet" href="/frontend/ProfileComponents/ProfileComponent.css">
-        <page-name width="17%">
-            <div slot="text" class="pageNameText">
-                <h1>PROFILE</h1>
-            </div>
-        </page-name>
-        <div class="main-profile-container">
-            <div class="profile-rank-2">
-                <user-rank id="user-rank" bcolor="bronze" height="140px">
-                    <div class="rank-label">
-                        <h5> RANK </h5>
-                        <h1> </h1>
-                    </div>
-                </user-rank>
-            </div>
-            <cover-component src="${fakeData.cover || "/frontend/images/xxxxxx.png"}"></cover-component>
-            <div class="profile-data">
-                <div class="profile-data-infos">
-                    <profile-info-component src="${fakeData.profileImage || "./images/svg-header/profile.jpeg"}" username="${fakeData.userName || "unknown"}" joindate="${fakeData.joinDate || "01 MAY 2000"} " league="bronze" ${fakeData.active && "active"} ${fakeData.friend && "friend"}></profile-info-component>
-
-                    <div class="profile-data-infos-container">
-
-                        <user-info-container id="userInfo" label="Account Information" icon="assets/profile-assets/account-icon.svg"></user-info-container>
-                            
-                        <user-info-container id="links" label="Links" icon="assets/profile-assets/chain-for-links.svg"></user-info-container>
-
-                        <user-info-container id="achievements" label="Achievements" icon="assets/profile-assets/trophy.svg"> </user-info-container>
-                        
-                    </div>
-                </div>
-
-                <div class="profile-data-stats">
-                    <stats-container>
-                        <div class="league-bar" slot="league-bar"></div>
-                        <div class="match-record" slot="match-record"></div>
-                    </stats-container>
-                    <custom-graph id="graph"></custom-graph>
-                    <custom-table></custom-table>
-                </div>
-            </div>
-        </div>
-    `;
+        this.setUpProfileInfo();
 
         this.setUpUserInfo();
 
@@ -235,6 +231,19 @@ export class ProfileComponent extends HTMLElement {
         this.setUpGraph();
     }
 
+    setUpProfileInfo() {
+        const coverComponent = this.shadowRoot.querySelector("cover-component");
+        coverComponent.src = fakeData.cover || "/frontend/images/xxxxxx.png";
+
+        const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
+        if (fakeData.stats)
+            profileInfoComponent.league = fakeData.stats.league;
+        profileInfoComponent.username = fakeData.userName || "unknown";
+        profileInfoComponent.src = fakeData.profileImage || "./images/svg-header/profile.jpeg";
+        profileInfoComponent.joindate = fakeData.joinDate.split(" ")[0] || "01 MAY 2000";
+        profileInfoComponent.active = fakeData.active;
+        profileInfoComponent.friend = fakeData.friend;
+    }
 
     setUpStats() {
         
@@ -244,15 +253,12 @@ export class ProfileComponent extends HTMLElement {
             this.shadowRoot.querySelector(".profile-rank-2").remove();
             return ;
         }
-    
+
         const userRank = this.shadowRoot.querySelector("user-rank");
         const leagueBar = this.shadowRoot.querySelector(".league-bar");
         userRank.bcolor = getLeagueColor(fakeData.stats.league);
         const rank = userRank.querySelector("h1");
         rank.textContent = fakeData.stats.rank;
-        const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
-        profileInfoComponent.setAttribute("league", fakeData.stats.league);
-
 
 
         const leagueInfo = document.createElement("league-info");
@@ -296,17 +302,16 @@ export class ProfileComponent extends HTMLElement {
         leagueBar.appendChild(leagueInfo);
         const progressBar = document.createElement("custom-progress-bar");
         progressBar.value = fakeData.stats.progressBar;
+        progressBar.color = getLeagueColor(fakeData.stats.league);
         leagueBar.appendChild(progressBar);
 
         const recordComponent = document.createElement("record-component");
         recordComponent.loss = fakeData.stats.loss;
         recordComponent.win = fakeData.stats.win;
-        recordComponent.winrate = Math.round((100 * fakeData.stats.win) / (fakeData.stats.win + fakeData.stats.loss) * 10) / 10;
         this.shadowRoot.querySelector(".match-record").appendChild(recordComponent);
 
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`Attribute ${name} has changed.`);
     }
 }

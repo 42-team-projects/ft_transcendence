@@ -21,7 +21,7 @@ export class ReceiverComponent extends HTMLElement {
                 }
 
             </style>
-            <c-hexagon class="profile" width="48px" height="47px" apply="true" Bcolor="aqua">
+            <c-hexagon class="profile" width="48px" height="47px" apply="true" bcolor="aqua">
                 <img slot="content" draggable="false" src="/frontend/images/svg-header/profile.jpeg" width="48px">
             </c-hexagon>
             <div class="content">
