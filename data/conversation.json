@@ -1,0 +1,52 @@
+[
+    {
+        "senderId": 1,
+        "receiverId": 2,
+        "message": "Hey Anna, how's it going?"
+    },
+    {
+        "senderId": 2,
+        "receiverId": 1,
+        "message": "Hey John! I'm good, thanks. How about you?"
+    },
+    {
+        "senderId": 1,
+        "receiverId": 2,
+        "message": "I'm doing well! Just finished a project at work."
+    },
+    {
+        "senderId": 2,
+        "receiverId": 1,
+        "message": "That's awesome! What was the project about?"
+    },
+    {
+        "senderId": 1,
+        "receiverId": 2,
+        "message": "It was a website redesign for a local business. Took a lot of effort, but it turned out great."
+    },
+    {
+        "senderId": 2,
+        "receiverId": 1,
+        "message": "Wow, that sounds like a lot of work. Congrats on finishing it!"
+    },
+    {
+        "senderId": 1,
+        "receiverId": 2,
+        "message": "Thanks! How's your latest project going?"
+    },
+    {
+        "senderId": 2,
+        "receiverId": 1,
+        "message": "It's going well, but there's still a lot to do. I'm hoping to wrap it up by the end of the month."
+    },
+    {
+        "senderId": 1,
+        "receiverId": 2,
+        "message": "Good luck with that! If you need any help, let me know."
+    },
+    {
+        "senderId": 2,
+        "receiverId": 1,
+        "message": "Thanks, John! I'll definitely reach out if I do."
+    }
+]
