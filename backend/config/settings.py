@@ -140,11 +140,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
-# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-# EMAIL_HOST_USER = '9b7457d9927aa5'
-# EMAIL_HOST_PASSWORD = '5d221c17067e93'
-# EMAIL_PORT = '2525'
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = '29d4ed8fa04e1d'
-EMAIL_HOST_PASSWORD = 'd940c4b999f3d9'
+EMAIL_HOST_USER = 'ebd6543637783d'
+EMAIL_HOST_PASSWORD = 'd36fe271a0aefd'
 EMAIL_PORT = '2525'
