@@ -17,7 +17,7 @@ class UserRegisterView(generics.GenericAPIView):
         serializer=self.serializer_class(data=request.data)
         if (serializer.is_valid(raise_exception=True)):
             user = serializer.save()
-            token = gen_email_token(user)
+            token = gen_email_token(user, days=7)
             send_confirmation_email(user, request, token)
             return Response({
                 'message': f"Thank you for registering, {user.username}. A confirmation email has been sent to your email address.",
@@ -88,8 +88,13 @@ def resend_confirmation_email(request):
         if user.is_verified:
             return Response({'status': 'success', 'message': 'Email is already confirmed'}, status=status.HTTP_200_OK)
 
-        new_token = gen_email_token(user)
+        new_token = gen_email_token(user, days=7)
         send_confirmation_email(user, request, new_token)
         return Response({'status': 'success', 'message': 'Confirmation email sent'}, status=status.HTTP_200_OK)
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):
         return Response({'status': 'error', 'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# store Access Token in Memory returned by the server
+# stor refresh token in a Cookie
+    
