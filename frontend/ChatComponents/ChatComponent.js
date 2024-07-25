@@ -3,8 +3,9 @@ export class ChatComponent extends HTMLElement {
         super();
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="./ChatComponents/ChatComponent.css">
-            
+            <style>
+                ${cssContent}
+            </style>
             <div class="main-container">
                 <page-name width="13%">
                     <div slot="text" class="pageNameText">
@@ -18,6 +19,25 @@ export class ChatComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log(this.shadowRoot.querySelector("chat-list").textContent);
     }
 }
+
+const cssContent = /*css*/`
+:host {
+    font-family: 'Sansation bold';
+    width: 90%;
+    height: 1000px;
+    background-color: #d9d9d905;
+}
+
+.main-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+`;
