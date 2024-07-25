@@ -1,25 +1,6 @@
 import { fetchData } from "../../Utils/Fetcher.js";
 
-// let fakeData = [
-//     {
-//         id: 1,
-//         userId: 1,
-//         userName: "ESALIM",
-//         targetUserId: 2,
-//         lastMessage: "last message ...",
-//         time: "12:58 PM",
-//         numberOfMessage: 1
-//     },
-//     {
-//         id: 2,
-//         userId: 1,
-//         userName: "nouakhro",
-//         targetUserId: 3,
-//         lastMessage: "hello test ...",
-//         time: "12:08 PM",
-//         numberOfMessage: 12
-//     }
-// ];
+let fakeData = [];
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
@@ -29,44 +10,60 @@ export class ChatListComponent extends HTMLElement {
             <style>
                 ${cssContent}
             </style>
-            <div class="top-box"></div>
-            <div class="list-item" id="list-items">
+            <div class="chat-list">
+                <div class="top-box"></div>
+                <div class="list-item" id="list-items"></div>
             </div>
+            <chat-room></chat-room>
         `;
     }
 
     selectItem;
 
     get selectItem() { return this.selectItem; }
-
-    createChatItem(item) {
+    
+    async createChatItem(item) {
         const chatItem = document.createElement("chat-item");
         chatItem.id = item.id;
+    
+        try {
+            const userInfo = await fetchData("http://localhost:8080/api/v1/users/" + item.id);
+            if (userInfo)
+            {
+                chatItem.userName = userInfo.userName;
+                chatItem.profileImage = userInfo.profileImage;
+                chatItem.active = userInfo.active;
+                if (userInfo.stats)
+                    chatItem.league = userInfo.stats.league;
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    
         chatItem.backgroundColor = "transparent";
         chatItem.opacity = 0.6;
-        chatItem.userName = item.userName;
         chatItem.lastMessage = item.lastMessage;
         chatItem.time = item.time;
         chatItem.numberOfMessage = item.numberOfMessage;
         return chatItem;
     }
-
-    connectedCallback() {
+    
+    async connectedCallback() {
         const list = this.shadowRoot.getElementById("list-items");
-
-        const promise = fetchData("http://localhost:8080/api/v1/chat/3");
-        promise.then( data => {
-            if (data)
-            {
-                data.forEach(item => list.appendChild(this.createChatItem(item)));
+    
+        try {
+            const data = await fetchData("http://localhost:8080/api/v1/chat/3");
+            if (data) {
+                for (const item of data) {
+                    const chatItem = await this.createChatItem(item);
+                    list.appendChild(chatItem);
+                }
                 this.eventListener();
             }
-        });
-
-
-        // chatItem.setAttribute("background-color", "#051d31");
+        } catch (error) {
+            console.error('Error fetching chat data:', error);
+        }
     }
-
     eventListener() {
         const chatItems = this.shadowRoot.querySelectorAll("chat-item");
         chatItems.forEach(item => {
@@ -81,7 +78,7 @@ export class ChatListComponent extends HTMLElement {
                 item.opacity = 1;
                 console.log("seletor id : ", item.id);
                 this.selectItem = item.id;
-                fetchData("http://localhost:8080/api/v1/users/" + item.id).then( data => console.log(data));
+                this.shadowRoot.querySelector("chat-room").targetId = item.id;
             });
         });
     }
@@ -93,13 +90,20 @@ const cssContent = /*css*/`
         font-family: 'Sansation bold';
         width: 100%;
         height: 100%;
+        flex: 10;
+        display: flex;
+              
+    }
+    
+    .chat-list {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        flex: 1;        
-        background-color: #d9d9d920
+        background-color: #d9d9d920;
+        flex: 1;
     }
-    :host .top-box {
+
+    .top-box {
         width: 100%;
         height: 100px;
     }

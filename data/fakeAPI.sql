@@ -5,9 +5,11 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-USE `fakeAPI`;
-
 SET NAMES utf8mb4;
+
+DROP DATABASE IF EXISTS `fakeAPI`;
+CREATE DATABASE `fakeAPI` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `fakeAPI`;
 
 DROP TABLE IF EXISTS `chat_list`;
 CREATE TABLE `chat_list` (
@@ -20,6 +22,11 @@ CREATE TABLE `chat_list` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `chat_list` (`id`, `last_message`, `number_of_message`, `target_id`, `time`, `user_id`) VALUES
+(1,	'hello salim ...',	1,	4,	'12:08 PM',	3),
+(2,	' ...',	1,	1,	'13:08 PM',	3),
+(3,	'hey world ...',	2,	2,	'10:08 PM',	3),
+(4,	'hey mehdi ...',	2,	4,	'10:08 PM',	3);
 
 DROP TABLE IF EXISTS `chat_list_seq`;
 CREATE TABLE `chat_list_seq` (
@@ -27,7 +34,7 @@ CREATE TABLE `chat_list_seq` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `chat_list_seq` (`next_val`) VALUES
-(1);
+(101);
 
 DROP TABLE IF EXISTS `conversations`;
 CREATE TABLE `conversations` (
@@ -126,7 +133,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `users` (`id`, `active`, `birthday`, `cover`, `email`, `friend`, `full_name`, `gender`, `join_date`, `phone`, `profile_image`, `user_name`) VALUES
-(1,	CONV('1', 2, 10) + 0,	'15 MAR 1990',	'/frontend/images/xxxxxx.png',	'alice.johnson@example.com',	CONV('0', 2, 10) + 0,	'Alice Johnson',	'female',	'24-07-2024 11:12:02:122',	NULL,	'https://randomuser.me/api/portraits/women/1.jpg',	'alicej'),
+(1,	CONV('1', 2, 10) + 0,	'15 MAR 1990',	'/frontend/images/xxxxxx.png',	'alice.johnson@example.com',	CONV('0', 2, 10) + 0,	'Alice Johnson',	'female',	'24-07-2024 11:12:02:122',	NULL,	'https://randomuser.me/api/portraits/women/1.jpg',	'khalid'),
 (2,	CONV('0', 2, 10) + 0,	'22 AUG 1985',	'/frontend/images/xxxxxx.png',	'bob.smith@example.com',	CONV('1', 2, 10) + 0,	'Bob Smith',	'male',	'24-07-2024 11:12:02:122',	NULL,	'https://randomuser.me/api/portraits/men/1.jpg',	'bobsmith'),
 (3,	CONV('1', 2, 10) + 0,	'10 DEC 1992',	'/frontend/images/xxxxxx.png',	'charlie.brown@example.com',	CONV('1', 2, 10) + 0,	'Charlie Brown',	'male',	'24-07-2024 11:12:02:122',	NULL,	'https://randomuser.me/api/portraits/men/2.jpg',	'charlieb'),
 (4,	CONV('0', 2, 10) + 0,	'1 JAN 1988',	'/frontend/images/xxxxxx.png',	'diana.prince@example.com',	CONV('0', 2, 10) + 0,	'Diana Prince',	'female',	'24-07-2024 11:12:02:122',	NULL,	'https://randomuser.me/api/portraits/women/2.jpg',	'diana'),
@@ -168,4 +175,4 @@ CREATE TABLE `users_seq` (
 INSERT INTO `users_seq` (`next_val`) VALUES
 (101);
 
--- 2024-07-24 11:15:39
+-- 2024-07-25 10:10:48
