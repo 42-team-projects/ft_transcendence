@@ -1,4 +1,4 @@
-import { getLeagueColor } from "../Utils/LeaguesData.js";
+import { getLeagueColor, getLeagueImage } from "../Utils/LeaguesData.js";
 
 let fakeData = {
     id: 1,
