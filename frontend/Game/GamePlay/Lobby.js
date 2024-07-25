@@ -8,48 +8,26 @@ const opponentSlot = document.createElement('template');
 const AiGameTemplate = document.createElement('template')
 const OnlineGameTemplate = document.createElement('template')
 
-const Default_sherching_images = [
+let searching_images = [
 	{
-		src: 'images/svg-header/profile.jpeg',
-		name: 'ESCANOR'
+		picture: 'images/svg-header/profile.jpeg',
+		username: 'ESCANOR'
 	},
 	{
-		src: 'images/OrangeCart/images.png',
-		name: 'ITATCHI'
+		picture: 'images/OrangeCart/images.png',
+		username: 'ITATCHI'
 	},
 	{
-		src: 'images/OrangeCart/img1.png',
-		name: 'ESALIM'
+		picture: 'images/OrangeCart/img1.png',
+		username: 'ESALIM'
 	},
 	{
-		src: 'images/OrangeCart/img2.jpg',
-		name: 'KILLUA'
+		picture: 'images/OrangeCart/img2.jpg',
+		username: 'KILLUA'
 	},
 	{
-		src: 'images/OrangeCart/img3.jpg',
-		name: 'GOJO'
-	}
-]
-const sherching_images = [
-	{
-		src: 'images/svg-header/profile.jpeg',
-		name: 'ESCANOR'
-	},
-	{
-		src: 'images/OrangeCart/images.png',
-		name: 'ITATCHI'
-	},
-	{
-		src: 'images/OrangeCart/img1.png',
-		name: 'ESALIM'
-	},
-	{
-		src: 'images/OrangeCart/img2.jpg',
-		name: 'KILLUA'
-	},
-	{
-		src: 'images/OrangeCart/img3.jpg',
-		name: 'GOJO'
+		picture: 'images/OrangeCart/img3.jpg',
+		username: 'GOJO'
 	}
 ]
 playerSlot.innerHTML = /*html*/ `
@@ -155,28 +133,6 @@ export class Lobby extends HTMLElement{
 
     connectedCallback()
     {
-        let js;
-        fetch('http://127.0.0.1:8000/game/',
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(response => {
-            if(!response.ok){
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data=>{
-            console.log("success: ", data)
-            data.forEach((player)=>{
-                console.log(player.username);
-            })
-        })
-        .catch(error => {
-            console.error(error)
-        })
         this.setSlots(playerSlot.content, 'false')
         this.setSlots(opponentSlot.content, 'true')
         this.headerAnimation();
@@ -186,9 +142,27 @@ export class Lobby extends HTMLElement{
         }, 1000);
 
     }
-
-    OnlineGame()
+    async getData(str)
     {
+        try{
+
+            const response = await fetch(str);
+            if(response.ok)
+                return response.json();
+            throw new Error("cant recive anything")            
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
+    async OnlineGame()
+    {
+        searching_images = await this.getData('http://127.0.0.1:8000/game/');
+        for(let userData in searching_images)
+        {
+            // console.log(userData);
+            console.log(searching_images[0].picture);
+        }
 		const root = document.querySelector('root-content')
         const p_img = OnlineGameTemplate.content.getElementById('Player')
 		p_img.src = 'images/svg-header/profile.jpeg';
@@ -200,7 +174,7 @@ export class Lobby extends HTMLElement{
 		players.forEach((element, index)=>{
 			element.style.setProperty('--dest', '400%');
 			element.style.setProperty('--numsec', 1);
-			element.src = sherching_images[index].src;
+			element.src = searching_images[index].picture;
 		})
 		this.appendChild(OnlineGameTemplate.content.cloneNode(true))
 		root.innerHTML = ``
@@ -217,7 +191,7 @@ export class Lobby extends HTMLElement{
 		h1.id = 'NOpponent'
 		h1.classList = 'Name'
 		h1.slot = 'OpponentName'
-		h1.textContent = sherching_images[0].name
+		h1.textContent = searching_images[0].username
 		this.appendChild(h1.cloneNode(true))	
 	}
     SinglePlayer()
