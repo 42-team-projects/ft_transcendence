@@ -4,12 +4,29 @@ export class ChatItemComponent extends HTMLElement {
         this.attachShadow({mode: "open"});
     }
 
+    set id(val) { this.setAttribute("id", val);}
+    get id() { return this.getAttribute("id");}
+
     set opacity(val) { this.setAttribute("opacity", val);}
     get opacity() { return this.getAttribute("opacity");}
     set backgroundColor(val) { this.setAttribute("background-color", val);}
     get backgroundColor() { return this.getAttribute("background-color");}
+    
+    set userName(val) { this.setAttribute("user-name", val);}
+    get userName() { return this.getAttribute("user-name");}
+    
+    set lastMessage(val) { this.setAttribute("last-message", val);}
+    get lastMessage() { return this.getAttribute("last-message");}
+    
+    set time(val) { this.setAttribute("time", val);}
+    get time() { return this.getAttribute("time");}
+    
+    set numberOfMessage(val) { this.setAttribute("number-of-message", val);}
+    get numberOfMessage() { return this.getAttribute("number-of-message");}
 
-    connectedCallback() {
+
+
+    render() {
         this.shadowRoot.innerHTML = `
             <style>
             :host {
@@ -99,24 +116,36 @@ export class ChatItemComponent extends HTMLElement {
             <div class="container">
                 <div class="profileAndOnlineContainer">
                     <div class="profileAndOnline">
-                        <c-hexagon class="profile" width="90px" height="87px" apply="true" Bcolor="aqua">
+                        <c-hexagon class="profile" width="90px" height="87px" apply="true" bcolor="aqua">
                             <img slot="content" draggable="false" src="/frontend/images/svg-header/profile.jpeg" width="100%">
                         </c-hexagon>
-                        <c-hexagon class="online" width="20px" height="20px" apply="true" Bcolor="aqua" >
+                        <c-hexagon class="online" width="20px" height="20px" apply="true" bcolor="aqua" >
                             <div style="width: 100%; height: 100%; background-color: aqua;" slot="content"></div>
                         </c-hexagon>
                     </div>
                 </div>
                 <div class="userNameAndLastMessageContainer">
-                    <h2>esalim</h2>
-                    <p>The different background images are ...</p>
+                    <h2>${this.userName}</h2>
+                    <p>${this.lastMessage}</p>
                 </div>
                 <div class="numberOfMessageAndTimeContainer">
-                    <p>12:05 PM</p>
-                    <div class="numberOfMessage">655</div>
+                    <p>${this.time}</p>
+                    <div class="numberOfMessage">${this.numberOfMessage}</div>
                 </div>
             </div>
         `;
+    }
 
+    connectedCallback() {
+        this.render();
+
+    }
+
+    static get observedAttributes() {
+        return ["opacity", "background-color", "user-name", "last-message", "time", "number-of-message"];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        this.render();
     }
 }
