@@ -64,7 +64,7 @@ export class FriendsListComponent extends HTMLElement {
 const cssContent = /*css*/`
 
     :host {
-        flex: 0.5;
+        flex: 1.5;
         height: 100%;
         max-height: 1000px;
         color: white;
