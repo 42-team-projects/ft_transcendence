@@ -99,7 +99,7 @@ export class CustomTable extends HTMLElement {
                     tableData.appendChild(parag);
                 } else if (counter == 6)  {
                     const icon = document.createElement("img");
-                    icon.src = "/frontend/assets/profile-assets/play-button.svg";
+                    icon.src = "./assets/profile-assets/play-button.svg";
                     icon.width = 24;
                     tableData.appendChild(icon);
                 } else {
@@ -123,7 +123,7 @@ export class CustomTable extends HTMLElement {
     connectedCallback() {
         const styleSheet = document.createElement("link");
         styleSheet.rel = `stylesheet`;
-        styleSheet.href = `/frontend/ProfileComponents/TableComponents/CustomTable.css`;
+        styleSheet.href = `./ProfileComponents/TableComponents/CustomTable.css`;
         this.shadowRoot.appendChild(styleSheet);
 
         const tableContainer = document.createElement("div");
