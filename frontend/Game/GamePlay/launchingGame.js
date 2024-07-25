@@ -23,4 +23,3 @@ export class LaunchingGame extends HTMLElement{
         this.shadowRoot.getElementById('time').textContent = `${time}`
     }
 }
-customElements.define('launching-game', LaunchingGame)
