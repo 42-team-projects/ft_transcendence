@@ -17,8 +17,8 @@ HeaderTemplate.innerHTML = /*html*/ `
 </div>
 
 <div class="Play_Pause">
-<div class="pause"></div>
-<p class="status">PAUSE</p>			
+    <div class="pause"></div>
+    <p class="status">PAUSE</p>			
 </div>
 
 <div class="rightPlayer">
