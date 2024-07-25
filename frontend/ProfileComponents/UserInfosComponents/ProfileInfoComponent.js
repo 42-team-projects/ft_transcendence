@@ -1,8 +1,68 @@
 
+function getLeagueColor(league) {
+    const leagueColors = new Map();
+    leagueColors.set("bronze", "#B54C1E");
+    leagueColors.set("silver", "#C0C0C0");
+    leagueColors.set("gold", "#EB9A45");
+    leagueColors.set("platinum", "#459BEB");
+    leagueColors.set("legendary", "#EB4545");
+    return leagueColors.get(league);
+}
+
 export class ProfileInfoComponent extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
+    }
+
+    static observedAttributes = ["src", "username", "joindate", "league", "active", "friend"];
+
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        if (attrName === "src")
+        {
+            const element = this.shadowRoot.querySelector(".c-hexagon-content");
+            if (!element)
+                return ;
+            element.style.background = "url(" + newValue + ") center / cover no-repeat";
+
+        }
+        else if (attrName === "username")
+        {
+            const element = this.shadowRoot.querySelector(".name-and-online p");
+            if (!element)
+                return ;
+            element.textContent = newValue;
+        }
+        else if (attrName === "joindate")
+        {
+            const element = this.shadowRoot.querySelector(".joined-date-text");
+            if (!element)
+                return ;
+            element.textContent = newValue;
+        }
+        else if (attrName === "league")
+        {
+            const element = this.shadowRoot.querySelector(".c-hexagon-profile");
+            if (!element)
+                return ;
+            element.bcolor = getLeagueColor(this.league);
+        }
+        else if (attrName === "active")
+        {
+            const element = this.shadowRoot.querySelector(".name-and-online c-hexagon");
+            if (!element)
+                return ;
+            element.bcolor = newValue === "true" ? "#00ffff" : "#d9d9d9";
+            element.querySelector("div").style.background = newValue === "true" ? "#00ffff" : "#d9d9d9";
+        }
+        else if (attrName === "friend")
+        {
+            const element = this.shadowRoot.querySelector(".add-friend img");
+            if (!element)
+            return ;
+            element.hidden = newValue === "true" ? true : false;
+        }
+        
     }
 
     get src() { return this.getAttribute("src");}
@@ -17,42 +77,39 @@ export class ProfileInfoComponent extends HTMLElement {
     get league() { return this.getAttribute("league");}
     set league(value) { this.setAttribute("league", value);}
 
-    getLeagueColor(league) {
-        const leagueColors = new Map();
-        leagueColors.set("bronze", "#B54C1E");
-        leagueColors.set("silver", "#C0C0C0");
-        leagueColors.set("gold", "#EB9A45");
-        leagueColors.set("platinum", "#459BEB");
-        leagueColors.set("legendary", "#EB4545");
-        return leagueColors.get(league);
-    }
-
+    get active() { return this.getAttribute("active");}
+    set active(value) { this.setAttribute("active", value);}
+    
+    get friend() { return this.getAttribute("friend");}
+    set friend(value) { this.setAttribute("friend", value);}
+    
     connectedCallback() {
 
-        const active = this.hasAttribute("active") ? "#00ffff" : "#d9d9d9";
-        const isFriend = this.hasAttribute("friend") ? "hidden" : "";
-
         this.shadowRoot.innerHTML = /* html */ `
-            <style>${cssContent}</style>
+            <style>
+
+                ${cssContent}
+            
+            </style>
             <div class="profile-image">
-                <c-hexagon width="250px" height="250px" apply="true" Bcolor="${this.getLeagueColor(this.league)}">
-                    <img slot="content" draggable="false" src="${this.src}">
+                <c-hexagon class="c-hexagon-profile" width="250px" height="250px" apply="true">
+                    <div slot="content" class="c-hexagon-content"></div>
                 </c-hexagon>
                 <div class="name">
                     <div class="name-and-online">
-                        <p>${this.username}</p>
-                        <c-hexagon width="24px" height="24px" apply="true" Bcolor=${active}>
-                            <div style="width: 100%; height: 100%; background-color: ${active};" slot="content"></div>
+                        <p> </p>
+                        <c-hexagon width="24px" height="24px" apply="true">
+                            <div style="width: 100%; height: 100%;" slot="content"></div>
                         </c-hexagon>
                     </div>
                     <div class="joined-date">
                         <img src="/frontend/assets/profile-assets/Calendar.svg" width="20px"/>
                         <p class="joined-text">joined:</p>
-                        <p class="joined-date-text">${this.joindate}</p>
+                        <p class="joined-date-text"> </p>
                     </div>
                 </div>
                 <div class="add-friend">
-                    <img src="/frontend/assets/profile-assets/add-friends-icon.svg" width="32" ${isFriend}/>
+                    <img src="/frontend/assets/profile-assets/add-friends-icon.svg" width="32"/>
                 </div>
             </div>
 
@@ -62,63 +119,66 @@ export class ProfileInfoComponent extends HTMLElement {
 
 
 const cssContent = /*css*/`
-:host * {
-    margin: 0;
-    padding: 0;
-}
+    :host * {
+        margin: 0;
+        padding: 0;
+    }
 
-.profile-image {
-    display: flex;
-    position: relative;
-    margin-left: 30%;
-    margin-top: -155px;
-    height: 250px;
-    z-index: 3;
-}
+    .c-hexagon-content {
+        width: 250px;
+        height: 250px;
+    }
 
-.add-friend {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 20px;
-    height: 80%;
-}
+    .profile-image {
+        display: flex;
+        position: relative;
+        margin-left: 30%;
+        margin-top: -155px;
+        height: 250px;
+        z-index: 3;
+    }
 
-.add-friend img {
-    width: 32px;
-    height: 32px;
-}
+    .add-friend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 20px;
+        height: 80%;
+    }
 
-.profile-image > .name {
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
-    margin-top: 60px;
-}
+    .add-friend img {
+        width: 32px;
+        height: 32px;
+    }
 
-.name-and-online {
-    width: 100%;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    align-items: center;
-}
+    .profile-image > .name {
+        height: 250px;
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+        margin-top: 60px;
+    }
 
-.name-and-online > p {
-    font-size: 40px;
-    margin-right: 10px;
-}
+    .name-and-online {
+        width: 100%;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+    }
 
-.joined-date {
-    color: #d9d9d9;
-    gap: 10px;
-    display: flex;
-    width: max-content;
-    margin-top: 10px;
-    opacity: 0.7;
-}
+    .name-and-online > p {
+        font-size: 40px;
+        margin-right: 10px;
+    }
 
-
+    .joined-date {
+        color: #d9d9d9;
+        gap: 10px;
+        display: flex;
+        width: max-content;
+        margin-top: 10px;
+        opacity: 0.7;
+    }
 `;

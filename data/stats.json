@@ -1,0 +1,299 @@
+[
+    {
+        "userId": 1,
+        "win": 89,
+        "loss": 11,
+        "rank": 200,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 89
+    },
+    {
+        "userId": 2,
+        "win": 75,
+        "loss": 25,
+        "rank": 150,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 75
+    },
+    {
+        "userId": 3,
+        "win": 100,
+        "loss": 0,
+        "rank": 1,
+        "league": "legendary",
+        "nextLeague": "legendary",
+        "progressBar": 100
+    },
+    {
+        "userId": 4,
+        "win": 60,
+        "loss": 40,
+        "rank": 500,
+        "league": "bronze",
+        "nextLeague": "silver",
+        "progressBar": 60
+    },
+    {
+        "userId": 5,
+        "win": 85,
+        "loss": 15,
+        "rank": 180,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 85
+    },
+    {
+        "userId": 6,
+        "win": 70,
+        "loss": 30,
+        "rank": 300,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 70
+    },
+    {
+        "userId": 7,
+        "win": 95,
+        "loss": 5,
+        "rank": 50,
+        "league": "legendary",
+        "nextLeague": "legendary",
+        "progressBar": 95
+    },
+    {
+        "userId": 8,
+        "win": 55,
+        "loss": 45,
+        "rank": 600,
+        "league": "bronze",
+        "nextLeague": "silver",
+        "progressBar": 55
+    },
+    {
+        "userId": 9,
+        "win": 82,
+        "loss": 18,
+        "rank": 220,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 82
+    },
+    {
+        "userId": 10,
+        "win": 68,
+        "loss": 32,
+        "rank": 350,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 68
+    },
+    {
+        "userId": 11,
+        "win": 92,
+        "loss": 8,
+        "rank": 120,
+        "league": "platinum",
+        "nextLeague": "legendary",
+        "progressBar": 92
+    },
+    {
+        "userId": 12,
+        "win": 78,
+        "loss": 22,
+        "rank": 275,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 78
+    },
+    {
+        "userId": 13,
+        "win": 63,
+        "loss": 37,
+        "rank": 480,
+        "league": "bronze",
+        "nextLeague": "silver",
+        "progressBar": 63
+    },
+    {
+        "userId": 14,
+        "win": 88,
+        "loss": 12,
+        "rank": 140,
+        "league": "platinum",
+        "nextLeague": "legendary",
+        "progressBar": 88
+    },
+    {
+        "userId": 15,
+        "win": 74,
+        "loss": 26,
+        "rank": 290,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 74
+    },
+    {
+        "userId": 16,
+        "win": 53,
+        "loss": 47,
+        "rank": 620,
+        "league": "bronze",
+        "nextLeague": "silver",
+        "progressBar": 53
+    },
+    {
+        "userId": 17,
+        "win": 91,
+        "loss": 9,
+        "rank": 110,
+        "league": "platinum",
+        "nextLeague": "legendary",
+        "progressBar": 91
+    },
+    {
+        "userId": 18,
+        "win": 65,
+        "loss": 35,
+        "rank": 440,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 65
+    },
+    {
+        "userId": 19,
+        "win": 77,
+        "loss": 23,
+        "rank": 260,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 77
+    },
+    {
+        "userId": 20,
+        "win": 96,
+        "loss": 4,
+        "rank": 30,
+        "league": "legendary",
+        "nextLeague": "legendary",
+        "progressBar": 96
+    },
+    {
+        "userId": 21,
+        "win": 61,
+        "loss": 39,
+        "rank": 500,
+        "league": "bronze",
+        "nextLeague": "silver",
+        "progressBar": 61
+    },
+    {
+        "userId": 22,
+        "win": 83,
+        "loss": 17,
+        "rank": 205,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 83
+    },
+    {
+        "userId": 23,
+        "win": 66,
+        "loss": 34,
+        "rank": 410,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 66
+    },
+    {
+        "userId": 24,
+        "win": 98,
+        "loss": 2,
+        "rank": 10,
+        "league": "legendary",
+        "nextLeague": "legendary",
+        "progressBar": 98
+    },
+    {
+        "userId": 25,
+        "win": 57,
+        "loss": 43,
+        "rank": 580,
+        "league": "bronze",
+        "nextLeague": "silver",
+        "progressBar": 57
+    },
+    {
+        "userId": 26,
+        "win": 80,
+        "loss": 20,
+        "rank": 240,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 80
+    },
+    {
+        "userId": 27,
+        "win": 72,
+        "loss": 28,
+        "rank": 320,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 72
+    },
+    {
+        "userId": 28,
+        "win": 87,
+        "loss": 13,
+        "rank": 160,
+        "league": "platinum",
+        "nextLeague": "legendary",
+        "progressBar": 87
+    },
+    {
+        "userId": 29,
+        "win": 64,
+        "loss": 36,
+        "rank": 450,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 64
+    },
+    {
+        "userId": 30,
+        "win": 93,
+        "loss": 7,
+        "rank": 90,
+        "league": "platinum",
+        "nextLeague": "legendary",
+        "progressBar": 93
+    },
+    {
+        "userId": 31,
+        "win": 67,
+        "loss": 33,
+        "rank": 370,
+        "league": "silver",
+        "nextLeague": "gold",
+        "progressBar": 67
+    },
+    {
+        "userId": 32,
+        "win": 81,
+        "loss": 19,
+        "rank": 230,
+        "league": "gold",
+        "nextLeague": "platinum",
+        "progressBar": 81
+    },
+    {
+        "userId": 33,
+        "win": 99,
+        "loss": 1,
+        "rank": 5,
+        "league": "legendary",
+        "nextLeague": "legendary",
+        "progressBar": 99
+    }
+]
