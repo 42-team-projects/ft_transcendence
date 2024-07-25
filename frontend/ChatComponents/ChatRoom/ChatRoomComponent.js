@@ -3,6 +3,9 @@ import { fetchData } from "../../Utils/Fetcher.js";
 let APIUrl = "http://localhost:8080/api/v1/conversations/sender=2&receiver="
 let fakeData = [];
 
+let league;
+let profileImage;
+
 export class ChatRoomComponent extends HTMLElement {
     constructor () {
         super();
@@ -23,36 +26,40 @@ export class ChatRoomComponent extends HTMLElement {
 
     static observedAttributes = ["target-id"];
 
-    attributeChangedCallback(attrName, oldValue, newValue) {
+    async attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "target-id")
         {
             this.shadowRoot.querySelector("chat-header").innerHTML = "";
-            this.renderHeader("http://localhost:8080/api/v1/users/" + newValue);
+            await this.renderHeader("http://localhost:8080/api/v1/users/" + newValue);
             this.shadowRoot.querySelector(".body").innerHTML = "";
-            this.renderConversation(APIUrl + newValue);
+            await this.renderConversation(APIUrl + newValue);
         }
     }
     // <div class="timer">
     //     <p>12:05 PM</p>
     // </div>
 
+
     async renderHeader(url) {
         console.log(url);
         try {
             const targetUserData = await fetchData(url);
             if (!targetUserData)
-                return;
+                return {league: null, profileImage: null};
             const header = this.shadowRoot.querySelector("chat-header");
             header.targetId = targetUserData.id;
             header.userName = targetUserData.userName;
             if (targetUserData.stats)
+            {
                 header.league = targetUserData.stats.league;
+                league = targetUserData.stats.league;
+            }
             header.active = targetUserData.active;
             header.profileImage = targetUserData.profileImage;
+            profileImage = targetUserData.profileImage;
         } catch (error) {
             console.error('Error fetching user info:', error);
         }
-
     }
 
     async renderConversation(apiurl) {
@@ -67,31 +74,42 @@ export class ChatRoomComponent extends HTMLElement {
             console.error(error.message);
         }
         const chatBdoy = this.shadowRoot.querySelector(".body");
-        fakeData.forEach(element => {
-            if (element.receiverId == 2)
+        let receiverComponent = document.createElement("receiver-component");
+        let senderComponent = document.createElement("sender-component");
+        for (let index = 0; index < fakeData.length; index++) {
+            const element = fakeData[index];
+            if (element.receiverId === 2)
             {
-                const receiverComponent = document.createElement("receiver-component");
                 const receiverMessageContainer = document.createElement("receiver-message-container");
                 receiverMessageContainer.textContent = element.message;
-                receiverMessageContainer.setAttribute("corner", "");
+                if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
+                {
+                    receiverMessageContainer.setAttribute("corner", "");
+                    receiverComponent = document.createElement("receiver-component")
+                }
+                receiverComponent.league = league;
+                receiverComponent.profileImage = profileImage;
                 receiverComponent.appendChild(receiverMessageContainer);
                 chatBdoy.appendChild(receiverComponent);
             }
             else
             {
-                const senderComponent = document.createElement("sender-component");
                 const senderMessageContainer = document.createElement("sender-message-container");
                 senderMessageContainer.textContent = element.message;
-                senderMessageContainer.setAttribute("corner", "");
+                if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
+                {
+                    senderMessageContainer.setAttribute("corner", "");
+                    senderComponent = document.createElement("sender-component");
+                }
                 senderComponent.appendChild(senderMessageContainer);
                 chatBdoy.appendChild(senderComponent);
             }
-        });
+        }
     }
 
-    connectedCallback() {
-        this.renderHeader("http://localhost:8080/api/v1/users/" + this.targetId);
-        this.renderConversation(APIUrl);
+    async connectedCallback() {
+        await this.renderHeader("http://localhost:8080/api/v1/users/" + this.targetId);
+        await this.renderConversation(APIUrl);
     }
 }
 
