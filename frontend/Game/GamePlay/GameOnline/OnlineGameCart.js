@@ -1,3 +1,5 @@
+import { GameHeader } from "../GameHeader.js"
+import { GameTable } from "../GameTable.js"
 import { Lobby } from "../Lobby.js"
 
 const OnlineGameTemplate = document.createElement('template')
@@ -189,7 +191,7 @@ export class OnlineGame extends HTMLElement{
 					const h1 = desc.querySelector('h1')
 
 					if(time < 0){
-						const header = new GameHeader();
+						const header = new GameHeader()
 						const game = new GameTable();
 						document.body.innerHTML = ``;
 						document.body.appendChild(header);

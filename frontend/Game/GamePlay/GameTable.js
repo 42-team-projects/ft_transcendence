@@ -1,3 +1,6 @@
+import { GameOver } from "./GameOver.js";
+import { LaunchingGame } from "./launchingGame.js";
+
 const game_page = document.createElement('template');
 
 let score = {
@@ -7,7 +10,7 @@ let score = {
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="./Game/GamePlay/GameOnline/GameTable.css">
+<link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>
