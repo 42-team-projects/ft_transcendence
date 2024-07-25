@@ -5,6 +5,7 @@ export class CustomGraph extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
+
     }
 
     drawLevels(ctx, centerX, centerY) {
@@ -131,6 +132,8 @@ export class CustomGraph extends HTMLElement {
     disconnectedCallback() {
 
     }
+
+    static observedAttributes = ["data-object"];
 
     attributeChangedCallback(name, oldValue, newValue) {
         console.log(`Attribute ${name} has changed.`);
