@@ -1,8 +1,3 @@
-
-import {Buttons} from '../buttons.js'
-import {aiLobby} from '../Lobby.js'
-import { GameTable } from './GameTable.js'
-import { GameHeader } from './GameHeader.js'
 const OnlineGameTemplate = document.createElement('template')
 
 const sherching_images = [
@@ -150,7 +145,7 @@ export class OnlineGame extends HTMLElement{
 		const root = document.querySelector('root-content')
 		// setTimeout(() => {
 			button.addEventListener('click', ()=>{
-				const lobby = new aiLobby();
+				const lobby = new Lobby();
 				const p_img = player_template.content.getElementById('Player')
 				p_img.src = 'images/svg-header/profile.jpeg';
 				const p_h1 = player_template.content.getElementById('NPlayer')

@@ -1,10 +1,5 @@
-import { PageName } from "./SinglePlayer/PageName.js";
 
-import { PlayerBorder } from "./SinglePlayer/PlayerBorder.js";
-customElements.define('page-name',PageName)
-customElements.define('player-border',PlayerBorder)
-
-const ai_lobby = document.createElement('template');
+const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
 
@@ -19,7 +14,7 @@ opponentSlot.innerHTML = /*html*/ `
     <slot name="OpponentName" slot="Name"></slot>
     `
 
-ai_lobby.innerHTML =  /* html */ `
+lobby.innerHTML =  /* html */ `
     <style>
 
         :host{
@@ -157,13 +152,13 @@ ai_lobby.innerHTML =  /* html */ `
         }
     */
     // <!--  -->
-export class aiLobby extends HTMLElement{
+export class Lobby extends HTMLElement{
 
     constructor()
     {
         super();
         this.attachShadow({ mode: 'open' });
-        this.shadowRoot.appendChild(ai_lobby.content.cloneNode(true));
+        this.shadowRoot.appendChild(lobby.content.cloneNode(true));
         this.setSlots(playerSlot.content, 'false')
         this.setSlots(opponentSlot.content, 'true')
         this.headerAnimation();

@@ -1,8 +1,4 @@
-
-import {Buttons} from '../buttons.js'
-
 const MultiPlayerTemplate = document.createElement('template')
-
 
 MultiPlayerTemplate.innerHTML = /*html*/ `
 	<link rel="stylesheet" href="Game/GamePlay/MultiPlayer/MultiPlayer.css">
