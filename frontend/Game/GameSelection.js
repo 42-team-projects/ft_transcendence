@@ -1,10 +1,4 @@
-import {SinglePlayer} from './GamePlay/SinglePlayer/SinglePlayerCart.js'
-import {MultiPlayer} from './GamePlay/MultiPlayer/MultiPlayerCart.js'
-import {OnlineGame} from './GamePlay/GameOnline/OnlineGameCart.js'
 
-customElements.define("single-player", SinglePlayer)
-customElements.define("multi-player", MultiPlayer)
-customElements.define("online-game", OnlineGame)
 
 const game_selection = document.createElement('template')
 

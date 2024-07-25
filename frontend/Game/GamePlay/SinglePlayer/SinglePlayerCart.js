@@ -1,10 +1,5 @@
 
-import {Buttons} from '../buttons.js'
-import {aiLobby} from '../Lobby.js'
 
-customElements.define('ai-lobby', aiLobby)
-
-customElements.define('c-button', Buttons)
 const singlePlayerTemplate = document.createElement('template')
 const player_template = document.createElement('template')
 
@@ -89,7 +84,7 @@ export class SinglePlayer extends HTMLElement{
 		setTimeout(() => {
 
             button.addEventListener('click', ()=>{
-                const lobby = new aiLobby()
+                const lobby = new Lobby()
                 const p_img = player_template.content.getElementById('Player')
                 p_img.src = 'images/svg-header/profile.jpeg';
                 const p_h1 = player_template.content.getElementById('NPlayer')
@@ -114,7 +109,4 @@ export class SinglePlayer extends HTMLElement{
 			this.classList.toggle('opacity-1', true)
 		}, 3000);
     }
-    // connectedCallback(){
-    //     this.clickEvent()
-    // }
 }
