@@ -3,7 +3,7 @@ export class RecordComponent extends HTMLElement {
         super();
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = `
-                <link rel="stylesheet" href="/frontend/ProfileComponents/StatsComponents/RecordMatchesComponents/RecordComponent.css">
+                <link rel="stylesheet" href="./ProfileComponents/StatsComponents/RecordMatchesComponents/RecordComponent.css">
                 <p class="match-record-text">RECORD MATCHES</p>
                 <div class="match-record-stats">
                     <div class="match-record-stats-box">

@@ -7,7 +7,7 @@ let score = {
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GameTable.css">
+<link rel="stylesheet" href="./Game/GamePlay/GameOnline/GameTable.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>

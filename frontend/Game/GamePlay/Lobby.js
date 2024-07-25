@@ -1,3 +1,4 @@
+import { PlayerBorder } from "./PlayerBorder.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');

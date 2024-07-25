@@ -6,7 +6,7 @@ export class ChatComponent extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="/frontend/ChatComponents/ChatComponent.css">
+            <link rel="stylesheet" href="./ChatComponents/ChatComponent.css">
             
             <div class="main-container">
                 <page-name width="13%">
