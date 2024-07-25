@@ -1,12 +1,82 @@
 import { PlayerBorder } from "./PlayerBorder.js";
+import { GameHeader } from "./GameHeader.js"
+import { GameTable } from "./GameTable.js"
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
+const AiGameTemplate = document.createElement('template')
+const OnlineGameTemplate = document.createElement('template')
 
+const Default_sherching_images = [
+	{
+		src: 'images/svg-header/profile.jpeg',
+		name: 'ESCANOR'
+	},
+	{
+		src: 'images/OrangeCart/images.png',
+		name: 'ITATCHI'
+	},
+	{
+		src: 'images/OrangeCart/img1.png',
+		name: 'ESALIM'
+	},
+	{
+		src: 'images/OrangeCart/img2.jpg',
+		name: 'KILLUA'
+	},
+	{
+		src: 'images/OrangeCart/img3.jpg',
+		name: 'GOJO'
+	}
+]
+const sherching_images = [
+	{
+		src: 'images/svg-header/profile.jpeg',
+		name: 'ESCANOR'
+	},
+	{
+		src: 'images/OrangeCart/images.png',
+		name: 'ITATCHI'
+	},
+	{
+		src: 'images/OrangeCart/img1.png',
+		name: 'ESALIM'
+	},
+	{
+		src: 'images/OrangeCart/img2.jpg',
+		name: 'KILLUA'
+	},
+	{
+		src: 'images/OrangeCart/img3.jpg',
+		name: 'GOJO'
+	}
+]
 playerSlot.innerHTML = /*html*/ `
     <slot  name="PlayerImg" slot="Player"> </slot>
     <slot  name="PlayerName" slot="Name"> </slot>
+`
+
+AiGameTemplate.innerHTML = /*html*/ `
+    <link rel="stylesheet" href="./Game/GamePlay/AiLobby.css">
+    <img id='Player' class="Player" slot="PlayerImg" alt="Player" />
+    <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
+    <h1 id='Opponent' class="Opponent" slot="searshing"></h1>
+    <h1 id='NOpponent' class="Name" slot="OpponentName"></h1>
+`
+
+OnlineGameTemplate.innerHTML = /*html*/ `
+    <link rel="stylesheet" href="./Game/GamePlay/OnlineGameLobby.css">
+	<div class="searshingImgs" slot="searshing">
+		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent3' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent4' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent5' class="PlayerS" alt="searchingImg"/>
+	</div>
+
+    <img id='Player' class="Player" slot="PlayerImg" alt="" />
+    <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 `
 
 opponentSlot.innerHTML = /*html*/ `
@@ -16,111 +86,7 @@ opponentSlot.innerHTML = /*html*/ `
     `
 
 lobby.innerHTML =  /* html */ `
-    <style>
-
-        :host{
-            position: relative;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            width : 60%;
-            aspect-ratio: 1.7;
-            background-color: #e6ffff14;
-            box-shadow: 0px 0px 15px 1px #0000001c;
-            border-radius: 15px 15px 15px 15px;
-        }
-        .lines{
-            position : absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-
-        }
-        .lines::before{
-            content: '';
-            position: absolute;
-            background-image: url(images/GreenCart/smalLine.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 1.5%;
-            aspect-ratio: 0.7;
-            top: 27%;
-            left: 53.8%;
-        }
-        .lines::after{
-            position: absolute;
-            content: '';
-            background-image: url(images/GreenCart/line1.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 4.4%;
-            aspect-ratio: 0.7;
-            top: 61.5%;
-            left: 44.2%;
-        }
-        .VS{
-            position : absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-        }
-        .VS::before{
-            content: '';
-            position: absolute;
-            background-image: url(images/GreenCart/V-Lobby.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 12.1%;
-            aspect-ratio: 0.7;
-            left: 42.6%;
-            animation: moveV 1s forwards;
-            transform: translateY(-100%);
-        }
-        @keyframes moveV {
-
-            100%{
-                transform: translateY(106%);
-            }
-        }
-        @keyframes pulseShadow {
-            0%, 100% {
-                filter: drop-shadow(0px 0px 5px white);
-            }
-            50% {
-                filter: drop-shadow(0px 0px 10px white);
-            }
-        }
-        .VS::after{
-            position: absolute;
-            content: '';
-            background-image: url(images/GreenCart/s-Lobby.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 12.1%;
-            aspect-ratio: 0.7;
-            top: 44%;
-            left: 47%;
-            animation: moveS 1s forwards;
-            transform: translateY(200%);
-        }
-        @keyframes moveS {
-            to {
-                transform: translateY(0);
-            }
-        }
-        .opponent{
-            display: flex;
-            justify-content: center;
-            align-items: center; 
-            background-image: url(images/GreenCart/lobby-border.svg);
-            background-repeat : no-repeat;
-            background-size: contain;
-            width: 36.4%;
-            aspect-ratio: 1;
-            transform: scaleX(-1) scaleY(-1);
-        }
-
-    </style>
+    <link rel="stylesheet" href="./Game/GamePlay/Lobby.css">
     <page-name width="35%">
         <div slot="text" class="pageNameText">
             <h1>MATCH MAKING</h1>
@@ -131,28 +97,15 @@ lobby.innerHTML =  /* html */ `
     </div>
     <div class="lines"></div>
     `
-    /*
-            border: 1px solid red;
-            :host{
-            position: relative;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            width : 72%;
-            aspect-ratio: 1.7;
-            border-radius: 10px;
-            background-color: #e6ffff14;
-        }
-        
-        :host::before{
+let time = 3;
+const timer = document.createElement('template')
+timer.innerHTML = /*html*/ `
+    <link rel="stylesheet", href="./Game/GamePlay/Timer.css">
+	<div class="descounter">
+		<h1>${time}</h1>
+	</div>
+`
 
-        }
-            .page-name h1{
-            color : white;
-            
-        }
-    */
-    // <!--  -->
 export class Lobby extends HTMLElement{
 
     constructor()
@@ -160,13 +113,6 @@ export class Lobby extends HTMLElement{
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(lobby.content.cloneNode(true));
-        this.setSlots(playerSlot.content, 'false')
-        this.setSlots(opponentSlot.content, 'true')
-        this.headerAnimation();
-        this.sidebarAnimation();
-        setTimeout(() => {
-            document.body.classList.toggle('body-game-shrink', true);   
-        }, 1000);
     }
 
     headerAnimation(){
@@ -206,5 +152,120 @@ export class Lobby extends HTMLElement{
         border.appendChild(template.cloneNode(true))
         this.shadowRoot.appendChild(border.cloneNode(true))
     }
+
+    connectedCallback()
+    {
+        let js;
+        fetch('http://127.0.0.1:8000/game/',
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(response => {
+            if(!response.ok){
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data=>{
+            console.log("success: ", data)
+            data.forEach((player)=>{
+                console.log(player.username);
+            })
+        })
+        .catch(error => {
+            console.error(error)
+        })
+        this.setSlots(playerSlot.content, 'false')
+        this.setSlots(opponentSlot.content, 'true')
+        this.headerAnimation();
+        this.sidebarAnimation();
+        setTimeout(() => {
+            document.body.classList.toggle('body-game-shrink', true);   
+        }, 1000);
+
+    }
+
+    OnlineGame()
+    {
+		const root = document.querySelector('root-content')
+        const p_img = OnlineGameTemplate.content.getElementById('Player')
+		p_img.src = 'images/svg-header/profile.jpeg';
+		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer')
+
+		p_h1.textContent = 'NOUAKHRO'
+
+		const players = OnlineGameTemplate.content.querySelectorAll('.PlayerS')
+		players.forEach((element, index)=>{
+			element.style.setProperty('--dest', '400%');
+			element.style.setProperty('--numsec', 1);
+			element.src = sherching_images[index].src;
+		})
+		this.appendChild(OnlineGameTemplate.content.cloneNode(true))
+		root.innerHTML = ``
+		root.appendChild(this)
+    }
+    setPlayer(){
+		const h1 = document.createElement('h1')
+		const PlayerS = this.querySelectorAll('.PlayerS')
+		PlayerS.forEach((element)=>{
+			element.style.setProperty('--numsec', 10);
+			element.style.setProperty('--dest', '400%');
+			element.style.opacity = '1'
+		})
+		h1.id = 'NOpponent'
+		h1.classList = 'Name'
+		h1.slot = 'OpponentName'
+		h1.textContent = sherching_images[0].name
+		this.appendChild(h1.cloneNode(true))	
+	}
+    SinglePlayer()
+    {
+        const root = document.querySelector('root-content')
+        const p_img = AiGameTemplate.content.getElementById('Player')
+        p_img.src = 'images/svg-header/profile.jpeg';
+        const p_h1 = AiGameTemplate.content.getElementById('NPlayer')
+
+        p_h1.textContent = 'NOUAKHRO'
+
+        const o_img = AiGameTemplate.content.getElementById('Opponent')
+        o_img.textContent = 'AI'
+        const o_h1 = AiGameTemplate.content.getElementById('NOpponent')
+
+        o_h1.textContent = 'AI'
+
+        this.appendChild(AiGameTemplate.content.cloneNode(true))
+        root.innerHTML = ``
+        root.appendChild(this)
+    }
+	gameMode(){
+		const PlayerS = this.querySelectorAll('.PlayerS')
+		PlayerS.forEach((element, index)=>{
+			if(index !== 0)
+				element.remove()
+			else{
+				element.style.animation = 'none';
+				this.shadowRoot.appendChild(timer.content.cloneNode(true));
+				const countdown = setInterval(()=>{
+					time--;
+					const desc = this.shadowRoot.querySelector('.descounter')
+					const h1 = desc.querySelector('h1')
+
+					if(time < 0){
+						const header = new GameHeader()
+						const game = new GameTable();
+						document.body.innerHTML = ``;
+						document.body.appendChild(header);
+						document.body.appendChild(game);
+						clearInterval(countdown)
+					}
+					else{
+						h1.textContent = `${time}`
+					}
+				},1000)
+			}
+		})
+	}
 }
 
