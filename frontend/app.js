@@ -1,3 +1,5 @@
+//app.js
+
 import { ChatComponent } from "./ChatComponents/ChatComponent.js";
 import { ChatItemComponent } from "./ChatComponents/ChatList/ChatItemComponent.js";
 import { ChatListComponent } from "./ChatComponents/ChatList/ChatListComponent.js";
@@ -26,7 +28,7 @@ import { ProfileInfoComponent } from "./ProfileComponents/UserInfosComponents/Pr
 import { UserInfoComponent } from "./ProfileComponents/UserInfosComponents/UserInfoComponent.js";
 import { UserInfoContainerComponent } from "./ProfileComponents/UserInfosComponents/UserInfoContainer.js";
 
-//Game Header
+// Game
 import { Lobby } from "./Game/GamePlay/Lobby.js"
 import { Buttons } from "./Game/GamePlay/buttons.js"
 import { SinglePlayer } from './Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
@@ -64,10 +66,10 @@ customElements.define('launching-game', LaunchingGame)
 customElements.define('game-header', GameHeader)
 customElements.define('page-name',PageName)
 customElements.define('player-border',PlayerBorder)
+customElements.define('game-lobby', Lobby)
 customElements.define("single-player", SinglePlayer)
 customElements.define("multi-player", MultiPlayer)
 customElements.define("online-game", OnlineGame)
-customElements.define('ai-lobby', Lobby)
 customElements.define('c-button', Buttons)
 customElements.define('game-selection', GameSelection)
 

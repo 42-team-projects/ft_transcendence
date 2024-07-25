@@ -1,4 +1,4 @@
-
+import { Lobby } from "../Lobby.js";
 
 const singlePlayerTemplate = document.createElement('template')
 const player_template = document.createElement('template')

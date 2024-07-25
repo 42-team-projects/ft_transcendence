@@ -97,7 +97,7 @@ export class ChatRoomComponent extends HTMLElement {
         });
     }
 }
-let fakeData;
+let fakeData = [];
 // let fakeData = [
 //     {
 //         "id": 1,

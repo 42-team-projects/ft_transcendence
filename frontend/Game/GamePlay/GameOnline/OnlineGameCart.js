@@ -1,3 +1,5 @@
+import { Lobby } from "../Lobby.js"
+
 const OnlineGameTemplate = document.createElement('template')
 
 const sherching_images = [
