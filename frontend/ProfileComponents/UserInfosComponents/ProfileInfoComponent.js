@@ -1,13 +1,4 @@
-
-function getLeagueColor(league) {
-    const leagueColors = new Map();
-    leagueColors.set("bronze", "#B54C1E");
-    leagueColors.set("silver", "#C0C0C0");
-    leagueColors.set("gold", "#EB9A45");
-    leagueColors.set("platinum", "#459BEB");
-    leagueColors.set("legendary", "#EB4545");
-    return leagueColors.get(league);
-}
+import { getLeagueColor } from "../../Utils/LeaguesData.js";
 
 export class ProfileInfoComponent extends HTMLElement {
     constructor () {
@@ -103,13 +94,13 @@ export class ProfileInfoComponent extends HTMLElement {
                         </c-hexagon>
                     </div>
                     <div class="joined-date">
-                        <img src="/frontend/assets/profile-assets/Calendar.svg" width="20px"/>
+                        <img src="./assets/profile-assets/Calendar.svg" width="20px"/>
                         <p class="joined-text">joined:</p>
                         <p class="joined-date-text"> </p>
                     </div>
                 </div>
                 <div class="add-friend">
-                    <img src="/frontend/assets/profile-assets/add-friends-icon.svg" width="32"/>
+                    <img src="./assets/profile-assets/add-friends-icon.svg" width="32"/>
                 </div>
             </div>
 

@@ -5,8 +5,7 @@ export async function fetchData(APIURL) {
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
-        const json = await response.json();
-        return json;  // Return the result
+        return await response.json();  // Return the result
     } catch (error) {
         console.error(error.message);
         return null;  // Return null in case of an error

@@ -1,3 +1,5 @@
+import { getLeagueColor } from "../Utils/LeaguesData.js";
+
 let fakeData = {
     id: 1,
     userName: "Esalim",
@@ -5,7 +7,7 @@ let fakeData = {
     active: true,
     friend: false,
     profileImage: "./images/svg-header/profile.jpeg",
-    cover: "/frontend/images/xxxxxx.png",
+    cover: "./images/xxxxxx.png",
     stats: {
         win: 89,
         loss: 11,
@@ -53,19 +55,19 @@ let fakeData = {
     achievements: [
         {
             name: "Bronze",
-            img: "/frontend/assets/leagues-logo/bronze-league.svg"
+            img: "./assets/leagues-logo/bronze-league.svg"
         },
         {
             name: "Silver",
-            img: "/frontend/assets/leagues-logo/silver-league.svg"
+            img: "./assets/leagues-logo/silver-league.svg"
         },
         {
             name: "Gold",
-            img: "/frontend/assets/leagues-logo/gold-league.svg"
+            img: "./assets/leagues-logo/gold-league.svg"
         },
         {
             name: "Platinum",
-            img: "/frontend/assets/leagues-logo/platinum-league.svg"
+            img: "./assets/leagues-logo/platinum-league.svg"
         }
     ],
     history: {
@@ -75,27 +77,6 @@ let fakeData = {
 };
 
 const APIUrl = "http://localhost:8080/api/v1/users/4";
-
-function getLeagueColor(league) {
-    const leagueColors = new Map();
-    leagueColors.set("bronze", "#B54C1E");
-    leagueColors.set("silver", "#C0C0C0");
-    leagueColors.set("gold", "#EB9A45");
-    leagueColors.set("platinum", "#459BEB");
-    leagueColors.set("legendary", "#EB4545");
-    return leagueColors.get(league.toLowerCase());
-}
-
-function getLeagueImage(league) {
-    const leagueColors = new Map();
-    leagueColors.set("bronze", "/frontend/assets/leagues-logo/bronze-league.svg");
-    leagueColors.set("silver", "/frontend/assets/leagues-logo/silver-league.svg");
-    leagueColors.set("gold", "/frontend/assets/leagues-logo/gold-league.svg");
-    leagueColors.set("platinum", "/frontend/assets/leagues-logo/platinum-league.svg");
-    leagueColors.set("legendary", "/frontend/assets/leagues-logo/legendary-league.svg");
-    return leagueColors.get(league.toLowerCase());
-}
-
 const emptyGraph = [{ label: "", value: 0 }];
 
 export class ProfileComponent extends HTMLElement {
@@ -105,7 +86,7 @@ export class ProfileComponent extends HTMLElement {
         this.attachShadow({ mode: "open" });
 
         this.shadowRoot.innerHTML = `
-                <link rel="stylesheet" href="/frontend/ProfileComponents/ProfileComponent.css">
+                <link rel="stylesheet" href="./ProfileComponents/ProfileComponent.css">
                 <page-name width="17%">
                     <div slot="text" class="pageNameText">
                         <h1>PROFILE</h1>
@@ -233,7 +214,7 @@ export class ProfileComponent extends HTMLElement {
 
     setUpProfileInfo() {
         const coverComponent = this.shadowRoot.querySelector("cover-component");
-        coverComponent.src = fakeData.cover || "/frontend/images/xxxxxx.png";
+        coverComponent.src = fakeData.cover || "./images/xxxxxx.png";
 
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
         if (fakeData.stats)

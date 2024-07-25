@@ -51,5 +51,5 @@ customElements.define("league-info", LeagueInfo);
 customElements.define("stats-container", StatsContainer);
 customElements.define("custom-graph", CustomGraph);
 customElements.define("date-component", DateComponent);
-window.customElements.define("custom-table", CustomTable);
-window.customElements.define("profile-component", ProfileComponent);
+customElements.define("custom-table", CustomTable);
+customElements.define("profile-component", ProfileComponent);
