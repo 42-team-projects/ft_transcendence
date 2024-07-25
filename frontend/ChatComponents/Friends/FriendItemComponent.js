@@ -20,7 +20,7 @@ export class FriendItemComponent extends HTMLElement {
             </style>
 
             <c-hexagon width="48px" height="48px" apply="true" bcolor="aqua">
-                <img slot="content" draggable="false" src="/frontend/assets/profile-assets/profile-image.svg">
+                <img slot="content" draggable="false" src="./assets/profile-assets/profile-image.svg">
             </c-hexagon>
             <p>esalim</p>
             <c-hexagon width="16px" height="16px" apply="true" bcolor="green">

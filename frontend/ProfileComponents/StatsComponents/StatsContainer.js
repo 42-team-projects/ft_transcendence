@@ -7,7 +7,7 @@ export class StatsContainer extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="/frontend/ProfileComponents/StatsComponents/StatsContainer.css">
+            <link rel="stylesheet" href="./ProfileComponents/StatsComponents/StatsContainer.css">
             <slot class="league-bar" name="league-bar"></slot>
             <slot classs="match-record" name="match-record"></slot>
         `;
