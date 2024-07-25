@@ -1,13 +1,18 @@
+:host {
+    grid-area: 5 / 1 / 7 / -1;
+}
+
+:host::-webkit-scrollbar {
+    display: none;
+}
 
 .profile-data-stats-history {
     margin-left: 20px;
     margin-right: 20px;
-    height: 500px;
 }
 
 .profile-data-stats-history > table {
     width: 100%;
-    height: 500px;
     font-family: 'Sansation Bold', 'Sansation';
     font-size: 26px;
     color: white;

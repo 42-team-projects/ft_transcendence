@@ -11,13 +11,13 @@ export class ChatHeaderComponent extends HTMLElement {
                 ${cssContent}
             </style>
             <div class="profile-infos">
-                <c-hexagon class="profile" width="120px" height="117px" apply="true" Bcolor="aqua">
+                <c-hexagon class="profile" width="120px" height="117px" apply="true" bcolor="aqua">
                     <img slot="content" draggable="false" src="/frontend/images/svg-header/profile.jpeg">
                 </c-hexagon>
                 <div class="infos">
                     <h1>SALIM ELMEHDI</h1>
                     <div class="activation">
-                        <c-hexagon class="online" width="16px" height="16px" apply="true" Bcolor="aqua" >
+                        <c-hexagon class="online" width="16px" height="16px" apply="true" bcolor="aqua" >
                             <div style="width: 100%; height: 100%; background-color: aqua;" slot="content"></div>
                         </c-hexagon>
                         online

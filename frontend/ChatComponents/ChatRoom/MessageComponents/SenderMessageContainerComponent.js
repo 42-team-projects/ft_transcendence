@@ -9,7 +9,7 @@ export class SenderMessageContainerComponent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
-                    margin: 2px;
+                    margin: 4px;
                     display: flex;
                     font-family: 'Sansation bold';
                 }

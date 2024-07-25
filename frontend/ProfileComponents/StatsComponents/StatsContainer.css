@@ -1,8 +1,14 @@
 
+:host {
+    grid-area: 1 / 1 / 5 / 5;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 20px;
+}
 
-:host * {
+* {
     margin:0;
-    padding: 0;
 }
 
 .match-record {
