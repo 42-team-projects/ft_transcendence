@@ -12,7 +12,7 @@ export class ChatItemComponent extends HTMLElement {
             <div class="container">
                 <div class="profileAndOnlineContainer">
                     <div class="profileAndOnline">
-                        <c-hexagon class="profile" width="90px" height="87px" apply="true" bcolor="aqua">
+                        <c-hexagon class="profile" width="90px" height="87px" apply="true" bcolor="#d9d9d9">
                             <img slot="content" draggable="false" width="100%">
                         </c-hexagon>
                         <c-hexagon class="online" width="20px" height="20px" apply="true" bcolor="#d9d9d9" >
@@ -47,7 +47,7 @@ export class ChatItemComponent extends HTMLElement {
         element.querySelector("div").style.background = this.active === "true" ? "#00ffff" : "#d9d9d9";
     }
 
-    static observedAttributes = ["opacity", "background-color", "user-name", "last-message", "time", "number-of-message", "league", "profileImage", "active"];
+    static observedAttributes = ["opacity", "background-color", "user-name", "last-message", "time", "number-of-message", "league", "profile-image", "active"];
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === "background-color")
