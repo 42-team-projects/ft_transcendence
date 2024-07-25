@@ -45,5 +45,3 @@ export class GameHeader extends HTMLElement{
         this.querySelector('.playerscor1 h1').textContent = score.player2
     }
 }
-
-customElements.define('game-header', GameHeader)
