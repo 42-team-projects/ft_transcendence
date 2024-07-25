@@ -6,7 +6,7 @@ export class LeagueInfo extends HTMLElement {
     }
     connectedCallback() {
         this.shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="/frontend/ProfileComponents/StatsComponents/LeagueComponents/LeagueInfo.css">
+            <link rel="stylesheet" href="./ProfileComponents/StatsComponents/LeagueComponents/LeagueInfo.css">
             <slot name="current-rank"></slot>
             <slot name="league-logo"></slot>
             <slot name="next-league"></slot>
