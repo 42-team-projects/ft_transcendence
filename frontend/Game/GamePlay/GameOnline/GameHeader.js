@@ -2,9 +2,9 @@
 const HeaderTemplate = document.createElement('template');
 
 HeaderTemplate.innerHTML = /*html*/ `
-<link rel="stylesheet" href="/frontend/Game/GamePlay/GameOnline/GamePage.css">
+<link rel="stylesheet" href="./Game/GamePlay/GameOnline/GameTable.css">
 <div class="leftPlayer">
-<img class="GamePlayer" src="/frontend/images/svg-header/profile.jpeg" alt="playerImg" />
+<img class="GamePlayer" src="./images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo">
     <div class="player_number">
         <p>PLAYER 1</p>
@@ -22,7 +22,7 @@ HeaderTemplate.innerHTML = /*html*/ `
 </div>
 
 <div class="rightPlayer">
-<img class="GamePlayer1" src="/frontend/images/svg-header/profile.jpeg" alt="playerImg" />
+<img class="GamePlayer1" src="./images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo1">
     <div class="player_number">
         <p>PLAYER 1</p>
@@ -39,6 +39,10 @@ export class GameHeader extends HTMLElement{
     constructor(){
         super();
         this.appendChild(HeaderTemplate.content.cloneNode(true))
+    }
+    updateScore(score){
+        this.querySelector('.playerscor h1').textContent = score.player1
+        this.querySelector('.playerscor1 h1').textContent = score.player2
     }
 }
 
