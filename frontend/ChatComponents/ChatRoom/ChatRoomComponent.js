@@ -41,7 +41,6 @@ export class ChatRoomComponent extends HTMLElement {
 
 
     async renderHeader(url) {
-        console.log(url);
         try {
             const targetUserData = await fetchData(url);
             if (!targetUserData)
@@ -110,8 +109,18 @@ export class ChatRoomComponent extends HTMLElement {
     }
 
     async connectedCallback() {
+        if (!this.targetId)
+            return ;
         await this.renderHeader("http://localhost:8080/api/v1/users/" + this.targetId);
         await this.renderConversation(APIUrl);
+    }
+
+    disconnectedCallback() {
+        console.log("Custom element removed from page.");
+    }
+    
+    adoptedCallback() {
+        console.log("Custom element moved to new page.");
     }
 }
 

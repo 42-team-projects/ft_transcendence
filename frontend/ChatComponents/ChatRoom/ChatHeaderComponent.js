@@ -11,7 +11,7 @@ export class ChatHeaderComponent extends HTMLElement {
         </style>
         <div class="profile-infos">
             <c-hexagon class="profile" width="120px" height="117px" apply="true" bcolor="aqua">
-                <img slot="content" draggable="false" src="./images/svg-header/profile.jpeg">
+                <img slot="content" draggable="false">
             </c-hexagon>
             <div class="infos">
                 <h1>SALIM ELMEHDI</h1>
@@ -33,7 +33,8 @@ export class ChatHeaderComponent extends HTMLElement {
         this.shadowRoot.querySelector(".infos h1").textContent = this.userName;
         this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
         this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
-        this.shadowRoot.querySelector(".profile img").src = this.profileImage;
+        if (this.profileImage)
+            this.shadowRoot.querySelector(".profile img").src = this.profileImage;
         const element = this.shadowRoot.querySelector(".online");
         element.bcolor = this.active === "true" ? "#00ffff" : "#d9d9d9";
         element.querySelector("div").style.backgroundColor = this.active === "true" ? "#00ffff" : "#d9d9d9";
