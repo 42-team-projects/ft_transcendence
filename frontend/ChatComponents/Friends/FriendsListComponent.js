@@ -34,7 +34,6 @@ export class FriendsListComponent extends HTMLElement {
             }
             const json = await response.json();
             fakeData = json;
-            console.log(fakeData);
             this.renderFriendsList();
         } catch (error) {
             console.error(error.message);
