@@ -128,6 +128,7 @@ const cssContent = `
             flex-direction: column;
             width: 100%;
             overflow-y: scroll;
+            overflow-x: hidden;
         }
 
         .body::-webkit-scrollbar {
