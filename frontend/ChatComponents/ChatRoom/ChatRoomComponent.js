@@ -87,6 +87,7 @@ export class ChatRoomComponent extends HTMLElement {
                     receiverMessageContainer.setAttribute("corner", "");
                     receiverComponent = document.createElement("receiver-component")
                 }
+                receiverMessageContainer.time = element.time.split(" ")[1];
                 receiverComponent.league = league;
                 receiverComponent.profileImage = profileImage;
                 receiverComponent.appendChild(receiverMessageContainer);
@@ -101,6 +102,7 @@ export class ChatRoomComponent extends HTMLElement {
                     senderMessageContainer.setAttribute("corner", "");
                     senderComponent = document.createElement("sender-component");
                 }
+                senderMessageContainer.time = element.time.split(" ")[1];
                 senderComponent.appendChild(senderMessageContainer);
                 chatBdoy.appendChild(senderComponent);
             }
@@ -113,7 +115,7 @@ export class ChatRoomComponent extends HTMLElement {
     }
 }
 
-const cssContent = `
+const cssContent = /*css*/`
         :host {
             font-family: 'Sansation bold';
             height: 1000px;
