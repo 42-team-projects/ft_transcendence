@@ -11,7 +11,7 @@ export class ChatHeaderComponent extends HTMLElement {
         </style>
         <div class="profile-infos">
             <c-hexagon class="profile" width="120px" height="117px" apply="true" bcolor="aqua">
-                <img slot="content" draggable="false">
+                <img loading="lazy" slot="content" loading="lazy" draggable="false">
             </c-hexagon>
             <div class="infos">
                 <h1>SALIM ELMEHDI</h1>
@@ -23,9 +23,9 @@ export class ChatHeaderComponent extends HTMLElement {
                 </div>
             </div>
         </div>
-        <img src="./images/Game.svg">
-        <img src="./assets/profile-assets/account-icon.svg">
-        <img src="./assets/profile-assets/block-icon.svg">
+        <img loading="lazy" src="./images/Game.svg">
+        <img loading="lazy" src="./assets/profile-assets/account-icon.svg">
+        <img loading="lazy" src="./assets/profile-assets/block-icon.svg">
     `;
     }
 
