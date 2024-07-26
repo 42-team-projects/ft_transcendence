@@ -104,6 +104,12 @@ export class Lobby extends HTMLElement{
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(lobby.content.cloneNode(true));
+
+        var socket = new WebSocket('ws://127.0.0.1:8000/ws/game/')
+        socket.onmessage = function(e){
+            var data = JSON.parse(e.data)
+            console.log(data)
+        }
     }
 
     headerAnimation(){
@@ -136,6 +142,7 @@ export class Lobby extends HTMLElement{
             sideBar.shadowRoot.innerHTML = '';
         }, 1000);
     }
+
     setSlots(template, revers){
         const border = new PlayerBorder();
 
@@ -153,24 +160,23 @@ export class Lobby extends HTMLElement{
         setTimeout(() => {
             document.body.classList.toggle('body-game-shrink', true);   
         }, 1000);
-
     }
+
     async getData(str)
     {
         try{
-
             const response = await fetch(str);
             if(response.ok)
                 return response.json();
-            throw new Error("cant recive anything")            
+            throw new Error("cant recive anything")
         }
         catch(error){
             console.log(error)
         }
     }
+
     async OnlineGame()
     {
-        searching_images = await this.getData('http://127.0.0.1:8000/game/');
 		const root = document.querySelector('root-content');
         const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
@@ -179,6 +185,7 @@ export class Lobby extends HTMLElement{
         let delay = 0; 
         let delayNumber = (turnTime / 2) / Players.length;
 
+        searching_images = await this.getData('http://127.0.0.1:8000/game/players/');
 		p_img.src = userInfo.picture;
 		p_h1.textContent = userInfo.username;
 		Players.forEach((element, index)=>{
@@ -192,14 +199,15 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
     }
+
     async setPlayer(){
-        opponentInfo = await this.getData('http://127.0.0.1:8000/game/3/')
-		const h1 = document.createElement('h1');
+        const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
         const turnTime = 10;
         let delay = 0; 
         let delayNumber = (turnTime / 2) / Players.length;
-        
+
+        opponentInfo = await this.getData('http://127.0.0.1:8000/game/players/4/')
         h1.id = 'NOpponent';
         h1.classList = 'Name';
         h1.slot = 'OpponentName';
@@ -222,13 +230,13 @@ export class Lobby extends HTMLElement{
         const o_img = AiGameTemplate.content.getElementById('Opponent')
         const o_h1 = AiGameTemplate.content.getElementById('NOpponent')
 
-        p_h1.textContent = userInfo.username
+        p_h1.textContent = userInfo.username;
         p_img.src = userInfo.picture;
-        o_img.textContent = 'AI'
-        o_h1.textContent = 'AI'
-        this.appendChild(AiGameTemplate.content.cloneNode(true))
-        root.innerHTML = ``
-        root.appendChild(this)
+        o_img.textContent = 'AI';
+        o_h1.textContent = 'AI';
+        this.appendChild(AiGameTemplate.content.cloneNode(true));
+        root.innerHTML = ``;
+        root.appendChild(this);
     }
 	gameMode(){
 		const PlayerS = this.querySelectorAll('.PlayerS')
