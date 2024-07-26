@@ -5,31 +5,44 @@ import { GameTable } from "./GameTable.js"
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
-const AiGameTemplate = document.createElement('template')
-const OnlineGameTemplate = document.createElement('template')
+const AiGameTemplate = document.createElement('template');
+const OnlineGameTemplate = document.createElement('template');
+const timer = document.createElement('template')
+let time = 3;
 
 let searching_images = [
 	{
-		picture: 'images/svg-header/profile.jpeg',
+		picture: 'http://127.0.0.1:5500/images/svg-header/profile.jpeg',
 		username: 'ESCANOR'
 	},
 	{
-		picture: 'images/OrangeCart/images.png',
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/images.png',
 		username: 'ITATCHI'
 	},
 	{
-		picture: 'images/OrangeCart/img1.png',
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/img1.png',
 		username: 'ESALIM'
 	},
 	{
-		picture: 'images/OrangeCart/img2.jpg',
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/img2.jpg',
 		username: 'KILLUA'
 	},
 	{
-		picture: 'images/OrangeCart/img3.jpg',
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
 		username: 'GOJO'
 	}
 ]
+
+const userInfo = {
+	picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+	username: 'GOJO'
+}
+
+let opponentInfo = {
+    picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+	username: 'GOJO'
+}
+
 playerSlot.innerHTML = /*html*/ `
     <slot  name="PlayerImg" slot="Player"> </slot>
     <slot  name="PlayerName" slot="Name"> </slot>
@@ -75,8 +88,8 @@ lobby.innerHTML =  /* html */ `
     </div>
     <div class="lines"></div>
     `
-let time = 3;
-const timer = document.createElement('template')
+
+
 timer.innerHTML = /*html*/ `
     <link rel="stylesheet", href="./Game/GamePlay/Timer.css">
 	<div class="descounter">
@@ -102,7 +115,6 @@ export class Lobby extends HTMLElement{
         userRunk.classList.toggle('game-mode', true);
         userRunk.classList.toggle('down-60', false);
         userRunk.classList.toggle('rise-0', true);
-
         headerBar.classList.toggle('game-mode', true);
         headerBar.classList.toggle('up-100', true);
         headerBar.classList.toggle('p-animation', true);
@@ -126,6 +138,7 @@ export class Lobby extends HTMLElement{
     }
     setSlots(template, revers){
         const border = new PlayerBorder();
+
         border.setAttribute('revers', revers);
         border.appendChild(template.cloneNode(true))
         this.shadowRoot.appendChild(border.cloneNode(true))
@@ -158,57 +171,61 @@ export class Lobby extends HTMLElement{
     async OnlineGame()
     {
         searching_images = await this.getData('http://127.0.0.1:8000/game/');
-        for(let userData in searching_images)
-        {
-            // console.log(userData);
-            console.log(searching_images[0].picture);
-        }
-		const root = document.querySelector('root-content')
-        const p_img = OnlineGameTemplate.content.getElementById('Player')
-		p_img.src = 'images/svg-header/profile.jpeg';
-		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer')
+		const root = document.querySelector('root-content');
+        const p_img = OnlineGameTemplate.content.getElementById('Player');
+		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
+		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
+        const turnTime = 1;
+        let delay = 0; 
+        let delayNumber = (turnTime / 2) / Players.length;
 
-		p_h1.textContent = 'NOUAKHRO'
-
-		const players = OnlineGameTemplate.content.querySelectorAll('.PlayerS')
-		players.forEach((element, index)=>{
-			element.style.setProperty('--dest', '400%');
-			element.style.setProperty('--numsec', 1);
+		p_img.src = userInfo.picture;
+		p_h1.textContent = userInfo.username;
+		Players.forEach((element, index)=>{
+            element.style.animationDelay = `${delay}s`;
+			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
+			element.style.setProperty('--numsec', turnTime);
 			element.src = searching_images[index].picture;
+            delay += delayNumber;
 		})
-		this.appendChild(OnlineGameTemplate.content.cloneNode(true))
-		root.innerHTML = ``
-		root.appendChild(this)
+		this.appendChild(OnlineGameTemplate.content.cloneNode(true));
+		root.innerHTML = ``;
+		root.appendChild(this);
     }
-    setPlayer(){
-		const h1 = document.createElement('h1')
-		const PlayerS = this.querySelectorAll('.PlayerS')
-		PlayerS.forEach((element)=>{
-			element.style.setProperty('--numsec', 10);
-			element.style.setProperty('--dest', '400%');
-			element.style.opacity = '1'
+    async setPlayer(){
+        opponentInfo = await this.getData('http://127.0.0.1:8000/game/3/')
+		const h1 = document.createElement('h1');
+		const Players = this.querySelectorAll('.PlayerS');
+        const turnTime = 10;
+        let delay = 0; 
+        let delayNumber = (turnTime / 2) / Players.length;
+        
+        h1.id = 'NOpponent';
+        h1.classList = 'Name';
+        h1.slot = 'OpponentName';
+        h1.textContent = opponentInfo.username;
+        Players[0].src = opponentInfo.picture
+		Players.forEach((element)=>{
+            element.style.animationDelay = `${delay}s`;
+			element.style.setProperty('--numsec', turnTime);
+			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
+			element.style.opacity = '1';
+            delay += delayNumber;
 		})
-		h1.id = 'NOpponent'
-		h1.classList = 'Name'
-		h1.slot = 'OpponentName'
-		h1.textContent = searching_images[0].username
-		this.appendChild(h1.cloneNode(true))	
+		this.appendChild(h1.cloneNode(true));
 	}
     SinglePlayer()
     {
         const root = document.querySelector('root-content')
         const p_img = AiGameTemplate.content.getElementById('Player')
-        p_img.src = 'images/svg-header/profile.jpeg';
         const p_h1 = AiGameTemplate.content.getElementById('NPlayer')
-
-        p_h1.textContent = 'NOUAKHRO'
-
         const o_img = AiGameTemplate.content.getElementById('Opponent')
-        o_img.textContent = 'AI'
         const o_h1 = AiGameTemplate.content.getElementById('NOpponent')
 
+        p_h1.textContent = userInfo.username
+        p_img.src = userInfo.picture;
+        o_img.textContent = 'AI'
         o_h1.textContent = 'AI'
-
         this.appendChild(AiGameTemplate.content.cloneNode(true))
         root.innerHTML = ``
         root.appendChild(this)
