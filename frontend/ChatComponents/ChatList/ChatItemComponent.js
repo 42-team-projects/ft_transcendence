@@ -108,7 +108,7 @@ export class ChatItemComponent extends HTMLElement {
 
 }
 
-const cssContent = `
+const cssContent = /*css*/`
     :host {
         font-family: 'Sansation bold';
         padding: 15px 0;
@@ -117,7 +117,19 @@ const cssContent = `
         justify-content: space-between;
         height: 100px;
         background-color: "transparent";
+        animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        overflow: hidden;
     }
+
+    @keyframes slide-right {
+        0% {
+          transform: translateY(-100px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+    }              
+
 
     .container {
         width: 100%;
