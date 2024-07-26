@@ -13,7 +13,7 @@ export class ChatItemComponent extends HTMLElement {
                 <div class="profileAndOnlineContainer">
                     <div class="profileAndOnline">
                         <c-hexagon class="profile" width="90px" height="87px" apply="true" bcolor="#d9d9d9">
-                            <img slot="content" draggable="false" width="100%">
+                            <img slot="content" loading="lazy" draggable="false" width="100%">
                         </c-hexagon>
                         <c-hexagon class="online" width="20px" height="20px" apply="true" bcolor="#d9d9d9" >
                             <div style="width: 100%; height: 100%; background-color: #d9d9d9;" slot="content"></div>
