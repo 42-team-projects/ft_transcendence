@@ -1,7 +1,7 @@
 
 import {Buttons} from '../buttons.js'
 import {aiLobby} from '../Lobby.js'
-import { GamePage } from './GamePage.js'
+import { GameTable } from './GameTable.js'
 import { GameHeader } from './GameHeader.js'
 const OnlineGameTemplate = document.createElement('template')
 
@@ -113,13 +113,13 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 			<p>
 			Lorem ipsum dolor sit amet. Ut facere consequatur est dolore placeat rem accusamus quae est odit dolore. Id impedit molestiae vel voluptates repellendus ut perferendis libero et blanditiis dolor est dolorum molestiae. 
 			</p>
-			<c-button Bcolor="#EB9A45" Hcolor="#e98f2f"> 
+			<c-button bcolor="#EB9A45" Hcolor="#e98f2f"> 
 				<h1 slot="text">START</h1>
 			</c-button>
 		</div>
 	</div>
 	`
-let time = 0;
+let time = 3;
 const timer = document.createElement('template')
 timer.innerHTML = /*html*/ `
 	<style>
@@ -150,9 +150,6 @@ export class OnlineGame extends HTMLElement{
 		const root = document.querySelector('root-content')
 		// setTimeout(() => {
 			button.addEventListener('click', ()=>{
-				// const game = new GamePage();
-				// document.body.innerHTML = ``;
-				// document.body.appendChild(game);
 				const lobby = new aiLobby();
 				const p_img = player_template.content.getElementById('Player')
 				p_img.src = 'images/svg-header/profile.jpeg';
@@ -161,7 +158,6 @@ export class OnlineGame extends HTMLElement{
 				p_h1.textContent = 'NOUAKHRO'
 
 				const players = player_template.content.querySelectorAll('.PlayerS')
-				console.log(players);
 				players.forEach((element, index)=>{
 					element.style.setProperty('--dest', '400%');
 					element.style.setProperty('--numsec', 1);
@@ -170,8 +166,8 @@ export class OnlineGame extends HTMLElement{
 				lobby.appendChild(player_template.content.cloneNode(true))
 				root.innerHTML = ``
 				root.appendChild(lobby)
-				setTimeout(() => this.setPlayer(lobby), 50);
-				setTimeout(() => this.gameMode(lobby), 60);
+				setTimeout(() => this.setPlayer(lobby), 5000);
+				setTimeout(() => this.gameMode(lobby), 6000);
 			})
 		// }, 4000);
         this.classList.toggle('cart-animation', true)
@@ -194,9 +190,10 @@ export class OnlineGame extends HTMLElement{
 					time--;
 					const desc = lobby.shadowRoot.querySelector('.descounter')
 					const h1 = desc.querySelector('h1')
+
 					if(time < 0){
 						const header = new GameHeader();
-						const game = new GamePage();
+						const game = new GameTable();
 						document.body.innerHTML = ``;
 						document.body.appendChild(header);
 						document.body.appendChild(game);

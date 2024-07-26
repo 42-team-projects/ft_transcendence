@@ -29,17 +29,23 @@ HexagonTemplate.innerHTML = /*html*/`
 export class Hexagon extends HTMLElement{
     constructor(){
         super();
-        const shadow = this.attachShadow({
+        this.attachShadow({
             mode: 'open'
-        })
-        shadow.appendChild(HexagonTemplate.content.cloneNode(true))
+        });
+        this.shadowRoot.appendChild(HexagonTemplate.content.cloneNode(true))
+    }
+
+    static observedAttributes = ["width", "height", "bcolor", "apply"];
+
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        this.update();
     }
 
     update()
     {
         this.style.width = this.width || '140px';
         this.style.height = this.height || '140px';
-        this.style.background = this.Bcolor || '#00FFFC';
+        this.style.background = this.bcolor || '#00FFFC';
     }
 
     get width(){
@@ -52,10 +58,10 @@ export class Hexagon extends HTMLElement{
     }
     set height(value) {this.setAttribute("height", value);}
 
-    get Bcolor(){
-        return this.getAttribute('Bcolor')
+    get bcolor(){
+        return this.getAttribute('bcolor')
     }
-    set Bcolor(value) {this.setAttribute("Bcolor", value);}
+    set bcolor(value) {this.setAttribute("bcolor", value);}
 
     get apply(){
         return this.getAttribute('apply')

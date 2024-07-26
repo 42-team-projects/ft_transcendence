@@ -11,9 +11,6 @@ export class CustomProgressBar extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
-    }
-
-    connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
@@ -34,8 +31,8 @@ export class CustomProgressBar extends HTMLElement {
                 }
 
                 .horizontal-scroll-bar-reach {
-                    background-color: #EB9A45;
-                    width: 80%;
+                    background-color: ${this.color || "aqua"};
+                    width: ${this.value || 0}%;
                     height: 100%;
                     border-radius: 200px;
                 }
@@ -45,5 +42,27 @@ export class CustomProgressBar extends HTMLElement {
                 <div class="horizontal-scroll-bar-reach"></div>
             </div>
         `;
+    }
+
+    set value(val) { this.setAttribute("value", val); }
+    get value() { return this.getAttribute("value"); }
+    
+    set color(val) { this.setAttribute("color", val); }
+    get color() { return this.getAttribute("color"); }
+
+    static observedAttributes = ["value", "color"];
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        const element = this.shadowRoot.querySelector(".horizontal-scroll-bar-reach");
+        if (name === "color")
+            element.style.backgroundColor = newValue;
+        else if (name === "value")
+            element.style.width = newValue + "%";
+    }
+
+    connectedCallback() {
+        const element = this.shadowRoot.querySelector(".horizontal-scroll-bar-reach");
+        element.style.backgroundColor = this.color;
+        element.style.width = this.value;
     }
 }
