@@ -43,5 +43,3 @@ export class GameOver extends HTMLElement{
         this.shadowRoot.appendChild(GameOverTamplate.content.cloneNode(true))
     }
 }
-
-customElements.define('game-over', GameOver)
