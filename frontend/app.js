@@ -25,6 +25,9 @@ import { LinkComponent } from "./ProfileComponents/UserInfosComponents/LinkCompo
 import { ProfileInfoComponent } from "./ProfileComponents/UserInfosComponents/ProfileInfoComponent.js";
 import { UserInfoComponent } from "./ProfileComponents/UserInfosComponents/UserInfoComponent.js";
 import { UserInfoContainerComponent } from "./ProfileComponents/UserInfosComponents/UserInfoContainer.js";
+import { TournamentComponent } from "./Tournament-Components/Tournament-Component.js";
+
+customElements.define("tournament-page", TournamentComponent);
 
 customElements.define("sender-component", SenderComponent);
 customElements.define("receiver-component", ReceiverComponent);
