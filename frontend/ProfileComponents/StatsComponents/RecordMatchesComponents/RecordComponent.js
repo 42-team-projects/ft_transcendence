@@ -3,7 +3,9 @@ export class RecordComponent extends HTMLElement {
         super();
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = `
-                <link rel="stylesheet" href="./ProfileComponents/StatsComponents/RecordMatchesComponents/RecordComponent.css">
+                <style>
+                    ${cssContent}
+                </style>
                 <p class="match-record-text">RECORD MATCHES</p>
                 <div class="match-record-stats">
                     <div class="match-record-stats-box">
@@ -55,3 +57,68 @@ export class RecordComponent extends HTMLElement {
         }
     }
 }
+
+
+const cssContent = /*css*/`
+
+        :host {
+            gap: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        :host * {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .match-record-text {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+
+        }
+
+        .match-record-stats {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .match-record-stats-box {
+            font-size: 22px;
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .match-record-stats-box > hr {
+            height: 70px;
+            width: 2.4px;
+            background-color: white;
+        }
+
+        .match-record-stats-box-value {
+            color: aqua;
+            font-size: 48px;
+        }
+
+        .color-red {
+            color: #EB4545;
+        }
+
+        .color-white {
+            color: white;
+        }
+
+`;

@@ -4,7 +4,7 @@ import { userInfo, opponentInfo } from "./Lobby.js";
 HeaderTemplate.innerHTML = /*html*/ `
 <link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
 <div class="leftPlayer">
-<img class="GamePlayer" src="./images/svg-header/profile.jpeg" alt="playerImg" />
+<img loading="lazy" class="GamePlayer" src="./images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo">
     <div class="playerusername">
         <p></p>
@@ -22,7 +22,7 @@ HeaderTemplate.innerHTML = /*html*/ `
 </div>
 
 <div class="rightPlayer">
-<img class="GamePlayer1" src="./images/svg-header/profile.jpeg" alt="playerImg" />
+<img loading="lazy" class="GamePlayer1" src="./images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo1">
     <div class="playerusername">
         <p></p>
