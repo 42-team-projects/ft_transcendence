@@ -1,5 +1,6 @@
 import { GameOver } from "./GameOver.js";
 import { LaunchingGame } from "./launchingGame.js";
+import { userInfo, opponentInfo } from "./Lobby.js";
 
 const game_page = document.createElement('template');
 
@@ -93,7 +94,7 @@ export class GameTable extends HTMLElement{
 
     GameOver(ctx, status_player1, status_player2){
         this.stopLoop = false;
-        const gameOver = new GameOver(status_player1, status_player2, 'NOUKHRO', 'ESCANOR');
+        const gameOver = new GameOver(status_player1, status_player2, userInfo.username, opponentInfo.username);
         document.body.appendChild(gameOver);
     }
     LuncheGame(ctx){
