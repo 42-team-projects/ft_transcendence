@@ -1,10 +1,8 @@
 const root = document.createElement('template')
 
-import {GameSelection} from '../Game/GameSelection.js'
-customElements.define("game-selection", GameSelection)
-
 const sideBar = document.querySelector('side-bar')
 const header = document.querySelector('header-bar')
+const footer = document.querySelector('footer')
 
 
 const rootContent = ['home-page',
@@ -26,6 +24,7 @@ class Root extends HTMLElement{
     }
 
     set ChangeRootContent(component){
+        console.log('hiiiiiiiii')
         const content = document.createElement(component)
         this.innerHTML = ``
         this.appendChild(content);
@@ -39,7 +38,6 @@ class Root extends HTMLElement{
                     this.ChangeRootContent = rootContent[index]
                     sideBar.clickEvent = index;
                     sideBar.activeButton = button;
-
                 }
             });
         })
@@ -56,6 +54,14 @@ class Root extends HTMLElement{
                 sideBar.activeButton.querySelector('h1').classList.toggle('on')
                 sideBar.activeButton.querySelector('img').classList.toggle('on')
             }
+        })
+        const logout = footer.querySelector('.logout')
+
+        logout.addEventListener('click', () => {
+
+            this.ChangeRootContent = rootContent[0]
+            sideBar.clickEvent = 0;
+            sideBar.activeButton = buttons[0];
         })
     }
     connectedCallback()

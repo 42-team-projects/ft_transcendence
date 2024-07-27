@@ -1,17 +1,3 @@
-import {} from './ImagesContainer.js'
-import {SearchBar} from './Search-bar.js'
-import {UserRank} from './UserRank.js'
-import {Hexagon} from './hexagon.js'
-import {Profile} from './profile.js'
-
-
-customElements.define('c-hexagon',Hexagon)
-customElements.define('search-bar', SearchBar);
-customElements.define('c-profile', Profile)
-customElements.define('user-rank',UserRank)
-
-
-
 const HeaderTemplate =  document.createElement('template');
 
 HeaderTemplate.innerHTML = /*html*/`
@@ -28,12 +14,10 @@ HeaderTemplate.innerHTML = /*html*/`
     `
 
         
-class HeaderBar extends HTMLElement{
+export class HeaderBar extends HTMLElement{
     constructor(){
         super();
-        this.appendChild(HeaderTemplate.content);
+        this.appendChild(HeaderTemplate.content.cloneNode(true));
     }
 }
-
-customElements.define('header-bar', HeaderBar);
 
