@@ -1,9 +1,3 @@
-
-import {SideBarButtonIcons} from './sb-icon.js'
-import {SideBarButtonText} from './sb-text.js'
-customElements.define('sb-text',SideBarButtonText)
-customElements.define('sb-icon',SideBarButtonIcons)
-
 const SB_ButtonTemplate = document.createElement('template')
 
 SB_ButtonTemplate.innerHTML = /*html*/`

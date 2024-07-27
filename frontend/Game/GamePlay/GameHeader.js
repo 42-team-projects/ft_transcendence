@@ -2,7 +2,7 @@
 const HeaderTemplate = document.createElement('template');
 
 HeaderTemplate.innerHTML = /*html*/ `
-<link rel="stylesheet" href="./Game/GamePlay/GameOnline/GameTable.css">
+<link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
 <div class="leftPlayer">
 <img loading="lazy" class="GamePlayer" src="./images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo">
@@ -17,8 +17,8 @@ HeaderTemplate.innerHTML = /*html*/ `
 </div>
 
 <div class="Play_Pause">
-<div class="pause"></div>
-<p class="status">PAUSE</p>			
+    <div class="pause"></div>
+    <p class="status">PAUSE</p>			
 </div>
 
 <div class="rightPlayer">
@@ -45,5 +45,3 @@ export class GameHeader extends HTMLElement{
         this.querySelector('.playerscor1 h1').textContent = score.player2
     }
 }
-
-customElements.define('game-header', GameHeader)
