@@ -1,6 +1,6 @@
 
 const HeaderTemplate = document.createElement('template');
-import { userInfo, opponentInfo } from "./Lobby";
+
 HeaderTemplate.innerHTML = /*html*/ `
 <link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
 <div class="leftPlayer">
