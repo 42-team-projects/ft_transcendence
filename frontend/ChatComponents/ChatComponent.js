@@ -25,8 +25,8 @@ export class ChatComponent extends HTMLElement {
 const cssContent = /*css*/`
 :host {
     font-family: 'Sansation bold';
-    width: 90%;
-    height: 1000px;
+    width: 95%;
+    height: 95%;
     background-color: #d9d9d905;
 }
 
