@@ -1,5 +1,6 @@
-import {GameSelection} from '../Game/GameSelection.js'
+const root = document.createElement('template')
 
+import {GameSelection} from '../Game/GameSelection.js'
 customElements.define("game-selection", GameSelection)
 
 const sideBar = document.querySelector('side-bar')
@@ -14,26 +15,20 @@ const rootContent = ['home-page',
      'settings-page'
 ]
 
+root.innerHTML = /*html*/ `
+`
 class Root extends HTMLElement{
 
     constructor()
     {
         super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = /*html*/ `
-                <style>
-                    ${cssContent}
-                </style>
-                <div class="rootContainer">
-                </div>
-            `;
+        this.appendChild(root.content.cloneNode(true))
     }
 
     set ChangeRootContent(component){
         const content = document.createElement(component)
-        const rootContent = this.shadowRoot.querySelector(".rootContainer");
-        rootContent.innerHTML = '';
-        rootContent.appendChild(content);
+        this.innerHTML = ``
+        this.appendChild(content);
     }
     clickEvent() {
         const buttons = sideBar.shadowRoot.querySelectorAll('sb-button')
@@ -51,8 +46,10 @@ class Root extends HTMLElement{
         const profile = header.querySelector('c-profile')
         profile.addEventListener('click', () => {
 
-            if(this.shadowRoot.querySelector(".rootContainer").firstChild.nodeName !== 'PROFILE-COMPONENT')
+            if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
+            {
                 this.ChangeRootContent = 'profile-component'
+            }
             if(sideBar.activeButton.classList.length)
             {
                 sideBar.activeButton.classList.toggle('on')
@@ -66,24 +63,4 @@ class Root extends HTMLElement{
         this.clickEvent()
     }
 }
-
-
-const cssContent = /*css*/`
-    :host {
-        grid-area: content;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        padding: 2%;
-        padding-top: 3%;
-    }
-    .rootContainer {
-        position: relative;
-        width: 96%;
-        height: 96%;
-    }
-`;
-
 customElements.define("root-content", Root)
