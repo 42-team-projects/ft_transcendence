@@ -301,6 +301,17 @@ export class ProfileComponent extends HTMLElement {
 
 const cssContent = /*css*/`
 
+:host {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin-right: 50px;
+    margin-left: 50px;
+    font-family: 'Sansation Bold', 'Sansation';
+    background-color: #00ffff10;
+    border-radius: 5px;
+}
+
 :host * {
     margin: 0;
 }
