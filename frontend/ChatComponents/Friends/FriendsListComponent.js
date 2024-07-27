@@ -48,18 +48,18 @@ const cssContent = /*css*/`
     :host {
         flex: 1.5;
         height: 100%;
-        max-height: 1000px;
         color: white;
         background-color: #d9d9d920;
     }
     
     h1 {
         padding: 0px 20px;
+        height: 32px;
     }
 
     .friends-list-container {
         padding: 0px 20px;
-        max-height: 920px;
+        max-height: calc(94% - 32px);
         display: flex;
         gap: 10px;
         height: min-content;
