@@ -1,6 +1,4 @@
 
-import {SideBarButton} from './sb-button.js'
-customElements.define("sb-button", SideBarButton)
 
 const SideBarTemplate = document.createElement('template')
 const SideBarButtonTemplate = document.createElement('template')
