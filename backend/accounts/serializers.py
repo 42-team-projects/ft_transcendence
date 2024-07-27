@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import User
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
+from .google import Google, register_social_user
+from django.conf import settings
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True, min_length=8, max_length=128)
@@ -55,3 +57,24 @@ class LoginSerializer(serializers.ModelSerializer):
             'refresh_token': tokens['refresh_token'],
         }
 
+class GoogleSerializer(serializers.Serializer):
+    access_token = serializers.CharField(min_length=6)
+
+    def validate(self, data):
+        access_token = data.get('access_token')
+
+        google_user_data = Google.validate(access_token)
+        try:
+            uid = google_user_data["user_id"]
+        except:
+            raise serializers.ValidationError("this token is invalid or has expired **")
+        if google_user_data["audience"] != settings.GOOGLE_CLIENT_ID:
+            raise serializers.ValidationError(detail="could not verify user")
+        
+        
+        # register user
+        email = google_user_data["email"]
+        username = google_user_data["email"].split('@')[0]
+        provider = 'google'
+
+        return register_social_user(provider=provider, email=email, username=username)

@@ -1,12 +1,13 @@
 from .models import OTP, User
 from rest_framework import generics
-from .serializers import UserRegisterSerializer, LoginSerializer
+from .serializers import UserRegisterSerializer, LoginSerializer, GoogleSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from .utils import send_otp, send_confirmation_email, gen_email_token
 from rest_framework.decorators import api_view, permission_classes
 from django_ratelimit.decorators import ratelimit
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny,IsAuthenticated
+
 from django.conf import settings
 import jwt
 
@@ -26,6 +27,14 @@ class UserRegisterView(generics.GenericAPIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def google_auth_view(request):
+    serializer = GoogleSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user_data = serializer.validated_data
+    response = Response(user_data)
+    response.set_cookie('refresh_token', user_data.get('refresh_token'), httponly=True)
+    return response
 
 class VerifyOTPView(generics.GenericAPIView):
     def post(self, request):
@@ -41,15 +50,46 @@ class VerifyOTPView(generics.GenericAPIView):
         except OTP.DoesNotExist:
             return Response({'status': 'error', 'message': 'OTP does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
-class LoginUserView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
-    
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data, context={'request':request})
-        if serializer.is_valid():
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        else:
-            return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+def login(request):
+    serializer = LoginSerializer(data=request.data, context={'request': request})
+    if not serializer.is_valid():
+        return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    data = serializer.validated_data
+    response = Response({
+        'email': data['email'],
+        'username': data['username'],
+        'access_token': data['access_token'],
+    })
+    response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True)
+    return response
+
+@api_view(['POST'])
+def refresh(request):
+    refresh_token = request.COOKIES.get('refresh_token')
+
+    if refresh_token is None:
+        return Response({'error': 'Authentication credentials were not provided.'}, status=status.HTTP_403_FORBIDDEN)
+
+    try:
+        payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
+        user = User.objects.get(id=payload['user_id'])
+        if not user:
+            return Response({'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+        tokens = user.tokens
+        response = Response({
+            'email': user.email,
+            'username': user.username,
+            'access_token': tokens['access_token'],
+        })
+        response.set_cookie(key='refresh_token', value=tokens['refresh_token'], httponly=True)
+        return response
+    except jwt.ExpiredSignatureError:
+        return Response({'error': 'Refresh token expired'}, status=status.HTTP_403_FORBIDDEN)
+    except jwt.InvalidTokenError:
+        return Response({'error': 'Invalid token'}, status=status.HTTP_403_FORBIDDEN)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -97,4 +137,10 @@ def resend_confirmation_email(request):
 
 # store Access Token in Memory returned by the server
 # stor refresh token in a Cookie
-    
+
+# testing function that return user username if he authenticated we will use access token of jwt
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def whoami(request):
+    return Response({'username': request.user.username})

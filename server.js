@@ -7,6 +7,11 @@ let tt = path.join(__dirname)
 
 app.use(express.static(tt + '/frontend'));
 
+app.use(function(req, res, next) {
+  res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net");
+  return next();
+});
+
 app.get('/', (req, res) => {
     res.sendFile(tt + '/frontend/html/register.html');
 })
