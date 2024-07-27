@@ -10,7 +10,7 @@ export class LinkComponent extends HTMLElement {
         <div class="profile-data-infos-container-item-content" slot="content">
             <div class="content-links">
                 <a href="${this.link}"><slot></slot></a>
-                <img src="assets/profile-assets/expand-icon.svg" width="16">
+                <img loading="lazy"  src="assets/profile-assets/expand-icon.svg" width="16">
             </div>
         </div>
         `;
