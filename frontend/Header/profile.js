@@ -14,7 +14,7 @@ ProfileTemplate.innerHTML = /*html*/`
 export class Profile extends HTMLElement{  
     constructor(){
         super();
-        this.appendChild(ProfileTemplate.content)
+        this.appendChild(ProfileTemplate.content.cloneNode(true))
     }
 
 }

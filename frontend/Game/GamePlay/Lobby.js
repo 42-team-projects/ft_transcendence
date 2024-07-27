@@ -1,16 +1,73 @@
-import { PageName } from "./SinglePlayer/PageName.js";
+import { PlayerBorder } from "./PlayerBorder.js";
+import { GameHeader } from "./GameHeader.js"
+import { GameTable } from "./GameTable.js"
 
-import { PlayerBorder } from "./SinglePlayer/PlayerBorder.js";
-customElements.define('page-name',PageName)
-customElements.define('player-border',PlayerBorder)
-
-const ai_lobby = document.createElement('template');
+const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
+const AiGameTemplate = document.createElement('template');
+const OnlineGameTemplate = document.createElement('template');
+const timer = document.createElement('template')
+let time = 3;
+
+let searching_images = [
+	{
+		picture: 'http://127.0.0.1:5500/images/svg-header/profile.jpeg',
+		username: 'ESCANOR'
+	},
+	{
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/images.png',
+		username: 'ITATCHI'
+	},
+	{
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/img1.png',
+		username: 'ESALIM'
+	},
+	{
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/img2.jpg',
+		username: 'KILLUA'
+	},
+	{
+		picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+		username: 'GOJO'
+	}
+]
+
+const userInfo = {
+	picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+	username: 'GOJO'
+}
+
+let opponentInfo = {
+    picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+	username: 'GOJO'
+}
 
 playerSlot.innerHTML = /*html*/ `
     <slot  name="PlayerImg" slot="Player"> </slot>
     <slot  name="PlayerName" slot="Name"> </slot>
+`
+
+AiGameTemplate.innerHTML = /*html*/ `
+    <link rel="stylesheet" href="./Game/GamePlay/AiLobby.css">
+    <img id='Player' class="Player" slot="PlayerImg" alt="Player" />
+    <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
+    <h1 id='Opponent' class="Opponent" slot="searshing"></h1>
+    <h1 id='NOpponent' class="Name" slot="OpponentName"></h1>
+`
+
+OnlineGameTemplate.innerHTML = /*html*/ `
+    <link rel="stylesheet" href="./Game/GamePlay/OnlineGameLobby.css">
+	<div class="searshingImgs" slot="searshing">
+		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent3' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent4' class="PlayerS" alt="searchingImg"/>
+		<img id='Opponent5' class="PlayerS" alt="searchingImg"/>
+	</div>
+
+    <img id='Player' class="Player" slot="PlayerImg" alt="" />
+    <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 `
 
 opponentSlot.innerHTML = /*html*/ `
@@ -19,112 +76,8 @@ opponentSlot.innerHTML = /*html*/ `
     <slot name="OpponentName" slot="Name"></slot>
     `
 
-ai_lobby.innerHTML =  /* html */ `
-    <style>
-
-        :host{
-            position: relative;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            width : 60%;
-            aspect-ratio: 1.7;
-            background-color: #e6ffff14;
-            box-shadow: 0px 0px 15px 1px #0000001c;
-            border-radius: 15px 15px 15px 15px;
-        }
-        .lines{
-            position : absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-
-        }
-        .lines::before{
-            content: '';
-            position: absolute;
-            background-image: url(images/GreenCart/smalLine.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 1.5%;
-            aspect-ratio: 0.7;
-            top: 27%;
-            left: 53.8%;
-        }
-        .lines::after{
-            position: absolute;
-            content: '';
-            background-image: url(images/GreenCart/line1.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 4.4%;
-            aspect-ratio: 0.7;
-            top: 61.5%;
-            left: 44.2%;
-        }
-        .VS{
-            position : absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-        }
-        .VS::before{
-            content: '';
-            position: absolute;
-            background-image: url(images/GreenCart/V-Lobby.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 12.1%;
-            aspect-ratio: 0.7;
-            left: 42.6%;
-            animation: moveV 1s forwards;
-            transform: translateY(-100%);
-        }
-        @keyframes moveV {
-
-            100%{
-                transform: translateY(106%);
-            }
-        }
-        @keyframes pulseShadow {
-            0%, 100% {
-                filter: drop-shadow(0px 0px 5px white);
-            }
-            50% {
-                filter: drop-shadow(0px 0px 10px white);
-            }
-        }
-        .VS::after{
-            position: absolute;
-            content: '';
-            background-image: url(images/GreenCart/s-Lobby.svg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 12.1%;
-            aspect-ratio: 0.7;
-            top: 44%;
-            left: 47%;
-            animation: moveS 1s forwards;
-            transform: translateY(200%);
-        }
-        @keyframes moveS {
-            to {
-                transform: translateY(0);
-            }
-        }
-        .opponent{
-            display: flex;
-            justify-content: center;
-            align-items: center; 
-            background-image: url(images/GreenCart/lobby-border.svg);
-            background-repeat : no-repeat;
-            background-size: contain;
-            width: 36.4%;
-            aspect-ratio: 1;
-            transform: scaleX(-1) scaleY(-1);
-        }
-
-    </style>
+lobby.innerHTML =  /* html */ `
+    <link rel="stylesheet" href="./Game/GamePlay/Lobby.css">
     <page-name width="35%">
         <div slot="text" class="pageNameText">
             <h1>MATCH MAKING</h1>
@@ -135,42 +88,31 @@ ai_lobby.innerHTML =  /* html */ `
     </div>
     <div class="lines"></div>
     `
-    /*
-            border: 1px solid red;
-            :host{
-            position: relative;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            width : 72%;
-            aspect-ratio: 1.7;
-            border-radius: 10px;
-            background-color: #e6ffff14;
-        }
-        
-        :host::before{
 
-        }
-            .page-name h1{
-            color : white;
-            
-        }
-    */
-    // <!--  -->
-export class aiLobby extends HTMLElement{
+
+timer.innerHTML = /*html*/ `
+    <link rel="stylesheet", href="./Game/GamePlay/Timer.css">
+	<div class="descounter">
+		<h1>${time}</h1>
+	</div>
+`
+
+export class Lobby extends HTMLElement{
 
     constructor()
     {
         super();
         this.attachShadow({ mode: 'open' });
-        this.shadowRoot.appendChild(ai_lobby.content.cloneNode(true));
-        this.setSlots(playerSlot.content, 'false')
-        this.setSlots(opponentSlot.content, 'true')
-        this.headerAnimation();
-        this.sidebarAnimation();
-        setTimeout(() => {
-            document.body.classList.toggle('body-game-shrink', true);   
-        }, 1000);
+        this.shadowRoot.appendChild(lobby.content.cloneNode(true));
+
+        var socket = new WebSocket('ws://127.0.0.1:8000/ws/game/')
+        socket.onopen = function(e){
+            console.log('hiiiiiii')
+        }
+        socket.onmessage = function(e){
+            var data = JSON.parse(e.data)
+            console.log(data)
+        }
     }
 
     headerAnimation(){
@@ -182,7 +124,6 @@ export class aiLobby extends HTMLElement{
         userRunk.classList.toggle('game-mode', true);
         userRunk.classList.toggle('down-60', false);
         userRunk.classList.toggle('rise-0', true);
-
         headerBar.classList.toggle('game-mode', true);
         headerBar.classList.toggle('up-100', true);
         headerBar.classList.toggle('p-animation', true);
@@ -204,11 +145,129 @@ export class aiLobby extends HTMLElement{
             sideBar.shadowRoot.innerHTML = '';
         }, 1000);
     }
+
     setSlots(template, revers){
         const border = new PlayerBorder();
+
         border.setAttribute('revers', revers);
         border.appendChild(template.cloneNode(true))
         this.shadowRoot.appendChild(border.cloneNode(true))
     }
+
+    connectedCallback()
+    {
+        this.setSlots(playerSlot.content, 'false')
+        this.setSlots(opponentSlot.content, 'true')
+        this.headerAnimation();
+        this.sidebarAnimation();
+        setTimeout(() => {
+            document.body.classList.toggle('body-game-shrink', true);   
+        }, 1000);
+    }
+
+    async getData(str)
+    {
+        try{
+            const response = await fetch(str);
+            if(response.ok)
+                return response.json();
+            throw new Error("cant recive anything")
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
+
+    async OnlineGame()
+    {
+		const root = document.querySelector('root-content');
+        const p_img = OnlineGameTemplate.content.getElementById('Player');
+		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
+		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
+        const turnTime = 1;
+        let delay = 0; 
+        let delayNumber = (turnTime / 2) / Players.length;
+
+        searching_images = await this.getData('http://127.0.0.1:8000/game/players/');
+		p_img.src = userInfo.picture;
+		p_h1.textContent = userInfo.username;
+		Players.forEach((element, index)=>{
+            element.style.animationDelay = `${delay}s`;
+			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
+			element.style.setProperty('--numsec', turnTime);
+			element.src = searching_images[index].picture;
+            delay += delayNumber;
+		})
+		this.appendChild(OnlineGameTemplate.content.cloneNode(true));
+		root.innerHTML = ``;
+		root.appendChild(this);
+    }
+
+    async setPlayer(){
+        const h1 = document.createElement('h1');
+		const Players = this.querySelectorAll('.PlayerS');
+        const turnTime = 10;
+        let delay = 0; 
+        let delayNumber = (turnTime / 2) / Players.length;
+
+        opponentInfo = await this.getData('http://127.0.0.1:8000/game/players/4/')
+        h1.id = 'NOpponent';
+        h1.classList = 'Name';
+        h1.slot = 'OpponentName';
+        h1.textContent = opponentInfo.username;
+        Players[0].src = opponentInfo.picture
+		Players.forEach((element)=>{
+            element.style.animationDelay = `${delay}s`;
+			element.style.setProperty('--numsec', turnTime);
+			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
+			element.style.opacity = '1';
+            delay += delayNumber;
+		})
+		this.appendChild(h1.cloneNode(true));
+	}
+    SinglePlayer()
+    {
+        const root = document.querySelector('root-content')
+        const p_img = AiGameTemplate.content.getElementById('Player')
+        const p_h1 = AiGameTemplate.content.getElementById('NPlayer')
+        const o_img = AiGameTemplate.content.getElementById('Opponent')
+        const o_h1 = AiGameTemplate.content.getElementById('NOpponent')
+
+        p_h1.textContent = userInfo.username;
+        p_img.src = userInfo.picture;
+        o_img.textContent = 'AI';
+        o_h1.textContent = 'AI';
+        this.appendChild(AiGameTemplate.content.cloneNode(true));
+        root.innerHTML = ``;
+        root.appendChild(this);
+    }
+	gameMode(){
+		const PlayerS = this.querySelectorAll('.PlayerS')
+		PlayerS.forEach((element, index)=>{
+			if(index !== 0)
+				element.remove()
+			else{
+				element.style.animation = 'none';
+				this.shadowRoot.appendChild(timer.content.cloneNode(true));
+				const countdown = setInterval(()=>{
+					time--;
+					const desc = this.shadowRoot.querySelector('.descounter')
+					const h1 = desc.querySelector('h1')
+
+					if(time < 0){
+						const header = new GameHeader()
+						const game = new GameTable();
+						document.body.innerHTML = ``;
+						document.body.appendChild(header);
+						document.body.appendChild(game);
+						clearInterval(countdown)
+					}
+					else{
+						h1.textContent = `${time}`
+					}
+				},1000)
+			}
+		})
+	}
 }
 
