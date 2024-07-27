@@ -33,12 +33,12 @@ let searching_images = [
 	}
 ]
 
-const userInfo = {
+export const userInfo = {
 	picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
 	username: 'GOJO'
 }
 
-let opponentInfo = {
+export let opponentInfo = {
     picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
 	username: 'GOJO'
 }
@@ -106,6 +106,9 @@ export class Lobby extends HTMLElement{
         this.shadowRoot.appendChild(lobby.content.cloneNode(true));
 
         var socket = new WebSocket('ws://127.0.0.1:8000/ws/game/')
+        socket.onopen = function(e){
+            console.log('hiiiiiii')
+        }
         socket.onmessage = function(e){
             var data = JSON.parse(e.data)
             console.log(data)
