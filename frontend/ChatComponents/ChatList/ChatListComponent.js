@@ -110,8 +110,7 @@ const cssContent = /*css*/`
     
     :host .list-item {
         width: 100%;
-        height: max-content;
-        height: 920px;
+        height: calc(100% - 100px);
         display: flex;
         flex-direction: column;
         overflow-y: scroll;

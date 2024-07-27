@@ -127,7 +127,7 @@ export class ChatRoomComponent extends HTMLElement {
 const cssContent = /*css*/`
         :host {
             font-family: 'Sansation bold';
-            height: 1000px;
+            height: 100%;
             display: flex;
             flex: 2.5;
             flex-direction: column;
