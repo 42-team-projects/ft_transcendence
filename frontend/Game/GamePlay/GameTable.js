@@ -1,9 +1,7 @@
-import { GameOver } from './GameOver.js';
+import { GameOver } from "./GameOver.js";
+import { LaunchingGame } from "./launchingGame.js";
 
 const game_page = document.createElement('template');
-
-import { LaunchingGame } from './launchingGame.js'
-
 
 let score = {
     player1: 0,
@@ -12,7 +10,7 @@ let score = {
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="./Game/GamePlay/GameOnline/GameTable.css">
+<link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>
@@ -101,12 +99,12 @@ export class GameTable extends HTMLElement{
     LuncheGame(ctx){
         document.body.querySelector('game-header').classList.toggle('blur', true)
 		document.body.querySelector('game-table').classList.toggle('blur', true)
-        if(score.player1 === 5  )
+        if(score.player1 === 5)
         {
             this.GameOver(ctx, 'win', 'lose');
             return;
         }
-        if(score.player2 === 5  )
+        if(score.player2 === 5)
         {
             this.GameOver(ctx, 'lose', 'win');
             return;
@@ -259,5 +257,3 @@ export class GameTable extends HTMLElement{
             player.y -= 10;
     }
 }
-
-customElements.define('game-table', GameTable)
