@@ -3,29 +3,24 @@
     <title>Home</title>
     <style>
         body {
-            background-color: #282c34;  /* Dark blue-gray background */
-            font-family: Arial, sans-serif;  /* Change the font */
-            color: #f0f0f0;  /* Light gray text */
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        h1 {
-            font-size: 2em;
-            margin-bottom: 0.5em;
-        }
-        p {
-            font-size: 1.2em;
+            background-color: #282c34;
+            color: #ffffff;
+            font-family: Arial, sans-serif
         }
     </style>
+    <script type="module" src="../js/components/home.js"></script>
 </head>
 <body>
     <h1>Welcome to the Homepage!</h1>
-    <p>This is a simple homepage.</p>
+    <p>This data can be seen by everybody.</p>
+    <button id="whoami-button">Who am I?</button>
+    <p id="api-response"></p>
 </body>
 </html>

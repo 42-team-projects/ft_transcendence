@@ -1,4 +1,5 @@
 import { showToast } from "./toast.js";
+import { sendTokenToBackend, windowOnLoad } from './googleAuth.js';
 
 document
     .getElementById("registerForm")
@@ -40,7 +41,7 @@ document
             }
             else
             {
-                // showToast(data.message, false);
+                showToast(data.message, false);
                 window.location.href = "../html/confirm-message.html";
         }
         } catch (error) {
@@ -48,3 +49,21 @@ document
             showToast("An error occurred", true);
         }
     });
+
+// Include the googleAuth.js script
+
+// Google OAuth logic
+const CLIENT_ID = '727204892262-1k88o4pf5cqg7qgb9aem8bt236apcaof.apps.googleusercontent.com';
+const SCOPES = 'profile email'; // Scopes that your application is requesting access to
+const BACKEND_URL = 'http://127.0.0.1:8000/api/v1/auth/google/';
+const REDIRECT_URI = 'http://127.0.0.1:8000/api/v1/auth/google/redirect';
+
+document.getElementById('googleSignUp').addEventListener('click', function() {
+    // Step 1: Redirect the user to Google's OAuth 2.0 server
+    let authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(CLIENT_ID)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(SCOPES)}&prompt=consent`;
+    window.location.href = authUrl;
+});
+
+window.onload = function() {
+    windowOnLoad(BACKEND_URL);
+};
