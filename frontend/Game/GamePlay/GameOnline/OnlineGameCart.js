@@ -30,8 +30,6 @@ export class OnlineGame extends HTMLElement{
 			button.addEventListener('click', ()=>{
 				const lobby = new Lobby();
 				lobby.OnlineGame();
-				setTimeout(() => lobby.setPlayer(), 5000);
-				setTimeout(() => lobby.gameMode(), 6000);
 			})
 		// }, 4000);
         this.classList.toggle('cart-animation', true)

@@ -7,9 +7,9 @@ buttonsTemplate.innerHTML = /*html*/`
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 55%;
+            width: 100%;
             height: 22%;
-            clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
+            clip-path: polygon(6% 1%, 100% 0%, 100% 66%, 95% 100%, 1% 100%, 1% 33%);
             background-color: #47AF56;
             transition: transform 0.3s ease;
             cursor: pointer;
@@ -29,10 +29,10 @@ buttonsTemplate.innerHTML = /*html*/`
             align-items: center;
         }
     </style>
-    <div class="buttons-content">
-        <slot name="text"></slot>
-    </div>
 `
+// <div class="buttons-content">
+//     <slot name="text"></slot>
+// </div>
 
 export class Buttons extends HTMLElement{
 
@@ -57,10 +57,11 @@ export class Buttons extends HTMLElement{
         return this.getAttribute('Hcolor')
     }
     update(){
-        this.style.width = this.width || '55%';
-        this.style.height = this.height || '22%';
+        this.style.width = this.width || '100%';
+        this.style.height = this.height || '15%';
         this.style.background = this.bcolor || '#47AF56';
         this.style.setProperty('--hover-background-color', this.Hcolor);
+        this.style.setProperty('--width', this.style.width);
     }
     connectedCallback(){
         this.update()
