@@ -13,7 +13,7 @@ export class AchievementComponent extends HTMLElement {
                 }
             </style>
             <div class="content-league">
-                <img width="80">
+                <img loading="lazy" width="80">
                 <h6> </h6>
             </div>
         `;

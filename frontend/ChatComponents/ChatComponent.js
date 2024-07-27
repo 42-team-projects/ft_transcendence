@@ -2,12 +2,10 @@ export class ChatComponent extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
-    }
-
-    connectedCallback() {
         this.shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="./ChatComponents/ChatComponent.css">
-            
+            <style>
+                ${cssContent}
+            </style>
             <div class="main-container">
                 <page-name width="13%">
                     <div slot="text" class="pageNameText">
@@ -15,9 +13,31 @@ export class ChatComponent extends HTMLElement {
                     </div>
                 </page-name>
                 <chat-list></chat-list>
-                <chat-room></chat-room>
                 <friends-list></friends-list>
             </div>
         `;
     }
+
+    connectedCallback() {
+    }
 }
+
+const cssContent = /*css*/`
+:host {
+    font-family: 'Sansation bold';
+    width: 95%;
+    height: 95%;
+    background-color: #d9d9d905;
+}
+
+.main-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+`;
