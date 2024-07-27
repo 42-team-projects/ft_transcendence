@@ -33,12 +33,12 @@ let searching_images = [
 	}
 ]
 
-const userInfo = {
+export const userInfo = {
 	picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
 	username: 'GOJO'
 }
 
-let opponentInfo = {
+export let opponentInfo = {
     picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
 	username: 'GOJO'
 }
