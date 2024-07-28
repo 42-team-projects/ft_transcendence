@@ -112,10 +112,10 @@ export class Lobby extends HTMLElement{
         const userRunk = profile.querySelector('user-rank');
     
         userRunk.classList.toggle('drop-100', false);
-        userRunk.classList.toggle('game-mode', true);
+        userRunk.classList.toggle('transform-1s', true);
         userRunk.classList.toggle('down-60', false);
         userRunk.classList.toggle('rise-0', true);
-        headerBar.classList.toggle('game-mode', true);
+        headerBar.classList.toggle('transform-1s', true);
         headerBar.classList.toggle('up-100', true);
         headerBar.classList.toggle('p-animation', true);
         setTimeout(() => {
@@ -128,7 +128,7 @@ export class Lobby extends HTMLElement{
         const Buttons = sideBar.shadowRoot.querySelector('.buttons');
         const clickedButtons = Buttons.querySelector('.on');
     
-        sideBar.classList.toggle('game-mode', true);
+        sideBar.classList.toggle('transform-1s', true);
         sideBar.classList.toggle('left', true);
         clickedButtons.classList.toggle('on', false);
         sideBar.classList.toggle('p-animation', true);
