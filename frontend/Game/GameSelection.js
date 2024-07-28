@@ -11,7 +11,7 @@ game_selection.innerHTML = /*html*/ `
             height:100%;
             grid-area: content;
             display: grid;
-            grid-template-columns: repeat(3, 23%);
+            grid-template-columns: repeat(3, 30rem);
             grid-template-areas: 
             "single multiple online";
             justify-content: space-around;
