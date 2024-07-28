@@ -265,6 +265,9 @@ game-over{
     transform: translateY(-100%);
 }
 
+.left{
+    transform: translateX(-150%);
+}
 
 *::-webkit-scrollbar { 
     display: none;
