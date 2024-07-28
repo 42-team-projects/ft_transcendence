@@ -37,19 +37,20 @@ export class SinglePlayer extends HTMLElement{
 
     constructor (){
         super();
-        this.appendChild(singlePlayerTemplate.content.cloneNode(true))
-        const button = this.querySelector('c-button')
+        this.attachShadow({mode : 'open'})
+        this.shadowRoot.appendChild(singlePlayerTemplate.content.cloneNode(true))
+        const button = this.shadowRoot.querySelector('c-button')
 		// setTimeout(() => {
             button.addEventListener('click', ()=>{
                 const lobby = new Lobby()
                 lobby.SinglePlayer();
             })
         // }, 4000);
-        this.classList.toggle('cart-animation', true)
-        this.classList.toggle('opacity-0', true)
+        this.shadowRoot.classList.toggle('cart-animation', true)
+        this.shadowRoot.classList.toggle('opacity-0', true)
         setTimeout(() => {
-			this.classList.toggle('opacity-0', false)
-			this.classList.toggle('opacity-1', true)
+			this.shadowRoot.classList.toggle('opacity-0', false)
+			this.shadowRoot.classList.toggle('opacity-1', true)
 		}, 3000);
     }
 }
