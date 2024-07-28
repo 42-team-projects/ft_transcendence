@@ -79,6 +79,7 @@ class SideBar extends HTMLElement {
     }
     connectedCallback(){
         this.setbuttons()
+        this.activeButton = this.shadowRoot.querySelectorAll('sb-button')[0]
         this.clickEvent = 0;
     }
     set activeButton(button){
@@ -88,41 +89,22 @@ class SideBar extends HTMLElement {
         return this.active_button;
     }
     set clickEvent(id){
-        const buttons = this.shadowRoot.querySelectorAll('sb-button')
-        buttons.forEach((button) => {
-            if(Number(id) === Number(button.id))
-            {
-                if(button.classList.length === 0)
-                {
-                    button.classList.toggle('on')
-                    let imgClassName = button.querySelector('.images.on')
-                    if(!imgClassName)
-                    {
-                        imgClassName = button.querySelector('.images');
-                        if(imgClassName)
-                            imgClassName.classList.toggle('on')
-                    }
-                    let textClassName = button.querySelector('h1.on')
-                    if(!textClassName)
-                    {
-                        textClassName = button.querySelector('h1');
-                        if(textClassName)
-                            textClassName.classList.toggle('on')
-                    }
-                }
-                this.active_button = button;
-            }
-            else{
-                if(button.classList.length)
-                    button.classList.toggle('on')
-                let imgClassName = button.querySelector('.images.on')
-                if(imgClassName)
-                    imgClassName.classList.toggle('on')
-                let textClassName = button.querySelector('h1.on')
-                if(textClassName)
-                        textClassName.classList.toggle('on')
-            }
-        })
+        const button = this.shadowRoot.querySelectorAll('sb-button')[id]
+        if (!button.classList.contains('on')) {
+            this.active_button.classList.remove('on')
+            this.active_button.querySelector('img').classList.remove('on')
+            this.active_button.shadowRoot.querySelector('sb-icon').classList.remove('on')
+            this.active_button.shadowRoot.querySelector('.c-sb-text').classList.remove('on')
+            this.active_button.querySelector('h1').classList.remove('on')
+            this.active_button.classList.remove('on')
+
+            button.classList.add('on')
+            button.querySelector('img').classList.add('on')
+            button.querySelector('h1').classList.add('on')
+            button.shadowRoot.querySelector('sb-icon').classList.add('on')
+            button.shadowRoot.querySelector('.c-sb-text').classList.add('on')
+            this.active_button = button;
+        }
     }
 }
 

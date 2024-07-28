@@ -27,11 +27,11 @@ export class MultiPlayer extends HTMLElement{
 		super();
 		this.attachShadow({mode:'open'})
 		this.shadowRoot.appendChild(MultiPlayerTemplate.content.cloneNode(true))
-        this.shadowRoot.classList.toggle('cart-animation', true)
-        this.shadowRoot.classList.toggle('opacity-0', true)
+        this.classList.toggle('cart-animation', true)
+        this.classList.toggle('opacity-0', true)
 		setTimeout(() => {
-			this.shadowRoot.classList.toggle('opacity-0', false)
-			this.shadowRoot.classList.toggle('opacity-1', true)
+			this.classList.toggle('opacity-0', false)
+			this.classList.toggle('opacity-1', true)
 		}, 4000);
 	}
 

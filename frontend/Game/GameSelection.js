@@ -16,7 +16,7 @@ game_selection.innerHTML = /*html*/ `
             "single multiple online";
             justify-content: space-around;
         }
-
+        
         .playerImg{
             position: absolute;
             height: 99%;
