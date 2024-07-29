@@ -27,12 +27,12 @@ game_selection.innerHTML = /*html*/ `
 
         .Player{
             color: white;
-            font-size: clamp(0.5, 9vw, 10rem);
+            font-size: 10rem;
         }
         .Name{
             z-index: 0;
             position: absolute;
-            font-size: clamp(0.3rem, 1.5vw, 2rem);
+            font-size: 2rem;
             color: white;
             top:100%;
             margin: 0;

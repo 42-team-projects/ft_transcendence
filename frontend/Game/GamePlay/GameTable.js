@@ -49,19 +49,26 @@ let CANVAS_HEIGHT = tableContainerHeight;
 
 export class GameTable extends HTMLElement{
 
-    constructor()
+    constructor(room_name)
     {
         super();
+        this.room_name = room_name;
         this.appendChild(game_page.content.cloneNode(true))
         this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 5, 2);
-        this.setCoordonatesP1(0, CANVAS_HEIGHT / 2);
-        this.setCoordonatesP2(CANVAS_WIDTH - 10, CANVAS_HEIGHT / 2);
+        this.setCoordonatesP1(CANVAS_HEIGHT / 2);
+        this.setCoordonatesP2(CANVAS_HEIGHT / 2);
         this.setKeys(false, false, false, false);
         this.stopLoop = false;
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("position : ", data.position);
+            this.setCoordonatesP2(data.position);
+        }
     }
-    setCoordonatesP1(x, y){
+
+    setCoordonatesP1(y){
         this.concoordonateP1 = {
-            x: x,
+            x: 0,
             y: y,
             color: 'white',
             width: 10,
@@ -71,9 +78,9 @@ export class GameTable extends HTMLElement{
     getCoordonatesP1(){
         return this.concoordonateP1;
     }
-    setCoordonatesP2(x, y){
+    setCoordonatesP2(y){
         this.concoordonateP2 = {
-            x: x,
+            x: CANVAS_WIDTH - 10,
             y: y,
             color: '#00b9be',
             width: 10,
@@ -222,8 +229,8 @@ export class GameTable extends HTMLElement{
 
         if(event.key === 'w' || event.key === 'W') { keyW = true };
         if(event.key === 's' || event.key === 'S') { keyS = true };
-        if(event.key === 'ArrowUp') { keyArrowUp = true };
-        if(event.key === 'ArrowDown') { keyArrowDown = true };
+        // if(event.key === 'ArrowUp') { keyArrowUp = true };
+        // if(event.key === 'ArrowDown') { keyArrowDown = true };
 
         this.setKeys(keyS, keyW, keyArrowUp, keyArrowDown);
     }
@@ -232,29 +239,41 @@ export class GameTable extends HTMLElement{
 
         if(event.key === 'w' || event.key === 'W') { keyW = false };
         if(event.key === 's' || event.key === 'S') { keyS = false };
-        if(event.key === 'ArrowUp') { keyArrowUp = false };
-        if(event.key === 'ArrowDown') { keyArrowDown = false };
+        // if(event.key === 'ArrowUp') { keyArrowUp = false };
+        // if(event.key === 'ArrowDown') { keyArrowDown = false };
 
         this.setKeys(keyS, keyW, keyArrowUp, keyArrowDown);
     }
 
     movePlayer(keys, player1, player2){
         const {keyW, keyS, keyArrowUp, keyArrowDown} = keys;
-        if(keyW === true) { this.moveUp(player1) };
-        if(keyS === true) { this.moveDown(player1) };
-        if(keyArrowUp === true) { this.moveUp(player2) };
-        if(keyArrowDown === true) { this.moveDown(player2) };
-        this.setCoordonatesP1(player1.x, player1.y);
-        this.setCoordonatesP2(player2.x, player2.y);
+        if(keyW === true) { this.moveUp(player1, player2) };
+        if(keyS === true) { this.moveDown(player1, player2) };
+        // if(keyArrowUp === true) { this.moveUp(player2) };
+        // if(keyArrowDown === true) { this.moveDown(player2) };
+        this.setCoordonatesP1(player1.y);
+        this.setCoordonatesP2(player2.y);
     }
-    moveDown(player){
+    moveDown(player, player2){
         if(player.y + player.height + 10 <= CANVAS_HEIGHT)
             player.y += 10;
         else
             player.y = CANVAS_HEIGHT - player.height;
+        const message = {
+            'status': 'startGame',
+            'room_name': this.room_name,
+            'position': player.y
+        }
+        socket.send(JSON.stringify(message));
     }
-    moveUp(player){
+    moveUp(player, player2){
         if(player.y >= 0)
             player.y -= 10;
+        const message = {
+            'status': 'startGame',
+            'room_name': this.room_name,
+            'position': player.y,
+        }
+        socket.send(JSON.stringify(message));
     }
 }
