@@ -50,20 +50,27 @@ document
         }
     });
 
-// Include the googleAuth.js script
-
-// Google OAuth logic
-const CLIENT_ID = '727204892262-1k88o4pf5cqg7qgb9aem8bt236apcaof.apps.googleusercontent.com';
-const SCOPES = 'profile email'; // Scopes that your application is requesting access to
-const BACKEND_URL = 'http://127.0.0.1:8000/api/v1/auth/google/';
-const REDIRECT_URI = 'http://127.0.0.1:8000/api/v1/auth/google/redirect';
-
+// OAuth logic
 document.getElementById('googleSignUp').addEventListener('click', function() {
-    // Step 1: Redirect the user to Google's OAuth 2.0 server
-    let authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(CLIENT_ID)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(SCOPES)}&prompt=consent`;
-    window.location.href = authUrl;
+    window.location.href = 'http://127.0.0.1:8000/api/v1/auth/google/redirect/';
 });
 
-window.onload = function() {
-    windowOnLoad(BACKEND_URL);
-};
+document.getElementById('intraSignUp').addEventListener('click', function() {
+    window.location.href = 'http://127.0.0.1:8000/api/v1/auth/intra/redirect/';
+});
+
+window.addEventListener('load', function()
+{
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    console.log('Access token:', token);
+    if (token)
+    {
+        localStorage.setItem('access_token', token);
+        window.location.href = "../html/home.html";
+
+    } else {
+        console.error('An error occurred during the OAuth process');
+    }
+});

@@ -147,6 +147,25 @@ EMAIL_HOST_USER = 'ebd6543637783d'
 EMAIL_HOST_PASSWORD = 'd36fe271a0aefd'
 EMAIL_PORT = '2525'
 
-GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET = env('GOOGLE_CLIENT_SECRET')
-SOCIAL_AUTH_PASSWORD = env('SOCIAL_AUTH_PASSWORD')
+OAUTH_PROVIDERS = {
+    'INTRA': {
+        'CLIENT_ID': env('INTRA_CLIENT_ID'),
+        'CLIENT_SECRET': env('INTRA_CLIENT_SECRET'),
+        'REDIRECT_URI': env('INTRA_REDIRECT_URI'),
+        'AUTHORIZE_URL': 'https://api.intra.42.fr/oauth/authorize',
+        'TOKEN_URL': 'https://api.intra.42.fr/oauth/token',
+        'USER_INFO_URL': 'https://api.intra.42.fr/v2/me',
+        'SCOPE': 'public',
+        'USER_ID_FIELD': 'login',
+    },
+    'GOOGLE': {
+        'CLIENT_ID': env('GOOGLE_CLIENT_ID'),
+        'CLIENT_SECRET': env('GOOGLE_CLIENT_SECRET'),
+        'REDIRECT_URI': env('GOOGLE_REDIRECT_URI'),
+        'AUTHORIZE_URL': 'https://accounts.google.com/o/oauth2/v2/auth',
+        'TOKEN_URL': 'https://oauth2.googleapis.com/token',
+        'USER_INFO_URL': 'https://openidconnect.googleapis.com/v1/userinfo',
+        'SCOPE': 'profile email',
+        'USER_ID_FIELD': 'given_name',
+    },
+}
