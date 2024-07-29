@@ -22,7 +22,7 @@ page_name.innerHTML =  /* html */ `
             position: relative;
             display: flex;
             align-items: center;
-            left:4%;
+            left:3%;
         }
     </style>
     <slot name="text"></slot>

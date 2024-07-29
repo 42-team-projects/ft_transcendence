@@ -15,7 +15,6 @@ export class ProfileInfoComponent extends HTMLElement {
             if (!element)
                 return ;
             element.style.background = "url(" + newValue + ") center / cover no-repeat";
-
         }
         else if (attrName === "username")
         {
