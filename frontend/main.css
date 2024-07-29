@@ -198,7 +198,7 @@ game-over{
 }
 .logoutText{
     color : white;
-    font-size: clamp(1rem, 1.2vw, 1.5rem);
+    font-size: 1.5rem;
 }
 
 .blur{
@@ -264,11 +264,9 @@ game-over{
 .up-100{
     transform: translateY(-100%);
 }
-
 .left{
     transform: translateX(-150%);
 }
-
 *::-webkit-scrollbar { 
     display: none;
 }
