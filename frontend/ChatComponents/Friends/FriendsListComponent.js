@@ -59,10 +59,9 @@ const cssContent = /*css*/`
 
     .friends-list-container {
         padding: 0px 20px;
-        max-height: calc(94% - 32px);
         display: flex;
         gap: 10px;
-        height: min-content;
+        height: calc(100% - 80px);
         flex-direction: column;
         overflow-y: scroll;
     }
