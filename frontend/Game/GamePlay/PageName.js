@@ -12,7 +12,7 @@ page_name.innerHTML =  /* html */ `
             background: linear-gradient(62deg, #00fffc66 0%, #00fffc00 45%);
             top: -0.2%;
             left: -2%;
-            font-size: 1.5rem;
+            font-size: clamp(0.5rem , 0.9vw, 1rem);
             color: white;
             
         }
