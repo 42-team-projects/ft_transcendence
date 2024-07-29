@@ -18,10 +18,14 @@ export class FriendItemComponent extends HTMLElement {
                 flex: 3;
             }
 
+            .c-hexagon-content {
+                width: 48px;
+                height: 48px;
+            }
         </style>
 
         <c-hexagon class="profile" width="48px" height="48px" apply="true" bcolor="aqua">
-            <img loading="lazy" slot="content" draggable="false" width="48">
+            <div slot="content" class="c-hexagon-content"></div>
         </c-hexagon>
         <p></p>
         <c-hexagon class="status" width="16px" height="16px" apply="true" bcolor="#d9d9d9">
@@ -32,7 +36,7 @@ export class FriendItemComponent extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
-        this.shadowRoot.querySelector(".profile img").src = this.profileImage;
+        this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
         const statusElement = this.shadowRoot.querySelector(".status");
         statusElement.bcolor = this.status === "true" ? "#d9d9d9" : "aqua";
         statusElement.querySelector("div").style.backgroundColor = this.status === "true" ? "#d9d9d9" : "aqua"; 
@@ -46,7 +50,7 @@ export class FriendItemComponent extends HTMLElement {
         if (name === "league")
             this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(newValue);
         else if (name === "profile-image")
-            this.shadowRoot.querySelector(".profile img").src = newValue;
+            this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + newValue + ") center / cover no-repeat";
         else if (name === "status")
         {
             const statusElement = this.shadowRoot.querySelector(".status");

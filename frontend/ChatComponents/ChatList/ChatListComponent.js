@@ -12,7 +12,7 @@ export class ChatListComponent extends HTMLElement {
             </style>
             <div class="chat-list">
                 <div class="top-box"></div>
-                <div class="list-item" id="list-items"></div>
+                <div class="list-item"></div>
             </div>
             <chat-room></chat-room>
         `;
@@ -49,10 +49,10 @@ export class ChatListComponent extends HTMLElement {
     }
     
     async connectedCallback() {
-        const list = this.shadowRoot.getElementById("list-items");
+        const list = this.shadowRoot.querySelector(".list-item");
     
         try {
-            const data = await fetchData("http://localhost:8080/api/v1/chat/3");
+            const data = await fetchData("http://localhost:8080/api/v1/chat/all");
             if (data) {
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item);
@@ -92,27 +92,23 @@ const cssContent = /*css*/`
         height: 100%;
         flex: 10;
         display: flex;
-              
     }
     
     .chat-list {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         background-color: #d9d9d920;
+        height: 100%;
         flex: 1;
     }
-
+    
     .top-box {
-        width: 100%;
         height: 100px;
     }
     
-    :host .list-item {
+    .list-item {
         width: 100%;
-        height: calc(100% - 100px);
         display: flex;
         flex-direction: column;
+        height: calc(100% - 100px);
         overflow-y: scroll;
 
     }
