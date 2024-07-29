@@ -3,6 +3,7 @@ from . import views
 # from django.contrib.auth import views as auth_view
 from . import password_reset
 from .google import redirect
+from . import intra
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
@@ -21,6 +22,9 @@ urlpatterns = [
     path('whoami/', views.whoami, name='whoami'),
     path('refresh/', views.refresh, name='refresh_token'),
 
-    path('google/', views.google_auth_view, name='google'),
-    path('google/redirect/', redirect, name='redirect'),
+    # path('google/', views.google_auth_view, name='google'),
+    # path('google/redirect/', redirect, name='redirect'),
+
+    path('<str:provider>/redirect/', intra.redirect_to_provider, name='redirect_to_provider'),
+    path('<str:provider>/oauth_callback/', intra.oauth_callback, name='oauth_callback'),
 ]
