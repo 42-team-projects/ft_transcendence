@@ -290,7 +290,7 @@ game-header{
 }
 
 .playerinfo p, .playerinfo1 p{
-    font-size: clamp(0.5rem, 2vw, 1.6rem);
+    font-size: 1.6rem;
     color: white;
 }
 
@@ -310,7 +310,7 @@ game-header{
 }
 
 .playerscor h1, .playerscor1 h1{
-    font-size: clamp(0.5rem, 4vw, 4rem);
+    font-size: 4rem;
     color: white;
 }
 
@@ -344,7 +344,7 @@ game-header{
     background-color:#00FFFC;
 }
 .status{
-    font-size: clamp(0.5rem, 2vw, 1.6rem);
+    font-size: 1.6rem;
     color: white;
 }
 

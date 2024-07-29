@@ -5,7 +5,7 @@ export class GameOver extends HTMLElement{
         GameOverTamplate.innerHTML = /*html*/ `
         <style>
         p{
-            font-size: clamp(0.5rem, 5vw, 4rem);
+            font-size: 4rem;
             color: white;
             text-shadow: 0 0 10px #00b9be;
         }
