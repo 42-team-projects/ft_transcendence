@@ -76,6 +76,7 @@ const cssContent = /*css*/`
     width: 100%;
     height: 100%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -105,6 +106,7 @@ const cssContent = /*css*/`
 }
 
 .item h1 {
+    min-width: 200px;
     flex: 1;
 }
 
