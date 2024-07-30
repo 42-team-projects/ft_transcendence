@@ -7,7 +7,7 @@ buttonsTemplate.innerHTML = /*html*/`
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 55%;
+            width: 100%;
             height: 22%;
             clip-path: polygon(14% 1%, 100% 0%, 100% 72%, 90% 100%, 1% 100%, 1% 36%);
             background-color: #47AF56;
@@ -61,6 +61,7 @@ export class Buttons extends HTMLElement{
         this.style.height = this.height || '22%';
         this.style.background = this.bcolor || '#47AF56';
         this.style.setProperty('--hover-background-color', this.Hcolor);
+        this.style.setProperty('--width', this.style.width);
     }
     connectedCallback(){
         this.update()
