@@ -84,3 +84,7 @@ def oauth_callback(request, provider):
     response = HttpResponseRedirect(f'http://127.0.0.1:3000?token={result["access_token"]}')
     response.set_cookie('refresh_token', result['refresh_token'], httponly=True)
     return response
+
+
+# if google_user_data["audience"] != settings.GOOGLE_CLIENT_ID:
+#     raise serializers.ValidationError(detail="could not verify user")

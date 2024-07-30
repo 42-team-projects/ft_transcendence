@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../css/login.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="../js/components/oauth.js"></script>
 </head>
 
 <body>
@@ -24,7 +25,20 @@
     <p>
         Don't have an account? <a id="signup-link" href="../html/register.html" >Sign Up</a>.
     </p>
-    <button id="googleLogin">Login with Google</button>
+
+    <h3 class="text-option">Or</h3>
+    <button id="googleSignUp" 
+            onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/google/redirect/')">
+        Login with Google
+    </button>
+    <button id="intraSignUp" 
+            onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/intra/redirect/')">
+        Login with Intra
+    </button>
+
+    <script>
+        handleOAuthResponse();
+    </script>
     <script type="module" src="../js/components/login.js"></script>
 </body>
 
