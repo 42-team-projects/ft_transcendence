@@ -18,16 +18,20 @@ export class CreateTournament extends HTMLElement {
                 <players-and-stages></players-and-stages>
 
                 <visibillity-settings></visibillity-settings>
-                
+
             </div>
-            <qrcode-component value="hello world" title="Pong Cup"></qrcode-component>
+            <qrcode-component></qrcode-component>
         `;
     }
 
 
 
     connectedCallback() {
-
+        const inputField = this.shadowRoot.querySelector(".settingsform input");
+        const qrCodeTitle = this.shadowRoot.querySelector("qrcode-component");
+        setInterval(() => {
+            qrCodeTitle.title = inputField.value;
+        }, 100);
     }
 
     disconnectedCallback() {
@@ -42,10 +46,6 @@ export class CreateTournament extends HTMLElement {
 }
 
 const cssContent = /*css*/`
-
-::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-}
 
 :host {
     width: 100%;
