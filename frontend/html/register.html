@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 
+<!-- type="module" means  can use import and export -->
 <head>
     <title>Registration</title>
     <link rel="stylesheet" type="text/css" href="../css/register.css">
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com"> -->
+    <script src="../js/components/oauth.js"></script>
 </head>
 
 <body>
@@ -23,16 +25,22 @@
         <input type="submit" value="Register">
     </form>
     <p>Already have an account? Please <a id="signin-link" href="../html/login.html"> Sign In.</a></p>
-    
-    <h3 class="text-option">Or</h3>
-    <div class="oauthContainer">
-        <button id="googleSignUp">Sign Up with Google</button>
-        <button id="intraSignUp">Sign Up with Intra</button>
-    </div>
 
-    
+    <h3 class="text-option">Or</h3>
+    <button id="googleSignUp"
+        onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/google/redirect/')">
+        Sign Up with Google
+    </button>
+    <button id="intraSignUp"
+        onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/intra/redirect/')">
+        Sign Up with Intra
+    </button>
+
+
     <script type="module" src="../js/components/register.js"></script>
-    <script type="module" src="../js/components/googleAuth.js"></script>
+    <script>
+        handleOAuthResponse();
+    </script>
 </body>
 
 </html>

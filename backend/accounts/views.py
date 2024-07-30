@@ -1,6 +1,6 @@
 from .models import OTP, User
 from rest_framework import generics
-from .serializers import UserRegisterSerializer, LoginSerializer, GoogleSerializer
+from .serializers import UserRegisterSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from .utils import send_otp, send_confirmation_email, gen_email_token
@@ -26,15 +26,6 @@ class UserRegisterView(generics.GenericAPIView):
             }, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-def google_auth_view(request):
-    serializer = GoogleSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    user_data = serializer.validated_data
-    response = Response(user_data)
-    response.set_cookie('refresh_token', user_data.get('refresh_token'), httponly=True)
-    return response
 
 class VerifyOTPView(generics.GenericAPIView):
     def post(self, request):

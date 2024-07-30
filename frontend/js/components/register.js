@@ -1,5 +1,4 @@
 import { showToast } from "./toast.js";
-import { sendTokenToBackend, windowOnLoad } from './googleAuth.js';
 
 document
     .getElementById("registerForm")
@@ -51,26 +50,26 @@ document
     });
 
 // OAuth logic
-document.getElementById('googleSignUp').addEventListener('click', function() {
-    window.location.href = 'http://127.0.0.1:8000/api/v1/auth/google/redirect/';
-});
+// document.getElementById('googleSignUp').addEventListener('click', function() {
+//     window.location.href = 'http://127.0.0.1:8000/api/v1/auth/google/redirect/';
+// });
 
-document.getElementById('intraSignUp').addEventListener('click', function() {
-    window.location.href = 'http://127.0.0.1:8000/api/v1/auth/intra/redirect/';
-});
+// document.getElementById('intraSignUp').addEventListener('click', function() {
+//     window.location.href = 'http://127.0.0.1:8000/api/v1/auth/intra/redirect/';
+// });
 
-window.addEventListener('load', function()
-{
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
+// window.addEventListener('load', function()
+// {
+//     const params = new URLSearchParams(window.location.search);
+//     const token = params.get('token');
 
-    console.log('Access token:', token);
-    if (token)
-    {
-        localStorage.setItem('access_token', token);
-        window.location.href = "../html/home.html";
+//     console.log('Access token:', token);
+//     if (token)
+//     {
+//         localStorage.setItem('access_token', token);
+//         window.location.href = "../html/home.html";
 
-    } else {
-        console.error('An error occurred during the OAuth process');
-    }
-});
+//     } else {
+//         console.error('An error occurred during the OAuth process');
+//     }
+// });
