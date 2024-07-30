@@ -5,6 +5,7 @@ export class CreateTournament extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="settings-section">
+
                 <div class="itemContainer">
                     <div class="item">
                         <h1>Tournament Name</h1>
@@ -13,84 +14,13 @@ export class CreateTournament extends HTMLElement {
                         </div>
                     </div>
                 </div>
-                <div class="itemContainer">
-                    <div class="item">
-                        <h1>Number Of Players</h1>
-                        <div class="settingsform">
-                            <div class="chooseContainer">
-                                <div class="choix"></div>
-                                <p>4 Players</p>
-                            </div>
-                            <div class="chooseContainer">
-                                <div class="choix"></div>
-                                <p>8 Players</p>
-                            </div>
-                            <div class="chooseContainer">
-                                <div class="choix aqua"></div>
-                                <p>16 Players</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="subitems">
-                        <div class="item">
-                            <h1>Quarter-Final</h1>
-                            <div class="settingsform">
-                                <input type="date">
-                                <input type="time">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <h1>Semi-Final</h1>
-                            <div class="settingsform">
-                                <input type="date">
-                                <input type="time">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <h1>Final</h1>
-                            <div class="settingsform">
-                                <input type="date">
-                                <input type="time">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="itemContainer">
-                    <div class="item">
-                        <h1>Visibility</h1>
-                        <div class="settingsform">
-                            <div class="chooseContainer">
-                                <div class="checkbox"></div>
-                                <p>Public</p>
-                            </div>
-                            <div class="chooseContainer">
-                                <div class="checkbox aqua"></div>
-                                <p>Private</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="subitems">
-                        <div class="item">
-                            <h1>Password</h1>
-                            <div class="settingsform">
-                                <input type="password">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <h1>Confirm Password</h1>
-                            <div class="settingsform">
-                                <input type="password">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                <players-and-stages></players-and-stages>
+
+                <visibillity-settings></visibillity-settings>
+                
             </div>
-            <div class="qrcode-section">
-                <h1>Pong Cup</h1>
-                <div class="qrcode">
-                    <img src="/frontend/assets/tournament-assets/qrcode.svg">
-                </div>
-            </div>
+            <qrcode-component value="hello world" title="Pong Cup"></qrcode-component>
         `;
     }
 
@@ -123,6 +53,7 @@ const cssContent = /*css*/`
     display: flex;
     font-size: 20px;
     flex-wrap: wrap;
+    gap: 20px;
 }
 
 .settings-section {
@@ -132,31 +63,6 @@ const cssContent = /*css*/`
     gap: 30px;
     margin-top: 50px;
     margin-left: 50px;
-}
-
-.qrcode-section {
-    flex: 1.5;
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.qrcode {
-    width: 500px;
-    height: 500px;
-    border: 3px solid aqua;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.qrcode img {
-    width: 440px;
-    height: 440px;
-    opacity: 0.1;
 }
 
 .itemContainer {
@@ -201,6 +107,13 @@ const cssContent = /*css*/`
 .item h1 {
     flex: 1;
 }
+
+.item h2 {
+    font-family: 'Sansation';
+    flex: 1;
+}
+
+
 .settingsform {
     flex: 1;
     width: 300px;
@@ -230,12 +143,6 @@ const cssContent = /*css*/`
     
 }
 
-.choix {
-    width: 26px;
-    height: 26px;
-    border-radius: 100px;
-    background: #cccccc60;
-}
 
 .checkbox {
     width: 26px;
@@ -245,22 +152,16 @@ const cssContent = /*css*/`
 }
 
 
-.aqua {
-    background: aqua;
+.aqua-border {
+    border: 2px solid aqua;
+    display: flex;
+    border-radius: 7px;
+    align-items: center;
+    justify-content: center;
+    background: url("/frontend/assets/icons/checked-icon.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
-p {
-    font-family: 'Sansation';
-    font-size: 14px;
-}
-
-::placeholder {
-    color: #d9d9d9;
-    opacity: 1; /* Firefox */
-  }
-  
-  ::-ms-input-placeholder { /* Edge 12 -18 */
-    color: #d9d9d9;
-  }
 
 `;
