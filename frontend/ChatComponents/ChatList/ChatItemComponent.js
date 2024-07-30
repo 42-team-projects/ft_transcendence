@@ -13,7 +13,7 @@ export class ChatItemComponent extends HTMLElement {
                 <div class="profileAndOnlineContainer">
                     <div class="profileAndOnline">
                         <c-hexagon class="profile" width="90px" height="87px" apply="true" bcolor="#d9d9d9">
-                            <img slot="content" loading="lazy" draggable="false" width="100%">
+                            <div slot="content" class="c-hexagon-content"></div>
                         </c-hexagon>
                         <c-hexagon class="online" width="20px" height="20px" apply="true" bcolor="#d9d9d9" >
                             <div style="width: 100%; height: 100%; background-color: #d9d9d9;" slot="content"></div>
@@ -41,7 +41,9 @@ export class ChatItemComponent extends HTMLElement {
         this.shadowRoot.querySelector(".numberOfMessage").textContent = this.numberOfMessage || "00.00.00";
         this.shadowRoot.querySelector("h2").textContent = this.userName || "unknown";
         this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
-        this.shadowRoot.querySelector(".profile img").src = this.profileImage;
+
+        this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
+
         const element = this.shadowRoot.querySelector(".online");
         element.bcolor = this.active === "true" ? "#00ffff" : "#d9d9d9";
         element.querySelector("div").style.background = this.active === "true" ? "#00ffff" : "#d9d9d9";
@@ -70,7 +72,7 @@ export class ChatItemComponent extends HTMLElement {
         else if (name === "league")
             this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(newValue);
         else if (name === "profile-image")
-            this.shadowRoot.querySelector(".profile img").src = newValue;
+            this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + newValue + ") center / cover no-repeat";
     }
 
 
@@ -111,14 +113,13 @@ export class ChatItemComponent extends HTMLElement {
 const cssContent = /*css*/`
     :host {
         font-family: 'Sansation bold';
-        padding: 15px 0;
+        padding: 12px 0;
         width: 100%;
         display: flex;
         justify-content: space-between;
         height: 100px;
         background-color: "transparent";
         animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-        overflow: hidden;
     }
 
     @keyframes slide-right {
@@ -131,16 +132,25 @@ const cssContent = /*css*/`
     }              
 
 
+    .c-hexagon-content {
+        width: 90px;
+        height: 90px;
+    }
+
     .container {
         width: 100%;
         display: flex;
         justify-content: space-between;
         height: 100px;
         opacity: 0.6;
+        
     }
 
     .profileAndOnlineContainer {
         display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-right: 10px;
         flex: 1;
     }
 
