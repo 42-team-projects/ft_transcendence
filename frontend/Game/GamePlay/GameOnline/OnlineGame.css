@@ -1,4 +1,4 @@
-online-game{
+:host{
     background-image: url(../../../images/OrangeCart/OrangeCart.svg);
     background-repeat: no-repeat;
     background-size: contain;
@@ -6,9 +6,11 @@ online-game{
     grid-area : online;
     display: flex;
     justify-content: center;
+    position: relative;
+    aspect-ratio: 0.56;
 }
 
-online-game:hover{
+:host:hover{
     transform: scale(1.03);
 }
 .OrangeCartImg{
@@ -18,7 +20,7 @@ online-game:hover{
     z-index: 0;
 }
 
-online-game::before{
+:host::before{
     position: absolute;
     content: "";
     background: url(../../../images/OrangeCart/BorderShapes.svg);
@@ -31,7 +33,7 @@ online-game::before{
     z-index: 1;
 
 }
-online-game::after{
+:host::after{
     position: absolute;
     content: "";
     background: url(../../../images/OrangeCart/RL-Lines.svg);
