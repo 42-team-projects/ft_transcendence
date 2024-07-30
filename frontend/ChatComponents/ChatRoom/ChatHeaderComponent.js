@@ -10,8 +10,8 @@ export class ChatHeaderComponent extends HTMLElement {
             ${cssContent}
         </style>
         <div class="profile-infos">
-            <c-hexagon class="profile" width="120px" height="117px" apply="true" bcolor="aqua">
-                <img loading="lazy" slot="content" loading="lazy" draggable="false">
+            <c-hexagon class="profile" width="120px" height="118px" apply="true" bcolor="aqua">
+                <div slot="content" class="c-hexagon-content"></div>
             </c-hexagon>
             <div class="infos">
                 <h1>SALIM ELMEHDI</h1>
@@ -34,7 +34,7 @@ export class ChatHeaderComponent extends HTMLElement {
         this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
         this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
         if (this.profileImage)
-            this.shadowRoot.querySelector(".profile img").src = this.profileImage;
+            this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
         const element = this.shadowRoot.querySelector(".online");
         element.bcolor = this.active === "true" ? "#00ffff" : "#d9d9d9";
         element.querySelector("div").style.backgroundColor = this.active === "true" ? "#00ffff" : "#d9d9d9";
@@ -54,7 +54,7 @@ export class ChatHeaderComponent extends HTMLElement {
         else if (attrName === "league")
             this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(newValue);
         else if (attrName === "profile-image")
-            this.shadowRoot.querySelector(".profile img").src = newValue;
+            this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + newValue + ") center / cover no-repeat";
 
     }
 
@@ -81,10 +81,16 @@ const cssContent = /*css*/ `
     :host {
         font-family: 'Sansation bold';
         display: flex;
-        flex: 1.8;
+        flex: 1;
         justify-content: space-between;
         align-items: center;
-        font-family: 'Sansation bold'
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+    .c-hexagon-content {
+        width: 120px;
+        height: 120px;
     }
 
     .profile-infos {

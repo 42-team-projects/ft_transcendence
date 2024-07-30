@@ -1,10 +1,11 @@
-multi-player{
+:host{
     position: relative;
     grid-area : multiple;
     transform: translateY(-7%);
     --position: -7%;
+    aspect-ratio: 0.56;
 }
-multi-player:hover{
+:host:hover{
     transform: translateY(-7%) scale(1.03);
 }
 .BlueCartImg{
@@ -19,7 +20,7 @@ multi-player:hover{
     z-index: 1;
 }
 
-multi-player::before{
+:host::before{
     position: absolute;
     content: "";
     background: url(../../../images/BlueCart/BlueRectangle.svg);
@@ -31,7 +32,7 @@ multi-player::before{
     /* border: 1px solid red; */
 
 }
-multi-player::after{
+:host::after{
     position: absolute;
     content: "";
     background: url(../../../images/BlueCart/shape1.svg);
