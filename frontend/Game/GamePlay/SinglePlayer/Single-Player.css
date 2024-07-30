@@ -1,9 +1,11 @@
-single-player{
+:host{
     grid-area : single;
     top: 0%;
+    position: relative;
+    aspect-ratio: 0.56;
 }
 
-single-player:hover{
+:host:hover{
     transform: scale(1.03);
 }
 .GreenCartImg{
@@ -20,7 +22,7 @@ single-player:hover{
     /* box-shadow: 0px 0px 5px 5px #47AF56; */
 }
 
-single-player::before{
+:host::before{
     position: absolute;
     content: "";
     background: url(../../../images/GreenCart/shape1.svg);
@@ -32,7 +34,7 @@ single-player::before{
     /* border: 1px solid red; */
 
 }
-single-player::after{
+:host::after{
     position: absolute;
     content: "";
     background: url(../../../images/GreenCart/shape2.svg);

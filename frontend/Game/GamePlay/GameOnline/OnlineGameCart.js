@@ -24,14 +24,13 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 export class OnlineGame extends HTMLElement{
 	constructor (){
 		super();
-		this.appendChild(OnlineGameTemplate.content.cloneNode(true))
-		const button = this.querySelector('c-button')
+		this.attachShadow({mode:'open'})
+		this.shadowRoot.appendChild(OnlineGameTemplate.content.cloneNode(true))
+		const button = this.shadowRoot.querySelector('c-button')
 		// setTimeout(() => {
 			button.addEventListener('click', ()=>{
 				const lobby = new Lobby();
 				lobby.OnlineGame();
-				setTimeout(() => lobby.setPlayer(), 5000);
-				setTimeout(() => lobby.gameMode(), 6000);
 			})
 		// }, 4000);
         this.classList.toggle('cart-animation', true)

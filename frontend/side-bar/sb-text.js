@@ -10,9 +10,9 @@ ButtontextElement.innerHTML = /*html*/ `
 export class SideBarButtonText extends HTMLElement {
     constructor(){
         super();
-        const shadow = this.attachShadow({
+        this.attachShadow({
             mode: 'open'
         })
-        shadow.appendChild(ButtontextElement.content.cloneNode(true))
+        this.shadowRoot.appendChild(ButtontextElement.content.cloneNode(true))
     }
 }

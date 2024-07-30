@@ -33,12 +33,12 @@ let searching_images = [
 	}
 ]
 
-const userInfo = {
+export let userInfo = {
 	picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
 	username: 'GOJO'
 }
 
-let opponentInfo = {
+export let opponentInfo = {
     picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
 	username: 'GOJO'
 }
@@ -104,15 +104,6 @@ export class Lobby extends HTMLElement{
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(lobby.content.cloneNode(true));
-
-        var socket = new WebSocket('ws://127.0.0.1:8000/ws/game/')
-        socket.onopen = function(e){
-            console.log('hiiiiiii')
-        }
-        socket.onmessage = function(e){
-            var data = JSON.parse(e.data)
-            console.log(data)
-        }
     }
 
     headerAnimation(){
@@ -121,10 +112,10 @@ export class Lobby extends HTMLElement{
         const userRunk = profile.querySelector('user-rank');
     
         userRunk.classList.toggle('drop-100', false);
-        userRunk.classList.toggle('game-mode', true);
+        userRunk.classList.toggle('transform-1s', true);
         userRunk.classList.toggle('down-60', false);
         userRunk.classList.toggle('rise-0', true);
-        headerBar.classList.toggle('game-mode', true);
+        headerBar.classList.toggle('transform-1s', true);
         headerBar.classList.toggle('up-100', true);
         headerBar.classList.toggle('p-animation', true);
         setTimeout(() => {
@@ -137,7 +128,7 @@ export class Lobby extends HTMLElement{
         const Buttons = sideBar.shadowRoot.querySelector('.buttons');
         const clickedButtons = Buttons.querySelector('.on');
     
-        sideBar.classList.toggle('game-mode', true);
+        sideBar.classList.toggle('transform-1s', true);
         sideBar.classList.toggle('left', true);
         clickedButtons.classList.toggle('on', false);
         sideBar.classList.toggle('p-animation', true);
@@ -180,15 +171,30 @@ export class Lobby extends HTMLElement{
 
     async OnlineGame()
     {
-		const root = document.querySelector('root-content');
+        var socket = new WebSocket('ws://127.0.0.1:8000/ws/game/')
+        const root = document.querySelector('root-content');
         const p_img = OnlineGameTemplate.content.getElementById('Player');
-		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
-		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
+        const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
+        const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
+        const userId = Math.floor(Math.random() * 5) + 1;
         const turnTime = 1;
         let delay = 0; 
         let delayNumber = (turnTime / 2) / Players.length;
-
+    
+        socket.onopen = (e) => {
+            console.log(userId);
+            const message = JSON.stringify({ userId: userId });
+            socket.send(message);
+        };
+        socket.onmessage = (e) => {
+          var data = JSON.parse(e.data);
+          console.log(data);
+          setTimeout(() => this.setPlayer(data.id), 5000);
+          setTimeout(() => this.gameMode(), 6000);
+        };
         searching_images = await this.getData('http://127.0.0.1:8000/game/players/');
+        userInfo = await this.getData(`http://127.0.0.1:8000/game/players/${userId}/`);
+
 		p_img.src = userInfo.picture;
 		p_h1.textContent = userInfo.username;
 		Players.forEach((element, index)=>{
@@ -203,14 +209,13 @@ export class Lobby extends HTMLElement{
 		root.appendChild(this);
     }
 
-    async setPlayer(){
+    async setPlayer(opponentId){
         const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
         const turnTime = 10;
         let delay = 0; 
         let delayNumber = (turnTime / 2) / Players.length;
-
-        opponentInfo = await this.getData('http://127.0.0.1:8000/game/players/4/')
+        opponentInfo = await this.getData(`http://127.0.0.1:8000/game/players/${opponentId}/`)
         h1.id = 'NOpponent';
         h1.classList = 'Name';
         h1.slot = 'OpponentName';
