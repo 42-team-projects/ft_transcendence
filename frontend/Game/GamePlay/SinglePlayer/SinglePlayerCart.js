@@ -37,8 +37,9 @@ export class SinglePlayer extends HTMLElement{
 
     constructor (){
         super();
-        this.appendChild(singlePlayerTemplate.content.cloneNode(true))
-        const button = this.querySelector('c-button')
+        this.attachShadow({mode : 'open'})
+        this.shadowRoot.appendChild(singlePlayerTemplate.content.cloneNode(true))
+        const button = this.shadowRoot.querySelector('c-button')
 		// setTimeout(() => {
             button.addEventListener('click', ()=>{
                 const lobby = new Lobby()
