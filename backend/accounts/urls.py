@@ -1,9 +1,7 @@
 from django.urls import path
-from . import views
-# from django.contrib.auth import views as auth_view
 from . import password_reset
-from .google import redirect
-from . import intra
+from . import views
+from . import oauth
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
@@ -22,9 +20,6 @@ urlpatterns = [
     path('whoami/', views.whoami, name='whoami'),
     path('refresh/', views.refresh, name='refresh_token'),
 
-    # path('google/', views.google_auth_view, name='google'),
-    # path('google/redirect/', redirect, name='redirect'),
-
-    path('<str:provider>/redirect/', intra.redirect_to_provider, name='redirect_to_provider'),
-    path('<str:provider>/oauth_callback/', intra.oauth_callback, name='oauth_callback'),
+    path('<str:provider>/redirect/', oauth.redirect_to_provider, name='redirect_to_provider'),
+    path('<str:provider>/oauth_callback/', oauth.oauth_callback, name='oauth_callback'),
 ]
