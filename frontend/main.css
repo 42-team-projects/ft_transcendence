@@ -58,6 +58,16 @@ html, body {
         "foter foter";
 }
 
+@media screen and (max-width: 1900px) {
+    .body-default-shrink {
+        grid-template-columns: 5rem 1fr;
+        grid-template-rows: 12rem calc(100% - 16rem) 4rem;
+        grid-template-areas:
+            "head head" 
+            "sidebar content"
+            "foter foter";
+    }
+} 
 *::-webkit-scrollbar {
     display: none;
 }
@@ -196,7 +206,7 @@ game-over{
 }
 
 
-.game-mode
+.transform-1s
 {
     transition: transform 1s ease;
 }
@@ -254,8 +264,9 @@ game-over{
 .up-100{
     transform: translateY(-100%);
 }
+
 .left{
-    transform: translateX(-100%);
+    transform: translateX(-150%);
 }
 
 *::-webkit-scrollbar { 

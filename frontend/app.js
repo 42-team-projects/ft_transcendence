@@ -27,9 +27,7 @@ import { LinkComponent } from "./ProfileComponents/UserInfosComponents/LinkCompo
 import { ProfileInfoComponent } from "./ProfileComponents/UserInfosComponents/ProfileInfoComponent.js";
 import { UserInfoComponent } from "./ProfileComponents/UserInfosComponents/UserInfoComponent.js";
 import { UserInfoContainerComponent } from "./ProfileComponents/UserInfosComponents/UserInfoContainer.js";
-import { TournamentComponent } from "./Tournament-Components/Tournament-Component.js";
-
-customElements.define("tournament-page", TournamentComponent);
+import { TournamentComponent } from "./TournamentComponents/TournamentComponent.js";
 
 // Game
 import { Lobby } from "./Game/GamePlay/Lobby.js"
@@ -54,6 +52,23 @@ import { Profile } from './Header/profile.js'
 import { SideBarButtonIcons } from './side-bar/sb-icon.js'
 import { SideBarButtonText } from './side-bar/sb-text.js'
 import { SideBarButton } from './side-bar/sb-button.js'
+import { CustomButton } from "./TournamentComponents/CustomButton.js";
+import { TournamentsTable } from "./TournamentComponents/TournamentsTable.js";
+import { CreateTournament } from "./TournamentComponents/CreateTournament.js";
+import { QRCodeComponent } from "./TournamentComponents/QRCodeComponent.js";
+import { SettingContainer } from "./TournamentComponents/SettingContainer.js";
+import { PlayersAndStages } from "./TournamentComponents/PlayersAndStages.js";
+import { Visibility } from "./TournamentComponents/VisibillitySettings.js";
+
+
+customElements.define("visibillity-settings", Visibility);
+customElements.define("players-and-stages", PlayersAndStages);
+customElements.define("setting-container", SettingContainer);
+customElements.define("qrcode-component", QRCodeComponent);
+customElements.define("create-tournament", CreateTournament);
+customElements.define("tournaments-table", TournamentsTable);
+customElements.define("custom-button", CustomButton);
+customElements.define("tournament-page", TournamentComponent);
 
 customElements.define("header-bar", HeaderBar)
 customElements.define("sb-button", SideBarButton)

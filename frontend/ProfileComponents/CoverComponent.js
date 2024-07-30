@@ -18,9 +18,9 @@ export class CoverComponent extends HTMLElement {
                     color: white;
                     background-size: cover;
                     background-repeat: no-repeat;
-                    background-position: top;
+                    background-position: center;
                     background-attachment: local;
-                    opacity: 0.7;
+                    opacity: 0.8;
                     z-index: 1;
                 }
             </style>
