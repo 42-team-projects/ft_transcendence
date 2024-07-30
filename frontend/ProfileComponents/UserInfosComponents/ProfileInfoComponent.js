@@ -116,7 +116,7 @@ const cssContent = /*css*/`
 
     .c-hexagon-content {
         width: 250px;
-        height: 250px;
+        height: 247px;
     }
 
     .profile-image {
