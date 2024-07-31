@@ -38,6 +38,11 @@ export class CreateTournament extends HTMLElement {
 
     }
 
+    get data() {
+        
+        return this.shadowRoot.querySelector("players-and-stages").stages;
+    };
+
     static observedAttributes = [];
 
     attributeChangedCallback(attrName, oldVdalue, newValue) {

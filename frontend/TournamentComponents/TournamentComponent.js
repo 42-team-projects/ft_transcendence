@@ -84,14 +84,14 @@ export class TournamentComponent extends HTMLElement {
                 <h2 slot="text">TOURNAMENTS LIST</h2>
             </page-name>
             <div style="height:62px; width:100%;"></div>
-            <div class="mainContainer">
-                <create-tournament></create-tournament>
-            </div>
+
+            <div class="mainContainer"></div>
+
             <div class="tournament-actions">
-                <custom-button width="300px">
+                <custom-button id="firstButton" width="300px">
                     <h3>JOIN TOURNAMENT</h3>
                 </custom-button>
-                <custom-button width="300px" background-color="#0C9BA3" reflect>
+                <custom-button id="secondButton" width="300px" background-color="#0C9BA3" reflect>
                     <h3>CREATE TOURNAMENT</h3>
                 </custom-button>
             </div>
@@ -100,7 +100,36 @@ export class TournamentComponent extends HTMLElement {
     }
 
     connectedCallback() {
+        const mainContainer = this.shadowRoot.querySelector(".mainContainer");
+        const tournamentsTable = document.createElement("tournaments-table");
+        mainContainer.appendChild(tournamentsTable);
+        const firstButton = this.shadowRoot.getElementById("firstButton");
+        const secondButton = this.shadowRoot.getElementById("secondButton");
+        firstButton.addEventListener("click", () => {
+            const buttonValue = firstButton.querySelector("h3");
+            if (buttonValue.textContent == "CANCEL") {
+                mainContainer.innerHTML = '';
+                mainContainer.appendChild(document.createElement("tournaments-table"));
+                buttonValue.textContent = "JOIN TOURNAMENT";
+                secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
+            }
+            else {
 
+            }
+        });
+        secondButton.addEventListener("click", () => {
+            const buttonValue = secondButton.querySelector("h3");
+            if (buttonValue.textContent == "GENERATE") {
+                const value = this.shadowRoot.querySelector("create-tournament").data;
+                console.log("you are clicked on generate button!  ", value);
+            }
+            else {
+                mainContainer.innerHTML = '';
+                mainContainer.appendChild(document.createElement("create-tournament"));
+                buttonValue.textContent = "GENERATE";
+                firstButton.querySelector("h3").textContent = "CANCEL";
+            }
+        });
     }
 
 
