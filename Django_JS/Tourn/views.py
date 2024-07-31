@@ -40,6 +40,7 @@ def List_Tournaments(request):
         return JsonResponse(serializer.data, safe=False)
     return JsonResponse({'status': 'success'})
 
+
 def List_Players(request):
     if request.method == 'GET':
         players = Player.objects.all()
@@ -49,11 +50,45 @@ def List_Players(request):
 
 def get_tournament_by_id(request, id):
     if request.method == 'GET':
-        # tournaments = Tournament.objects.filter(playerstournament__player_id=player_id)
         tournament = Tournament.objects.get(id=id)
         serializer  = TournamentSerializer(tournament)
         return JsonResponse(serializer.data, safe=False)
     return JsonResponse({'status': 'success'})
 
+def get_tournaments_by_player_id(request, player_id):
+    try:
+        player = Player.objects.get(id=player_id)
+    except Player.DoesNotExist:
+        return JsonResponse({'error': 'Player not found'})
+    
+    tournaments = player.tournaments.all()  # Get all tournaments associated with the player
+    serializer = TournamentSerializer(tournaments, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+def get_Available_Tournaments(request):
+    if request.method == 'GET':
+        Tournaments = Tournament.objects.filter(can_join=True)
+        serializer  = TournamentSerializer(Tournaments, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    return JsonResponse({'status': 'success'})
+
+def Player_Join_Tournament(request): # this function i have switsh request method to post
+    if request.method == 'GET':
+        tournament = Tournament.objects.get(id=4)
+        player = Player.objects.get(id=2)
+        tournament.players.add(player)
+        return JsonResponse({'status': 'Player with id 2 join tournament with id 4'})
+    return JsonResponse({'status': 'success'})
+
+def player_leave_tournament(request): # this function i have switsh request method to post
+    if request.method == 'GET':
+        tournament = Tournament.objects.get(id=4)
+        player = Player.objects.get(id=2)
+        if player in tournament.players.all():
+            tournament.players.remove(player)
+            return JsonResponse({'status': 'Player with id 2 remove from tournament with id 4'})
+        else:
+            return JsonResponse({'status': 'Player is not in this tournament'})
+    
 def index(request):
     return HttpResponse("Teeeeeeeeeet")
