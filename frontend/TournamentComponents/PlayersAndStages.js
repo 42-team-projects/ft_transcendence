@@ -35,8 +35,8 @@ export class PlayersAndStages extends HTMLElement {
             rounds.innerHTML = `
                     <h2>Round Of 16 will start at: </h2>
                     <div class="settingsform">
-                        <input id="roundsDate" type="date">
-                        <input id="roundsTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(rounds);
@@ -48,8 +48,8 @@ export class PlayersAndStages extends HTMLElement {
             quarterfinal.innerHTML = `
                     <h2>Quarter-Final will start at: </h2>
                     <div class="settingsform">
-                        <input id="quarterfinalDate" type="date">
-                        <input id="quarterfinalTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(quarterfinal);
@@ -61,8 +61,8 @@ export class PlayersAndStages extends HTMLElement {
             semifinal.innerHTML = `
                     <h2>Semi-Final will start at: </h2>
                     <div class="settingsform">
-                        <input id="semifinalDate" type="date">
-                        <input id="semifinalTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(semifinal);
@@ -74,8 +74,8 @@ export class PlayersAndStages extends HTMLElement {
             final.innerHTML = `
                     <h2>Final will start at: </h2>
                     <div class="settingsform">
-                        <input id="finalDate" type="date">
-                        <input id="finalTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(final);
@@ -86,10 +86,26 @@ export class PlayersAndStages extends HTMLElement {
 
     get selectItem() { return this.selectItem; }
 
+
+    get stages() {
+        let data = [];
+        const items = this.shadowRoot.querySelectorAll(".subitems .item");
+        items.forEach((item) => {
+            let values = {stage_type: "", date: ""};
+            const stage_type = item.id.toUpperCase();
+            values.stage_type = stage_type;
+            const date = item.querySelector(".settingsform #date");
+            const time = item.querySelector(".settingsform #time");
+            values.date = date.value + "," + time.value;
+            data.push(values);
+        });
+        return data;
+    };
+
     connectedCallback() {
         this.createChoices();
         this.shadowRoot.querySelectorAll(".chooseContainer").forEach(elem => {
-            elem.addEventListener("click", e => {
+            elem.addEventListener("click", () => {
                 const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
                 if (selectItemcomponent)
                 {
@@ -99,11 +115,9 @@ export class PlayersAndStages extends HTMLElement {
                 }
                 this.selectItem = elem.id;
                 elem.querySelector(".choice").className = "choice aqua";
-                console.log(elem.id);
                 this.createStages(Number(elem.id));
             });
         });
-
     }
 
 }
