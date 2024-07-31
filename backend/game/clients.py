@@ -18,7 +18,6 @@ class GameRoom :
         if ws == self.client1.ws:
             print("sending data to client2")
             self.client2.ws.send(json.dumps({'position' : y}))
-            # self.client1.ws.send(json.dumps({'message' : 'your y position is go to client2'}))
         else:
             print("sending data to client1")
             self.client1.ws.send(json.dumps({'position' : y}))
