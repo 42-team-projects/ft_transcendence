@@ -9,14 +9,18 @@ game_selection.innerHTML = /*html*/ `
             align-items: center;
             width:100%;
             height:100%;
-            grid-area: content;
             display: grid;
             grid-template-columns: repeat(3, 30rem);
             grid-template-areas: 
             "single multiple online";
             justify-content: space-around;
+            transition: grid 0.3s ease;
         }
-        
+        @media (max-width: 1600px){
+            :host{
+                grid-template-columns: repeat(3, 25rem);
+            }
+        }
         .playerImg{
             position: absolute;
             height: 99%;
@@ -70,7 +74,7 @@ game_selection.innerHTML = /*html*/ `
                 transform: translateY(var(--position, 0));
             }
         }
-
+        
     </style>
     <single-player></single-player>
     <multi-player></multi-player>
