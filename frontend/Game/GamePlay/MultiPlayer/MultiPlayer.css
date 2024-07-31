@@ -176,11 +176,17 @@
     align-items: center;
 }
 
-.M-buttonC p{
-    width: 75%;
+p{
+    width: 80%;
     font-size: 1.5rem;
     text-align: center;
     color: wheat;
+    margin: 0;
+}
+@media (max-width: 1600px){
+    p{
+        font-size: 1.2rem;
+    }
 }
 
 
