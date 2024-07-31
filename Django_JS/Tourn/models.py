@@ -2,6 +2,10 @@ from django.db import models
 import uuid
 # Create your models here.
 
+class Player(models.Model):
+    name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
 
 class Tournament(models.Model):
     tournament_id = models.CharField(max_length=10, unique=True, editable=False)
@@ -11,6 +15,10 @@ class Tournament(models.Model):
     number_of_players = models.IntegerField(choices=[(4, '4 Players'), (8, '8 Players'), (16, '16 Players')])
     is_accessible = models.BooleanField(null=True, blank=True)
     access_password = models.IntegerField(null=True, blank=True)
+
+    players = models.ManyToManyField(Player, related_name='tournaments')
+
+    can_join = models.BooleanField(default=True) # if any palyers join in tournament i need to check if tournament is full or not and check datetime of tournament
 
     def save(self, *args, **kwargs):
         if not self.tournament_id:
@@ -36,8 +44,4 @@ class Stage(models.Model):
     def __str__(self):
         return f"{self.get_stage_type_display()} - {self.stage_datetime}"
 
-class Player(models.Model):
-    stage = models.ForeignKey(Stage, on_delete=models.CASCADE, related_name='players', null=True, blank=True)
-    name = models.CharField(max_length=100)
-    def __str__(self):
-        return self.name
+
