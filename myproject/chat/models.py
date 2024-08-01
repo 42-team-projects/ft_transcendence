@@ -14,6 +14,9 @@ class ChatList(models.Model):
 
     # def __str__(self):
     #     return f"receiver is = {self.receiver_id}"
+    
+
+
 
 class Chat(models.Model):
     # sender_id = models.ForeignKey(User, unique=True, null=True)
