@@ -84,3 +84,30 @@ def get_tournaments_by_player_id(request, player_id):
     tournaments = player.tournaments.all()  # Get all tournaments associated with the player
     serializer = TournamentSerializer(tournaments, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+def launch_tournament(tournament):
+    print("Tournament with name {} is started.".format(tournament.tournament_name))
+
+def player_join_tournament(request, tournamentId, playerId):
+    if request.method == 'POST':
+        try:
+            player = Player.objects.get(id=playerId)
+            tournament = Tournament.objects.get(id=tournamentId)
+            if not tournament.can_join:
+                return JsonResponse({'error': 'Tournament is not open for new players'}, status=400)
+
+            if player in tournament.players.all():
+                return JsonResponse({'error': 'Player is already in the tournament'}, status=400)
+
+            tournament.players.add(player)
+            tournament.save()
+            if tournament.players.count() >= tournament.number_of_players:
+                tournament.can_join = False
+                tournament.save()
+                launch_tournament(tournament) # here call launch_tournament function
+            return JsonResponse({'success': 'Player successfully joined the tournament'}, status=200)
+        except Player.DoesNotExist:
+            return JsonResponse({'error': 'Player not found'}, status=404)
+        except Tournament.DoesNotExist:
+            return JsonResponse({'error': 'Tournament not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
