@@ -16,7 +16,10 @@
     </div>
     
     <script type="text/javascript">
-        url = "ws://127.0.0.1:8000/ws/"
+        const roomName = "214571245";
+        {% comment %} const roomName = "1_chat"; {% endcomment %}
+        {% comment %} const roomName = "2_1_chat"; {% endcomment %}
+        url = `ws://127.0.0.1:8000/ws/chat/${roomName}/`
 
         const webSocket = new WebSocket(url)
 
@@ -42,7 +45,6 @@
             }))
             form.reset()
         })
-
     </script>
 </body>
 </html>
