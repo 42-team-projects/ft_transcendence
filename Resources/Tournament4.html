@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Tournament</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Create Tournament</h1>
+            <div class="form-group">
+                <label for="name">Tournament Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Tournament name" required>
+            </div>
+            <div class="form-group">
+                <label for="num_players">Number of Players</label>
+                <select class="form-control" id="num_players" name="numberofplayers">
+                    <option value="4">4 Players</option>
+                    <option value="8">8 Players</option>
+                    <option value="16">16 Players</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" onclick="Create_Tournament()">Create Tournament</button>
+                <button type="submit" class="btn btn-primary" onclick="List_Tournament()">List Tournament</button>
+                <button type="submit" class="btn btn-primary" onclick="get_Available_Tournaments()">get Available Tournaments</button>
+                <button type="submit" class="btn btn-primary" onclick="get_tournament_by_id()">get tournament by id</button>
+                <button type="submit" class="btn btn-primary" onclick="get_tournaments_by_player_id()">get tournament by player id</button>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="name">Tournament Id</label>
+                    <input type="number" class="form-control" id="tournamentId" name="name" placeholder="Tournament Id" required>
+                </div>
+                <div class="form-group">
+                    <label for="name">Player Id</label>
+                    <input type="number" class="form-control" id="playerId" name="name" placeholder="Player Id" required>
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="player_join_tournament()">add player to tournament</button>
+            </div>
+    </div>
+    <script>
+        let stages = [];
+
+        const apiUrl = 'http://127.0.0.1:8000/TournamentApp/';
+        async function List_Tournament() {
+            try {
+                const List_Tournament = "list_tournaments/";
+                const response = await fetch(`${apiUrl}${List_Tournament}`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+        async function Create_Tournament()
+        {
+            try {
+                const name = document.getElementById("name").value;
+                const num_players = document.getElementById("num_players").value;
+
+                const Tournament = {
+                    tournament_name: name,
+                    number_of_players: num_players
+                }
+                const create_tournament = "create/"
+                const response = await fetch(`${apiUrl}${create_tournament}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Tournament),
+                });
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+                // console.log(JSON.stringify(Tournament, null, 2));
+            } catch(error) {
+                console.error('Error creating Tournament: ', error);
+            }
+        }
+    
+        async function get_tournament_by_id() {
+            try {
+                const id = "2/";
+                const response = await fetch(`${apiUrl}${id}`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+    
+        async function get_tournaments_by_player_id() {
+            try {
+                const player = "player/"
+                const playerId = "1/";
+                const response = await fetch(`${apiUrl}${player}${playerId}`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+
+        async function get_Available_Tournaments() {
+            try {
+                const Available_Tournaments = "available_tournaments/";
+                const response = await fetch(`${apiUrl}${Available_Tournaments}`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+        async function player_join_tournament()
+        {
+            try {
+                const tournamentId = document.getElementById("tournamentId").value;
+                const playerId = document.getElementById("playerId").value;
+                const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/`, {
+                    method: 'POST'
+                });
+                if (!response.ok) {
+                    const data = await response.json();
+                    // throw new Error(`${response.status}  ${response.statusText}`);
+                    throw new Error(`${response.status}  ${data.statusText}`);
+                }
+                console.log(response);
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                
+                console.error('Error of player join tournament: ', error);
+            }
+        }
+    </script>
+</body>
+</html>
