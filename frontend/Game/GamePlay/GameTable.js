@@ -54,47 +54,71 @@ export class GameTable extends HTMLElement{
         super();
         this.room_name = room_name;
         this.appendChild(game_page.content.cloneNode(true))
-        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 5, 2);
-        this.setCoordonatesP1(CANVAS_HEIGHT / 2);
-        this.setCoordonatesP2(CANVAS_HEIGHT / 2);
-        this.setKeys(false, false, false, false);
-        this.stopLoop = false;
+        // this.setCoordonatesP1(CANVAS_HEIGHT / 2);
+        // this.setKeys(false, false, false, false);
+        // this.stopLoop = false;
+        const message = {
+            'status': 'startGame',
+            'room_name': this.room_name,
+        }
+        socket.send(JSON.stringify(message))
+        this.getMessages();
+        // document.addEventListener('visibilitychange', (event)=>{
+        //     socket.send(JSON.stringify({'status': 'pause'}))
+        // })
+        
+    }
+    getMessages() {
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log("position : ", data.position);
-            this.setCoordonatesP2(data.position);
+            const x_percent = (data.ball.x / 300 * 100);
+            const y_percent = (data.ball.y / 150 * 100);
+            const radius_percent = (data.ball.radius / 10 * 100);
+            const ball_y = CANVAS_HEIGHT * y_percent / 100;
+            const ball_x = CANVAS_WIDTH * x_percent / 100;
+            const player_percent = (data.racquet.player_y / 150 * 100);
+            const opponent_percent = (data.racquet.opponent_y / 150 * 100);
+            const racket_width_percent = (data.racquet.racquet_width / 300 * 100);
+            const racket_height_percent = (data.racquet.racquet_height / 150 * 100);
+            const racket_width = CANVAS_WIDTH * racket_width_percent / 100;
+            const racket_height = CANVAS_HEIGHT * racket_height_percent / 100;
+            const player = CANVAS_HEIGHT * player_percent / 100;
+            const opponent = CANVAS_HEIGHT * opponent_percent / 100;
+            const ball_radius = CANVAS_WIDTH * radius_percent / 100;
+            this.setCoordonates(ball_x , ball_y, ball_radius);
+            this.setCoordonatesP1(player, racket_width, racket_height);
+            this.setCoordonatesP2(opponent, racket_width, racket_height);
+            this.runder();
         }
     }
-
-    setCoordonatesP1(y){
+    setCoordonatesP1(y, width, height){
         this.concoordonateP1 = {
             x: 0,
             y: y,
             color: 'white',
-            width: 10,
-            height: 100,
+            width: width,
+            height: height,
         };
     }
     getCoordonatesP1(){
         return this.concoordonateP1;
     }
-    setCoordonatesP2(y){
+    setCoordonatesP2(y, width, height){
         this.concoordonateP2 = {
-            x: CANVAS_WIDTH - 10,
+            x: CANVAS_WIDTH - width,
             y: y,
             color: '#00b9be',
-            width: 10,
-            height: 100,
+            width: width,
+            height: height,
         };
     }
     getCoordonatesP2(){return this.concoordonateP2;}
 
-    setCoordonates(x, y, dx, dy){
+    setCoordonates(x, y, radius){
         this.concoordonate = {
             x: x,
             y: y,
-            dx: dx,
-            dy: dy,
+            radius: radius,
         };
     }
     getCoordonates(){return this.concoordonate;}
@@ -105,35 +129,35 @@ export class GameTable extends HTMLElement{
         document.body.appendChild(gameOver);
     }
     LuncheGame(ctx){
-        document.body.querySelector('game-header').classList.toggle('blur', true)
-		document.body.querySelector('game-table').classList.toggle('blur', true)
-        if(score.player1 === 5)
-        {
-            this.GameOver(ctx, 'win', 'lose');
-            return;
-        }
-        if(score.player2 === 5)
-        {
-            this.GameOver(ctx, 'lose', 'win');
-            return;
-        }
-        let RoundTime = 3;
-        const LunchingGame = new LaunchingGame(RoundTime, 1);
-		document.body.appendChild(LunchingGame);
-		const Lunching = setInterval(() => {
-			RoundTime--;
-			if(RoundTime < 0)
-            {
-                clearInterval(Lunching);
-                document.body.querySelector('game-header').classList.toggle('blur', false)
-                document.body.querySelector('game-table').classList.toggle('blur', false)
-                document.body.querySelector('launching-game').remove();
-                this.stopLoop = true;
-                this.gameLoop(ctx);
-            }
-			else
-                LunchingGame.updateTimer(RoundTime, 1);
-		}, 1000);
+        // document.body.querySelector('game-header').classList.toggle('blur', true)
+		// document.body.querySelector('game-table').classList.toggle('blur', true)
+        // if(score.player1 === 5)
+        // {
+        //     this.GameOver(ctx, 'win', 'lose');
+        //     return;
+        // }
+        // if(score.player2 === 5)
+        // {
+        //     this.GameOver(ctx, 'lose', 'win');
+        //     return;
+        // }
+        // let RoundTime = 3;
+        // const LunchingGame = new LaunchingGame(RoundTime, 1);
+		// document.body.appendChild(LunchingGame);
+		// const Lunching = setInterval(() => {
+		// 	RoundTime--;
+		// 	if(RoundTime < 0)
+        //     {
+        //         clearInterval(Lunching);
+        //         document.body.querySelector('game-header').classList.toggle('blur', false);
+        //         document.body.querySelector('game-table').classList.toggle('blur', false);
+        //         document.body.querySelector('launching-game').remove();
+        //         this.stopLoop = true;
+        //         this.gameLoop(ctx);
+        //     }
+		// 	else
+        //         LunchingGame.updateTimer(RoundTime, 1);
+		// }, 1000);
     }
 
     setKeys(keyS, keyW, keyArrowUp, keyArrowDown){
@@ -155,39 +179,41 @@ export class GameTable extends HTMLElement{
         const coordonate = this.getCoordonates();
         ctx.fillStyle = 'white';
         ctx.beginPath();
-        ctx.arc(coordonate.x, coordonate.y, 10, 0, Math.PI * 2);
+        ctx.arc(coordonate.x, coordonate.y,coordonate.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.closePath();
     }
     gameLoop(ctx){
-        if(this.stopLoop === false)
-            return;
-        const player1 = this.getCoordonatesP1();
-        const player2 = this.getCoordonatesP2();
-        requestAnimationFrame(() => this.gameLoop(ctx));
+        // if(this.stopLoop === false)
+        //     return;
+        // const player1 = this.getCoordonatesP1();
+        // const player2 = this.getCoordonatesP2();
+        // requestAnimationFrame(() => this.gameLoop(ctx));
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        this.movePlayer(this.getKeys(), player1, player2);
-        this.moveBall(player1, player2, ctx);
+        // this.movePlayer(this.getKeys(), player1, player2);
+        // this.moveBall(player1, player2, ctx);
         this.renderBall(ctx);
         this.RanderRackit(ctx, this.getCoordonatesP1());
         this.RanderRackit(ctx, this.getCoordonatesP2());
     }
-    connectedCallback(){
-        addEventListener('keydown', (event) => {
-            this.setMove(event, this.getKeys());
-        })
-        addEventListener('keyup', (event) => {
-            this.resetMove(event, this.getKeys());
-        })
-        const container = document.querySelector('.table_container');
-        const canvas = document.querySelector('#table');
+    runder (){
+        // console.log('rendering');
+        // addEventListener('keydown', (event) => {
+        //     this.setMove(event, this.getKeys());
+        // })
+        // addEventListener('keyup', (event) => {
+        //     this.resetMove(event, this.getKeys());
+        // })
+        const container = game_page.querySelector('.table_container');
+        const canvas = this.querySelector('#table');
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
         const ctx = canvas.getContext('2d');
         this.renderBall(ctx);
         this.RanderRackit(ctx, this.getCoordonatesP1());
         this.RanderRackit(ctx, this.getCoordonatesP2());
-        this.LuncheGame(ctx);
+        // this.LuncheGame(ctx);
+        this.gameLoop(ctx);
     }
     RoundOver(ctx){
         let {x, y, dx, dy} = this.getCoordonates();
@@ -197,31 +223,31 @@ export class GameTable extends HTMLElement{
         document.querySelector('game-header').updateScore(score);
     }
     moveBall(player1, player2, ctx){
-        let {x, y, dx, dy} = this.getCoordonates();
-        if(y + 10 + dy >= CANVAS_HEIGHT || y - 10 + dy <= 0)
-            dy = -dy;
-        if(x + 10 + dx >= player2.x && y >= player2.y && y <= player2.y + player2.height)
-            dx = -dx;
-        if(x - 10 + dx <= player1.x + player1.width && y >= player1.y && y <= player1.y + player1.height)
-            dx = -dx;
-        x += dx;
-        y += dy;
+        // let {x, y, dx, dy} = this.getCoordonates();
+        // if(y + 10 + dy >= CANVAS_HEIGHT || y - 10 + dy <= 0)
+        //     dy = -dy;
+        // if(x + 10 + dx >= player2.x && y >= player2.y && y <= player2.y + player2.height)
+        //     dx = -dx;
+        // if(x - 10 + dx <= player1.x + player1.width && y >= player1.y && y <= player1.y + player1.height)
+        //     dx = -dx;
+        // x += dx;
+        // y += dy;
         // dx = dx + 0.1;
         // dy = dy + 0.1;
-        console.log(dx, dy);
-        this.setCoordonates(x, y, dx, dy);
+        // console.log(dx, dy);
+        // this.setCoordonates(x, y, dx, dy);
 
         //round over reset coordonates and update score
-        if(x - 10 + dx <= 0)
-        {
-            score.player2++;
-            this.RoundOver(ctx);
-        }
-        if(x + 10 + dx >= CANVAS_WIDTH)
-        {
-            score.player1++;
-            this.RoundOver(ctx);
-        }
+        // if(x - 10 + dx <= 0)
+        // {
+        //     score.player2++;
+        //     this.RoundOver(ctx);
+        // }
+        // if(x + 10 + dx >= CANVAS_WIDTH)
+        // {
+        //     score.player1++;
+        //     this.RoundOver(ctx);
+        // }
     }
 
     setMove = (event, keys) =>{
@@ -256,11 +282,11 @@ export class GameTable extends HTMLElement{
     }
     moveDown(player, player2){
         if(player.y + player.height + 10 <= CANVAS_HEIGHT)
-            player.y += 10;
+            player.y += player.width;
         else
             player.y = CANVAS_HEIGHT - player.height;
         const message = {
-            'status': 'startGame',
+            'status': 'move',
             'room_name': this.room_name,
             'position': player.y
         }
@@ -268,9 +294,9 @@ export class GameTable extends HTMLElement{
     }
     moveUp(player, player2){
         if(player.y >= 0)
-            player.y -= 10;
+            player.y -= player.width;
         const message = {
-            'status': 'startGame',
+            'status': 'move',
             'room_name': this.room_name,
             'position': player.y,
         }
