@@ -24,7 +24,7 @@ class Root extends HTMLElement{
     }
 
     set ChangeRootContent(component){
-        console.log('hiiiiiiiii')
+        // console.log('hiiiiiiiii')
         const content = document.createElement(component)
         this.innerHTML = ``
         this.appendChild(content);
