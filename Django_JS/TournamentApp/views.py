@@ -6,6 +6,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
+import random
 
 # Create your views here.
 
@@ -85,19 +86,74 @@ def get_tournaments_by_player_id(request, player_id):
     serializer = TournamentSerializer(tournaments, many=True)
     return JsonResponse(serializer.data, safe=False)
 
+def play_game(player1, player2):
+    score1 = random.randint(0, 5)
+    score2 = random.randint(0, 5)
+    print(f"Game played between {player1.name} and {player2.name}")
+    print(f"Scores: {player1.name} - {score1}, {player2.name} - {score2}")
+    return score1, score2
+
+def launch_tournament_test(request):
+    tournament = Tournament.objects.get(id=2)
+    print("Tournament with name {} is started.".format(tournament.tournament_name))
+    while tournament.players.count() > 1:
+        players = tournament.players.all()
+        i = 0
+        while i < len(players) - 1:
+            player1 = players[i]
+            player2 = players[i + 1]
+            score1, score2 = play_game(player1, player2)
+            if score1 >= score2:
+                tournament.players.remove(player2)
+            else:
+                tournament.players.remove(player1)
+            i += 2
+    if tournament.players.count() == 1:
+        Winner = tournament.players.first()
+    return JsonResponse({"Player Win": Winner.name}, safe=False)
+
+# def launch_tournament_test_Old(request):
+#     tournament = Tournament.objects.get(id=2)
+#     print("Tournament with name {} is started.".format(tournament.tournament_name))
+#     players = tournament.players.all()
+#     i = 0
+#     # results = []
+#     while i < len(players) - 1:
+#         player1 = players[i]
+#         player2 = players[i + 1]
+#         score1, score2 = play_game(player1, player2)
+#         # results.append({
+#         #         'player1': player1.name,
+#         #         'player2': player2.name,
+#         #         'score1': score1,
+#         #         'score2': score2
+#         #     })
+#         if score1 >= score2:
+#             tournament.players.remove(player2)
+#         else:
+#             tournament.players.remove(player1)
+#         i += 2
+#     # print(results[0])
+#     # serializer = PlayerSerializer(players, many=True)
+#     return JsonResponse("Test Tournament", safe=False)
+
 def launch_tournament(tournament):
+    players = tournament.players.objects.all()
+    serilizer = PlayerSerializer(players, many=True)
+    print(serilizer.data)
     print("Tournament with name {} is started.".format(tournament.tournament_name))
 
+@csrf_exempt
 def player_join_tournament(request, tournamentId, playerId):
     if request.method == 'POST':
         try:
             player = Player.objects.get(id=playerId)
             tournament = Tournament.objects.get(id=tournamentId)
             if not tournament.can_join:
-                return JsonResponse({'error': 'Tournament is not open for new players'}, status=400)
+                return JsonResponse({'statusText': 'Tournament is not open for new players'}, status=400)
 
             if player in tournament.players.all():
-                return JsonResponse({'error': 'Player is already in the tournament'}, status=400)
+                return JsonResponse({'statusText': 'Player is already in the tournament'}, status=400)
 
             tournament.players.add(player)
             tournament.save()
@@ -107,7 +163,7 @@ def player_join_tournament(request, tournamentId, playerId):
                 launch_tournament(tournament) # here call launch_tournament function
             return JsonResponse({'success': 'Player successfully joined the tournament'}, status=200)
         except Player.DoesNotExist:
-            return JsonResponse({'error': 'Player not found'}, status=404)
+            return JsonResponse({'statusText': 'Player not found'}, status=404)
         except Tournament.DoesNotExist:
-            return JsonResponse({'error': 'Tournament not found'}, status=404)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+            return JsonResponse({'statusText': 'Tournament not found'}, status=404)
+    return JsonResponse({'statusText': 'Invalid request method'}, status=405)
