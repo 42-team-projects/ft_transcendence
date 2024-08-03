@@ -54,8 +54,8 @@ export class GameHeader extends HTMLElement{
         const player2Name = this.querySelector('.playerinfo1')
         player2.querySelector('h1').textContent = score.player2
         player2Img.src = opponentInfo.picture;
-        console.log(player1Name);
-        console.log(player2Name);
+        // console.log(player1Name);
+        // console.log(player2Name);
         player2Name.querySelector('p').textContent = opponentInfo.username
     }
 }

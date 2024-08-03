@@ -204,7 +204,7 @@ export class Lobby extends HTMLElement{
 		};
 		socket.addEventListener('message', (e) => {
 			var data = JSON.parse(e.data);
-			console.log("hiiiii :", data);
+			console.log("data :", data);
 			setTimeout(() => this.setPlayer(data.opponent_id), 5000);
 			setTimeout(() => this.gameMode(data.room_name), 6000);
 		}, { once: true });
