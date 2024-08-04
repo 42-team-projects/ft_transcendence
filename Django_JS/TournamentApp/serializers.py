@@ -5,7 +5,7 @@ class PlayerSerializer(serializers.ModelSerializer):
     tournaments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Player
-        fields = ['id', 'name', 'tournaments']
+        fields = ['id', 'username', 'password', 'email', 'tournaments']
 
 class TournamentSerializer(serializers.ModelSerializer):
     players = PlayerSerializer(many=True, required=False)
