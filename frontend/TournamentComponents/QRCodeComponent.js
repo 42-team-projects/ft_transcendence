@@ -8,6 +8,9 @@ export class QRCodeComponent extends HTMLElement {
             <div class="qrcode">
                 <img src="/frontend/assets/tournament-assets/qrcode.svg">
             </div>
+            <div class="shareButtons" hidden>
+                <button class="download">DOWNLOAD</button>
+            </div>
         `;
     }
     connectedCallback() {
@@ -22,57 +25,30 @@ export class QRCodeComponent extends HTMLElement {
 
     }
 
-    static observedAttributes = ["title", "value"];
+    static observedAttributes = ["title", "value", "opacity", "hidden"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName == "title")
             this.shadowRoot.querySelector("h1").textContent = newValue;
+        else if (attrName == "opacity")
+        {
+            this.shadowRoot.querySelector(".qrcode img").style.opacity = newValue;
+            this.shadowRoot.querySelector(".shareButtons").removeAttribute("hidden");
+
+        }
         // else if (attrName == "value")
         //     this.generate();
     }
 
     get title() { return this.getAttribute("title");}
-    set title(value) { this.setAttribute("title", value);}
+    set title(val) { this.setAttribute("title", val);}
     
     get value() { return this.getAttribute("value");}
-    set value(value) { this.setAttribute("value", value);}
+    set value(val) { this.setAttribute("val", val);}
     
-
-    // generate() {
-    //     let qr_code_element = document.querySelector(".qr-code");
-    //     qr_code_element.style = "";
-      
-    //     var qrcode = new QRCode(qr_code_element, {
-    //       text: `${this.value}`,
-    //       width: 180, //128
-    //       height: 180,
-    //       colorDark: "#000000",
-    //       colorLight: "#ffffff",
-    //       correctLevel: QRCode.CorrectLevel.H
-    //     });
-      
-    //     let download = document.createElement("button");
-    //     qr_code_element.appendChild(download);
-      
-    //     let download_link = document.createElement("a");
-    //     download_link.setAttribute("download", "qr_code.png");
-    //     download_link.innerHTML = `Download <i class="fa-solid fa-download"></i>`;
-      
-    //     download.appendChild(download_link);
-      
-    //     let qr_code_img = document.querySelector(".qr-code img");
-    //     let qr_code_canvas = document.querySelector("canvas");
-      
-    //     if (qr_code_img.getAttribute("src") == null) {
-    //       setTimeout(() => {
-    //         download_link.setAttribute("href", `${qr_code_canvas.toDataURL()}`);
-    //       }, 300);
-    //     } else {
-    //       setTimeout(() => {
-    //         download_link.setAttribute("href", `${qr_code_img.getAttribute("src")}`);
-    //       }, 300);
-    //     }
-    //   }
+    get opacity() { return this.getAttribute("opacity");}
+    set opacity(val) { this.setAttribute("opacity", val);}
+    
 }
 
 const cssContent = /*css*/`
@@ -99,5 +75,17 @@ const cssContent = /*css*/`
     width: 440px;
     height: 440px;
     opacity: 0.1;
+}
+
+.download {
+    width: 200px;
+    height: 48px;
+    background-color: #0C9BA3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Sansation bold';
+    font-size: 20px;
+    margin: 40px;
 }
 `;
