@@ -34,16 +34,48 @@ def printRequest(request):
 
 @api_view(['POST'])
 @csrf_exempt
-def create_tournament(request):
+def create_tournament(request, player_id):
     printRequest(request)
     if request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = TournamentSerializer(data=data)
         if serializer.is_valid():
             tournament = serializer.save()
+            player = Player.objects.get(id=player_id)
+            tournament.players.add(player)
             return JsonResponse({'status': 'success', 'tournament': serializer.data}, status=201)
         print("Validation errors:", serializer.errors)
         return JsonResponse({'status': 'error', 'errors': serializer.errors}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def signup(request):
+    printRequest(request)
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = PlayerSerializer(data=data)
+        if serializer.is_valid():
+            player = serializer.save()
+            return JsonResponse({'status': 'success', 'player': serializer.data}, status=201)
+        print("Validation errors: ", serializer.errors)
+        return JsonResponse({'status': 'error', 'errors': serializer.errors}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def login(request):
+    printRequest(request)
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        username = data.get('username')
+        password = data.get('password')
+        try:
+            player = Player.objects.get(username=username, password=password)
+            serializer = PlayerSerializer(player)
+            return JsonResponse({'status': 'success', 'player': serializer.data}, status=200)
+        except Player.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Invalid email or password'}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 def list_tournaments(request):
@@ -89,9 +121,31 @@ def get_tournaments_by_player_id(request, player_id):
 def play_game(player1, player2):
     score1 = random.randint(0, 5)
     score2 = random.randint(0, 5)
-    print(f"Game played between {player1.name} and {player2.name}")
-    print(f"Scores: {player1.name} - {score1}, {player2.name} - {score2}")
+    print(f"Game played between {player1.username} and {player2.username}")
+    print(f"Scores: {player1.username} - {score1}, {player2.username} - {score2}")
     return score1, score2
+    #///////////// play game with send players tp game_service to play /////////////
+    # # Define the API endpoint for starting a game
+    # api_url = "http://game-service:8002/api/games/play"
+    # # Create the payload with player IDs
+    # payload = {
+    #     'player1_id': player1.id,
+    #     'player2_id': player2.id
+    # }
+    # # Make a POST request to the Game Service API
+    # response = requests.post(api_url, json=payload)
+    # # Check if the request was successful
+    # if response.status_code == 200:
+    #     # Extract scores from the response
+    #     data = response.json()
+    #     score1 = data['score1']
+    #     score2 = data['score2']
+    #     return score1, score2
+    # else:
+    #     # Handle error or unexpected response
+    #     raise Exception("Failed to get game result from Game Service")
+    #///////////// EEEENNNENENENENENEENENENENDDDDDDD /////////////
+
 
 def launch_tournament_test(request):
     tournament = Tournament.objects.get(id=2)
@@ -138,10 +192,27 @@ def launch_tournament_test(request):
 #     return JsonResponse("Test Tournament", safe=False)
 
 def launch_tournament(tournament):
-    players = tournament.players.objects.all()
+    players = tournament.players.all()
     serilizer = PlayerSerializer(players, many=True)
-    print(serilizer.data)
     print("Tournament with name {} is started.".format(tournament.tournament_name))
+    while tournament.players.count() > 1:
+        players = tournament.players.all()
+        i = 0
+        while i < len(players) - 1:
+            player1 = players[i]
+            player2 = players[i + 1]
+            score1, score2 = play_game(player1, player2)
+            if score1 >= score2:
+                tournament.players.remove(player2)
+            else:
+                tournament.players.remove(player1)
+            i += 2
+    if tournament.players.count() == 1:
+        Winner = tournament.players.first()
+        print("player with name  ", Winner.username , "  is Win .")
+        return {"statusText": "Player Win", "Winner": Winner.username}
+    else:
+        return {"statusText": "No players left"}
 
 @csrf_exempt
 def player_join_tournament(request, tournamentId, playerId):
@@ -160,7 +231,8 @@ def player_join_tournament(request, tournamentId, playerId):
             if tournament.players.count() >= tournament.number_of_players:
                 tournament.can_join = False
                 tournament.save()
-                launch_tournament(tournament) # here call launch_tournament function
+                # launch_tournament(tournament) # here call launch_tournament function
+                return JsonResponse({'success': launch_tournament(tournament)}, status=200)
             return JsonResponse({'success': 'Player successfully joined the tournament'}, status=200)
         except Player.DoesNotExist:
             return JsonResponse({'statusText': 'Player not found'}, status=404)

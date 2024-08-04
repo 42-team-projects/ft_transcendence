@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="my-4">Create Tournament</h1>
+        <h1 class="my-4">Welcome to the Tournament</h1>
+            <div id="user-info"></div>
             <div class="form-group">
                 <label for="name">Tournament Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Tournament name" required>
@@ -33,14 +34,30 @@
                     <label for="name">Tournament Id</label>
                     <input type="number" class="form-control" id="tournamentId" name="name" placeholder="Tournament Id" required>
                 </div>
-                <div class="form-group">
-                    <label for="name">Player Id</label>
-                    <input type="number" class="form-control" id="playerId" name="name" placeholder="Player Id" required>
-                </div>
-                <button type="submit" class="btn btn-primary" onclick="player_join_tournament()">add player to tournament</button>
+                <button type="button" class="btn btn-primary" onclick="player_join_tournament()">Join Tournament</button>
+            </div>
+            <hr>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="logout()">logout ></button>
             </div>
     </div>
     <script>
+        
+        // Retrieve user data from local storage
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const id = user.id;
+        if (user) {
+            document.getElementById('user-info').innerHTML = `
+                <h2>${user.username} Player !</h2>`;
+        } else {
+            document.getElementById('user-info').innerHTML = `
+                <p>No user is logged in.</p>`;
+        }
+
+        function logout()
+        {
+            window.location.href = './login.html';
+        }
         let stages = [];
 
         const apiUrl = 'http://127.0.0.1:8000/TournamentApp/';
@@ -62,13 +79,12 @@
             try {
                 const name = document.getElementById("name").value;
                 const num_players = document.getElementById("num_players").value;
-
                 const Tournament = {
                     tournament_name: name,
                     number_of_players: num_players
                 }
-                const create_tournament = "create/"
-                const response = await fetch(`${apiUrl}${create_tournament}`, {
+                const create_tournament = "create/player/";
+                const response = await fetch(`${apiUrl}${create_tournament}${id}/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -103,8 +119,8 @@
         async function get_tournaments_by_player_id() {
             try {
                 const player = "player/"
-                const playerId = "1/";
-                const response = await fetch(`${apiUrl}${player}${playerId}`);
+                const playerId = id;
+                const response = await fetch(`${apiUrl}${player}${playerId}/`);
                 if (!response.ok) {
                     throw new Error(`${response.status}  ${response.statusText}`);
                 }
@@ -132,20 +148,23 @@
         {
             try {
                 const tournamentId = document.getElementById("tournamentId").value;
-                const playerId = document.getElementById("playerId").value;
+                const playerId = id;
+                // const playerId = document.getElementById("playerId").value;
                 const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/`, {
                     method: 'POST'
                 });
                 if (!response.ok) {
                     const data = await response.json();
-                    // throw new Error(`${response.status}  ${response.statusText}`);
+                    console.log(JSON.stringify(data, null, 2));
                     throw new Error(`${response.status}  ${data.statusText}`);
                 }
-                console.log(response);
                 const data = await response.json();
                 console.log(JSON.stringify(data, null, 2));
+                if(data.success.Winner) {
+                    console.log(`Player with name ${data.success.Winner} is the winner.`);
+                    alert(`Player with name ${data.success.Winner} is the winner.`);
+                }
             } catch(error) {
-                
                 console.error('Error of player join tournament: ', error);
             }
         }
