@@ -20,33 +20,61 @@ export class CreateTournament extends HTMLElement {
                 <visibillity-settings></visibillity-settings>
 
             </div>
-            <qrcode-component></qrcode-component>
+            <tournament-rules></tournament-rules>
         `;
     }
-
+        
+        // <qrcode-component></qrcode-component>
 
 
     connectedCallback() {
-        const inputField = this.shadowRoot.querySelector(".settingsform input");
-        const qrCodeTitle = this.shadowRoot.querySelector("qrcode-component");
-        setInterval(() => {
-            qrCodeTitle.title = inputField.value;
-        }, 100);
+        // const inputField = this.shadowRoot.querySelector(".settingsform input");
+        // const qrCodeTitle = this.shadowRoot.querySelector("qrcode-component");
+        // setInterval(() => {
+        //     qrCodeTitle.title = inputField.value;
+        // }, 100);
+        // console.log("hello world");
     }
 
     disconnectedCallback() {
 
     }
 
+
     get data() {
-        
-        return this.shadowRoot.querySelector("players-and-stages").stages;
+        let apiData = {name: null, start_date: null, end_date: null, num_players: 0, access: false, password: null, stages: []};
+        const name = this.shadowRoot.querySelector(".item .settingsform input");
+        if (name)
+        {
+            // if (name.value.length < 3)
+            // {
+            //     name.style.border = "1px solid red";
+            //     return null;
+            // }
+            name.style.border = "1px solid aqua";
+            apiData.name = name.value;
+        }
+        apiData.access = this.shadowRoot.querySelector("visibillity-settings").access;
+        // if (!apiData.access)
+        //     return null;
+        apiData.password = this.shadowRoot.querySelector("visibillity-settings").password;
+        // if (apiData.access.toLowerCase() == "private" && !apiData.password)
+        //     return null;
+        apiData.num_players = this.shadowRoot.querySelector("players-and-stages").selectItemId;
+        apiData.stages = this.shadowRoot.querySelector("players-and-stages").stages;
+        // if (!apiData.stages || !apiData.stages.length)
+        //     return null;
+        // if (apiData.stages.length)
+        // {
+        //     apiData.start_date = apiData.stages[0].date;
+        //     apiData.end_date = apiData.stages[apiData.stages.length - 1].date;
+        // }
+        return apiData;
     };
 
     static observedAttributes = [];
 
     attributeChangedCallback(attrName, oldVdalue, newValue) {
-
     }
 }
 
@@ -66,8 +94,11 @@ const cssContent = /*css*/`
     display: flex;
     flex-direction: column;
     gap: 30px;
+    align-items: center;
+    justify-content: center;
     margin-top: 50px;
     margin-left: 50px;
+    min-width: 700px;
 }
 
 .itemContainer {
@@ -169,6 +200,5 @@ const cssContent = /*css*/`
     background-repeat: no-repeat;
     background-size: cover;
 }
-
 
 `;
