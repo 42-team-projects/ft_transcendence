@@ -5,9 +5,11 @@ import uuid
 # Create your models here.
 
 class Player(models.Model):
-    name = models.CharField(max_length=100)
+    username = models.CharField(max_length=100)
+    email = models.CharField(max_length=200)
+    password = models.CharField(max_length=225)
     def __str__(self):
-        return self.name
+        return self.username
 
 class Tournament(models.Model):
     tournament_id = models.CharField(max_length=10, unique=True, editable=False)
