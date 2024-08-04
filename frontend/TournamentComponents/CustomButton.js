@@ -86,8 +86,8 @@ export class CustomButton extends HTMLElement {
             this.changeBorderColor(this.borderColor);
         if (this.backgroundColor)
             this.changeBackgroundColor(this.backgroundColor);
-        if (this.reflect)
-            this.reflectButton(this.reflect);
+        if (this.reverse)
+            this.reverseButton(this.reverse);
     }
 
 
@@ -107,9 +107,9 @@ export class CustomButton extends HTMLElement {
         this.shadowRoot.querySelector(".center").style.backgroundColor = newValue;
     }
 
-    reflectButton(newVdalue) {
+    reverseButton(newVdalue) {
 
-        if (!this.hasAttribute("reflect"))
+        if (!this.hasAttribute("reverse"))
             return ;
         this.shadowRoot.querySelector(".left-side").style.clipPath = "polygon(100% 0%, 100% 100%, 0 100%, 0 30%, 50% 0)";
         this.shadowRoot.querySelector(".right-side").style.clipPath = "polygon(100% 0%, 100% 100%, 0 100%, 0 30%, 50% 0)";
@@ -123,8 +123,8 @@ export class CustomButton extends HTMLElement {
     set height(val) { this.setAttribute("height", val);}
     get height() { return this.getAttribute("height");}
     
-    set reflect(val) { this.setAttribute("reflect", val);}
-    get reflect() { return this.getAttribute("reflect");}
+    set reverse(val) { this.setAttribute("reverse", val);}
+    get reverse() { return this.getAttribute("reverse");}
     
     set borderColor(val) { this.setAttribute("border-color", val);}
     get borderColor() { return this.getAttribute("border-color");}
@@ -132,7 +132,7 @@ export class CustomButton extends HTMLElement {
     set backgroundColor(val) { this.setAttribute("background-color", val);}
     get backgroundColor() { return this.getAttribute("background-color");}
 
-    static observedAttributes = ["width", "height", "border-color", "background-color", "reflect"];
+    static observedAttributes = ["width", "height", "border-color", "background-color", "reverse"];
 
     attributeChangedCallback(attrName, oldVdalue, newValue) {
         if (attrName == "width")
@@ -143,8 +143,8 @@ export class CustomButton extends HTMLElement {
             this.changeBorderColor(newValue);
         else if (attrName == "background-color")
             this.changeBackgroundColor(newValue);
-        else if (attrName == "reflect")
-            this.reflectButton(newValue);
+        else if (attrName == "reverse")
+            this.reverseButton(newValue);
 
     }
 }

@@ -82,20 +82,38 @@ export class PlayersAndStages extends HTMLElement {
         }
     }
 
-    selectItem;
+    selectItemId;
 
-    get selectItem() { return this.selectItem; }
+    get selectItemId() { return this.selectItemId; }
 
 
     get stages() {
+        if (!this.selectItemId)
+        {
+            const choices = this.shadowRoot.querySelectorAll(".choice");
+            choices.forEach(elem => elem.style.border = "1px solid red");
+            return null;
+        }
         let data = [];
         const items = this.shadowRoot.querySelectorAll(".subitems .item");
         items.forEach((item) => {
-            let values = {stage_type: "", date: ""};
+            let values = {stage_type: null, date: null};
             const stage_type = item.id.toUpperCase();
             values.stage_type = stage_type;
             const date = item.querySelector(".settingsform #date");
+            if (!date.value)
+            {
+                date.style.border = "1px solid red";
+                return null;
+            }
+            date.style.border = "1px solid aqua";
             const time = item.querySelector(".settingsform #time");
+            if (!time.value)
+            {
+                time.style.border = "1px solid red";
+                return null;
+            }
+            time.style.border = "1px solid aqua";
             values.date = date.value + "," + time.value;
             data.push(values);
         });
@@ -106,14 +124,16 @@ export class PlayersAndStages extends HTMLElement {
         this.createChoices();
         this.shadowRoot.querySelectorAll(".chooseContainer").forEach(elem => {
             elem.addEventListener("click", () => {
-                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
+                const choices = this.shadowRoot.querySelectorAll(".choice");
+                choices.forEach(elem => elem.style.border = "none");
+                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItemId);
                 if (selectItemcomponent)
                 {
                     const choice = selectItemcomponent.querySelector(".choice");
                     if (choice)
                         choice.className = "choice";
                 }
-                this.selectItem = elem.id;
+                this.selectItemId = elem.id;
                 elem.querySelector(".choice").className = "choice aqua";
                 this.createStages(Number(elem.id));
             });
