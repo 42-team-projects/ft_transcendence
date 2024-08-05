@@ -1,4 +1,4 @@
-
+import asyncio
 import json
 from channels.generic.websocket import WebsocketConsumer
 from . clients import Client , GameRoom
@@ -10,17 +10,16 @@ class GameConsumer(WebsocketConsumer) :
     def receive(self, text_data=None, bytes_data=None):
         data = json.loads(text_data)
         status = data.get('status', None)
-        # print("status : ", status)
         if status == 'searching':
             user_id = data.get('userId', None)
             self.add_to_queue(user_id)
             if(len(queue) >= 2):
                 self.add_to_room()
         elif status == 'startGame':
-            # print("start game")
             room_name = data.get('room_name', None)
             room = self.find_room(room_name)
-            # room.set_player_y(self, data.get('y', None))
+            room.set_canvas_width(data.get('canvas_width', None))
+            room.set_canvas_height(data.get('canvas_height', None))
             if(room._active == False):
                 room.game_loop()
                 room._active = True
