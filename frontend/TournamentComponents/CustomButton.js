@@ -6,12 +6,12 @@ const cssContent = /*css*/`
 }
 
 .left-side {
-    width: 40px;
+    width: 20px;
     height: 100%;
     padding-top: 3px;
     padding-bottom: 3px;
     padding-left: 3px;
-    clip-path: polygon(100% 0, 100% 100%, 50% 100%, 0 70%, 0 0);
+    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
     background-color: aqua;
     display: flex;
     align-items: center;
@@ -21,9 +21,10 @@ const cssContent = /*css*/`
 .left-side div {
     width: 100%;
     height: 100%;
-    clip-path: polygon(100% 0, 100% 100%, 50% 100%, 0 70%, 0 0);
+    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
     background-color: #1c3143;
 }
+
 .center {
     width: 100%;
     height: 100%;
@@ -38,12 +39,12 @@ const cssContent = /*css*/`
 }
 
 .right-side {
-    width: 40px;
+    width: 20px;
     height: 100%;
     padding-top: 3px;
     padding-bottom: 3px;
     padding-left: 3px;
-    clip-path: polygon(100% 0, 100% 100%, 50% 100%, 0 70%, 0 0);
+    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
     background-color: aqua;
     display: flex;
     align-items: center;
@@ -54,7 +55,7 @@ const cssContent = /*css*/`
 .right-side div {
     width: 100%;
     height: 100%;
-    clip-path: polygon(100% 0, 100% 100%, 50% 100%, 0 70%, 0 0);
+    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
     background-color: #1c3143;
 }
 `;
