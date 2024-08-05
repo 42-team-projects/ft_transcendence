@@ -33,10 +33,10 @@ export class PlayersAndStages extends HTMLElement {
             rounds.className = "item";
             rounds.id = "rounds";
             rounds.innerHTML = `
-                    <h2>Round Of 16</h2>
+                    <h2>Round Of 16 will start at: </h2>
                     <div class="settingsform">
-                        <input id="roundsDate" type="date">
-                        <input id="roundsTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(rounds);
@@ -46,10 +46,10 @@ export class PlayersAndStages extends HTMLElement {
             quarterfinal.className = "item";
             quarterfinal.id = "quarterfinal";
             quarterfinal.innerHTML = `
-                    <h2>Quarter-Final</h2>
+                    <h2>Quarter-Final will start at: </h2>
                     <div class="settingsform">
-                        <input id="quarterfinalDate" type="date">
-                        <input id="quarterfinalTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(quarterfinal);
@@ -59,10 +59,10 @@ export class PlayersAndStages extends HTMLElement {
             semifinal.className = "item";
             semifinal.id = "semifinal";
             semifinal.innerHTML = `
-                    <h2>Semi-Final</h2>
+                    <h2>Semi-Final will start at: </h2>
                     <div class="settingsform">
-                        <input id="semifinalDate" type="date">
-                        <input id="semifinalTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(semifinal);
@@ -72,39 +72,74 @@ export class PlayersAndStages extends HTMLElement {
             final.className = "item";
             final.id = "final";
             final.innerHTML = `
-                    <h2>Final</h2>
+                    <h2>Final will start at: </h2>
                     <div class="settingsform">
-                        <input id="finalDate" type="date">
-                        <input id="finalTime" type="time">
+                        <input id="date" type="date">
+                        <input id="time" type="time">
                     </div>
             `;
             subItems.appendChild(final);
         }
     }
 
-    selectItem;
+    selectItemId;
 
-    get selectItem() { return this.selectItem; }
+    get selectItemId() { return this.selectItemId; }
+
+
+    get stages() {
+        if (!this.selectItemId)
+        {
+            const choices = this.shadowRoot.querySelectorAll(".choice");
+            choices.forEach(elem => elem.style.border = "1px solid red");
+            return null;
+        }
+        let data = [];
+        const items = this.shadowRoot.querySelectorAll(".subitems .item");
+        items.forEach((item) => {
+            let values = {stage_type: null, date: null};
+            const stage_type = item.id.toUpperCase();
+            values.stage_type = stage_type;
+            const date = item.querySelector(".settingsform #date");
+            if (!date.value)
+            {
+                date.style.border = "1px solid red";
+                return null;
+            }
+            date.style.border = "1px solid aqua";
+            const time = item.querySelector(".settingsform #time");
+            if (!time.value)
+            {
+                time.style.border = "1px solid red";
+                return null;
+            }
+            time.style.border = "1px solid aqua";
+            values.date = date.value + "," + time.value;
+            data.push(values);
+        });
+        return data;
+    };
 
     connectedCallback() {
         this.createChoices();
         this.shadowRoot.querySelectorAll(".chooseContainer").forEach(elem => {
-            elem.addEventListener("click", e => {
-                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
+            elem.addEventListener("click", () => {
+                const choices = this.shadowRoot.querySelectorAll(".choice");
+                choices.forEach(elem => elem.style.border = "none");
+                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItemId);
                 if (selectItemcomponent)
                 {
                     const choice = selectItemcomponent.querySelector(".choice");
                     if (choice)
                         choice.className = "choice";
                 }
-                this.selectItem = elem.id;
+                this.selectItemId = elem.id;
                 elem.querySelector(".choice").className = "choice aqua";
-                console.log(elem.id);
                 this.createStages(Number(elem.id));
             });
         });
-
     }
+
 }
 
 const cssContent = /*css*/`

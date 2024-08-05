@@ -18,34 +18,67 @@ export class CreateTournament extends HTMLElement {
                 <players-and-stages></players-and-stages>
 
                 <visibillity-settings></visibillity-settings>
-                
+
             </div>
-            <qrcode-component value="hello world" title="Pong Cup"></qrcode-component>
+            <tournament-rules></tournament-rules>
         `;
     }
-
+        
+        // <qrcode-component></qrcode-component>
 
 
     connectedCallback() {
-
+        // const inputField = this.shadowRoot.querySelector(".settingsform input");
+        // const qrCodeTitle = this.shadowRoot.querySelector("qrcode-component");
+        // setInterval(() => {
+        //     qrCodeTitle.title = inputField.value;
+        // }, 100);
+        // console.log("hello world");
     }
 
     disconnectedCallback() {
 
     }
 
+
+    get data() {
+        let apiData = {name: null, start_date: null, end_date: null, num_players: 0, access: false, password: null, stages: []};
+        const name = this.shadowRoot.querySelector(".item .settingsform input");
+        if (name)
+        {
+            // if (name.value.length < 3)
+            // {
+            //     name.style.border = "1px solid red";
+            //     return null;
+            // }
+            name.style.border = "1px solid aqua";
+            apiData.name = name.value;
+        }
+        apiData.access = this.shadowRoot.querySelector("visibillity-settings").access;
+        // if (!apiData.access)
+        //     return null;
+        apiData.password = this.shadowRoot.querySelector("visibillity-settings").password;
+        // if (apiData.access.toLowerCase() == "private" && !apiData.password)
+        //     return null;
+        apiData.num_players = this.shadowRoot.querySelector("players-and-stages").selectItemId;
+        apiData.stages = this.shadowRoot.querySelector("players-and-stages").stages;
+        // if (!apiData.stages || !apiData.stages.length)
+        //     return null;
+        // if (apiData.stages.length)
+        // {
+        //     apiData.start_date = apiData.stages[0].date;
+        //     apiData.end_date = apiData.stages[apiData.stages.length - 1].date;
+        // }
+        return apiData;
+    };
+
     static observedAttributes = [];
 
     attributeChangedCallback(attrName, oldVdalue, newValue) {
-
     }
 }
 
 const cssContent = /*css*/`
-
-::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-}
 
 :host {
     width: 100%;
@@ -61,8 +94,11 @@ const cssContent = /*css*/`
     display: flex;
     flex-direction: column;
     gap: 30px;
+    align-items: center;
+    justify-content: center;
     margin-top: 50px;
     margin-left: 50px;
+    min-width: 700px;
 }
 
 .itemContainer {
@@ -76,6 +112,7 @@ const cssContent = /*css*/`
     width: 100%;
     height: 100%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -105,6 +142,7 @@ const cssContent = /*css*/`
 }
 
 .item h1 {
+    min-width: 200px;
     flex: 1;
 }
 
@@ -162,6 +200,5 @@ const cssContent = /*css*/`
     background-repeat: no-repeat;
     background-size: cover;
 }
-
 
 `;
