@@ -1,0 +1,21 @@
+{
+    "id": 5,
+    "tournament_name": "Tournament 2",
+    "start_datetime": "2024-07-28T19:00:00Z",
+    "end_datetime": "2024-07-28T19:30:00Z",
+    "number_of_players": 4,
+    "is_accessible": false,
+    "access_password": 2000,
+    "stages": [
+      {
+        "stage_id": 7,
+        "stage_name": "SEMIFINALS",
+        "stage_datetime": "2024-07-28T18:00:00Z"
+      },
+      {
+        "stage_id": 8,
+        "stage_name": "FINAL",
+        "stage_datetime": "2024-07-28T18:30:00Z"
+      }
+    ]
+  }
