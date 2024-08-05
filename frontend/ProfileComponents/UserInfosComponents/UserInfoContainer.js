@@ -34,7 +34,6 @@ const cssContent = /*css*/`
     font-size: 16px;
     display:flex;
     flex-direction: column;
-    justify-content: space-between;
     width: 100%;
     padding-left: 20px;
 }

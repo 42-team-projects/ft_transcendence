@@ -55,16 +55,16 @@ import { SideBarButton } from './side-bar/sb-button.js'
 import { CustomButton } from "./TournamentComponents/CustomButton.js";
 import { TournamentsTable } from "./TournamentComponents/TournamentsTable.js";
 import { CreateTournament } from "./TournamentComponents/CreateTournament.js";
-import { QRCodeComponent } from "./TournamentComponents/QRCodeComponent.js";
-import { SettingContainer } from "./TournamentComponents/SettingContainer.js";
 import { PlayersAndStages } from "./TournamentComponents/PlayersAndStages.js";
 import { Visibility } from "./TournamentComponents/VisibillitySettings.js";
+import { TournamentRules } from "./TournamentComponents/TournamentRules.js";
+import { TournamentRound } from "./TournamentComponents/TournamentRound.js";
 
 
+customElements.define("tournament-round", TournamentRound);
 customElements.define("visibillity-settings", Visibility);
 customElements.define("players-and-stages", PlayersAndStages);
-customElements.define("setting-container", SettingContainer);
-customElements.define("qrcode-component", QRCodeComponent);
+customElements.define("tournament-rules", TournamentRules);
 customElements.define("create-tournament", CreateTournament);
 customElements.define("tournaments-table", TournamentsTable);
 customElements.define("custom-button", CustomButton);
