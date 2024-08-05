@@ -135,7 +135,7 @@ export class TournamentComponent extends HTMLElement {
 
     connectedCallback() {
         const mainContainer = this.shadowRoot.querySelector(".mainContainer");
-        const tournamentsTable = document.createElement("tournaments-table");
+        let tournamentsTable = document.createElement("tournaments-table");
         tournamentsTable.style.width = "100%";
         mainContainer.appendChild(tournamentsTable);
         const firstButton = this.shadowRoot.getElementById("firstButton");
@@ -144,6 +144,8 @@ export class TournamentComponent extends HTMLElement {
             const buttonValue = firstButton.querySelector("h3");
             if (buttonValue.textContent == "CANCEL") {
                 mainContainer.innerHTML = '';
+                tournamentsTable = document.createElement("tournaments-table");
+                tournamentsTable.style.width = "100%";
                 mainContainer.appendChild(tournamentsTable);
                 buttonValue.textContent = "JOIN TOURNAMENT";
                 secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
