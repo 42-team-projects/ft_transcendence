@@ -89,7 +89,7 @@ async function login()
         if (data.status === 'success') {
             // Store user data in local storage
             localStorage.setItem('loggedInUser', JSON.stringify(data.player));
-            window.location.href = './Tournament4.html';
+            window.location.href = '../frontend/index.html';
         }
     } catch(error) {
         console.error('Error during tournament login: ', error);
