@@ -20,7 +20,57 @@ const fakeData = [
         profile: uri,
         time: "2 HOURS AGO",
         score: "5 - 6",
-        result: "WIN",
+        result: "LOSS",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 10, month: "MAY"},
+        username: "NOURDIN",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "LOSS",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 10, month: "MAY"},
+        username: "NOURDIN",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "LOSS",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 10, month: "MAY"},
+        username: "NOURDIN",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "LOSS",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 10, month: "MAY"},
+        username: "NOURDIN",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "LOSS",
+        replay: ">"
+    },
+    {
+        id: 1,
+        date: {day: 10, month: "MAY"},
+        username: "NOURDIN",
+        profile: uri,
+        time: "2 HOURS AGO",
+        score: "5 - 6",
+        result: "LOSS",
         replay: ">"
     }
 ];
@@ -30,6 +80,9 @@ export class CustomTable extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
+        this.shadowRoot.innerHTML = `
+            <style> ${cssContent} </style>
+        `;
     }
 
     async getDataFromApi(APIUrl) {
@@ -147,3 +200,12 @@ export class CustomTable extends HTMLElement {
     }
 
 }
+
+
+const cssContent = /*css*/`
+
+:host {
+    padding: 10px 0;
+}
+
+`;

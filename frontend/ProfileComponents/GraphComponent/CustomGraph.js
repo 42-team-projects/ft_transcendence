@@ -5,7 +5,6 @@ export class CustomGraph extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
-
     }
 
     drawLevels(ctx, centerX, centerY) {
@@ -141,10 +140,11 @@ export class CustomGraph extends HTMLElement {
 
     set dataObject(value) {
         this.setAttribute("data-object", value);
-        this.shadowRoot.innerHTML = "";
+        this.shadowRoot.innerHTML = '';
         const radarChart = document.createElement("canvas");
         radarChart.width = 400;
         radarChart.height = 400;
+        radarChart.margin = 0;
         this.drawRadarChart(radarChart, value);
         this.shadowRoot.appendChild(radarChart);
     }
