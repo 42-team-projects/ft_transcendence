@@ -1,6 +1,5 @@
 import json
 import asyncio
-
 class GameRoom :
     def __init__(self, client1, client2):
         self._client1 = client1
@@ -9,6 +8,8 @@ class GameRoom :
         self._client1.y = 0
         self._client2.y = 0
         self._active = False
+        self._canvas_width = 300
+        self._canvas_height = 150
 
     def find_opponent(self):
         message = {
@@ -19,17 +20,23 @@ class GameRoom :
         message['opponent_id'] = self._client1.id
         self._client2.ws.send(json.dumps(message))
     def game_loop(self):
-        canvas_width = 300
-        canvas_height = 150
+        #canvas
+        canvas_width = self._canvas_width
+        canvas_height = self._canvas_height
+
+        #ball
         ball_x = canvas_width / 2
         ball_y = canvas_height / 2
-        ball_radius = 0.1
-        ball_dx = 0.1
-        ball_dy = 0.1
+        ball_radius = 10
+        ball_dx = 1
+        ball_dy = 1
+
+        #racquet
         player1_y = canvas_height / 2
         player2_y = canvas_height / 2
-        racquet_width = 2
-        racquet_height = 25
+        racquet_width = 5
+        racquet_height = 90
+        #game loop
         while True:
             ball_x += ball_dx
             ball_y += ball_dy
@@ -47,6 +54,8 @@ class GameRoom :
                     'x': ball_x,
                     'y': ball_y,
                     'radius': ball_radius,
+                    'dx': ball_dx,
+                    'dy': ball_dy,
                 },
                 'racquet': {
                     'player_y': player1_y,
@@ -60,6 +69,8 @@ class GameRoom :
                     'x': canvas_width - ball_x,
                     'y': ball_y,
                     'radius': ball_radius,
+                    'dx': -ball_dx,
+                    'dy': ball_dy,
                 },
                 'racquet': {
                     'player_y': player2_y,
@@ -70,13 +81,11 @@ class GameRoom :
             }
             self.sendData(data1, self._client1.ws)
             self.sendData(data2, self._client2.ws)
-            asyncio.sleep(0.16)
+            asyncio.sleep(0.05)
     def sendData(self, data, ws):
         if ws == self._client1.ws:
-            # print("sending data to client2")
             self._client2.ws.send(json.dumps(data))
         else:
-            # print("sending data to client1")
             self._client1.ws.send(json.dumps(data))
     def set_player_y(self, ws, y):
         if ws == self._client1.ws:
@@ -97,6 +106,10 @@ class GameRoom :
 
     def get_client2_ws(self):
         return self._client2.ws
+    def set_canvas_width(self, width):
+        self._canvas_width = width
+    def set_canvas_height(self, height):
+        self._canvas_height = height
 class Client :
     def __init__(self, ws, id):
         self.ws = ws
