@@ -3,12 +3,12 @@ const reverseContent = `
 <div class="linking-line-reverse"></div>
 <div class="playerContainer">
     <div class="player">
-        <custom-button id="firstPlayer" height="40px" width="200px" reverse>
+        <custom-button id="firstPlayer" height="50px" reverse>
             <slot name="firstPlayer"></slot>
         </custom-button>
     </div>
     <div class="player">
-        <custom-button id="secondPlayer" height="40px" width="200px" reverse>
+        <custom-button id="secondPlayer" height="50px" reverse>
             <slot name="secondPlayer"></slot>
         </custom-button>
     </div>
@@ -24,12 +24,12 @@ export class TournamentRound extends HTMLElement {
             <div class="container">
                 <div class="playerContainer">
                     <div class="player">
-                        <custom-button id="firstPlayer" height="40px" width="200px">
+                        <custom-button id="firstPlayer" height="50px">
                             <slot name="firstPlayer"></slot>
                         </custom-button>
                     </div>
                     <div class="player">
-                        <custom-button id="secondPlayer" height="40px" width="200px">
+                        <custom-button id="secondPlayer" height="50px">
                             <slot name="secondPlayer"></slot>
                         </custom-button>
                     </div>
@@ -106,7 +106,6 @@ const cssContent = /*css*/`
 
     .player {
         flex: 1;
-        width: 100%;
         display: flex;
         align-items: center;
         justify-content: end;
@@ -150,11 +149,6 @@ const cssContent = /*css*/`
         width: 25px;
         height: 5px;
         background-color: aqua;
-    }
-
-    ::slotted(*) {
-        width: 100px;
-
     }
 
 `;
