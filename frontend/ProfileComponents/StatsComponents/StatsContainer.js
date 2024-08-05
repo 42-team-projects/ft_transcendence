@@ -19,11 +19,12 @@ export class StatsContainer extends HTMLElement {
 const cssContent = /*css*/`
 
     :host {
-        grid-area: 1 / 1 / 5 / 5;
+        flex: 3;
         display: flex;
         flex-direction: column;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         padding: 20px;
+        min-width: 600px;
     }
 
     league-info {

@@ -10,7 +10,7 @@ export class Visibility extends HTMLElement {
                 <h1>Visibility</h1>
                 <div class="settingsform">
                     <div class="chooseContainer" id="public">
-                        <div class="checkbox"></div>
+                        <div class="checkbox aqua-border"></div>
                         <p>Public</p>
                     </div>
                     <div class="chooseContainer" id="private">
@@ -39,14 +39,13 @@ export class Visibility extends HTMLElement {
             <div class="item">
                 <h2>Confirm Password</h2>
                 <div class="settingsform">
-                    <input id="re-password" type="password" placeholder="Password">
+                    <input id="re-password" type="password" placeholder="Re-Password">
                 </div>
             </div>
         `;
     }
 
     connectedCallback() {
-        // this.createChoices();
         this.shadowRoot.querySelectorAll(".chooseContainer").forEach(elem => {
             elem.addEventListener("click", e => {
                 if (elem.id == "public")
@@ -57,7 +56,39 @@ export class Visibility extends HTMLElement {
                 this.createForms(elem.id);
             });
         });
+    }
 
+    get access() {
+        const accessStatus = this.shadowRoot.querySelector(".aqua-border");
+        if (!accessStatus)
+            return null;
+        return accessStatus.parentNode.id;
+    }
+
+    get password() {
+        if (this.access && this.access.toLowerCase() == "private")
+        {
+            const password = this.shadowRoot.getElementById("password");
+            const re_password = this.shadowRoot.getElementById("re-password");
+            if (password.value == "" || password.value.length < 4)
+            {
+                password.style.border = "1.5px solid red";
+                return null;
+            }
+            else if (password.value != re_password.value)
+            {
+                password.style.border = "1.5px solid aqua";
+                re_password.style.border = "1.5px solid red";
+                return null;
+            }
+            else
+            {
+                password.style.border = "1.5px solid aqua";
+                re_password.style.border = "1.5px solid aqua";
+                return password.value;
+            }
+        }
+        return null;
     }
 }
 

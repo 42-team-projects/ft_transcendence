@@ -31,6 +31,14 @@ let fakeData = {
             {
                 label: "max-score",
                 value: 90
+            },
+            {
+                label: "max-score",
+                value: 90
+            },
+            {
+                label: "max-score",
+                value: 90
             }
         ]
     },
@@ -105,7 +113,7 @@ export class ProfileComponent extends HTMLElement {
                     </div>
                     <cover-component ></cover-component>
                     <div class="profile-data">
-                        <div class="profile-data-infos">
+                        <div style="flex: 1;">
                             <profile-info-component></profile-info-component>
 
                             <div class="profile-data-infos-container">
@@ -117,11 +125,15 @@ export class ProfileComponent extends HTMLElement {
                         </div>
 
                         <div class="profile-data-stats">
-                            <stats-container>
-                                <div class="league-bar" slot="league-bar"></div>
-                                <div class="match-record" slot="match-record"></div>
-                            </stats-container>
-                            <custom-graph id="graph"></custom-graph>
+                            <div class="statsClass">
+                                <stats-container>
+                                    <div class="league-bar" slot="league-bar"></div>
+                                    <div class="match-record" slot="match-record"></div>
+                                </stats-container>
+                                <div class="graphClass">
+                                    <custom-graph id="graph"></custom-graph>
+                                </div>
+                            </div>
                             <custom-table></custom-table>
                         </div>
                     </div>
@@ -339,7 +351,6 @@ const cssContent = /*css*/`
     display: flex;
     position: relative;
     flex-direction: column;
-    /* border: 1px solid red; */
     overflow-y: scroll;
     width: 100%;
     height: 100%;
@@ -402,54 +413,37 @@ page-name {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 10px;
     width: 100%;
     flex: 1;
-    height: 100%;
-}
-
-.profile-data-infos
-{
-    flex: 1;
-    height: 100%;
-    min-width: 400px;
 }
 
 .profile-data-stats
 {
     flex: 3;
-    height: 100%;
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    grid-gap: 5px;
-    min-width: 900px;
-    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+}
+
+.statsClass {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.graphClass {
+    flex: 2;
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .profile-data-stats::-webkit-scrollbar { 
     display: none;
-}
-
-
-custom-graph
-{
-    grid-area: 1 / 5 / 5 / -1;
-}
-
-@media only screen and (max-width: 1600px) {
-
-    .profile-data-stats {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(3, 100%);
-        min-width: 600px;
-        height: 100%;
-    }
-    stats-container { grid-area: 1 / 1 / 2 / 2; max-height: 100%;}    
-    custom-graph { grid-area: 2 / 1 / 3 / 2; max-width: 100%;}
-    custom-table { grid-area: 3 / 1 / 4 / 2; max-width: 100%;}
-
 }
 
 
@@ -483,18 +477,6 @@ custom-graph
 
 
 
-custom-graph {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-}
-
-
-
-
 /* Profile data infos container */
 
 .profile-data-infos-container {
@@ -502,8 +484,6 @@ custom-graph {
     flex-direction: column;
     gap: 30px;
     padding-bottom: 20px;
-    width: 100%;
-
 }
 
 
@@ -519,7 +499,6 @@ custom-graph {
     flex-wrap: wrap;
     gap: 20px;
     margin-right: 70px;
-    
 }
 
 `;
