@@ -1,3 +1,5 @@
+import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
+
 const cssContent = /*css*/`
 :host {
     
@@ -5,7 +7,6 @@ const cssContent = /*css*/`
 
 table {
     width: 100%;
-    height: 100%;
     font-size: 26px;
     color: white;
 }
@@ -27,7 +28,7 @@ tbody {
 }
 
 tbody > tr {
-    height: 60px;
+    height: 64px;
     font-size: 22px;
     text-align: center;
     opacity: 0.6;
@@ -46,12 +47,11 @@ td {
 }
 `;
 
-const fakeData = ["Pong Cup", "ESALIM", "27 JUL 2023", "27 JUL 2024", "ACTIVE", "PRIVATE"];
 
 export class TournamentsTable extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({mode: "open"});
+        this.attachShadow({ mode: "open" });
         this.shadowRoot.innerHTML = `
             <style>
                 ${cssContent}
@@ -62,7 +62,7 @@ export class TournamentsTable extends HTMLElement {
                         <th>NAME</th>
                         <th>OWNER</th>
                         <th>BEGIN</th>
-                        <th>END</th>
+                        <th>NUMBER OF PLAYERS</th>
                         <th>STATE</th>
                         <th>ACCESS</th>
                         <th>ACTIONS</th>
@@ -74,42 +74,83 @@ export class TournamentsTable extends HTMLElement {
         `;
     }
 
-
     createRow(data) {
         const tr = document.createElement("tr");
-        data.forEach(value => {
+        {
             const td = document.createElement("td");
-            td.textContent = value;
+            td.textContent = data.tournament_name;
             tr.appendChild(td);
-        });
-        const td = document.createElement("td");
-        td.innerHTML = `
-                <div class="actions">
-                    <img src="./images/logout.svg" width="24"/>
-                    <img src="./assets/profile-assets/play-button.svg" width="24"/>
-                </div>
-            `;
-        tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            if (data.players.length)
+                td.textContent = data.players[0].username;
+            else
+                td.textContent = "unknown";
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.textContent = convertTimeStampIntoDate(data.created_at);
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.textContent = data.players.length + " / " + data.number_of_players;
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.textContent = "STARTED";
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.textContent = data.is_accessible ? "PUBLIC" : "PRIVATE";
+            tr.appendChild(td);
+        }
+        {
+            const actions = document.createElement("td");
+            actions.innerHTML = `
+                    <div class="actions">
+                        <img src="./images/logout.svg" width="24"/>
+                        <img src="./assets/profile-assets/play-button.svg" width="24"/>
+                    </div>
+                `;
+            tr.appendChild(actions);
+        }
         return tr;
     }
 
-    connectedCallback() {
-        const tbody = this.shadowRoot.querySelector("tbody");
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
-        tbody.appendChild(this.createRow(fakeData));
+    async get_tournaments_by_player_id() {
+        try {
+            const player = "player/"
+            const playerId = JSON.parse(localStorage.getItem('loggedInUser')).id;
+            const response = await fetch(`${apiUrl}${player}${playerId}/`);
+            if (!response.ok) {
+                return null;
+            }
+            const data = await response.json();
+            console.log(JSON.stringify(data, null, 2));
+            return data;
+        } catch (error) {
+            console.error('Error of tournament list: ', error);
+            return null;
+        }
     }
 
+    async connectedCallback() {
+        const APIData = await this.get_tournaments_by_player_id();
+        if (!APIData)
+            return;
+        const tbody = this.shadowRoot.querySelector("tbody");
+
+        APIData.forEach(data => tbody.appendChild(this.createRow(data)));
+    }
+
+    disconnectedCallback() {
+    }
 
 }
+
+const apiUrl = 'http://127.0.0.1:8000/TournamentApp/';
