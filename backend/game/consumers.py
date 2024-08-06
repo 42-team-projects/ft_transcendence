@@ -1,27 +1,29 @@
 import asyncio
 import json
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from . clients import Client , GameRoom
 queue = []
 rooms = []
-class GameConsumer(WebsocketConsumer) :
-    def connect(self):
-        self.accept()
-    def receive(self, text_data=None, bytes_data=None):
+class GameConsumer(AsyncWebsocketConsumer) :
+    async def connect(self):
+        await self.accept()
+    async def receive(self, text_data=None, bytes_data=None):
         data = json.loads(text_data)
         status = data.get('status', None)
         if status == 'searching':
             user_id = data.get('userId', None)
-            self.add_to_queue(user_id)
+            await self.add_to_queue(user_id)
+            # print("Client connected", data)
             if(len(queue) >= 2):
-                self.add_to_room()
+                # print("Client connected", queue)
+                await self.add_to_room()
         elif status == 'startGame':
             room_name = data.get('room_name', None)
             room = self.find_room(room_name)
             room.set_canvas_width(data.get('canvas_width', None))
             room.set_canvas_height(data.get('canvas_height', None))
             if(room._active == False):
-                room.game_loop()
+                asyncio.create_task(room.game_loops())
                 room._active = True
             # print("game loop")
         elif status == 'move':
@@ -30,9 +32,9 @@ class GameConsumer(WebsocketConsumer) :
             room = self.find_room(room_name)
             if room:
                 room.set_player_y(self, data.get('y', None))
-                room.sendData(data, self)
+                await room.sendData(data, self)
 
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         global queue
         global rooms
         queue = [client for client in queue if client.ws != self]
@@ -40,16 +42,18 @@ class GameConsumer(WebsocketConsumer) :
         # print("Client disconnected", queue)
         # print("Client disconnected", rooms)
 
-    def add_to_queue(self, user_id):
+    async def add_to_queue(self, user_id):
+        # print("add to queue", user_id)
         client = Client(ws=self, id=user_id)
+        # print(client)
         queue.append(client)
 
-    def add_to_room(self):
+    async def add_to_room(self):
         client1 = queue.pop()
         client2 = queue.pop() 
         room = GameRoom(client1, client2)
         rooms.append(room)
-        room.find_opponent()
+        await room.find_opponent()
 
     def find_room(self, room_name):
         for room in rooms:
