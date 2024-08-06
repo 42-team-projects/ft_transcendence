@@ -25,100 +25,21 @@ export class PlayersAndStages extends HTMLElement {
         });
     }
 
-    // createStages(numberOfPlayers) {
-    //     const subItems = this.shadowRoot.querySelector(".subitems");
-    //     subItems.innerHTML = '';
-    //     if (numberOfPlayers >= 16) {
-    //         const rounds = document.createElement("div");
-    //         rounds.className = "item";
-    //         rounds.id = "rounds";
-    //         rounds.innerHTML = `
-    //                 <h2>Round Of 16 will start at: </h2>
-    //                 <div class="settingsform">
-    //                     <input id="date" type="date">
-    //                     <input id="time" type="time">
-    //                 </div>
-    //         `;
-    //         subItems.appendChild(rounds);
-    //     }
-    //     if (numberOfPlayers >= 8) {
-    //         const quarterfinal = document.createElement("div");
-    //         quarterfinal.className = "item";
-    //         quarterfinal.id = "quarterfinal";
-    //         quarterfinal.innerHTML = `
-    //                 <h2>Quarter-Final will start at: </h2>
-    //                 <div class="settingsform">
-    //                     <input id="date" type="date">
-    //                     <input id="time" type="time">
-    //                 </div>
-    //         `;
-    //         subItems.appendChild(quarterfinal);
-    //     }
-    //     if (numberOfPlayers >= 4) {
-    //         const semifinal = document.createElement("div");
-    //         semifinal.className = "item";
-    //         semifinal.id = "semifinal";
-    //         semifinal.innerHTML = `
-    //                 <h2>Semi-Final will start at: </h2>
-    //                 <div class="settingsform">
-    //                     <input id="date" type="date">
-    //                     <input id="time" type="time">
-    //                 </div>
-    //         `;
-    //         subItems.appendChild(semifinal);
-    //     }
-    //     if (numberOfPlayers >= 2) {
-    //         const final = document.createElement("div");
-    //         final.className = "item";
-    //         final.id = "final";
-    //         final.innerHTML = `
-    //                 <h2>Final will start at: </h2>
-    //                 <div class="settingsform">
-    //                     <input id="date" type="date">
-    //                     <input id="time" type="time">
-    //                 </div>
-    //         `;
-    //         subItems.appendChild(final);
-    //     }
-    // }
+    set selectItemId(val) {
+        const choices = this.shadowRoot.querySelectorAll(".choice");
+        choices.forEach(elem => elem.style.border = "none");
+        this.setAttribute("selectItemId", val);
+    }
 
-    selectItemId;
-
-    get selectItemId() { return this.selectItemId; }
-
-
-    // get stages() {
-    //     if (!this.selectItemId)
-    //     {
-    //         const choices = this.shadowRoot.querySelectorAll(".choice");
-    //         choices.forEach(elem => elem.style.border = "1px solid red");
-    //         return null;
-    //     }
-    //     let data = [];
-    //     const items = this.shadowRoot.querySelectorAll(".subitems .item");
-    //     items.forEach((item) => {
-    //         let values = {stage_type: null, date: null};
-    //         const stage_type = item.id.toUpperCase();
-    //         values.stage_type = stage_type;
-    //         const date = item.querySelector(".settingsform #date");
-    //         if (!date.value)
-    //         {
-    //             date.style.border = "1px solid red";
-    //             return null;
-    //         }
-    //         date.style.border = "1px solid aqua";
-    //         const time = item.querySelector(".settingsform #time");
-    //         if (!time.value)
-    //         {
-    //             time.style.border = "1px solid red";
-    //             return null;
-    //         }
-    //         time.style.border = "1px solid aqua";
-    //         values.date = date.value + "," + time.value;
-    //         data.push(values);
-    //     });
-    //     return data;
-    // };
+    get selectItemId() {
+        const attr = this.getAttribute("selectItemId");
+        if (!attr) {
+            const choices = this.shadowRoot.querySelectorAll(".choice");
+            choices.forEach(elem => elem.style.border = "1px solid red");
+            console.log("hello world from selectItemId getter.");
+        }
+        return attr;
+    }
 
     connectedCallback() {
         this.createChoices();
@@ -135,10 +56,13 @@ export class PlayersAndStages extends HTMLElement {
                 }
                 this.selectItemId = elem.id;
                 elem.querySelector(".choice").className = "choice aqua";
-                // this.createStages(Number(elem.id));
             });
         });
     }
+
+    static observedAttributes = ["selectItemId"];
+
+    attributeChangedCallback(attrName, oldValue, newValue) {}
 
 }
 

@@ -1,29 +1,5 @@
-
-const fakePlayers = [
-    {
-        firstPlayer: "mehdi",
-        secondPlayer: "salim"
-    },
-    {
-        firstPlayer: "omar",
-        secondPlayer: "khalid"
-    },
-    {
-        firstPlayer: "yassine",
-        secondPlayer: "ali"
-    },
-    {
-        firstPlayer: "asdf",
-        secondPlayer: "avfdli"
-    },
-    {
-        firstPlayer: "qwe",
-        secondPlayer: "awerli"
-    },
-    {
-        firstPlayer: "qqqqq"
-    }
-];
+import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
+import { GenerateRounds } from "./GenerateRounds.js";
 
 export class TournamentComponent extends HTMLElement {
     constructor () {
@@ -52,88 +28,7 @@ export class TournamentComponent extends HTMLElement {
         `;
     }
 
-        
-    finalStage(firstPlayer, secondPlayer) {
-        const _final = document.createElement("div");
-        _final.className = "final";
-        _final.innerHTML = `
-            <custom-button>
-                <c-hexagon class="firstPlayer" width="32px" height="32px" apply="true" bcolor="aqua">
-                    <div slot="content" class="c-hexagon-content" style="background: url(/frontend/assets/profile-assets/tanjuro.jpg) center / cover no-repeat;"></div>
-                </c-hexagon>
-                <h4>${firstPlayer}</h4>
-            </custom-button>
-            <h1> VS </h1>
-            <custom-button reverse>
-                <c-hexagon class="firstPlayer" width="32px" height="32px" apply="true" bcolor="aqua">
-                    <div slot="content" class="c-hexagon-content" style="background: url(/frontend/assets/profile-assets/tanjuro.jpg) center / cover no-repeat;"></div>
-                </c-hexagon>
-                <h4>${secondPlayer}</h4>
-            </custom-button>
-        `;
-        return _final;
-    }
-
-    getPlayerInfo(PlayerName, slot, nextRounds) {
-        const player = document.createElement("div");
-        player.slot = slot;
-        if (nextRounds)
-            return player;
-        if (PlayerName)
-            player.innerHTML = `
-                    <c-hexagon class="${slot}" width="32px" height="32px" apply="true" bcolor="aqua">
-                        <div slot="content" class="c-hexagon-content" style="background: url(/frontend/assets/profile-assets/tanjuro.jpg) center / cover no-repeat;"></div>
-                    </c-hexagon>
-                    <h4>${PlayerName}</h4>
-                `;
-        else
-            player.innerHTML = `<img src="/frontend/assets/profile-assets/add-friends-icon.svg" width="24px"/>`;
-        return player;
-    }
-
-    getTournamentRound(firstPlayer, secondPlayer, nextRounds, reverse) {
-        const tournamentRound = document.createElement("tournament-round");
-        if (reverse)
-            tournamentRound.reverse = "true";
-
-
-        tournamentRound.appendChild(this.getPlayerInfo(firstPlayer, "firstPlayer", nextRounds));
-        tournamentRound.appendChild(this.getPlayerInfo(secondPlayer, "secondPlayer", nextRounds));
-
-        return tournamentRound;
-    }
-
-    generateRounds(numberOfPlayers, players, nextRounds, reverse) {
-        const rounds = document.createElement("div");
-        rounds.className = "rounds";
-        for (let index = 0; index < numberOfPlayers / 2; index++)
-        {
-            if (players.length > index)
-            {
-                const player = players[index];
-                rounds.appendChild(this.getTournamentRound(player.firstPlayer, player.secondPlayer, nextRounds, reverse));
-            }
-            else
-                rounds.appendChild(this.getTournamentRound(null, null, nextRounds, reverse));
-        }
-        return rounds;
-    }
-    
-    generateRoundsGraph(mainContainer, players) {
-        const leftRounds = players.slice(0, players.length / 2);
-        const rightRounds = players.slice(players.length / 2);
-        mainContainer.innerHTML = '';
-        this.shadowRoot.querySelector(".tournament-actions").innerHTML = '';
-        mainContainer.appendChild(this.generateRounds(8, leftRounds, null, null));
-        mainContainer.appendChild(this.generateRounds(4, [], true, null));
-        mainContainer.appendChild(this.generateRounds(2, [], true, null));
-        mainContainer.appendChild(this.finalStage("", ""));
-        mainContainer.appendChild(this.generateRounds(2, [], true, true));
-        mainContainer.appendChild(this.generateRounds(4, [], true, true));
-        mainContainer.appendChild(this.generateRounds(8, rightRounds, null, true));
-    }
-
-    connectedCallback() {
+    async connectedCallback() {
         const mainContainer = this.shadowRoot.querySelector(".mainContainer");
         let tournamentsTable = document.createElement("tournaments-table");
         tournamentsTable.style.width = "100%";
@@ -151,15 +46,28 @@ export class TournamentComponent extends HTMLElement {
                 secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
             }
             else {
-
             }
         });
-        secondButton.addEventListener("click", () => {
+        secondButton.addEventListener("click", async () => {
             const buttonValue = secondButton.querySelector("h3");
             if (buttonValue.textContent == "GENERATE") {
-                const value = this.shadowRoot.querySelector("create-tournament").data;
-                if (value)
-                    this.generateRoundsGraph(mainContainer, fakePlayers);
+                const data = this.shadowRoot.querySelector("create-tournament").data;
+                if (data)
+                {
+                    try {
+                        const response = await this.createTournament(data);
+                        if (!response)
+                            throw new Error(`${response.status}  ${response.statusText}`);
+                        const tournamentResponse = await response.tournament;
+                        const rounds = document.createElement("generate-rounds");
+                        rounds.numberOfPlayers = tournamentResponse.number_of_players;
+                        rounds.players = tournamentResponse.players;
+                        mainContainer.innerHTML = '';
+                        mainContainer.appendChild(rounds);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
                 else
                     console.log("Please fill all inputs field!!");
             }
@@ -173,9 +81,6 @@ export class TournamentComponent extends HTMLElement {
         });
     }
 
-
-
-
     disconnectedCallback() {
 
     }
@@ -185,8 +90,33 @@ export class TournamentComponent extends HTMLElement {
     attributeChangedCallback(attrName, oldVdalue, newValue) {
 
     }
-}
 
+
+    async createTournament(data)
+    {
+        try {
+            const Tournament = {
+                tournament_name: data.name,
+                number_of_players: data.num_players,
+                is_accessible: data.access.toLowerCase() == "public" ? true : false,
+                access_password: data.password
+            }
+            const create_tournament = "create/player/";
+            const response = await fetch(`${apiUrl}${create_tournament}${playerId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Tournament),
+            });
+            if (!response.ok)
+                throw new Error(`${response.status}  ${response.statusText}`);
+            return await response.json();
+        } catch(error) {
+            console.error('Error creating Tournament: ', error);
+        }
+    }
+}
 
 const cssContent = /*css*/`
     :host {
