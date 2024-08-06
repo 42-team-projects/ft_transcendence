@@ -6,7 +6,7 @@ export class QRCodeComponent extends HTMLElement {
             <style> ${cssContent} </style>
             <h1></h1>
             <div class="qrcode">
-                <img src="/frontend/assets/tournament-assets/qrcode.svg">
+                <img src="../assets/tournament-assets/qrcode.svg">
             </div>
             <div class="shareButtons" hidden>
                 <button class="download">DOWNLOAD</button>

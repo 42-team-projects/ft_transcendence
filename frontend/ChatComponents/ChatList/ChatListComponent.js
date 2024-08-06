@@ -76,7 +76,6 @@ export class ChatListComponent extends HTMLElement {
                 }
                 item.backgroundColor = "#051d31";
                 item.opacity = 1;
-                console.log("seletor id : ", item.id);
                 this.selectItem = item.id;
                 this.shadowRoot.querySelector("chat-room").targetId = item.id;
             });

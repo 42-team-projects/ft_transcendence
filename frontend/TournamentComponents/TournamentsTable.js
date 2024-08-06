@@ -1,4 +1,6 @@
 import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
+import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
+import { TournamentComponent } from "./TournamentComponent.js";
 
 const cssContent = /*css*/`
 :host {
@@ -25,6 +27,7 @@ thead > tr {
 
 tbody {
     height: 100%;
+    width: 100%;
 }
 
 tbody > tr {
@@ -76,6 +79,7 @@ export class TournamentsTable extends HTMLElement {
 
     createRow(data) {
         const tr = document.createElement("tr");
+        tr.id = data.id;
         {
             const td = document.createElement("td");
             td.textContent = data.tournament_name;
@@ -113,8 +117,8 @@ export class TournamentsTable extends HTMLElement {
             const actions = document.createElement("td");
             actions.innerHTML = `
                     <div class="actions">
-                        <img src="./images/logout.svg" width="24"/>
-                        <img src="./assets/profile-assets/play-button.svg" width="24"/>
+                        <img id="${data.id}" class="exitAction" src="./images/logout.svg" width="24"/>
+                        <img id="${data.id}" class="displayAction" src="./assets/profile-assets/play-button.svg" width="24"/>
                     </div>
                 `;
             tr.appendChild(actions);
@@ -124,15 +128,12 @@ export class TournamentsTable extends HTMLElement {
 
     async get_tournaments_by_player_id() {
         try {
-            const player = "player/"
-            const playerId = JSON.parse(localStorage.getItem('loggedInUser')).id;
+            const player = "player/";
             const response = await fetch(`${apiUrl}${player}${playerId}/`);
             if (!response.ok) {
                 return null;
             }
-            const data = await response.json();
-            console.log(JSON.stringify(data, null, 2));
-            return data;
+            return await response.json();
         } catch (error) {
             console.error('Error of tournament list: ', error);
             return null;
@@ -143,9 +144,26 @@ export class TournamentsTable extends HTMLElement {
         const APIData = await this.get_tournaments_by_player_id();
         if (!APIData)
             return;
+        console.log(APIData);
         const tbody = this.shadowRoot.querySelector("tbody");
 
-        APIData.forEach(data => tbody.appendChild(this.createRow(data)));
+        for (let index = APIData.length - 1; index >= 0; index--)
+            tbody.appendChild(this.createRow(APIData[index]));
+
+        const allDisplayAction = this.shadowRoot.querySelectorAll(".displayAction");
+        allDisplayAction.forEach(elem => {
+            elem.addEventListener("click", async () => {
+                this.shadowRoot.innerHTML = '';
+                const response = await get_tournament_by_id(elem.id);
+                if (!response)
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                this.shadowRoot.innerHTML = '';
+                const rounds = document.createElement("generate-rounds");
+                rounds.numberOfPlayers = response.number_of_players;
+                rounds.players = response.players;
+                this.shadowRoot.appendChild(rounds);
+            });
+        });
     }
 
     disconnectedCallback() {
@@ -153,4 +171,14 @@ export class TournamentsTable extends HTMLElement {
 
 }
 
-const apiUrl = 'http://127.0.0.1:8000/TournamentApp/';
+export async function get_tournament_by_id(id) {
+    try {
+        const response = await fetch(`${apiUrl}${id}`);
+        if (!response.ok) {
+            throw new Error(`${response.status}  ${response.statusText}`);
+        }
+        return await response.json();
+    } catch(error) {
+        console.error('Error of tournament list: ', error);
+    }
+}
