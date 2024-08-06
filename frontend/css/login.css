@@ -1,11 +1,112 @@
 body {
-    background-color: #282c34;
     color: #ffffff;
+
+    background: url('../svg/bg.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* position: relative; */
+    height: 100vh;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0;
+}
+.left,
+.right {
+    border: 1px solid red;
+    flex: 2;
 }
 
-#signup-link {
-    color: skyblue;
+h1 {
+    /* border: solid red 1px; */
+    text-align: center;
+    padding: 10px;
+    font-family: 'Sansation';
+    font-size: 3rem;
+    margin: 5px;
 }
-#forgot-password {
-    color: skyblue;
+
+.center {
+    border: 1px solid red;
+    flex: 1;
+    color: #ffffff;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 0;
+}
+
+#separator
+{
+    /* border: 1px solid red; */
+    margin: 0;
+    width: auto;
+    height: 12px;
+    margin-bottom: 20px;
+}
+
+
+#outer-box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+    height: 50%;
+    border: 1px solid green;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    /* background-image: url('../svg/box.svg'); */
+    /* padding: 80px; */
+    /* margin: 20px; */
+}
+
+#inner-box {
+    position: relative;
+    border: 5px solid cyan;
+    width: 90%;
+    height: 88%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* flex-direction: column;
+    /*padding: 40px 60px; */
+    background-color: #052357;
+    border-radius: 10px;
+    /* display: flex; */
+}
+
+.test{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border: 2px solid yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+.login-section {
+    /* width: 100%; */
+    /* height: 100%; */
+    width: initial;
+    border: solid red 1px;
+    /* position: relative; */
+    /* width: 100%; */
+    /* height: 100%; */ 
+    /* flex-direction: column; */
+}
+
+.oauth-section {
+    /* border: solid red 1px; */
+    /* text-align: center; */
 }
