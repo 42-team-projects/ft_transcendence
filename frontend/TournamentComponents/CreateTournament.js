@@ -28,12 +28,6 @@ export class CreateTournament extends HTMLElement {
 
 
     connectedCallback() {
-        // const inputField = this.shadowRoot.querySelector(".settingsform input");
-        // const qrCodeTitle = this.shadowRoot.querySelector("qrcode-component");
-        // setInterval(() => {
-        //     qrCodeTitle.title = inputField.value;
-        // }, 100);
-        // console.log("hello world");
     }
 
     disconnectedCallback() {
@@ -42,40 +36,34 @@ export class CreateTournament extends HTMLElement {
 
 
     get data() {
-        let apiData = {name: null, start_date: null, end_date: null, num_players: 0, access: false, password: null, stages: []};
+        let apiData = {name: null, num_players: 0, access: false, password: null};
         const name = this.shadowRoot.querySelector(".item .settingsform input");
         if (name)
         {
-            // if (name.value.length < 3)
-            // {
-            //     name.style.border = "1px solid red";
-            //     return null;
-            // }
+            if (name.value.length < 3 || name.value.length > 24)
+            {
+                name.style.border = "1px solid red";
+                return null;
+            }
             name.style.border = "1px solid aqua";
             apiData.name = name.value;
         }
         apiData.access = this.shadowRoot.querySelector("visibillity-settings").access;
-        // if (!apiData.access)
-        //     return null;
+        if (!apiData.access)
+            return null;
         apiData.password = this.shadowRoot.querySelector("visibillity-settings").password;
-        // if (apiData.access.toLowerCase() == "private" && !apiData.password)
-        //     return null;
+        if (apiData.access.toLowerCase() == "private" && !apiData.password)
+            return null;
         apiData.num_players = this.shadowRoot.querySelector("players-and-stages").selectItemId;
-        apiData.stages = this.shadowRoot.querySelector("players-and-stages").stages;
-        // if (!apiData.stages || !apiData.stages.length)
-        //     return null;
-        // if (apiData.stages.length)
-        // {
-        //     apiData.start_date = apiData.stages[0].date;
-        //     apiData.end_date = apiData.stages[apiData.stages.length - 1].date;
-        // }
+        if (!apiData.num_players)
+            return null;
         return apiData;
     };
 
     static observedAttributes = [];
 
-    attributeChangedCallback(attrName, oldVdalue, newValue) {
-    }
+    attributeChangedCallback(attrName, oldVdalue, newValue) {}
+
 }
 
 const cssContent = /*css*/`
@@ -196,7 +184,7 @@ const cssContent = /*css*/`
     border-radius: 7px;
     align-items: center;
     justify-content: center;
-    background: url("/frontend/assets/icons/checked-icon.svg");
+    background: url("../assets/icons/checked-icon.svg");
     background-repeat: no-repeat;
     background-size: cover;
 }
