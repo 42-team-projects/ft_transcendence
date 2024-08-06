@@ -7,39 +7,56 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="../js/components/oauth.js"></script>
+
+    <link href="https://fonts.cdnfonts.com/css/sansation" rel="stylesheet">
 </head>
 
 <body>
-    <form id="loginForm">
-        <!-- <p style="color: red" id="error_msg"></p> -->
-        <label for="loginEmail">Email:</label><br />
-        <input type="email" id="loginEmail" name="loginEmail" /><br />
-        <label for="loginPassword">Password:</label><br />
-        <input type="password" id="loginPassword" name="loginPassword" /><br />
-        <input type="submit" value="Login" />
-    </form>
+    <div class="left"></div>
+    <div class="center">
+        <h1>FT_TRANSCENDENCE</h1>
+        <img id="separator" src="../svg/separator.svg" alt="Separator line">
+        <div id="outer-box">
+            <div id="inner-box">
+               <div class="test">
+                <section class="login-section">
+                    <form id="loginForm">
+                        <label for="loginEmail">Email:</label><br />
+                        <input type="email" id="loginEmail" name="loginEmail" /><br />
+                        <label for="loginPassword">Password:</label><br />
+                        <input type="password" id="loginPassword" name="loginPassword" /><br />
+                        <input type="submit" value="Login" />
+                    </form>
+                    <p>
+                        <a href="../html/forgot-password.html" id="forgot-password">Forgot Password?</a>
+                    </p>
+                    <p>
+                        Don't have an account? <a id="signup-link" href="../html/register.html">Sign Up</a>.
+                    </p>
+                </section>
 
-    <p>
-        <a href="../html/forgot-password.html" id="forgot-password">Forgot Password?</a>
-    </p>
-    <p>
-        Don't have an account? <a id="signup-link" href="../html/register.html" >Sign Up</a>.
-    </p>
+                <section class="oauth-section">
+                    <h3 class="text-option">Or</h3>
+                    <button id="googleSignUp"
+                        onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/google/redirect/')">
+                        Login with Google
+                    </button>
+                    <button id="intraSignUp"
+                        onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/intra/redirect/')">
+                        Login with Intra
+                    </button>
+                </section>
 
-    <h3 class="text-option">Or</h3>
-    <button id="googleSignUp" 
-            onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/google/redirect/')">
-        Login with Google
-    </button>
-    <button id="intraSignUp" 
-            onclick="redirectToProvider('http://127.0.0.1:8000/api/v1/auth/intra/redirect/')">
-        Login with Intra
-    </button>
+               </div>
+                <script>
+                    handleOAuthResponse();
+                </script>
+                <script type="module" src="../js/components/login.js"></script>
 
-    <script>
-        handleOAuthResponse();
-    </script>
-    <script type="module" src="../js/components/login.js"></script>
+            </div>
+        </div>
+    </div>
+    <div class="right"></div>
 </body>
 
 </html>
