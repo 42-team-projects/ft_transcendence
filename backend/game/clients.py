@@ -7,12 +7,13 @@ class GameRoom :
         self._room_name = f"{client1.id}-{client2.id}_room"
         self._client1.y = 0
         self._client2.y = 0
+        self._client1.score = 0
+        self._client2.score = 0
         self._active = False
         self._canvas_width = 300
         self._canvas_height = 150
         self._game_loop = True
-
-    async def find_opponent(self):
+    async def get_opponent(self):
         message = {
             'room_name': self._room_name,
             'opponent_id': self._client2.id
@@ -41,15 +42,24 @@ class GameRoom :
         while self._game_loop:
             ball_x += ball_dx
             ball_y += ball_dy
-            if ball_x + ball_radius >= canvas_width or ball_x - ball_radius <= 0 :
-                raise Exception("Game Over")
+
+            #calculate ball movement
             if ball_y + ball_radius >= canvas_height or ball_y - ball_radius <= 0:
                 ball_dy = -ball_dy
             if ball_x - ball_radius <= racquet_width and ball_y >= player1_y and ball_y <= player1_y + racquet_height:
                 ball_dx = -ball_dx
             if ball_x + ball_radius >= canvas_width - racquet_width and ball_y >= player2_y and ball_y <= player2_y + racquet_height:
                 ball_dx = -ball_dx
-            
+
+            #check if ball is out of bounds
+            if ball_x + ball_radius >= canvas_width:
+                self._client1.score += 1
+                raise Exception("Round Over")
+            if ball_x - ball_radius <= 0:
+                self._client2.score += 1
+                raise Exception("Round Over")
+
+            #store data
             self._data1 = {
                 'ball': {
                     'x': ball_x,
@@ -83,14 +93,15 @@ class GameRoom :
             await asyncio.sleep(0.016)
     async def sendin(self):
         while self._game_loop:
-            # print(self._data1, self._data2)
+            #send data
             await self.sendData(self._data1, self._client1.ws)
             await self.sendData(self._data2, self._client2.ws)
             await asyncio.sleep(0.05)
 
     async def game_loops(self):
-        i = 0
-        while i < 5:
+        self._rounds = 5
+        i = 1
+        while i <= self._rounds:
             message = {
                 'status': 'RoundStart',
                 'round': i
@@ -102,40 +113,59 @@ class GameRoom :
             try:
                 await asyncio.gather(self.game_loop(), self.sendin())
             except Exception as e:
-                print(e)
+                # print(e)
                 self._game_loop = False
                 await self._client1.ws.send(json.dumps({'status': 'RoundOver'}))
                 await self._client2.ws.send(json.dumps({'status': 'RoundOver'}))
             i += 1
+        message = {
+            'status': 'GameOver',
+            'player_state' : 'win' if self._client1.score > self._client2.score else 'lose'
+        }
+        print(message)
+        await self._client1.ws.send(json.dumps(message))
+        message['player_state'] = 'win' if self._client2.score > self._client1.score else 'lose'
+        await self._client2.ws.send(json.dumps(message))
+
     async def sendData(self, data, ws):
         if ws == self._client1.ws:
             await self._client2.ws.send(json.dumps(data))
         else:
             await self._client1.ws.send(json.dumps(data))
+
     def set_player_y(self, ws, y):
         if ws == self._client1.ws:
             self._client1.y = y
         else:
             self._client2.y = y
+
     def get_room_name(self):
         return self._room_name
 
-    def get_player1_y(self):
-        return self._client1.y
+    async def handle_disconnect(self):
+        self._game_loop = False
+        self._rounds = 0
+        # if self._client1.ws == self:
+        #     self._client2.score = 5
+        #     self._client1.score = 0
+        # else:
+        #     self._client1.score = 5
+        #     self._client2.score = 0
+        print("Client disconnected", self._client1.score, self._client2.score)
 
-    def get_player2_y(self):
-        return self._client2.y
-
-    def get_client1_ws(self):
-        return self._client1.ws
-
-    def get_client2_ws(self):
-        return self._client2.ws
     def set_canvas_width(self, width):
         self._canvas_width = width
+
     def set_canvas_height(self, height):
         self._canvas_height = height
+    
+    def get_client1_ws(self):
+        return self._client1.ws
+    
+    def get_client2_ws(self):
+        return self._client2.ws
 
+    
 class Client :
     def __init__(self, ws, id):
         self.ws = ws

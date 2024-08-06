@@ -19,7 +19,7 @@ class GameConsumer(AsyncWebsocketConsumer) :
                 await self.add_to_room()
         elif status == 'startGame':
             room_name = data.get('room_name', None)
-            room = self.find_room(room_name)
+            room = self.get_room_by_name(room_name)
             room.set_canvas_width(data.get('canvas_width', None))
             room.set_canvas_height(data.get('canvas_height', None))
             if(room._active == False):
@@ -29,7 +29,7 @@ class GameConsumer(AsyncWebsocketConsumer) :
         elif status == 'move':
             # print("move")
             room_name = data.get('room_name', None)
-            room = self.find_room(room_name)
+            room = self.get_room_by_name(room_name)
             if room:
                 room.set_player_y(self, data.get('y', None))
                 await room.sendData(data, self)
@@ -38,7 +38,10 @@ class GameConsumer(AsyncWebsocketConsumer) :
         global queue
         global rooms
         queue = [client for client in queue if client.ws != self]
-        rooms = [room for room in rooms if room.get_client1_ws() != self and room.get_client2_ws() != self]
+        current_room = self.get_room_by_client(self)
+        if current_room:
+            await current_room.handle_disconnect()
+        rooms = [room for room in rooms if room != current_room]
         # print("Client disconnected", queue)
         # print("Client disconnected", rooms)
 
@@ -53,11 +56,16 @@ class GameConsumer(AsyncWebsocketConsumer) :
         client2 = queue.pop() 
         room = GameRoom(client1, client2)
         rooms.append(room)
-        await room.find_opponent()
+        await room.get_opponent()
 
-    def find_room(self, room_name):
+    def get_room_by_name(self, room_name):
         for room in rooms:
             # print(room.get_room_name(), room_name)
             if room.get_room_name() == room_name:
+                return room
+        return None
+    def get_room_by_client(self, ws):
+        for room in rooms:
+            if room.get_client1_ws() == ws or room.get_client2_ws() == ws:
                 return room
         return None
