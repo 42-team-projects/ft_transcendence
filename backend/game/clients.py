@@ -13,31 +13,35 @@ class GameRoom :
         self._canvas_width = 300
         self._canvas_height = 150
         self._game_loop = True
+        self.racquet = {
+            'height': 50,
+            'width': 10
+        }
     async def get_opponent(self):
         message = {
-            'room_name': self._room_name,
+            'room_name': self ._room_name,
             'opponent_id': self._client2.id
         }
         await self._client1.ws.send(json.dumps(message))
         message['opponent_id'] = self._client1.id
         await self._client2.ws.send(json.dumps(message))
+
     async def game_loop(self):
         #canvas
         canvas_width = self._canvas_width
         canvas_height = self._canvas_height
 
-        #ball
+        #ball data
         ball_x = canvas_width / 2
         ball_y = canvas_height / 2
         ball_radius = 10
         ball_dx = 8
         ball_dy = 5
 
-        #racquet
-        player1_y = canvas_height / 2
-        player2_y = canvas_height / 2
-        racquet_width = 5
-        racquet_height = 90
+        #racquet data
+        racquet_width = self._racquet['width']
+        racquet_height = self._racquet['height']
+
         #game loop
         while self._game_loop:
             ball_x += ball_dx
@@ -46,17 +50,17 @@ class GameRoom :
             #calculate ball movement
             if ball_y + ball_radius >= canvas_height or ball_y - ball_radius <= 0:
                 ball_dy = -ball_dy
-            if ball_x - ball_radius <= racquet_width and ball_y >= player1_y and ball_y <= player1_y + racquet_height:
+            if ball_x - ball_radius <= racquet_width and ball_y >= self._client1.y and ball_y <= self._client1.y + racquet_height:
                 ball_dx = -ball_dx
-            if ball_x + ball_radius >= canvas_width - racquet_width and ball_y >= player2_y and ball_y <= player2_y + racquet_height:
+            if ball_x + ball_radius >= canvas_width - racquet_width and ball_y >= self._client2.y and ball_y <= self._client2.y + racquet_height:
                 ball_dx = -ball_dx
 
             #check if ball is out of bounds
             if ball_x + ball_radius >= canvas_width:
-                self._client1.score += 1
+                self._client2.score += 1
                 raise Exception("Round Over")
             if ball_x - ball_radius <= 0:
-                self._client2.score += 1
+                self._client1.score += 1
                 raise Exception("Round Over")
 
             #store data
@@ -68,12 +72,12 @@ class GameRoom :
                     'dx': ball_dx,
                     'dy': ball_dy,
                 },
-                'racquet': {
-                    'player_y': player1_y,
-                    'opponent_y': player2_y,
-                    'racquet_width': racquet_width,
-                    'racquet_height': racquet_height,
-                },
+                # 'racquet': {
+                #     'player_y': self._client1.y,
+                #     'opponent_y': self._client2.y,
+                #     'racquet_width': racquet_width,
+                #     'racquet_height': racquet_height,
+                # },
             }
             self._data2 = {
                 'ball': {
@@ -83,22 +87,22 @@ class GameRoom :
                     'dx': -ball_dx,
                     'dy': ball_dy,
                 },
-                'racquet': {
-                    'player_y': player2_y,
-                    'opponent_y': player1_y,
-                    'racquet_width': racquet_width,
-                    'racquet_height': racquet_height,
-                },
+                # 'racquet': {
+                #     'player_y': self._client2.y,
+                #     'opponent_y': self._client1.y,
+                #     'racquet_width': racquet_width,
+                #     'racquet_height': racquet_height,
+                # },
             }
             await asyncio.sleep(0.016)
-    async def sendin(self):
+    async def sending(self):
         while self._game_loop:
-            #send data
             await self.sendData(self._data1, self._client1.ws)
             await self.sendData(self._data2, self._client2.ws)
             await asyncio.sleep(0.05)
 
     async def game_loops(self):
+        #rounds
         self._rounds = 5
         i = 1
         while i <= self._rounds:
@@ -111,18 +115,27 @@ class GameRoom :
             self._game_loop = True
             await asyncio.sleep(4)
             try:
-                await asyncio.gather(self.game_loop(), self.sendin())
+                await asyncio.gather(self.game_loop(), self.sending())
             except Exception as e:
-                # print(e)
                 self._game_loop = False
-                await self._client1.ws.send(json.dumps({'status': 'RoundOver'}))
-                await self._client2.ws.send(json.dumps({'status': 'RoundOver'}))
+                message = {
+                    'status': 'RoundOver',
+                    'score': {
+                        'player': self._client1.score,
+                        'opponent': self._client2.score
+                    }
+                }
+                await self._client1.ws.send(json.dumps(message))
+                message['score'] = {
+                    'player': self._client2.score,
+                    'opponent': self._client1.score
+                }
+                await self._client2.ws.send(json.dumps(message))
             i += 1
         message = {
             'status': 'GameOver',
             'player_state' : 'win' if self._client1.score > self._client2.score else 'lose'
         }
-        print(message)
         await self._client1.ws.send(json.dumps(message))
         message['player_state'] = 'win' if self._client2.score > self._client1.score else 'lose'
         await self._client2.ws.send(json.dumps(message))
@@ -165,7 +178,9 @@ class GameRoom :
     def get_client2_ws(self):
         return self._client2.ws
 
-    
+    def set_racquet_size(self, racquet_size):
+        self._racquet = racquet_size
+
 class Client :
     def __init__(self, ws, id):
         self.ws = ws
