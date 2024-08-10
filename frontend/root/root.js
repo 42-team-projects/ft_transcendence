@@ -4,6 +4,7 @@ const sideBar = document.querySelector('side-bar')
 const header = document.querySelector('header-bar')
 const footer = document.querySelector('footer')
 
+import { ip } from '../ip.js'
 
 const rootContent = ['home-page',
      'game-selection',
@@ -21,6 +22,7 @@ class Root extends HTMLElement{
     {
         super();
         this.appendChild(root.content.cloneNode(true))
+	    window.socket = new WebSocket(`ws://${ip}:8000/ws/game/`)
     }
 
     set ChangeRootContent(component){
