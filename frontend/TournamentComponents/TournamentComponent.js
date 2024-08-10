@@ -23,9 +23,8 @@ export class TournamentComponent extends HTMLElement {
 
     async connectedCallback() {
         const mainContainer = this.shadowRoot.querySelector(".mainContainer");
-        // let tournamentsTable = document.createElement("tournaments-table");
-        let tournamentsTable = document.createElement("join-tournament");
-        // tournamentsTable.style.width = "100%";
+        let tournamentsTable = document.createElement("tournaments-table");
+        tournamentsTable.style.width = "100%";
         mainContainer.appendChild(tournamentsTable);
     }
 
