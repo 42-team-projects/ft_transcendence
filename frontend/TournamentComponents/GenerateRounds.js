@@ -1,3 +1,31 @@
+
+/*
+
+<div class="addPlayerContainer" >
+    <div class="friendsList">
+        <h2>YOUR FRIENDS</h2>
+        <div class="line">
+            <img class="separator" src="../assets/login-assets/separator.svg"/>
+        </div>
+        <div class="friends">
+            <div class="friend-item">
+                <c-hexagon class="profile" width="78px" height="77px" apply="true" bcolor="aqua">
+                    <div slot="content" class="c-hexagon-content"></div>
+                </c-hexagon>
+                <div class="text-content">
+                    <h1>ESALIM</h1>
+                    <h6>online</h6>
+                </div>
+                <img src="../assets/profile-assets/add-friends-icon.svg"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+*/
+
+import { AddPlayerComponent } from "./AddPlayerComponent.js";
+
 export class GenerateRounds extends HTMLElement {
     constructor () {
         super();
@@ -39,7 +67,7 @@ export class GenerateRounds extends HTMLElement {
                     <h4>${PlayerName}</h4>
                 `;
         else
-            player.innerHTML = `<img src="../assets/profile-assets/add-friends-icon.svg" width="24px"/>`;
+            player.innerHTML = `<img class="addPlayer" src="../assets/profile-assets/add-friends-icon.svg" width="24px"/>`;
         return player;
     }
 
@@ -131,8 +159,6 @@ export class GenerateRounds extends HTMLElement {
     }
 
     connectedCallback() {
-        // if (this.players)
-        //     this.generateRoundsGraph(JSON.stringify(this.players));
     }
 
     disconnectedCallback() {
@@ -146,10 +172,37 @@ export class GenerateRounds extends HTMLElement {
     get numberOfPlayers() { return this.getAttribute("number-of-players");}
 
     set players(val) {
-        console.log("numberOfPlayers :  ", this.numberOfPlayers);
         this.generateRoundsGraph(this.convertPlayersDataIntoRounds(val));
+        this.addPlayerEventListener();
     };
     
+    addPlayerEventListener() {
+        const newPlayer = this.shadowRoot.querySelectorAll(".addPlayer");
+        newPlayer.forEach( elem => {
+            elem.addEventListener("click", () => {
+                const container = this.shadowRoot.querySelector(".container");
+                container.style.opacity = 0.5;
+                const addPlayerContainer = document.createElement("div");
+                addPlayerContainer.className = "addPlayerContainer";
+                addPlayerContainer.innerHTML = `
+                    <div class="friendsList">
+                        <img class="closeButton" src="../assets/icons/close-x-icon.svg"/>
+                        <h2>YOUR FRIENDS</h2>
+                        <div class="line">
+                            <img class="separator" src="../assets/login-assets/separator.svg"/>
+                        </div>
+                        <add-player-component></add-player-component>
+                    </div>
+                `;
+                addPlayerContainer.querySelector(".closeButton").addEventListener("click", () => {
+                    container.style.opacity = 1;
+                    this.shadowRoot.removeChild(addPlayerContainer);
+                });
+                this.shadowRoot.appendChild(addPlayerContainer);
+            });
+        });
+    }
+
     get players() {
         return this.getAttribute("players");
     };
@@ -164,15 +217,27 @@ export class GenerateRounds extends HTMLElement {
 }
 
 const cssContent = /*css*/`
+    * {
+        margin: 0;
+        padding: 0;
+
+    }
+
     :host {
         width: 100%;
         height: 100%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Sansation Bold';
     }
 
     .container {
         width: 100%;
         height: 100%;
         display: flex;
+        opacity: 1;
     }
 
     h2 {
@@ -212,8 +277,57 @@ const cssContent = /*css*/`
         overflow-x: scroll;
     }
 
-    h4::-webkit-scrollbar {
-        display: none;
+    .addPlayerContainer {
+        width: 100%;
+        height: 100%;
+        background-color: #124B6C30;
+        position: absolute;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .friendsList {
+        width: 30%;
+        height: 95%;
+        background-color: #124B6C;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 600px;
+        position: relative;
+    }
+
+
+    .closeButton {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 24px;
+        height: 24px;
+        opacity: 0.75;
+    }
+
+    .friendsList h2 {
+        font-size: 40px;
+        display: flex;
+        align-items: center;
+        margin: 10px;
+
+    }
+
+    .line {
+        height: 2px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
     }
 
 `;
