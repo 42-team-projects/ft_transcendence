@@ -55,10 +55,10 @@ class GameRoom :
             elif ball_x + ball_radius >= canvas_width and ball_y >= self._client2.y and ball_y <= self._client2.y + racquet_height:
                 ball_dx = -ball_dx
             elif ball_x + ball_radius >= canvas_width:
-                self._client2.score += 1
+                self._client1.score += 1
                 raise Exception("Round Over")
             elif ball_x - ball_radius <= 0:
-                self._client1.score += 1
+                self._client2.score += 1
                 raise Exception("Round Over")
 
             #store data
