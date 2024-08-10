@@ -50,16 +50,14 @@ class GameRoom :
             #calculate ball movement
             if ball_y + ball_radius >= canvas_height or ball_y - ball_radius <= 0:
                 ball_dy = -ball_dy
-            if ball_x - ball_radius <= racquet_width and ball_y >= self._client1.y and ball_y <= self._client1.y + racquet_height:
+            if ball_x - ball_radius <= 0 and ball_y >= self._client1.y and ball_y <= self._client1.y + racquet_height:
                 ball_dx = -ball_dx
-            if ball_x + ball_radius >= canvas_width - racquet_width and ball_y >= self._client2.y and ball_y <= self._client2.y + racquet_height:
+            elif ball_x + ball_radius >= canvas_width and ball_y >= self._client2.y and ball_y <= self._client2.y + racquet_height:
                 ball_dx = -ball_dx
-
-            #check if ball is out of bounds
-            if ball_x + ball_radius >= canvas_width:
+            elif ball_x + ball_radius >= canvas_width:
                 self._client2.score += 1
                 raise Exception("Round Over")
-            if ball_x - ball_radius <= 0:
+            elif ball_x - ball_radius <= 0:
                 self._client1.score += 1
                 raise Exception("Round Over")
 
@@ -72,12 +70,6 @@ class GameRoom :
                     'dx': ball_dx,
                     'dy': ball_dy,
                 },
-                # 'racquet': {
-                #     'player_y': self._client1.y,
-                #     'opponent_y': self._client2.y,
-                #     'racquet_width': racquet_width,
-                #     'racquet_height': racquet_height,
-                # },
             }
             self._data2 = {
                 'ball': {
@@ -87,32 +79,27 @@ class GameRoom :
                     'dx': -ball_dx,
                     'dy': ball_dy,
                 },
-                # 'racquet': {
-                #     'player_y': self._client2.y,
-                #     'opponent_y': self._client1.y,
-                #     'racquet_width': racquet_width,
-                #     'racquet_height': racquet_height,
-                # },
             }
             await asyncio.sleep(0.016)
     async def sending(self):
         while self._game_loop:
-            await self.sendData(self._data1, self._client1.ws)
-            await self.sendData(self._data2, self._client2.ws)
+            await self._client1.ws.send(json.dumps(self._data1))
+            await self._client2.ws.send(json.dumps(self._data2))      
             await asyncio.sleep(0.05)
 
     async def game_loops(self):
         #rounds
         self._rounds = 5
-        i = 1
-        while i <= self._rounds:
+        for i in range(1, self._rounds + 1):
             message = {
                 'status': 'RoundStart',
                 'round': i
             }
             await self._client1.ws.send(json.dumps(message))
             await self._client2.ws.send(json.dumps(message))
+            await self.reset_players()
             self._game_loop = True
+            
             await asyncio.sleep(4)
             try:
                 await asyncio.gather(self.game_loop(), self.sending())
@@ -131,7 +118,6 @@ class GameRoom :
                     'opponent': self._client1.score
                 }
                 await self._client2.ws.send(json.dumps(message))
-            i += 1
         message = {
             'status': 'GameOver',
             'player_state' : 'win' if self._client1.score > self._client2.score else 'lose'
@@ -146,7 +132,7 @@ class GameRoom :
         else:
             await self._client1.ws.send(json.dumps(data))
 
-    def set_player_y(self, ws, y):
+    async def set_player_y(self, ws, y):
         if ws == self._client1.ws:
             self._client1.y = y
         else:
@@ -180,6 +166,10 @@ class GameRoom :
 
     def set_racquet_size(self, racquet_size):
         self._racquet = racquet_size
+
+    async def reset_players(self):
+        self._client1.y = 0
+        self._client2.y = 0
 
 class Client :
     def __init__(self, ws, id):
