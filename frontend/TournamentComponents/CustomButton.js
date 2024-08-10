@@ -2,61 +2,26 @@ const cssContent = /*css*/`
 :host {
     display: flex;
     width: 100%;
-    height: 50px;
-}
-
-.left-side {
-    width: 20px;
-    height: 100%;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-left: 3px;
-    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
+    height: 56px;
     background-color: aqua;
+    clip-path: polygon(0 0, calc(100% - 20px) 0%, 100% 20px, 100% 100%, 20px 100%, 0% calc(100% - 20px));
     display: flex;
     align-items: center;
-    justify-content: right;
-}
-
-.left-side div {
-    width: 100%;
-    height: 100%;
-    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
-    background-color: #1c3143;
+    justify-content: center;
 }
 
 .center {
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
     background-color: #1c3143;
-    border-top: 3px solid;
-    border-bottom: 3px solid;
-    border-color: aqua;
+    clip-path: polygon(0 0, calc(100% - 20px) 0%, 100% 20px, 100% 100%, 20px 100%, 0% calc(100% - 20px));
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-}
-
-.right-side {
-    width: 20px;
-    height: 100%;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-left: 3px;
-    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
-    background-color: aqua;
     display: flex;
     align-items: center;
-    justify-content: right;
-    transform: rotate(180deg);
-}
-
-.right-side div {
-    width: 100%;
-    height: 100%;
-    clip-path: polygon(100% 0, 100% 100%, 90% 100%, 0 70%, 0 0);
-    background-color: #1c3143;
+    justify-content: center;
 }
 `;
 
@@ -66,14 +31,8 @@ export class CustomButton extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = `
                     <style> ${cssContent} </style>
-                    <div class="left-side">
-                        <div></div>
-                    </div>
                     <div class="center">
                         <slot></slot>
-                    </div>
-                    <div class="right-side">
-                        <div></div>
                     </div>
             `;
     }
@@ -97,25 +56,18 @@ export class CustomButton extends HTMLElement {
 
 
     changeBorderColor(newValue) {
-        this.shadowRoot.querySelector(".left-side").style.backgroundColor = newValue;
-        this.shadowRoot.querySelector(".right-side").style.backgroundColor = newValue;
-        this.shadowRoot.querySelector(".center").style.borderColor = newValue;
+        this.shadowRoot.style.backgroundColor = newValue;
     }
 
     changeBackgroundColor(newValue) {
-        this.shadowRoot.querySelector(".left-side div").style.backgroundColor = newValue;
-        this.shadowRoot.querySelector(".right-side div").style.backgroundColor = newValue;
         this.shadowRoot.querySelector(".center").style.backgroundColor = newValue;
     }
 
-    reverseButton(newVdalue) {
-
+    reverseButton(newValue) {
         if (!this.hasAttribute("reverse"))
             return ;
-        this.shadowRoot.querySelector(".left-side").style.clipPath = "polygon(100% 0%, 100% 100%, 0 100%, 0 30%, 50% 0)";
-        this.shadowRoot.querySelector(".right-side").style.clipPath = "polygon(100% 0%, 100% 100%, 0 100%, 0 30%, 50% 0)";
-        this.shadowRoot.querySelector(".left-side div").style.clipPath = "polygon(100% 0%, 100% 100%, 0 100%, 0 30%, 50% 0)";
-        this.shadowRoot.querySelector(".right-side div").style.clipPath = "polygon(100% 0%, 100% 100%, 0 100%, 0 30%, 50% 0)";
+        this.style.clipPath = "polygon(20px 0%, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0% 20px)";
+        this.shadowRoot.querySelector(".center").style.clipPath = "polygon(20px 0%, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0% 20px)";
     }
 
     set width(val) { this.setAttribute("width", val);}
