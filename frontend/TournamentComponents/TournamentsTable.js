@@ -244,6 +244,22 @@ export class TournamentsTable extends HTMLElement {
                         <img id="${data.id}" class="displayAction" src="./assets/profile-assets/play-button.svg" width="24"/>
                     </div>
                 `;
+
+            actions.querySelector(".exitAction").addEventListener("click", async () => {
+                this.player_leave_tournament(data.id);
+                this.shadowRoot.getElementById(data.id).remove();
+            });
+            actions.querySelector(".displayAction").addEventListener("click", async () => {
+                this.shadow.innerHTML = '';
+                const response = await get_tournament_by_id(data.id);
+                if (!response)
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                this.shadow.innerHTML = '';
+                const rounds = document.createElement("generate-rounds");
+                rounds.numberOfPlayers = response.number_of_players;
+                rounds.players = response.players;
+                this.shadow.appendChild(rounds);
+            });
             tr.appendChild(actions);
         }
         return tr;
@@ -298,21 +314,6 @@ export class TournamentsTable extends HTMLElement {
 
         for (let index = APIData.length - 1; index >= 0; index--)
             tbody.appendChild(this.createRow(APIData[index]));
-
-        const allDisplayAction = this.shadow.querySelectorAll(".displayAction");
-        allDisplayAction.forEach(elem => {
-            elem.addEventListener("click", async () => {
-                this.shadow.innerHTML = '';
-                const response = await get_tournament_by_id(elem.id);
-                if (!response)
-                    throw new Error(`${response.status}  ${response.statusText}`);
-                this.shadow.innerHTML = '';
-                const rounds = document.createElement("generate-rounds");
-                rounds.numberOfPlayers = response.number_of_players;
-                rounds.players = response.players;
-                this.shadow.appendChild(rounds);
-            });
-        });
     }
 
     async connectedCallback() {
@@ -373,6 +374,25 @@ export class TournamentsTable extends HTMLElement {
     }
 
     disconnectedCallback() {
+    }
+
+    async player_leave_tournament(tournamentId)
+    {
+        try {
+
+            const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/leave/`, {
+                method: 'POST'
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+                throw new Error(`${response.status}  ${data.statusText}`);
+            }
+            const data = await response.json();
+            console.log(JSON.stringify(data, null, 2));
+        } catch(error) {
+            console.error('Error of player leave tournament: ', error);
+        }
     }
 
 }
