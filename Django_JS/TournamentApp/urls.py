@@ -15,5 +15,6 @@ urlpatterns = [
     path('tournament/<int:tournamentId>/player/<int:playerId>/', views.player_join_tournament, name='player_join_tournament'),
     path('login/', views.login, name='login'),
     path('signup/', views.signup, name='signup'),
+    path('tournament/<int:tournamentId>/player/<int:playerId>/leave/', views.player_leave_tournament, name='player_leave_tournament'),
 
 ]
