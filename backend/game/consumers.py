@@ -31,7 +31,7 @@ class GameConsumer(AsyncWebsocketConsumer) :
             room = self.get_room_by_name(room_name)
             y = data.get('position', None)
             if room:
-                room.set_player_y(self, y)
+                await room.set_player_y(self, y)
                 message = {
                     'status': 'move',
                     'opponent_y': y
@@ -52,8 +52,8 @@ class GameConsumer(AsyncWebsocketConsumer) :
         queue.append(client)
 
     async def add_to_room(self):
-        client1 = queue.pop()
         client2 = queue.pop()
+        client1 = queue.pop()
         room = GameRoom(client1, client2)
         rooms.append(room)
         await room.get_opponent()
