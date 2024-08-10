@@ -12,31 +12,32 @@ class GameConsumer(AsyncWebsocketConsumer) :
         start = time.time()
         data = json.loads(text_data)
         status = data.get('status', None)
-        if status == 'searching':
-            user_id = data.get('userId', None)
-            await self.add_to_queue(user_id)
-            if(len(queue) >= 2):
-                await self.add_to_room()
-        elif status == 'startGame':
-            room_name = data.get('room_name', None)
-            room = self.get_room_by_name(room_name)
-            room.set_canvas_width(data.get('canvas_width', None))
-            room.set_canvas_height(data.get('canvas_height', None))
-            room.set_racquet_size(data.get('racquet_size', None),)
-            if(room._active == False):
-                asyncio.create_task(room.game_loops())
-                room._active = True
-        elif status == 'move':
-            room_name = data.get('room_name', None)
-            room = self.get_room_by_name(room_name)
-            y = data.get('position', None)
-            if room:
-                await room.set_player_y(self, y)
-                message = {
-                    'status': 'move',
-                    'opponent_y': y
-                }
-                await room.sendData(message, self)
+        if status == 'P2245laye':
+            if status == 'searching':
+                user_id = data.get('userId', None)
+                await self.add_to_queue(user_id)
+                if(len(queue) >= 2):
+                    await self.add_to_room()
+            elif status == 'startGame':
+                room_name = data.get('room_name', None)
+                room = self.get_room_by_name(room_name)
+                room.set_canvas_width(data.get('canvas_width', None))
+                room.set_canvas_height(data.get('canvas_height', None))
+                room.set_racquet_size(data.get('racquet_size', None),)
+                if(room._active == False):
+                    asyncio.create_task(room.game_loops())
+                    room._active = True
+            elif status == 'move':
+                room_name = data.get('room_name', None)
+                room = self.get_room_by_name(room_name)
+                y = data.get('position', None)
+                if room:
+                    await room.set_player_y(self, y)
+                    message = {
+                        'status': 'move',
+                        'opponent_y': y
+                    }
+                    await room.sendData(message, self)
 
     async def disconnect(self, close_code):
         global queue

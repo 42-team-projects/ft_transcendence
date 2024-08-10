@@ -185,7 +185,6 @@ export class Lobby extends HTMLElement{
 	// }
 	async OnlineGame()
 	{
-		window.socket = new WebSocket(`ws://${ip}:8000/ws/game/`)
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
