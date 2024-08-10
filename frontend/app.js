@@ -68,7 +68,6 @@ customElements.define("visibillity-settings", Visibility);
 customElements.define("players-and-stages", PlayersAndStages);
 customElements.define("tournament-rules", TournamentRules);
 customElements.define("create-tournament", CreateTournament);
-customElements.define("tournaments-table", TournamentsTable);
 customElements.define("custom-button", CustomButton);
 customElements.define("tournament-page", TournamentComponent);
 

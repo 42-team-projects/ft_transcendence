@@ -1,6 +1,43 @@
 import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 
+const forms = `
+<div class="mainHeader">
+<img src="../assets/icons/back-icon.svg" id="back"/>
+<div class="tournament-search" style="border: none;">
+    <h2>Private Tournament</h2>
+</div>
+<div></div>
+</div>
+<div class="join-form">
+<div class="tournamentId">
+    <h2>Tournament ID:</h2>
+    <input id="tournamentId" type="text" placeholder="Enter Tournament Id"/>
+</div>
+<div class="password">
+    <h2>Password:</h2>
+    <input id="tournamentPassword" type="password" placeholder="Enter Password"/>
+</div>
+</div>
+<button class="join-private-tournament">JOIN</button>
+`;
+
+const list = `
+        <div class="mainHeader">
+            <img id="close-button" src="../assets/icons/close-x-icon.svg"/>
+            <div class="tournament-search">
+                <input type="text" placeholder="Tournament Name"/>
+                <img src="../images/svg-header/search.svg">
+            </div>
+            <img id="private-tournament" src="../assets/icons/key-icon.svg">
+        </div>
+        <div class="line">
+            <img class="separator" src="../assets/login-assets/separator.svg"/>
+        </div>
+        <div class="tournaments-list">
+            <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>
+        </div>
+`;
 export class JoinTournament extends HTMLElement {
     constructor() {
         super();
@@ -9,20 +46,7 @@ export class JoinTournament extends HTMLElement {
             <style> ${cssContent} </style>
             <div class="box">
                 <div class="mainContainer">
-                    <div class="mainHeader">
-                        <img src="../assets/icons/close-x-icon.svg"/>
-                        <div class="tournament-search">
-                            <input type="text" placeholder="Tournament Name"/>
-                            <img src="../images/svg-header/search.svg">
-                        </div>
-                        <img src="../assets/icons/key-icon.svg">
-                    </div>
-                    <div class="line">
-                        <img class="separator" src="../assets/login-assets/separator.svg"/>
-                    </div>
-                    <div class="tournaments-list">
-                        <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>
-                    </div>
+                    ${list}
                 </div>
             </div>
         `;
@@ -44,39 +68,91 @@ export class JoinTournament extends HTMLElement {
                 </div>
             </div>
             <div class="rightContainer">
-                <h5 class="deadline">${calculateTimeDifferents(tournamentData.created_at)}</h5>
+                <h5 class="deadline"></h5>
                 <button class="join-button"/>
             </div>
         `;
+        const deadline = tournamentItem.querySelector(".deadline");
+        setInterval(() => {
+            deadline.textContent = calculateTimeDifferents(tournamentData.created_at);
+        }, 1000);
         const joinButton = tournamentItem.querySelector(".join-button");
         joinButton.id = tournamentData.id;
         if (tournamentData.is_accessible == false)
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
             if (joinButton.className == "lock-button") {
-
+                this.joinToPrivateTournament(tournamentData);
             }
             else {
-                await this.player_join_tournament(joinButton.id);
+                await this.player_join_tournament(tournamentData.id);
                 const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
-                tournamentsList.removeChild(this.shadowRoot.getElementById(joinButton.id));
+                tournamentsList.removeChild(this.shadowRoot.getElementById(tournamentData.id));
             }
         });
         return tournamentItem;
     }
 
+    joinToPrivateTournament(tournamentData) {
+        const mainContainer = this.shadowRoot.querySelector(".mainContainer");
+        mainContainer.innerHTML = forms;
+        mainContainer.querySelector("#back").addEventListener("click", () => {
+            mainContainer.innerHTML = list;
+            this.bindingApiDataIntoComponents();
+        });
+        const tournamentId = mainContainer.querySelector(".tournamentId #tournamentId");
+        const tournamentPassword = mainContainer.querySelector(".password #tournamentPassword");
+        if (tournamentData) {
+            tournamentId.value = tournamentData.tournament_id;
+            tournamentId.setAttribute("readonly", true);
+        }
+        console.log("tournamentPassword: ", tournamentPassword.value);
+        mainContainer.querySelector(".join-private-tournament").addEventListener("click", () => {
+            if (tournamentPassword.value != "12345678") {
+                tournamentPassword.style.border = "1px solid red";
+                console.log("ERROR: wrong password !!!");
+            }
+            else {
+                tournamentPassword.style.border = "1px solid aqua";
+                console.log("join successfully to the tournament => ", tournamentId.value);
+            }
+
+        });
+    }
+
     async bindingApiDataIntoComponents() {
+        const privateTournament = this.shadowRoot.getElementById("private-tournament");
+        privateTournament.addEventListener("click", () => {
+            this.joinToPrivateTournament(null);
+        });
+        const closeButton = this.shadowRoot.getElementById("close-button");
+        closeButton.addEventListener("click", () => {
+            this.remove();
+            return ;
+        });
+
         const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
         tournamentsList.innerHTML = '';
         const tournaments = await this.get_Available_Tournaments();
-        tournaments.forEach(element => {
+        for (let index = tournaments.length - 1; index >= 0; index--) {
+            const element = tournaments[index];
             if (!element.players.some(e => e.id == playerId))
                 tournamentsList.appendChild(this.createTournamentItem(element));
-        });
+            
+        }
     }
 
     connectedCallback() {
         this.bindingApiDataIntoComponents();
+        this.setParentStatus();
+    }
+
+    setParentStatus(value) {
+        const parent = this.closest('tournaments-table');
+        console.log("parent: ", parent);
+        if (parent) {
+            parent.status = value;
+        }
     }
 
     async get_Available_Tournaments() {
@@ -122,12 +198,6 @@ export class JoinTournament extends HTMLElement {
 
 
 
-
-
-
-
-
-
 const cssContent = /*css*/`
     * {
         margin: 0;
@@ -138,15 +208,21 @@ const cssContent = /*css*/`
 
     :host {
         width: 100%;
-        height: 100%;
-        background-color: #124B6C50;
+        height: 102%;
+        background-color: #124B6C75;
         display: flex;
         align-items: center;
         justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 5;
+
     }
     .box {
-        width: 40%;
+        width: 45%;
         height: 90%;
+        min-width: 500px;
         display: flex;
         flex-direction: column;
         clip-path: polygon(0 0, calc(100% - 30px) 0%, 100% 30px, 100% 100%, 30px 100%, 0% calc(100% - 30px));
@@ -164,9 +240,9 @@ const cssContent = /*css*/`
         clip-path: polygon(0 0, calc(100% - 30px) 0%, 100% 30px, 100% 100%, 30px 100%, 0% calc(100% - 30px));
         background-color: #124B6C; 
         align-items: center;
-        justify-content: center;
         position: relative;
-        margin: 2px;   
+        justify-content: space-between;
+        margin: 2px;
     }
 
 
@@ -176,20 +252,6 @@ const cssContent = /*css*/`
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .line > img {
-        height: 12px;
-        margin: 20px;
-    }
-
-    h3 {
-        margin-bottom: 4px; 
-    }
-
-    .tournamentId {
-        width: 100%;
-        height: 80px;
     }
 
     .mainHeader {
@@ -287,7 +349,7 @@ const cssContent = /*css*/`
 
 
     .rightContainer {
-        min-width: 300px;
+        min-width: 200px;
         height: 100%;
         display: flex;
         align-items: center;
@@ -304,63 +366,75 @@ const cssContent = /*css*/`
         background: url("../assets/icons/join-icon.svg");
         background-repeat: no-repeat;
         background-size: cover;
+        border: none;
     }
+
     .lock-button {
         width: 24px;
+        height: 27px;
         background: url("../assets/icons/lock-icon.svg");
         background-repeat: no-repeat;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    .isPrivate {
-        width: 100%;
-        height: 80px;
-        display: flex;
-        align-items: center;
-        position: relative;
-    }
-
-    .privateCheckBox {
-        width: 48px;
-        height: 24px;
-        background-color: #d9d9d950;
-        position: absolute;
-        right: 40px;
-        border-radius: 100px;
-    }
-
-    .circle {
-        height: 24px;
-        width: 24px;
-        border-radius: 100%;
-        background-color: #d9d9d9;
-
-    }
-
-    .password {
-        width: 100%;
-        height: 80px;
-    }
-
-    button {
-        font-size: 26px;
-        font-family: 'Sansation Bold';
-        height: 64px;
-        background-color: transparent;
+        background-size: cover;
+        outline: none;
         border: none;
-        color: white;
+    }
+
+
+    .line > img {
+        height: 12px;
         margin: 20px;
+    }
+
+    .join-form {
+        height: calc(100% - 80px);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+
+    .tournamentId,
+    .password {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .tournamentId input,
+    .password input {
+        height: 40px;
+        width: 50%;
+        border: 1px solid aqua;
+        border-radius: 10px;
+        outline: none;
+        font-family: 'Sansation Bold';
+        color: #ffffff;
+        background-color: transparent;
+        padding-left: 10px;
+    }
+
+    .tournamentId h2,
+    .password h2 {
+        width: 50%;
+        text-align: left;
+        margin-bottom: 4px; 
+    }
+
+    .join-private-tournament {
+        background: transparent;
+        height: 64px;
+        border: none;
+        outline: none;
+        color: white;
+        font-family: 'Sansation bold';
+        font-size: 28px;
+        margin-bottom: 30px;
+
     }
 
 `;

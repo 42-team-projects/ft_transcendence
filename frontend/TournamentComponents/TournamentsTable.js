@@ -5,10 +5,9 @@ import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
 const cssContent = /*css*/`
 :host {
     width: 100%;
-    height: 100%; 
+    height: 100%;
+    position: relative;
 }
-
-
 .mainContainer {
     display: flex;
     width: 100%;
@@ -147,6 +146,11 @@ h4::-webkit-scrollbar {
     display: none;
 }
 
+.sss {
+    width: 100%;
+    height: 100%;
+}
+
 `;
 
 const TABLEHEADER = `
@@ -168,24 +172,27 @@ const TABLEHEADER = `
 `;
 
 export class TournamentsTable extends HTMLElement {
+    shadow;
     constructor() {
         super();
-        this.attachShadow({ mode: "open" });
-        this.shadowRoot.innerHTML = `
+        this.shadow = this.attachShadow({ mode: "open" });
+        this.shadow.innerHTML = `
             <style>
                 ${cssContent}
             </style>
-            <div class="mainContainer">
-                ${TABLEHEADER}
-            </div>
+            <div class="sss">
+                <div class="mainContainer">
+                    ${TABLEHEADER}
+                </div>
 
-            <div class="tournament-actions">
-                <custom-button id="firstButton" width="300px">
-                    <h3>JOIN TOURNAMENT</h3>
-                </custom-button>
-                <custom-button id="secondButton" width="300px" background-color="#0C9BA3" reverse>
-                    <h3>CREATE TOURNAMENT</h3>
-                </custom-button>
+                <div class="tournament-actions">
+                    <custom-button id="firstButton" width="300px">
+                        <h3>JOIN TOURNAMENT</h3>
+                    </custom-button>
+                    <custom-button id="secondButton" width="300px" background-color="#0C9BA3" reverse>
+                        <h3>CREATE TOURNAMENT</h3>
+                    </custom-button>
+                </div>
             </div>
         `;
     }
@@ -287,23 +294,23 @@ export class TournamentsTable extends HTMLElement {
         const APIData = await this.get_tournaments_by_player_id();
         if (!APIData)
             return;
-        const tbody = this.shadowRoot.querySelector("tbody");
+        const tbody = this.shadow.querySelector("tbody");
 
         for (let index = APIData.length - 1; index >= 0; index--)
             tbody.appendChild(this.createRow(APIData[index]));
 
-        const allDisplayAction = this.shadowRoot.querySelectorAll(".displayAction");
+        const allDisplayAction = this.shadow.querySelectorAll(".displayAction");
         allDisplayAction.forEach(elem => {
             elem.addEventListener("click", async () => {
-                this.shadowRoot.innerHTML = '';
+                this.shadow.innerHTML = '';
                 const response = await get_tournament_by_id(elem.id);
                 if (!response)
                     throw new Error(`${response.status}  ${response.statusText}`);
-                this.shadowRoot.innerHTML = '';
+                this.shadow.innerHTML = '';
                 const rounds = document.createElement("generate-rounds");
                 rounds.numberOfPlayers = response.number_of_players;
                 rounds.players = response.players;
-                this.shadowRoot.appendChild(rounds);
+                this.shadow.appendChild(rounds);
             });
         });
     }
@@ -314,9 +321,9 @@ export class TournamentsTable extends HTMLElement {
         this.createTournamentTable();
 
 
-        const mainContainer = this.shadowRoot.querySelector(".mainContainer");
-        const firstButton = this.shadowRoot.getElementById("firstButton");
-        const secondButton = this.shadowRoot.getElementById("secondButton");
+        const mainContainer = this.shadow.querySelector(".mainContainer");
+        const firstButton = this.shadow.getElementById("firstButton");
+        const secondButton = this.shadow.getElementById("secondButton");
         firstButton.addEventListener("click", () => {
             const buttonValue = firstButton.querySelector("h3");
             if (buttonValue.textContent == "CANCEL") {
@@ -326,13 +333,15 @@ export class TournamentsTable extends HTMLElement {
                 secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
             }
             else {
-
+                let joinTournament = document.createElement("join-tournament");
+                joinTournament.id = "joinTournament";
+                this.shadow.appendChild(joinTournament);
             }
         });
         secondButton.addEventListener("click", async () => {
             const buttonValue = secondButton.querySelector("h3");
             if (buttonValue.textContent == "GENERATE") {
-                const data = this.shadowRoot.querySelector("create-tournament").data;
+                const data = this.shadow.querySelector("create-tournament").data;
                 if (data)
                 {
                     try {
@@ -340,11 +349,11 @@ export class TournamentsTable extends HTMLElement {
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
-                        this.shadowRoot.innerHTML = '';
+                        this.shadow.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
                         rounds.players = tournamentResponse.players;
-                        this.shadowRoot.appendChild(rounds);
+                        this.shadow.appendChild(rounds);
                     } catch (error) {
                         console.log(error);
                     }
@@ -379,3 +388,6 @@ export async function get_tournament_by_id(id) {
         console.error('Error of tournament list: ', error);
     }
 }
+
+
+customElements.define("tournaments-table", TournamentsTable);
