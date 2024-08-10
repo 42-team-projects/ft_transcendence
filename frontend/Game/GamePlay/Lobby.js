@@ -1,7 +1,7 @@
 import { PlayerBorder } from "./PlayerBorder.js";
 import { GameHeader } from "./GameHeader.js"
 import { GameTable } from "./GameTable.js"
-
+import { ip } from "../../conf.js";
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
@@ -12,34 +12,34 @@ let time = 3;
 
 let searching_images = [
 	{
-		picture: 'http://127.0.0.1:5500/images/svg-header/profile.jpeg',
+		picture: `http://${ip}:5500/images/svg-header/profile.jpeg`,
 		username: 'ESCANOR'
 	},
 	{
-		picture: 'http://127.0.0.1:5500/images/OrangeCart/images.png',
+		picture: `http://${ip}:5500/images/OrangeCart/images.png`,
 		username: 'ITATCHI'
 	},
 	{
-		picture: 'http://127.0.0.1:5500/images/OrangeCart/img1.png',
+		picture: `http://${ip}:5500/images/OrangeCart/img1.png`,
 		username: 'ESALIM'
 	},
 	{
-		picture: 'http://127.0.0.1:5500/images/OrangeCart/img2.jpg',
+		picture: `http://${ip}:5500/images/OrangeCart/img2.jpg`,
 		username: 'KILLUA'
 	},
 	{
-		picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+		picture: `http://${ip}:5500/images/OrangeCart/img3.jpg`,
 		username: 'GOJO'
 	}
 ]
 
 export let userInfo = {
-	picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+	picture: `http://${ip}:5500/images/OrangeCart/img3.jpg`,
 	username: 'GOJO'
 }
 
 export let opponentInfo = {
-	picture: 'http://127.0.0.1:5500/images/OrangeCart/img3.jpg',
+	picture: `http://${ip}:5500/images/OrangeCart/img3.jpg`,
 	username: 'GOJO'
 }
 
@@ -185,7 +185,7 @@ export class Lobby extends HTMLElement{
 	// }
 	async OnlineGame()
 	{
-		window.socket = new WebSocket('ws://127.0.0.1:8000/ws/game/')
+		window.socket = new WebSocket(`ws://${ip}:8000/ws/game/`)
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
@@ -194,22 +194,27 @@ export class Lobby extends HTMLElement{
 		const turnTime = 1;
 		let delay = 0; 
 		let delayNumber = (turnTime / 2) / Players.length;
-	
+		
+		let start = Date.now();
+		console.log('start : ', start);
 		socket.onopen = (e) => {
 			const message = {
 				'status': 'searching',
-				'userId': userId
+				'userId': userId,
 			}
+			console.log('message : ', message);
 			socket.send(JSON.stringify(message));
 		};
 		socket.addEventListener('message', (e) => {
 			var data = JSON.parse(e.data);
-			console.log("data :", data);
+			let end = Date.now();
+			// console.log("data :", data);
+			console.log('end : ', end);
 			setTimeout(() => this.setPlayer(data.opponent_id), 5000);
 			setTimeout(() => this.gameMode(data.room_name), 6000);
 		}, { once: true });
-		searching_images = await this.getData('http://127.0.0.1:8000/game/players/');
-		userInfo = await this.getData(`http://127.0.0.1:8000/game/players/${userId}/`);
+		searching_images = await this.getData(`http://${ip}:8000/game/players/`);
+		userInfo = await this.getData(`http://${ip}:8000/game/players/${userId}/`);
 
 		p_img.src = userInfo.picture;
 		p_h1.textContent = userInfo.username;
@@ -231,7 +236,7 @@ export class Lobby extends HTMLElement{
 		const turnTime = 10;
 		let delay = 0; 
 		let delayNumber = (turnTime / 2) / Players.length;
-		opponentInfo = await this.getData(`http://127.0.0.1:8000/game/players/${opponentId}/`)
+		opponentInfo = await this.getData(`http://${ip}:8000/game/players/${opponentId}/`)
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
