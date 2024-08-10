@@ -12,34 +12,34 @@ let time = 3;
 
 let searching_images = [
 	{
-		picture: `http://${ip}:5500/images/svg-header/profile.jpeg`,
+		picture: `http://${ip}:8000/media/24/08/10/profile.jpeg`,
 		username: 'ESCANOR'
 	},
 	{
-		picture: `http://${ip}:5500/images/OrangeCart/images.png`,
+		picture: `http://${ip}:8000/media/24/08/10/images.png`,
 		username: 'ITATCHI'
 	},
 	{
-		picture: `http://${ip}:5500/images/OrangeCart/img1.png`,
+		picture: `http://${ip}:8000/media/24/08/10/img1.png`,
 		username: 'ESALIM'
 	},
 	{
-		picture: `http://${ip}:5500/images/OrangeCart/img2.jpg`,
+		picture: `http://${ip}:8000/media/24/08/10/img2.jpg`,
 		username: 'KILLUA'
 	},
 	{
-		picture: `http://${ip}:5500/images/OrangeCart/img3.jpg`,
+		picture: `http://${ip}:8000/media/24/08/10/img3.jpg`,
 		username: 'GOJO'
 	}
 ]
 
 export let userInfo = {
-	picture: `http://${ip}:5500/images/OrangeCart/img3.jpg`,
+	picture: `http://${ip}:8000/media/24/08/10/img3.jpg`,
 	username: 'GOJO'
 }
 
 export let opponentInfo = {
-	picture: `http://${ip}:5500/images/OrangeCart/img3.jpg`,
+	picture: `http://${ip}:8000/media/24/08/10/img3.jpg`,
 	username: 'GOJO'
 }
 
@@ -190,7 +190,7 @@ export class Lobby extends HTMLElement{
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
-		const userId = Math.floor(Math.random() * 5) + 1;
+		const userId = Math.floor(Math.random() * 15) + 1;
 		const turnTime = 1;
 		let delay = 0; 
 		let delayNumber = (turnTime / 2) / Players.length;
@@ -217,6 +217,7 @@ export class Lobby extends HTMLElement{
 		userInfo = await this.getData(`http://${ip}:8000/game/players/${userId}/`);
 
 		p_img.src = userInfo.picture;
+		console.log('userInfo : ', userInfo);
 		p_h1.textContent = userInfo.username;
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;

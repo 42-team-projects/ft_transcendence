@@ -93,17 +93,11 @@ export class GameTable extends HTMLElement{
             } else {
                 const ball_y = data.ball.y;
                 const ball_x = data.ball.x;
-                // const racket_width = data.racquet.racquet_width;
-                // const racket_height = data.racquet.racquet_height;
-                // const player = data.racquet.player_y;
-                // const opponent = data.racquet.opponent_y;
                 const ball_radius = data.ball.radius;
                 const dx = data.ball.dx;
                 const dy = data.ball.dy;
                 
                 this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
-                // this.setCoordonatesP1(player, racket_width, racket_height);
-                // this.setCoordonatesP2(opponent, racket_width, racket_height);
             }
         }
     }
@@ -153,7 +147,7 @@ export class GameTable extends HTMLElement{
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
     }
-    LuncheGame(ctx){
+    async LuncheGame(ctx){
         document.body.querySelector('game-header').classList.toggle('blur', true)
 		document.body.querySelector('game-table').classList.toggle('blur', true)
         if(this.luanching === false)
@@ -192,11 +186,11 @@ export class GameTable extends HTMLElement{
     }
     getKeys(){return this.conKeys;}
 
-    RanderRackit(ctx, player){
+    async RanderRackit(ctx, player){
         ctx.fillStyle = player.color;
         ctx.fillRect(player.x, player.y, this.racquet_size.width, this.racquet_size.height);
     }
-    renderBall(ctx){
+    async renderBall(ctx){
         const coordonate = this.getCoordonates();
         ctx.fillStyle = 'white';
         ctx.beginPath();
@@ -204,7 +198,7 @@ export class GameTable extends HTMLElement{
         ctx.fill();
         ctx.closePath();
     }
-    resetGame(){
+    async resetGame(){
         if(this.requestID)
             cancelAnimationFrame(this.requestID);
         // removeEventListener('keydown');
@@ -216,20 +210,20 @@ export class GameTable extends HTMLElement{
         this.runder_call = true;
         this.runder();
     }
-    gameLoop(ctx){
+    async gameLoop(ctx){
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         const player = this.getPlayerPosition();
         const opponent = this.getOpponentPosition();
         this.requestID = requestAnimationFrame(() => this.gameLoop(ctx));
-        this.movePlayer(this.getKeys(), player);
-        this.moveBall(player, opponent, ctx);
-        this.renderBall(ctx);
-        this.RanderRackit(ctx, player);
-        this.RanderRackit(ctx, opponent);
+        await this.movePlayer(this.getKeys(), player);
+        await this.moveBall(player, opponent, ctx);
+        await this.renderBall(ctx);
+        await this.RanderRackit(ctx, player);
+        await this.RanderRackit(ctx, opponent);
         if(this.Loop_state === false)
-            this.resetGame();
+            await this.resetGame();
     }
-    runder (){
+    async runder (){
         // console.log('rendering');
 
         const container = game_page.querySelector('.table_container');
@@ -237,16 +231,16 @@ export class GameTable extends HTMLElement{
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
         const ctx = canvas.getContext('2d');
-        this.renderBall(ctx);
-        this.RanderRackit(ctx, this.getPlayerPosition());
-        this.RanderRackit(ctx, this.getOpponentPosition());
-        this.LuncheGame(ctx);
+        await this.renderBall(ctx);
+        await this.RanderRackit(ctx, this.getPlayerPosition());
+        await this.RanderRackit(ctx, this.getOpponentPosition());
+        await this.LuncheGame(ctx);
     }
     RoundOver(ctx){
         this.Loop_state = false;
         document.querySelector('game-header').updateScore(score);
     }
-    moveBall(player, opponent, ctx){
+    async moveBall(player, opponent, ctx){
         let {x, y, radius, dx, dy} = this.getCoordonates();
         // console.log(this.getCoordonates());
         if(y + radius + dy >= CANVAS_HEIGHT || y - radius + dy <= 0)
@@ -295,7 +289,7 @@ export class GameTable extends HTMLElement{
         this.setKeys(keyS, keyW, keyArrowUp, keyArrowDown);
     }
 
-    movePlayer(keys, player){
+    async movePlayer(keys, player){
         const {keyW, keyS, keyArrowUp, keyArrowDown} = keys;
         if(keyW === true) { this.moveUp(player) };
         if(keyS === true) { this.moveDown(player) };
