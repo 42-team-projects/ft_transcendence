@@ -239,3 +239,31 @@ def player_join_tournament(request, tournamentId, playerId):
         except Tournament.DoesNotExist:
             return JsonResponse({'statusText': 'Tournament not found'}, status=404)
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def player_leave_tournament(request, tournamentId, playerId):
+    if request.method == 'POST':
+        try:
+            player = Player.objects.get(id=playerId)
+            tournament = Tournament.objects.get(id=tournamentId)
+            # if not tournament.can_join:
+            #     return JsonResponse({'statusText': 'Tournament is not open for new players'}, status=400)
+
+            # if player not in tournament.players.all():
+            #     return JsonResponse({'statusText': 'Player is not in the tournament'}, status=400)
+
+            # tournament.players.add(player)
+            tournament.players.remove(player)
+            tournament.save()
+            # if tournament.players.count() >= tournament.number_of_players:
+            #     tournament.can_join = False
+            #     tournament.save()
+                # launch_tournament(tournament) # here call launch_tournament function
+                # return JsonResponse({'success': launch_tournament(tournament)}, status=200)
+            return JsonResponse({'success': 'Player successfully leaved the tournament'}, status=200)
+        except Player.DoesNotExist:
+            return JsonResponse({'statusText': 'Player not found'}, status=404)
+        except Tournament.DoesNotExist:
+            return JsonResponse({'statusText': 'Tournament not found'}, status=404)
+    return JsonResponse({'statusText': 'Invalid request method'}, status=405)
