@@ -11,8 +11,8 @@ const cssContent = /*css*/`
 .mainContainer {
     display: flex;
     width: 100%;
-    height: calc(100% - 50px);
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 h2 {
@@ -39,6 +39,7 @@ h2 {
 
 table {
     width: 100%;
+    height: min-content;
     font-size: 26px;
     color: white;
 }
@@ -56,7 +57,6 @@ thead > tr {
 }
 
 tbody {
-    height: 100%;
     width: 100%;
 }
 
@@ -103,40 +103,11 @@ td {
     background: #cccc4040;
 }
 
-.qrcode-section {
-    flex: 1;
-    height: 100%;
-    background: #ffffff40;
-}
-
-.rounds,
-.final {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-.final {
-    flex-direction: row;
-    gap: 20px;
-}
-
-.rounds > tournament-round > div {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    max-width: 200px;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
 .c-hexagon-content {
     width: 100%;
     height: 100%;
 }
+
 h4 {
     max-width: 90px;
     overflow-x: scroll;
@@ -149,6 +120,9 @@ h4::-webkit-scrollbar {
 .sss {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 `;
@@ -172,11 +146,9 @@ const TABLEHEADER = `
 `;
 
 export class TournamentsTable extends HTMLElement {
-    shadow;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: "open" });
-        this.shadow.innerHTML = `
+        this.innerHTML = `
             <style>
                 ${cssContent}
             </style>
@@ -197,7 +169,6 @@ export class TournamentsTable extends HTMLElement {
         `;
     }
 
-
     createRow(data) {
         const tr = document.createElement("tr");
         tr.id = data.id;
@@ -208,10 +179,9 @@ export class TournamentsTable extends HTMLElement {
         }
         {
             const td = document.createElement("td");
+            td.textContent = "unknown";
             if (data.players.length)
                 td.textContent = data.players[0].username;
-            else
-                td.textContent = "unknown";
             tr.appendChild(td);
         }
         {
@@ -226,9 +196,9 @@ export class TournamentsTable extends HTMLElement {
         }
         {
             const td = document.createElement("td");
-            setInterval(() => {
-                td.textContent = calculateTimeDifferents(data.created_at);
-            }, 1000);
+            td.className = "deadLineTime";
+            td.dataset.createdAt = data.created_at;
+            td.textContent = calculateTimeDifferents(data.created_at);
             tr.appendChild(td);
         }
         {
@@ -238,28 +208,44 @@ export class TournamentsTable extends HTMLElement {
         }
         {
             const actions = document.createElement("td");
-            actions.innerHTML = `
-                    <div class="actions">
-                        <img id="${data.id}" class="exitAction" src="./images/logout.svg" width="24"/>
-                        <img id="${data.id}" class="displayAction" src="./assets/profile-assets/play-button.svg" width="24"/>
-                    </div>
-                `;
 
-            actions.querySelector(".exitAction").addEventListener("click", async () => {
+            const exitButton = document.createElement("img");
+            exitButton.id = data.id;
+            exitButton.className = "exitAction";
+            exitButton.src = "./images/logout.svg";
+            exitButton.width = 24;
+            exitButton.addEventListener("click", async () => {
                 this.player_leave_tournament(data.id);
-                this.shadowRoot.getElementById(data.id).remove();
+                tr.remove();
             });
-            actions.querySelector(".displayAction").addEventListener("click", async () => {
-                this.shadow.innerHTML = '';
-                const response = await get_tournament_by_id(data.id);
+
+            const displayButton = document.createElement("img");
+            displayButton.id = data.id;
+            displayButton.className = "displayAction";
+            displayButton.src = "./assets/profile-assets/play-button.svg";
+            displayButton.width = 24;
+            displayButton.addEventListener("click", async () => {
+                this.innerHTML = '';
+                const response = await this.get_tournament_by_id(data.id);
                 if (!response)
                     throw new Error(`${response.status}  ${response.statusText}`);
-                this.shadow.innerHTML = '';
+                this.innerHTML = '';
                 const rounds = document.createElement("generate-rounds");
                 rounds.numberOfPlayers = response.number_of_players;
                 rounds.players = response.players;
-                this.shadow.appendChild(rounds);
+                this.appendChild(rounds);
             });
+
+            const actionsContainer = document.createElement("div");
+            actionsContainer.className = "actions";
+
+            if (data.players.length && data.players[0].id != playerId)
+                actionsContainer.appendChild(exitButton);
+
+            actionsContainer.appendChild(displayButton);
+
+            actions.appendChild(actionsContainer);
+
             tr.appendChild(actions);
         }
         return tr;
@@ -279,10 +265,7 @@ export class TournamentsTable extends HTMLElement {
         }
     }
 
-
-
-    async createTournament(data)
-    {
+    async createTournament(data) {
         try {
             const Tournament = {
                 tournament_name: data.name,
@@ -301,30 +284,51 @@ export class TournamentsTable extends HTMLElement {
             if (!response.ok)
                 throw new Error(`${response.status}  ${response.statusText}`);
             return await response.json();
-        } catch(error) {
+        } catch (error) {
             console.error('Error creating Tournament: ', error);
         }
     }
 
     async createTournamentTable() {
-        const APIData = await this.get_tournaments_by_player_id();
-        if (!APIData)
+        const tournamentsAPIData = await this.get_tournaments_by_player_id();
+        if (!tournamentsAPIData)
             return;
-        const tbody = this.shadow.querySelector("tbody");
+        console.log(tournamentsAPIData);
+        let numberOfTournament = tournamentsAPIData.length;
+        const tbody = this.querySelector("tbody");
 
-        for (let index = APIData.length - 1; index >= 0; index--)
-            tbody.appendChild(this.createRow(APIData[index]));
+        for (let index = tournamentsAPIData.length - 1; index >= 0; index--)
+            tbody.appendChild(this.createRow(tournamentsAPIData[index]));
+
+        const deadlineTimeNodes = tbody.querySelectorAll(".deadLineTime");
+        const unfinishedTournament = Array.from(deadlineTimeNodes).filter((time) => time.textContent !== "finished");
+
+        this.dateInterval = setInterval(async () => {
+            numberOfTournament = await this.updateTournamentsTable(Number(numberOfTournament), tbody);
+            console.log("setInterval function: ", numberOfTournament);
+            unfinishedTournament.forEach((time) => {
+                time.textContent = calculateTimeDifferents(time.dataset.createdAt);
+            });
+        }, 1000);
+    }
+
+    async updateTournamentsTable(numberOfTournament, tbody) {
+        const tmpTournamentsAPIData = await this.get_tournaments_by_player_id();
+        const tournamentsCount = tmpTournamentsAPIData.length;
+        if (tmpTournamentsAPIData && Number(numberOfTournament) < Number(tournamentsCount)) {
+            const rest = tournamentsCount - numberOfTournament;
+            for (let index = 0; index < rest; index++)
+                tbody.prepend(this.createRow(tmpTournamentsAPIData.pop()));
+        }
+        return tournamentsCount;
     }
 
     async connectedCallback() {
-
-
         this.createTournamentTable();
 
-
-        const mainContainer = this.shadow.querySelector(".mainContainer");
-        const firstButton = this.shadow.getElementById("firstButton");
-        const secondButton = this.shadow.getElementById("secondButton");
+        const mainContainer = this.querySelector(".mainContainer");
+            const firstButton = this.querySelector("#firstButton");
+            const secondButton = this.querySelector("#secondButton");
         firstButton.addEventListener("click", () => {
             const buttonValue = firstButton.querySelector("h3");
             if (buttonValue.textContent == "CANCEL") {
@@ -332,54 +336,51 @@ export class TournamentsTable extends HTMLElement {
                 this.createTournamentTable();
                 buttonValue.textContent = "JOIN TOURNAMENT";
                 secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
-            }
-            else {
+            } else {
                 let joinTournament = document.createElement("join-tournament");
                 joinTournament.id = "joinTournament";
-                this.shadow.appendChild(joinTournament);
+                this.appendChild(joinTournament);
             }
         });
         secondButton.addEventListener("click", async () => {
             const buttonValue = secondButton.querySelector("h3");
+            clearInterval(this.dateInterval);
             if (buttonValue.textContent == "GENERATE") {
-                const data = this.shadow.querySelector("create-tournament").data;
-                if (data)
-                {
+                const data = this.querySelector("create-tournament").data;
+                if (data) {
                     try {
                         const response = await this.createTournament(data);
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
-                        this.shadow.innerHTML = '';
+                        this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
                         rounds.players = tournamentResponse.players;
-                        this.shadow.appendChild(rounds);
+                        this.appendChild(rounds);
                     } catch (error) {
                         console.log(error);
                     }
-                }
-                else
+                } else
                     console.log("Please fill all inputs field!!");
-            }
-            else
-            {
+            } else {
                 mainContainer.innerHTML = '';
                 mainContainer.appendChild(document.createElement("create-tournament"));
                 buttonValue.textContent = "GENERATE";
                 firstButton.querySelector("h3").textContent = "CANCEL";
             }
         });
-    
     }
+
+    dateInterval;
 
     disconnectedCallback() {
+        clearInterval(this.dateInterval);
+        console.log("this.dateInterval: ", this.dateInterval);
     }
 
-    async player_leave_tournament(tournamentId)
-    {
+    async player_leave_tournament(tournamentId) {
         try {
-
             const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/leave/`, {
                 method: 'POST'
             });
@@ -390,24 +391,22 @@ export class TournamentsTable extends HTMLElement {
             }
             const data = await response.json();
             console.log(JSON.stringify(data, null, 2));
-        } catch(error) {
+        } catch (error) {
             console.error('Error of player leave tournament: ', error);
         }
     }
 
-}
-
-export async function get_tournament_by_id(id) {
-    try {
-        const response = await fetch(`${apiUrl}${id}`);
-        if (!response.ok) {
-            throw new Error(`${response.status}  ${response.statusText}`);
+    async get_tournament_by_id(id) {
+        try {
+            const response = await fetch(`${apiUrl}${id}`);
+            if (!response.ok) {
+                throw new Error(`${response.status}  ${response.statusText}`);
+            }
+            return await response.json();
+        } catch(error) {
+            console.error('Error of tournament list: ', error);
         }
-        return await response.json();
-    } catch(error) {
-        console.error('Error of tournament list: ', error);
     }
 }
 
-
-customElements.define("tournaments-table", TournamentsTable);
+customElements.define('tournaments-table', TournamentsTable);

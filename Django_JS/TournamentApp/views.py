@@ -8,6 +8,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 import random
 
+import logging
+
+logger = logging.getLogger(__name__)
+# import customAPI
+
 # Create your views here.
 
 def index(request):
@@ -37,6 +42,7 @@ def printRequest(request):
 def create_tournament(request, player_id):
     printRequest(request)
     if request.method == 'POST':
+        logger.info(request);
         data = JSONParser().parse(request)
         serializer = TournamentSerializer(data=data)
         if serializer.is_valid():
@@ -44,7 +50,7 @@ def create_tournament(request, player_id):
             player = Player.objects.get(id=player_id)
             tournament.players.add(player)
             return JsonResponse({'status': 'success', 'tournament': serializer.data}, status=201)
-        print("Validation errors:", serializer.errors)
+        logger.debug("Validation errors:", serializer.errors)
         return JsonResponse({'status': 'error', 'errors': serializer.errors}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
@@ -98,14 +104,42 @@ def get_tournament_by_id(request, id):
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-
 def get_available_tournaments(request):
     if request.method == 'GET':
-        tournaments = Tournament.objects.filter(can_join=True)
+
+        tournamentName = request.GET.get("tournament_name")
+        tournamentId = request.GET.get("id")
+        
+        if tournamentId and tournamentName:
+            tournaments = Tournament.objects.filter(can_join=True, tournament_id=tournamentId, tournament_name=tournamentName)
+        elif tournamentId : 
+            tournaments = Tournament.objects.filter(can_join=True, tournament_id=tournamentId)
+        elif tournamentName : 
+            tournaments = Tournament.objects.filter(can_join=True, tournament_name=tournamentName)
+        else :
+            tournaments = Tournament.objects.filter(can_join=True)
+
         serializer = TournamentSerializer(tournaments, many=True)
         return JsonResponse(serializer.data, safe=False, status=200)
-    
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+
+# # TODO: GET ALL AVAILABLE TOURNAMENT USING PALYER ID
+# def get_available_tournaments_by_player_id(request, player_id):
+#     try:
+#         player = Player.objects.get(id=player_id)
+#     except Player.DoesNotExist:
+#         return JsonResponse({'error': 'Player not found'})
+#     if request.method == 'GET':
+#         # TODO: FILTER TOURNAMENTS BY CAN_JOIN FEILD
+#         tournaments = Tournament.objects.filter(can_join=True)
+#         # TODO: FILTER RESULT OF THE LAST STATEMENT BY REMOVE JOINED TOURNAMENTS.
+#         # tournaments = filter(lambda tournament: tournament.id in tournaments.players.tournaments.all(), tournaments);
+
+#         serializer = TournamentSerializer(tournaments, many=True)
+#         return JsonResponse(serializer.data, safe=False, status=200)
+    
+#     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
 def get_tournaments_by_player_id(request, player_id):
