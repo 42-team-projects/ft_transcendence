@@ -16,5 +16,8 @@ export function calculateTimeDifferents(date) {
     timeDifference -= minutes * 1000 * 60;
     
     const seconds = Math.floor(timeDifference / 1000);
+
+    // if (hours == 0 && minutes < 22)
+        // alert("the tournament will start soon.");
     return `${hours}h ${minutes}m ${seconds}s`;
 }

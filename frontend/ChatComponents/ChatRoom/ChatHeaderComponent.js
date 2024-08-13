@@ -30,11 +30,27 @@ export class ChatHeaderComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        this.shadowRoot.querySelector(".infos h1").textContent = this.userName;
-        this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
-        this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
+        if (this.userName) {
+            this.shadowRoot.querySelector(".infos h1").textContent = this.userName;
+            this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
+        }
+        else
+        {
+            this.shadowRoot.querySelector(".infos").style.display = "none";
+            this.shadowRoot.querySelectorAll("img").forEach(elem => {
+                elem.style.display = "none";
+            });
+        }
+        if (this.league)
+            this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
+        else
+            this.shadowRoot.querySelector(".profile").style.display = "none";
+    
         if (this.profileImage)
             this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
+        else
+            this.shadowRoot.querySelector(".c-hexagon-content").style.display = "none";
+
         const element = this.shadowRoot.querySelector(".online");
         element.bcolor = this.active === "true" ? "#00ffff" : "#d9d9d9";
         element.querySelector("div").style.backgroundColor = this.active === "true" ? "#00ffff" : "#d9d9d9";
@@ -44,7 +60,10 @@ export class ChatHeaderComponent extends HTMLElement {
 
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "user-name")
+        {
             this.shadowRoot.querySelector(".infos h1").textContent = newValue;
+            this.shadowRoot.querySelector(".infos").style.display = "flex";
+        }
         else if (attrName === "active")
         {
             this.shadowRoot.querySelector(".online").bcolor = newValue === "true" ? "#00ffff" : "#d9d9d9";
@@ -54,7 +73,11 @@ export class ChatHeaderComponent extends HTMLElement {
         else if (attrName === "league")
             this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(newValue);
         else if (attrName === "profile-image")
-            this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + newValue + ") center / cover no-repeat";
+        {
+            const profileComponent = this.shadowRoot.querySelector(".c-hexagon-content").style;
+            profileComponent.background = "url(" + newValue + ") center / cover no-repeat";
+            profileComponent.display = "flex";
+        }
 
     }
 
