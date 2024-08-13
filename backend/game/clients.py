@@ -3,6 +3,7 @@ import asyncio
 class GameLoop :
     def __init__(self, controler):
         print('hiiiiiii')
+        self.controler = controler
         # self.ready_clients = 0
         # self._client1.y = 0
         # self._client2.y = 0
@@ -16,14 +17,14 @@ class GameLoop :
         #     'height': 50,
         #     'width': 10
         # }
-    # async def get_opponent(self):
-    #     message = {
-    #         'room_name': self ._room_name,
-    #         'opponent_id': self._client2.id
-    #     }
-    #     await self._client1.ws.send(json.dumps(message))
-    #     message['opponent_id'] = self._client1.id
-    #     await self._client2.ws.send(json.dumps(message))
+    async def get_opponent(self):
+        message = {
+            'opponent': self.controler
+            
+        }
+        # await self._client1.ws.send(json.dumps(message))
+        # message['opponent_id'] = self._client1.id
+        # await self._client2.ws.send(json.dumps(message))
 
     # async def game_loop(self):
     #     #canvas
