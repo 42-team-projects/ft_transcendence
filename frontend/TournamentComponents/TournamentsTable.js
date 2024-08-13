@@ -225,6 +225,7 @@ export class TournamentsTable extends HTMLElement {
             displayButton.src = "./assets/profile-assets/play-button.svg";
             displayButton.width = 24;
             displayButton.addEventListener("click", async () => {
+                clearInterval(this.dateInterval);
                 this.innerHTML = '';
                 const response = await this.get_tournament_by_id(data.id);
                 if (!response)
@@ -293,7 +294,6 @@ export class TournamentsTable extends HTMLElement {
         const tournamentsAPIData = await this.get_tournaments_by_player_id();
         if (!tournamentsAPIData)
             return;
-        console.log(tournamentsAPIData);
         let numberOfTournament = tournamentsAPIData.length;
         const tbody = this.querySelector("tbody");
 
@@ -343,8 +343,8 @@ export class TournamentsTable extends HTMLElement {
             }
         });
         secondButton.addEventListener("click", async () => {
-            const buttonValue = secondButton.querySelector("h3");
             clearInterval(this.dateInterval);
+            const buttonValue = secondButton.querySelector("h3");
             if (buttonValue.textContent == "GENERATE") {
                 const data = this.querySelector("create-tournament").data;
                 if (data) {
@@ -376,7 +376,6 @@ export class TournamentsTable extends HTMLElement {
 
     disconnectedCallback() {
         clearInterval(this.dateInterval);
-        console.log("this.dateInterval: ", this.dateInterval);
     }
 
     async player_leave_tournament(tournamentId) {
