@@ -1,0 +1,33 @@
+• JoinTournament.js file
+    joinToPrivateTournament(tournamentData) funtion :
+        - check if the tournament is not null else get the specific tournaments by tournament id.
+        - there is a problem in join private tournament form in the password section.
+• the first player is not always the owner.
+• the rules of tournament most be done.
+• The tournament rounds most be done when the friend api done.
+
+
+
+
+
+
+
+API:
+
+    get_available_tournaments_by_tournament_id      ==> the tournaments most not be contains the main player.
+    get_available_tournaments_by_tournament_name    ==> the tournaments most not be contains the main player.
+
+    count_available_tournaments                     ==> get the number of tournaments that can the player join to it.
+
+TOURNAMENT API:
+
+    /tournaments                                    ===> get all tournaments
+    /tournaments/45                                 ===> get tournament by id = 45
+    /tournaments/available                          ===> get all tournaments available to join
+    /tournaments/available/1                     ===> get all tournaments available to join for the player with id = 1
+
+
+
+
+
+
