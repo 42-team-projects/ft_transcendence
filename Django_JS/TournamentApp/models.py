@@ -17,11 +17,13 @@ class Tournament(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     number_of_players = models.IntegerField(choices=[(4, '4 Players'), (8, '8 Players'), (16, '16 Players')])
     is_accessible = models.BooleanField(default=True)
-    access_password = models.IntegerField(null=True, blank=True)
+    access_password = models.CharField(null=True, blank=True, max_length=255)
+
+    # owner = models.ForeignKey(Player, on_delete=models.CASCADE)
 
     players = models.ManyToManyField(Player, related_name='tournaments')
 
-    can_join = models.BooleanField(default=True) # if any palyers join in tournament i need to check if tournament is full or not and check datetime of tournament
+    can_join = models.BooleanField(default=True) # if any players join in tournament i need to check if tournament is full or not and check datetime of tournament
 
     def save(self, *args, **kwargs):
         if not self.tournament_id:

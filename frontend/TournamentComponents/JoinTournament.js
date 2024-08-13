@@ -51,7 +51,7 @@ export class JoinTournament extends HTMLElement {
             </div>
         `;
     }
-
+    deadlineInterval;
     createTournamentItem(tournamentData) {
         const tournamentItem = document.createElement("div");
         tournamentItem.className = "tournament-item";
@@ -62,9 +62,9 @@ export class JoinTournament extends HTMLElement {
                 <div class="tournament-info">
                     <div>
                         <p>OWNER: </p>
-                        <p class="tournament-owner">${tournamentData.players.length != 0 && tournamentData.players[0].username}</p>
+                        <p class="tournament-owner">${tournamentData.players[0].username}</p>
                     </div>
-                    <p class="number-of-players">${tournamentData.players.length} / ${tournamentData.number_of_players}</p>
+                    <p class="number-of-players">${tournamentData.players.length + " / " + tournamentData.number_of_players}</p>
                 </div>
             </div>
             <div class="rightContainer">
@@ -73,7 +73,7 @@ export class JoinTournament extends HTMLElement {
             </div>
         `;
         const deadline = tournamentItem.querySelector(".deadline");
-        setInterval(() => {
+        this.deadlineInterval = setInterval(() => {
             deadline.textContent = calculateTimeDifferents(tournamentData.created_at);
         }, 1000);
         const joinButton = tournamentItem.querySelector(".join-button");
@@ -85,12 +85,16 @@ export class JoinTournament extends HTMLElement {
                 this.joinToPrivateTournament(tournamentData);
             }
             else {
-                await this.player_join_tournament(tournamentData.id);
-                const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
-                tournamentsList.removeChild(this.shadowRoot.getElementById(tournamentData.id));
+                await this.addPlayerToTournament(tournamentData.id);
             }
         });
         return tournamentItem;
+    }
+
+    async addPlayerToTournament(tournament_id) {
+        const data = await this.player_join_tournament(tournament_id);
+        if (data)
+            this.shadowRoot.getElementById(tournament_id).remove();
     }
 
     joinToPrivateTournament(tournamentData) {
@@ -106,17 +110,20 @@ export class JoinTournament extends HTMLElement {
             tournamentId.value = tournamentData.tournament_id;
             tournamentId.setAttribute("readonly", true);
         }
-        console.log("tournamentPassword: ", tournamentPassword.value);
-        mainContainer.querySelector(".join-private-tournament").addEventListener("click", () => {
-            if (tournamentPassword.value != "12345678") {
+        else {
+            // tournamentData = get_tournament_by_tournament_id();
+
+        }
+        mainContainer.querySelector(".join-private-tournament").addEventListener("click", async () => {
+            if (tournamentPassword.value == tournamentData.access_password) {
+                tournamentPassword.style.border = "1px solid aqua";
+                // mainContainer.innerHTML = list;
+                this.addPlayerToTournament(tournamentData.tournament_id);
+            }
+            else {
                 tournamentPassword.style.border = "1px solid red";
                 console.log("ERROR: wrong password !!!");
             }
-            else {
-                tournamentPassword.style.border = "1px solid aqua";
-                console.log("join successfully to the tournament => ", tournamentId.value);
-            }
-
         });
     }
 
@@ -136,15 +143,40 @@ export class JoinTournament extends HTMLElement {
         const tournaments = await this.get_Available_Tournaments();
         for (let index = tournaments.length - 1; index >= 0; index--) {
             const element = tournaments[index];
-            if (!element.players.some(e => e.id == playerId))
+            if (element.players.length && element.players[0].id != playerId)
                 tournamentsList.appendChild(this.createTournamentItem(element));
             
         }
     }
 
+    searchInterval;
     connectedCallback() {
         this.bindingApiDataIntoComponents();
+        const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
+        const tournamentSearch = this.shadowRoot.querySelector(".tournament-search");
+        const input = tournamentSearch.querySelector("input");
+        let searchDefaultValue;
+        tournamentSearch.addEventListener("click", () => {
+            this.searchInterval = setInterval(async () => {
+                if (input.value && searchDefaultValue != input.value) {
+                    tournamentsList.innerHTML = '';
+                    const tournaments = await this.get_Available_Tournaments("tournament_name=" + input.value);
+                    for (let index = tournaments.length - 1; index >= 0; index--) {
+                        const element = tournaments[index];
+                        if (element.players.length && element.players[0].id != playerId)
+                            tournamentsList.appendChild(this.createTournamentItem(element));
+                    }
+                    searchDefaultValue = input.value;
+                    console.log("heyyyyyyyyy");
+                }
+            }, 500); 
+        });
         this.setParentStatus();
+    }
+
+    disconnectedCallback() {
+        clearInterval(this.searchInterval);
+        clearInterval(this.deadlineInterval);
     }
 
     setParentStatus(value) {
@@ -155,9 +187,10 @@ export class JoinTournament extends HTMLElement {
         }
     }
 
-    async get_Available_Tournaments() {
+    async get_Available_Tournaments(queries) {
         try {
-            const Available_Tournaments = "available_tournaments/";
+            let Available_Tournaments = "available_tournaments?" + (queries || "");
+            console.log("Available_Tournaments: " + Available_Tournaments);
             const response = await fetch(`${apiUrl}${Available_Tournaments}`);
             if (!response.ok) {
                 throw new Error(`${response.status}  ${response.statusText}`);
@@ -171,7 +204,6 @@ export class JoinTournament extends HTMLElement {
     async player_join_tournament(tournamentId)
     {
         try {
-            // const playerId = document.getElementById("playerId").value;
             const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/`, {
                 method: 'POST'
             });
@@ -180,12 +212,7 @@ export class JoinTournament extends HTMLElement {
                 console.log(JSON.stringify(data, null, 2));
                 throw new Error(`${response.status}  ${data.statusText}`);
             }
-            const data = await response.json();
-            console.log(JSON.stringify(data, null, 2));
-            if(data.success.Winner) {
-                console.log(`Player with name ${data.success.Winner} is the winner.`);
-                alert(`Player with name ${data.success.Winner} is the winner.`);
-            }
+            return await response.json();
         } catch(error) {
             console.error('Error of player join tournament: ', error);
         }
@@ -196,8 +223,6 @@ export class JoinTournament extends HTMLElement {
 
 }
 
-
-
 const cssContent = /*css*/`
     * {
         margin: 0;
@@ -206,9 +231,13 @@ const cssContent = /*css*/`
         scrollbar-width: none;  /* Firefox */
     }
 
+    *::-webkit-scrollbar {
+        display: none;
+    }
+
     :host {
         width: 100%;
-        height: 102%;
+        height: 100%;
         background-color: #124B6C75;
         display: flex;
         align-items: center;
@@ -221,7 +250,7 @@ const cssContent = /*css*/`
     }
     .box {
         width: 45%;
-        height: 90%;
+        height: 85%;
         min-width: 500px;
         display: flex;
         flex-direction: column;
