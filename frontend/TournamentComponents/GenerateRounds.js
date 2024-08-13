@@ -15,7 +15,7 @@ export class GenerateRounds extends HTMLElement {
         `;
 
         this.shadowRoot.querySelector("#back-button").addEventListener("click", () => {
-            this.remove();
+            this.parentNode.innerHTML = '<tournaments-table></tournaments-table>';
         });
     }
 
@@ -206,6 +206,10 @@ const cssContent = /*css*/`
 
     }
 
+    *::-webkit-scrollbar {
+        display: none;
+    }
+    
     :host {
         width: 100%;
         height: 100%;

@@ -1,11 +1,24 @@
 from rest_framework import serializers
 from .models import Tournament, Player
 
+# class PlayerSerializer(serializers.ModelSerializer):
+#     tournaments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+#     class Meta:
+#         model = Player
+#         fields = ['id', 'username', 'password', 'email', 'tournaments']
+
+# class TournamentSerializer(serializers.ModelSerializer):
+#     players = PlayerSerializer(many=True, required=False)
+#     owner = PlayerSerializer()
+#     class Meta:
+#         model = Tournament
+#         fields = ['id', 'can_join', 'tournament_id', 'tournament_name', 'created_at', 'number_of_players', 'is_accessible', 'access_password', 'owner', 'players']
+
 class PlayerSerializer(serializers.ModelSerializer):
     tournaments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Player
-        fields = ['id', 'username', 'password', 'email', 'tournaments']
+        fields = ['id', 'username', 'tournaments']
 
 class TournamentSerializer(serializers.ModelSerializer):
     players = PlayerSerializer(many=True, required=False)

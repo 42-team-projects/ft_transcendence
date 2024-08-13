@@ -44,7 +44,11 @@ export class ChatRoomComponent extends HTMLElement {
         try {
             const targetUserData = await fetchData(url);
             if (!targetUserData)
-                return {league: null, profileImage: null};
+            {
+                // console.log("this.shadowRoot.innerHTML = '';");
+                // this.shadowRoot.innerHTML = '';
+                return ;
+            }
             const header = this.shadowRoot.querySelector("chat-header");
             header.targetId = targetUserData.id;
             header.userName = targetUserData.userName;
@@ -56,6 +60,7 @@ export class ChatRoomComponent extends HTMLElement {
             header.active = targetUserData.active;
             header.profileImage = targetUserData.profileImage;
             profileImage = targetUserData.profileImage;
+            return true;
         } catch (error) {
             console.error('Error fetching user info:', error);
         }
@@ -109,8 +114,8 @@ export class ChatRoomComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-        if (!this.targetId)
-            return ;
+        // if (!this.targetId)
+        //     return ;
         await this.renderHeader("http://localhost:8080/api/v1/users/" + this.targetId);
         await this.renderConversation(APIUrl);
     }
