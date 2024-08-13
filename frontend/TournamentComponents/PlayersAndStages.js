@@ -36,7 +36,6 @@ export class PlayersAndStages extends HTMLElement {
         if (!attr) {
             const choices = this.shadowRoot.querySelectorAll(".choice");
             choices.forEach(elem => elem.style.border = "1px solid red");
-            console.log("hello world from selectItemId getter.");
         }
         return attr;
     }
