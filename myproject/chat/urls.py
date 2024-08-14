@@ -1,29 +1,16 @@
+# from django.urls import path
+# from . import views
+
+from django.urls import path, re_path, include
+from . import views as chat_views
+from django.contrib.auth.views import LoginView, LogoutView
+# from .routing import *
 
 
-from django.urls import path, include
-from . import views
 
 urlpatterns = [
-    path('', views.chat, name='chat')
-]
-
-
-urlpatterns = [
-    path('', views.chat, name='chat'),
-    
-    # path("", views.chatSender, name='chat'),
-    
-    path("list", views.list, name='list'),
-    path("add/", views.add, name='add'),
-    path("html/", views.html, name='html'),
-    
-    
-    
-    
-    
-    # path("add/", views.chat_sender_id, name='chat-sender_id'),
-    
-    # path("chat-list/", views.chat_list, name='chat-list'),
-    # path("<int:id>/", views.chat_by_id, name='chat-by-id'),
-    # path("create/", views.send, name='create')
+    path('', chat_views.chat, name='chat'),
+    path('conversations/', chat_views.get_all_conversations, name='conversations'),
+    path('<str:conversation_name>/', chat_views.get_all_messages, name='messages'),
+    path('last_message/<str:conversation_name>/', chat_views.last_message, name='last_message'),
 ]
