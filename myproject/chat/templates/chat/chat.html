@@ -12,39 +12,55 @@
         <input type="submit"> </input>
     </form>
     <div id="messages">
-
+        {% comment %} <div>
+            <p> ${data.message} </p>
+        </div> {% endcomment %}
     </div>
     
     <script type="text/javascript">
-        const roomName = "214571245";
-        {% comment %} const roomName = "1_chat"; {% endcomment %}
-        {% comment %} const roomName = "2_1_chat"; {% endcomment %}
-        url = `ws://127.0.0.1:8000/ws/chat/${roomName}/`
+        function chat(sender_id, receiver_id) {
+            sender = sender_id
+            receiver = receiver_id
+            if (sender < receiver)
+                room_name = sender + '_' + receiver
+            else
+                room_name = receiver + '_' + sender
 
-        const webSocket = new WebSocket(url)
+            url = 'ws://' + `${window.location.host}/ws/chat/${room_name}/`
 
-        webSocket.onmessage = function(e) {
-            let data = JSON.parse(e.data)
 
-            if (data.type === 'chat') {
-                let messages = document.getElementById('messages')
-                messages.insertAdjacentHTML('beforeend', `<div>
-                    <p> ${data.message} </p>
-                </div>`)
+            const webSocket = new WebSocket(url)
+
+
+            webSocket.onmessage = function(e) {
+                let data = JSON.parse(e.data)
+
+                console.log(data)
+                if (data.Error) {
+                    console.log(data.Error)
+                }
+                else {
+                    let messages = document.getElementById('messages')
+                    messages.insertAdjacentHTML('afterbegin', `<div>
+                        <p> ${data.content} </p>
+                    </div>`)
+                    console.log(data.content)
+                }
             }
-        }
 
-        let form = document.getElementById('form')
-        form.addEventListener('submit', (e)=> {
-            e.preventDefault()
-            let message = e.target.message.value
-            webSocket.send(JSON.stringify({
-                'message' : message,
-                'sender_id' : 5,
-                'resiver_id' : 6
-            }))
-            form.reset()
-        })
+            let form = document.getElementById('form')
+            form.addEventListener('submit', (e)=> {
+                e.preventDefault()
+                let message = e.target.message.value
+                webSocket.send(JSON.stringify({
+                    'message' : message,
+                    'sender' : sender,
+                    'receiver' : receiver
+                }))
+                form.reset()
+            })
+        }
+        chat(3,4)
     </script>
 </body>
 </html>
