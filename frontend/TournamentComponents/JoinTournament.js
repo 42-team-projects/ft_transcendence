@@ -82,7 +82,7 @@ const list = `
                 </div>
                 <img id="filter-tournaments" src="../assets/icons/filter-icon.svg">
             </div>
-            <img id="private-tournament" src="../assets/icons/key-icon.svg">
+            <img id="private-tournament" src="../assets/icons/lock-icon.svg">
         </div>
         ${filterContent}
         <div class="line">
