@@ -8,3 +8,30 @@ services:
       - ./Django_JS/:/app
     ports:
       - "8000:8000"
+    networks:
+      - ft_transcendence
+  chat:
+    build: .
+    container_name: chat
+    volumes:
+      - ./Django_JS/:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - ft_transcendence
+
+  front-end:
+    container_name: front-end
+    image: nginx:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./frontend/:/usr/share/nginx/html
+    networks:
+      - ft_transcendence
+    depends_on:
+      - web
+
+networks:
+  ft_transcendence:
+    
