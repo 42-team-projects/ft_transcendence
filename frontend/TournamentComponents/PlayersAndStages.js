@@ -8,7 +8,6 @@ export class PlayersAndStages extends HTMLElement {
                 <h1>Number Of Players</h1>
                 <div class="settingsform" id="choices"></div>
             </div>
-            <div class="subitems"></div>
         `;
     }
 
@@ -77,26 +76,6 @@ const cssContent = /*css*/`
     height: 100%;
     display: flex;
     align-items: center;
-}
-
-.subitems {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    font-size: 16px;
-    height: calc(100% - 10px);
-    margin: 10px 5%;
-
-}
-
-.subitems .item .settingsform input {
-    font-family: 'Sansation';
-    max-width: 200px;
-    min-width: 100px;
-    width: auto;
-    height: 40px;
-    font-size: 16px;
-    padding-right: 10px;
 }
 
 .item h1 {
