@@ -1,1 +1,4 @@
 ignore
+.vscode
+.DS_Store
+env
