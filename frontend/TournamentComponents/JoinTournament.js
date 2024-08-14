@@ -22,15 +22,69 @@ const forms = `
 <button class="join-private-tournament">JOIN</button>
 `;
 
+
+const filterContent = `
+    <div class="filterContainer">
+        <div class="filterSection">
+            <div class="searchBySection">
+                <h3>Search By:</h3>
+                <div class="options">
+                    <select name="searchLabel" id="searchLabel">
+                        <option value="tournament_name">Tournament Name</option>
+                        <option value="tournament_id">Tournament Id</option>
+                    </select>
+                </div>
+            </div>
+            <div class="playersSection">
+                <h3>Players:</h3>
+                <div class="options">
+                    <div class="chooseContainer" id="4">
+                        <div id="4" class="choice">
+                        </div>
+                        <p>4</p>
+                    </div>
+                    <div class="chooseContainer" id="8">
+                        <div id="8" class="choice">
+                        </div>
+                        <p>8</p>
+                    </div>
+                    <div class="chooseContainer" id="16">
+                        <div id="16" class="choice">
+                        </div>
+                        <p>16</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accessibleSection">
+                <h3>Accessible:</h3>
+                <div class="options">
+                    <div class="chooseContainer" id="public">
+                        <div id="public" class="checkbox"></div>
+                        <p>Public</p>
+                    </div>
+                    <div class="chooseContainer" id="private">
+                        <div id="private" class="checkbox"></div>
+                        <p>Private</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+`;
+
 const list = `
         <div class="mainHeader">
             <img id="close-button" src="../assets/icons/close-x-icon.svg"/>
-            <div class="tournament-search">
-                <input type="text" placeholder="Tournament Name"/>
-                <img src="../images/svg-header/search.svg">
+            <div class="searchAndFilterContainer">
+                <div class="tournament-search">
+                    <input type="text" placeholder="Tournament Name"/>
+                    <img src="../images/svg-header/search.svg">
+                </div>
+                <img id="filter-tournaments" src="../assets/icons/filter-icon.svg">
             </div>
             <img id="private-tournament" src="../assets/icons/key-icon.svg">
         </div>
+        ${filterContent}
         <div class="line">
             <img class="separator" src="../assets/login-assets/separator.svg"/>
         </div>
@@ -38,6 +92,7 @@ const list = `
             <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>
         </div>
 `;
+
 export class JoinTournament extends HTMLElement {
     constructor() {
         super();
@@ -149,6 +204,23 @@ export class JoinTournament extends HTMLElement {
         }
     }
 
+    getQueryStatement(input, searchBy, players, accessible) {
+        let statement = "?" + searchBy.value + "=" + input.value;
+        if (players.length > 0 && players.length < 3)
+        {
+            statement += "&number_of_player=";
+            for (let index = 0; index < players.length; index++) {
+                statement += players[index].id;
+                if (index + 1 != players.length)
+                    statement += "_";
+            }
+        }
+        if (accessible.length == 1)
+            statement += "&accessible=" + accessible[0].id;
+        console.log("statement : ", statement);
+        return statement;
+    }
+
     searchInterval;
     connectedCallback() {
         this.bindingApiDataIntoComponents();
@@ -156,9 +228,20 @@ export class JoinTournament extends HTMLElement {
         const tournamentSearch = this.shadowRoot.querySelector(".tournament-search");
         const input = tournamentSearch.querySelector("input");
         let searchDefaultValue;
+        let storeFilterValues = {searchBy: "name", players: 0, accessible: 0};
+        const searchBy = this.shadowRoot.querySelector("select");
         tournamentSearch.addEventListener("click", () => {
             this.searchInterval = setInterval(async () => {
-                if (input.value && searchDefaultValue != input.value) {
+                const players = this.shadowRoot.querySelectorAll(".aqua");
+                const accessible = this.shadowRoot.querySelectorAll(".aqua-border");
+                if (input.value && 
+                        (searchDefaultValue != input.value || 
+                        storeFilterValues.searchBy != searchBy.value ||
+                        storeFilterValues.players != players.length ||
+                        storeFilterValues.accessible != accessible.length)
+                    ) {
+
+                    this.getQueryStatement(input, searchBy, players, accessible);
                     tournamentsList.innerHTML = '';
                     const tournaments = await this.get_Available_Tournaments("tournament_name=" + input.value);
                     for (let index = tournaments.length - 1; index >= 0; index--) {
@@ -166,12 +249,63 @@ export class JoinTournament extends HTMLElement {
                         if (element.players.length && element.players[0].id != playerId)
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
+
+                    storeFilterValues.searchBy = searchBy.value;
+                    storeFilterValues.players = players.length;
+                    storeFilterValues.accessible = accessible.length;
+
                     searchDefaultValue = input.value;
                     console.log("heyyyyyyyyy");
                 }
             }, 500); 
         });
+
+        this.setUpFilterOptions();
+
         this.setParentStatus();
+
+        const filterButton = this.shadowRoot.getElementById("filter-tournaments");
+        filterButton.addEventListener("click", () => {
+            const filterContainer = this.shadowRoot.querySelector(".filterContainer");
+            if (filterContainer.style.display == "none") {
+                filterContainer.style.display = "flex";
+                filterButton.src = "../assets/icons/close-x-icon.svg";
+            }
+            else {
+                filterContainer.style.display = "none";
+                filterButton.src = "../assets/icons/filter-icon.svg";
+            }
+
+
+        });
+
+    }
+
+    setUpFilterOptions() {
+        this.shadowRoot.querySelectorAll(".chooseContainer").forEach(elem => {
+            elem.addEventListener("click", e => {
+                this.playersOptions(elem);
+                this.accessibilityOptions(elem);
+            });
+        });
+    }
+
+    playersOptions(elem) {
+        if (!elem.querySelector(".choice"))
+            return ;
+        if (elem.querySelector(".aqua"))
+            elem.querySelector(".choice").className = "choice";
+        else
+            elem.querySelector(".choice").className = "choice aqua";
+    }
+
+    accessibilityOptions(elem) {
+        if (!elem.querySelector(".checkbox"))
+            return;
+        if (elem.querySelector(".aqua-border"))
+            elem.querySelector(".checkbox").className = "checkbox";
+        else
+            elem.querySelector(".checkbox").className = "checkbox aqua-border";
     }
 
     disconnectedCallback() {
@@ -272,6 +406,7 @@ const cssContent = /*css*/`
         position: relative;
         justify-content: space-between;
         margin: 2px;
+        gap: 15px;
     }
 
 
@@ -285,9 +420,9 @@ const cssContent = /*css*/`
 
     .mainHeader {
         display: flex;
+        justify-content: space-between;
         width: calc(100% - 60px);
         height: 40px;
-        justify-content: space-between;
         margin: 10px 30px;
     }
 
@@ -300,17 +435,44 @@ const cssContent = /*css*/`
         justify-content: center;
     }
 
+    .searchAndFilterContainer {
+        width: 65%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        margin: 10px 0;
+    }
+
+    #filter-tournaments {
+        display: flex;
+        width: 28px;
+        height: 24px;
+        align-items: start;
+        justify-content: center;
+        margin: 10px;
+    }
+
+    .filterbox {
+        display: flex;
+        flex-direction: column;
+        width: 28px;
+        height: 24px;
+        align-items: start;
+        justify-content: center;
+        margin: 10px;
+        position: relative;
+    }
 
     .tournament-search {
         height: 40px;
-        width: 60%;
+        width: calc(100% - 40px);
         border-radius: 7px;
         border: 1px solid aqua;
         padding-left: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 10px 0;
     }
 
     .tournament-search input {
@@ -411,7 +573,6 @@ const cssContent = /*css*/`
 
     .line > img {
         height: 12px;
-        margin: 20px;
     }
 
     .join-form {
@@ -464,6 +625,115 @@ const cssContent = /*css*/`
         font-size: 28px;
         margin-bottom: 30px;
 
+    }
+
+
+    .filterContainer {
+        width: 85%;
+        display: none;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .filterSection {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .searchBySection,
+    .playersSection,
+    .accessibleSection {
+        gap: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .options {
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 10px;
+    }
+
+    .filterSection h3 {
+        width: 100%;
+
+    }
+
+
+    select {
+        width: 150px;
+        background: transparent;
+        border: 1.5px solid aqua;
+        border-radius: 5px;
+        height: 100%;
+        color: white;
+        font-size: 12px;
+    }
+
+    .doneButton {
+        background-color: transparent;
+        color: white;
+        width: 60px;
+        height: 24px;
+        border: 1.5px solid aqua;
+        border-radius: 5px;
+    }
+
+
+
+
+
+
+
+
+
+    .chooseContainer {
+        display: flex;
+        gap: 5px;
+        height: 16px;
+        font-size: 16px;
+        align-items: center;
+        
+    }
+    
+    
+    .checkbox {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #cccccc60;
+        border-radius: 4px;
+    }
+    
+    
+    .aqua-border {
+        border: 2px solid aqua;
+        display: flex;
+        border-radius: 5px;
+        align-items: center;
+        justify-content: center;
+        background: url("../assets/icons/checked-icon.svg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .choice {
+        width: 17px;
+        height: 17px;
+        border-radius: 100px;
+        background: #cccccc60;
+    }
+    
+    .aqua {
+        background: aqua;
     }
 
 `;
