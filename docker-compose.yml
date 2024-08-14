@@ -11,12 +11,13 @@ services:
     networks:
       - ft_transcendence
   chat:
-    build: .
+    build:
+      dockerfile: ChatDockerfile
     container_name: chat
     volumes:
-      - ./Django_JS/:/app
+      - ./myproject/:/app
     ports:
-      - "8000:8000"
+      - "9000:8000"
     networks:
       - ft_transcendence
 
@@ -31,6 +32,7 @@ services:
       - ft_transcendence
     depends_on:
       - web
+      - chat
 
 networks:
   ft_transcendence:
