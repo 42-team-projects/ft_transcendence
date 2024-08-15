@@ -42,7 +42,7 @@ export class GameHeader extends HTMLElement{
         this.updateScore({player:0, opponent:0})
     }
     updateScore(score){
-        console.log('update : ', score);
+        // console.log('update : ', score);
         const player1 = this.querySelector('.playerscor')
         const player1Img = this.querySelector('.GamePlayer')
         const player1Name = this.querySelector('.playerinfo')

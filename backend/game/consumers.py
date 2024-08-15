@@ -33,7 +33,6 @@ async def timer(client, seconds):
 
 class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        GameConsumer.rooms = {}
         self.id = self.scope['url_route']['kwargs']['id']
 
         add_to_queue(self)
@@ -41,16 +40,16 @@ class GameConsumer(AsyncWebsocketConsumer):
         try:
             await asyncio.wait_for(self.wait_for_opponent(), timeout=30.0)
         except asyncio.TimeoutError:
-            print('Timeout')
             await self.close()
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         if text_data_json['message'] == 'start':
-            GameConsumer.rooms[self.room_group_name] += 1
-            if GameConsumer.rooms[self.room_group_name] == 2 :
-                # await self.send_message('start')
+            GameConsumer.rooms[self.room_group_name].ready += 1
+            if GameConsumer.rooms[self.room_group_name].ready == 2:
                 await timer(self, 4)
+                GameConsumer.rooms[self.room_group_name].game = GameLoop(self)
+        
 
     async def disconnect(self, close_code):
         await remove_from_queue(self)
@@ -85,7 +84,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 'user_id_2': controler.id,
             }
             await self.send_message(message=message)
-            GameConsumer.rooms[self.room_group_name] = 0
+            GameConsumer.rooms[self.room_group_name].ready = 0
 
     async def timer_message(self, event):
         await self.game_message(event)
@@ -93,7 +92,6 @@ class GameConsumer(AsyncWebsocketConsumer):
     
     async def game_message(self, event):
         message = event['message']
-        print(f"Handling game message: {message}")
         await self.send(text_data=json.dumps({
             'message': message
         }))
