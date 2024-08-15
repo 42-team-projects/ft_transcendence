@@ -4,23 +4,16 @@ class GameLoop :
     def __init__(self, controler):
         print('hiiiiiii')
         self.controler = controler
-        # self.ready_clients = 0
-        # self._client1.y = 0
-        # self._client2.y = 0
-        # self._client1.score = 0
-        # self._client2.score = 0
-        # self._active = False
-        # self._canvas_width = 300
-        # self._canvas_height = 150
-        # self._game_loop = True
-        # self.racquet = {
-        #     'height': 50,
-        #     'width': 10
-        # }
-    async def get_opponent(self):
-        message = {
-            'opponent': self.controler
-            
+        self._client1.y = 0
+        self._client2.y = 0
+        self._client1.score = 0
+        self._client2.score = 0
+        self._active = True
+        self._canvas_width = 300
+        self._canvas_height = 150
+        self.racquet = {
+            'height': 50,
+            'width': 10
         }
         # await self._client1.ws.send(json.dumps(message))
         # message['opponent_id'] = self._client1.id
