@@ -27,13 +27,13 @@ export class ChatRoomComponent extends HTMLElement {
     static observedAttributes = ["target-id"];
 
     async attributeChangedCallback(attrName, oldValue, newValue) {
-        if (attrName === "target-id")
-        {
-            this.shadowRoot.querySelector("chat-header").innerHTML = "";
-            await this.renderHeader("http://localhost:8080/api/v1/users/" + newValue);
-            this.shadowRoot.querySelector(".body").innerHTML = "";
-            await this.renderConversation(APIUrl + newValue);
-        }
+        // if (attrName === "target-id")
+        // {
+        //     this.shadowRoot.querySelector("chat-header").innerHTML = "";
+        //     await this.renderHeader("http://localhost:8080/api/v1/users/" + newValue);
+        //     this.shadowRoot.querySelector(".body").innerHTML = "";
+        //     await this.renderConversation(APIUrl + newValue);
+        // }
     }
     // <div class="timer">
     //     <p>12:05 PM</p>
@@ -67,57 +67,57 @@ export class ChatRoomComponent extends HTMLElement {
     }
 
     async renderConversation(apiurl) {
-        try {
-            const response = await fetch(apiurl);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-            const json = await response.json();
-            fakeData = json;
-        } catch (error) {
-            console.error(error.message);
-        }
-        const chatBdoy = this.shadowRoot.querySelector(".body");
-        let receiverComponent = document.createElement("receiver-component");
-        let senderComponent = document.createElement("sender-component");
-        for (let index = 0; index < fakeData.length; index++) {
-            const element = fakeData[index];
-            if (element.receiverId === 2)
-            {
-                const receiverMessageContainer = document.createElement("receiver-message-container");
-                receiverMessageContainer.textContent = element.message;
-                if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
-                {
-                    receiverMessageContainer.setAttribute("corner", "");
-                    receiverComponent = document.createElement("receiver-component")
-                }
-                receiverMessageContainer.time = element.time.split(" ")[1];
-                receiverComponent.league = league;
-                receiverComponent.profileImage = profileImage;
-                receiverComponent.appendChild(receiverMessageContainer);
-                chatBdoy.appendChild(receiverComponent);
-            }
-            else
-            {
-                const senderMessageContainer = document.createElement("sender-message-container");
-                senderMessageContainer.textContent = element.message;
-                if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
-                {
-                    senderMessageContainer.setAttribute("corner", "");
-                    senderComponent = document.createElement("sender-component");
-                }
-                senderMessageContainer.time = element.time.split(" ")[1];
-                senderComponent.appendChild(senderMessageContainer);
-                chatBdoy.appendChild(senderComponent);
-            }
-        }
+        // try {
+        //     const response = await fetch(apiurl);
+        //     if (!response.ok) {
+        //         throw new Error(`Response status: ${response.status}`);
+        //     }
+        //     const json = await response.json();
+        //     fakeData = json;
+        // } catch (error) {
+        //     console.error(error.message);
+        // }
+        // const chatBdoy = this.shadowRoot.querySelector(".body");
+        // let receiverComponent = document.createElement("receiver-component");
+        // let senderComponent = document.createElement("sender-component");
+        // for (let index = 0; index < fakeData.length; index++) {
+        //     const element = fakeData[index];
+        //     if (element.receiverId === 2)
+        //     {
+        //         const receiverMessageContainer = document.createElement("receiver-message-container");
+        //         receiverMessageContainer.textContent = element.message;
+        //         if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
+        //         {
+        //             receiverMessageContainer.setAttribute("corner", "");
+        //             receiverComponent = document.createElement("receiver-component")
+        //         }
+        //         receiverMessageContainer.time = element.time.split(" ")[1];
+        //         receiverComponent.league = league;
+        //         receiverComponent.profileImage = profileImage;
+        //         receiverComponent.appendChild(receiverMessageContainer);
+        //         chatBdoy.appendChild(receiverComponent);
+        //     }
+        //     else
+        //     {
+        //         const senderMessageContainer = document.createElement("sender-message-container");
+        //         senderMessageContainer.textContent = element.message;
+        //         if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
+        //         {
+        //             senderMessageContainer.setAttribute("corner", "");
+        //             senderComponent = document.createElement("sender-component");
+        //         }
+        //         senderMessageContainer.time = element.time.split(" ")[1];
+        //         senderComponent.appendChild(senderMessageContainer);
+        //         chatBdoy.appendChild(senderComponent);
+        //     }
+        // }
     }
 
     async connectedCallback() {
         // if (!this.targetId)
         //     return ;
-        await this.renderHeader("http://localhost:8080/api/v1/users/" + this.targetId);
-        await this.renderConversation(APIUrl);
+        // await this.renderHeader("http://localhost:8080/api/v1/users/" + this.targetId);
+        // await this.renderConversation(APIUrl);
     }
 
     disconnectedCallback() {

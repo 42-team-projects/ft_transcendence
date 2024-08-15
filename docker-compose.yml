@@ -10,6 +10,7 @@ services:
       - "8000:8000"
     networks:
       - ft_transcendence
+
   chat:
     build:
       dockerfile: ChatDockerfile
@@ -37,3 +38,24 @@ services:
 networks:
   ft_transcendence:
     
+# volumes:
+#     frontend:
+#       name: "frontend"
+#       driver_opts:
+#         type: none
+#         o: bind
+#         device: "./frontend"
+
+    # Django_JS:
+    #   name: "Django_JS"
+    #   driver_opts:
+    #     type: none
+    #     o: bind
+    #     device: "$HOME/Desktop/42cursus/ft_transcendence/Django_JS/"
+
+    # myproject:
+    #   name: "myproject"
+    #   driver_opts:
+    #     type: none
+    #     o: bind
+    #     device: "$HOME/Desktop/42cursus/ft_transcendence/myproject/"
