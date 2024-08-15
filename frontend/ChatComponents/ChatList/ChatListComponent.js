@@ -27,24 +27,24 @@ export class ChatListComponent extends HTMLElement {
         chatItem.id = item.id;
     
         try {
-            const userInfo = await fetchData("http://localhost:8080/api/v1/users/" + item.id);
-            if (userInfo)
-            {
-                chatItem.userName = userInfo.userName;
-                chatItem.profileImage = userInfo.profileImage;
-                chatItem.active = userInfo.active;
-                if (userInfo.stats)
-                    chatItem.league = userInfo.stats.league;
-            }
+            // const userInfo = await fetchData("http://localhost:8080/api/v1/users/" + item.id);
+            // if (userInfo)
+            // {
+                chatItem.userName = item.conversation_name;
+                chatItem.profileImage = "/frontend/assets/profile-assets/tanjuro.jpg";
+                chatItem.active = true;
+                // if (userInfo.stats)
+                    chatItem.league = "gold";
+            // }
         } catch (error) {
             console.error('Error fetching user info:', error);
         }
     
         chatItem.backgroundColor = "transparent";
         chatItem.opacity = 0.6;
-        chatItem.lastMessage = item.lastMessage;
-        chatItem.time = item.time;
-        chatItem.numberOfMessage = item.numberOfMessage;
+        // chatItem.lastMessage = item.lastMessage;
+        chatItem.time = item.created_at.split("-")[0];
+        // chatItem.numberOfMessage = item.numberOfMessage;
         return chatItem;
     }
     
@@ -52,13 +52,13 @@ export class ChatListComponent extends HTMLElement {
         const list = this.shadowRoot.querySelector(".list-item");
     
         try {
-            const data = await fetchData("http://localhost:8080/api/v1/chat/all");
+            const data = await fetchData("http://127.0.0.1:9000/chat/conversations/");
             if (data) {
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item);
                     list.appendChild(chatItem);
                 }
-                this.eventListener();
+                // this.eventListener();
             }
         } catch (error) {
             console.error('Error fetching chat data:', error);
@@ -116,3 +116,47 @@ const cssContent = /*css*/`
         display: none;
     }
 `;
+
+
+function chat(sender_id, receiver_id) {
+    sender = sender_id
+    receiver = receiver_id
+    if (sender < receiver)
+        room_name = sender + '_' + receiver
+    else
+        room_name = receiver + '_' + sender
+
+    url = 'ws://' + `${window.location.host}/ws/chat/${room_name}/`
+
+
+    const webSocket = new WebSocket(url)
+
+
+    webSocket.onmessage = function(e) {
+        let data = JSON.parse(e.data)
+
+        console.log(data)
+        if (data.Error) {
+            console.log(data.Error)
+        }
+        else {
+            let messages = document.getElementById('messages')
+            messages.insertAdjacentHTML('afterbegin', `<div>
+                <p> ${data.content} </p>
+            </div>`)
+            console.log(data.content)
+        }
+    }
+
+    let form = document.getElementById('form')
+    form.addEventListener('submit', (e)=> {
+        e.preventDefault()
+        let message = e.target.message.value
+        webSocket.send(JSON.stringify({
+            'message' : message,
+            'sender' : sender,
+            'receiver' : receiver
+        }))
+        form.reset()
+    })
+}
