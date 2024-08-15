@@ -1,1 +1,1 @@
-export const ip = '10.11.1.2';
+export const ip = 'localhost';
