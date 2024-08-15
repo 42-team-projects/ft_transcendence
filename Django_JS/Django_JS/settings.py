@@ -72,8 +72,8 @@ MIDDLEWARE = [
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5500',  # Example: Your frontend origin
-    'http://127.0.0.1:5500',   # Another example: Your frontend origin
+    'http://localhost:8080',  # Example: Your frontend origin
+    'http://127.0.0.1:8080',   # Another example: Your frontend origin
     # Add more origins as needed
 
     'http://localhost:5501',  # Example: Your frontend origin
