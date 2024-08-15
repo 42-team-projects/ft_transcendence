@@ -8,7 +8,7 @@ const opponentSlot = document.createElement('template');
 const AiGameTemplate = document.createElement('template');
 const OnlineGameTemplate = document.createElement('template');
 const timer = document.createElement('template')
-let time = 3;
+let time = 0;
 
 let searching_images = [
 	{
@@ -90,12 +90,6 @@ lobby.innerHTML =  /* html */ `
 	`
 
 
-timer.innerHTML = /*html*/ `
-	<link rel="stylesheet", href="./Game/GamePlay/Timer.css">
-	<div class="descounter">
-		<h1>${time}</h1>
-	</div>
-`
 
 export class Lobby extends HTMLElement{
 
@@ -185,38 +179,50 @@ export class Lobby extends HTMLElement{
 	// }
 	async OnlineGame()
 	{
+		const userId = Math.floor(Math.random() * 15) + 1;
+	    window.socket = new WebSocket(`ws://${ip}:8000/ws/game/${userId}/`);
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
-		const userId = Math.floor(Math.random() * 15) + 1;
 		const turnTime = 1;
 		let delay = 0; 
 		let delayNumber = (turnTime / 2) / Players.length;
 		
 		let start = Date.now();
-		console.log('start : ', start);
 		socket.onopen = (e) => {
-			const message = {
-				'status': 'searching',
-				'userId': userId,
-			}
-			console.log('message : ', message);
-			socket.send(JSON.stringify(message));
+			console.log('socket open');
 		};
-		socket.addEventListener('message', (e) => {
-			var data = JSON.parse(e.data);
-			let end = Date.now();
-			// console.log("data :", data);
-			console.log('end : ', end);
-			setTimeout(() => this.setPlayer(data.opponent_id), 5000);
-			setTimeout(() => this.gameMode(data.room_name), 6000);
-		}, { once: true });
+
+		socket.onmessage = (e) => {
+			var data = JSON.parse(e.data).message;
+			if (Number(data.user_id_1) === userId) {
+				setTimeout(() => this.setPlayer(data.user_id_2), 5000);
+				setTimeout(() => this.gameMode(data.room_name), 6000);
+			}
+			else if (Number(data.user_id_2) === userId) {
+				setTimeout(() => this.setPlayer(data.user_id_1), 5000);
+				setTimeout(() => this.gameMode(data.room_name), 6000);
+			}
+			else {
+				time = data.time;
+				this.updateTimer();
+			}
+		};
+		
+		socket.onclose = (e) => {
+			console.log('socket close');
+			document.body.innerHTML = '';
+		};
+
+		socket.onerror = (e) => {
+			console.log('socket error');
+		};
 		searching_images = await this.getData(`http://${ip}:8000/game/players/`);
 		userInfo = await this.getData(`http://${ip}:8000/game/players/${userId}/`);
 
 		p_img.src = userInfo.picture;
-		console.log('userInfo : ', userInfo);
+		// console.log('userInfo : ', userInfo);
 		p_h1.textContent = userInfo.username;
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
@@ -234,7 +240,7 @@ export class Lobby extends HTMLElement{
 		const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
 		const turnTime = 10;
-		let delay = 0; 
+		let delay = 0;
 		let delayNumber = (turnTime / 2) / Players.length;
 		opponentInfo = await this.getData(`http://${ip}:8000/game/players/${opponentId}/`)
 		h1.id = 'NOpponent';
@@ -267,33 +273,41 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
-	gameMode(room_name){
+	gameMode(){
+		socket.send(JSON.stringify({'message': 'start'}));
 		const PlayerS = this.querySelectorAll('.PlayerS')
 		PlayerS.forEach((element, index)=>{
 			if(index !== 0)
 				element.remove()
 			else{
 				element.style.animation = 'none';
-				this.shadowRoot.appendChild(timer.content.cloneNode(true));
+				this.createTimer();
 				const countdown = setInterval(()=>{
-					time--;
-					const desc = this.shadowRoot.querySelector('.descounter')
-					const h1 = desc.querySelector('h1')
-
+					// time -= 1;
 					if(time < 0){
 						const header = new GameHeader()
-						const game = new GameTable(room_name);
+						const game = new GameTable();
 						document.body.innerHTML = ``;
 						document.body.appendChild(header);
 						document.body.appendChild(game);
 						clearInterval(countdown)
 					}
-					else{
-						h1.textContent = `${time}`
-					}
 				},1000)
 			}
 		})
+	}
+	createTimer(){
+		timer.innerHTML = /*html*/ `
+			<link rel="stylesheet", href="./Game/GamePlay/Timer.css">
+			<div class="descounter">
+				<h1>${time}</h1>
+			</div>
+		`
+		this.shadowRoot.appendChild(timer.content.cloneNode(true));
+	}
+	updateTimer(){
+		const h1 = this.shadowRoot.querySelector('.descounter h1');
+		h1.textContent = time;
 	}
 }
 
