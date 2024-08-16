@@ -5,7 +5,7 @@ const header = document.querySelector('header-bar')
 const footer = document.querySelector('footer')
 
 
-const rootContent = ['home-page',
+const rootContent = ['settings-page',
      'game-selection',
      'chat-page',
      'freinds-page',
@@ -70,6 +70,7 @@ class Root extends HTMLElement{
     }
     connectedCallback()
     {
+        this.ChangeRootContent = "settings-page";
         this.clickEvent()
     }
 }
