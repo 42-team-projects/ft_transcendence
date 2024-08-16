@@ -33,6 +33,7 @@ async def timer(client, seconds):
 
 class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        GameConsumer.rooms = {}
         self.id = self.scope['url_route']['kwargs']['id']
 
         add_to_queue(self)
@@ -43,22 +44,29 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.close()
 
     async def receive(self, text_data):
+        # print(f"Received data: {text_data}")
         text_data_json = json.loads(text_data)
         if text_data_json['message'] == 'start':
             GameConsumer.rooms[self.room_group_name].ready += 1
             if GameConsumer.rooms[self.room_group_name].ready == 2:
                 await timer(self, 4)
-                GameConsumer.rooms[self.room_group_name].game = GameLoop(self)
-        
-
+                GameConsumer.rooms[self.room_group_name].ready = 0
+        if text_data_json['message'] == 'firstdata':
+            # print(f"Assigning data: {text_data_json}")
+            await GameConsumer.rooms[self.room_group_name].assign_data(text_data_json)
+        if text_data_json['message'] == 'move':
+            # print(f"Moving: {text_data_json}")
+            GameConsumer.rooms[self.room_group_name].assing_racquet(text_data_json, self)
+    
     async def disconnect(self, close_code):
         await remove_from_queue(self)
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
+    
     async def send_message(self, message, function='game_message'):
-        print(f"Sending message: {message}, function: {function}")
+        # print(f"Sending message: {message}, function: {function}")
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -84,6 +92,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 'user_id_2': controler.id,
             }
             await self.send_message(message=message)
+            GameConsumer.rooms[self.room_group_name] = GameLoop(controler, opponent)
             GameConsumer.rooms[self.room_group_name].ready = 0
 
     async def timer_message(self, event):
