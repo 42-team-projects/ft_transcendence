@@ -62,6 +62,8 @@ import { Visibility } from "./TournamentComponents/VisibillitySettings.js";
 import { TournamentRules } from "./TournamentComponents/TournamentRules.js";
 import { TournamentRound } from "./TournamentComponents/TournamentRound.js";
 
+import { SettingsComponent } from "./Settings/Settings-component.js"
+
 
 customElements.define("tournament-round", TournamentRound);
 customElements.define("visibillity-settings", Visibility);
