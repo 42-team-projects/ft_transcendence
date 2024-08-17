@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Tournament</title>
+    <style>
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            margin-top: 40px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .play-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        .cancel-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>WebSocket Tournament</h2>
+    <div id="user-info"></div>
+    <br></br>
+    <button type="submit" class="btn btn-primary" onclick="Join_Tournament()">Join Tournament</button>
+    <br></br>
+    <button type="submit" class="btn btn-primary" onclick="List_Tournaments()">List Tournament</button>
+    <br></br>
+    <button type="submit" class="btn btn-primary" onclick="update_start_date()">Update Start Date</button>
+    <br></br>
+    <button type="submit" class="btn btn-primary" onclick="get_start_date()">Get Start Date</button>
+    <br></br>
+    <button type="submit" class="btn btn-primary" onclick="get_players_ids()">Get Players Ids</button>
+    <!-- The Modal -->
+    <div id="tournamentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Tournament Starting Soon</h2>
+            <p>The tournament is starting in 2 minutes.</p>
+            <p> Are you ready to play?</p>
+            <div class="modal-buttons">
+                <button class="play-button" id="playBtn">Play Tournament</button>
+                <button class="cancel-button" id="cancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tournamentId = 1;
+
+        // Retrieve user data from local storage
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const id = user.id;
+
+        if (user) {
+            document.getElementById('user-info').innerHTML = `
+                <h2>player id = ${user.id}</h2>`;
+        } else {
+            document.getElementById('user-info').innerHTML = `
+                <p>No user is logged in.</p>`;
+        }
+
+        // Get the modal
+        var modal = document.getElementById("tournamentModal");
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        // Open the modal when WebSocket message is received
+        function showTournamentModal() {
+            modal.style.display = "block";
+        }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        // Add event listener for Play button
+        document.getElementById("playBtn").addEventListener("click", async function() {
+            modal.style.display = "none";
+            const start_date = await get_start_date();
+            console.log(start_date);
+            // console.log(tournamentId);
+            const currentDate = new Date();
+            
+            const parsedStartDate = new Date(start_date);
+            // Calculate the difference in milliseconds
+            const timeDifference = currentDate - parsedStartDate;
+            console.log("Current date:", currentDate);
+            console.log("parsedStartDate date:", parsedStartDate);
+            // Convert the difference from milliseconds to seconds
+            let timespent = Math.floor(timeDifference / 1000);
+            console.log("timespent:    ", timespent);
+            const totalCountdownTime = 60; // 1 minutes in seconds
+            timeLeft = totalCountdownTime - timespent;
+            //
+            playerIds = await get_players_ids();
+            const totalPlayers = playerIds.length;
+            playerId = id;
+            const opponentId = findOpponentId(playerId, playerIds, totalPlayers);
+            if (opponentId) {
+                console.log("playerID:     ", playerId, "opponentId:    ", opponentId);
+                // alert(`playerID:      ${playerId}   opponentId:     ${opponentId}`);
+                // lobby(playerId, opponentId);
+            } else {
+                console.log('No opponent found or already paired.');
+            }
+            startCountdown(timeLeft);
+            // Here you can add logic to start the game or redirect to the game page
+            // Here i need page of counter start with 2 minutes and decrement if 2 minutes is ended tournment is started
+            // like that tournament starts in : 01:59
+        });
+
+        async function get_start_date() {
+            try {
+                console.log(tournamentId);
+                const response = await fetch(`${httpUrl}tournament/${tournamentId}/`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                // console.log(data.start_date);
+                // console.log(JSON.stringify(data, null, 2));
+                return data.start_date;
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+
+        function startCountdown(timeLeft) {
+            const countdownElement = document.createElement('h2');
+            document.body.appendChild(countdownElement);
+            
+            // Apply styles to the countdown element
+            countdownElement.style.position = 'fixed';
+            countdownElement.style.top = '50%';
+            countdownElement.style.left = '50%';
+            countdownElement.style.transform = 'translate(-50%, -50%)';
+            countdownElement.style.fontSize = '48px';
+            countdownElement.style.color = '#FFFFFF';
+            countdownElement.style.textShadow = '2px 2px 8px rgba(0, 0, 0, 0.7)';
+            countdownElement.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            countdownElement.style.padding = '20px';
+            countdownElement.style.borderRadius = '10px';
+            countdownElement.style.border = '3px solid #4CAF50';
+            countdownElement.style.textAlign = 'center';
+            countdownElement.style.fontFamily = 'Arial, sans-serif';
+            countdownElement.style.zIndex = '9999';
+
+            
+            const countdownInterval = setInterval(function() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+
+                countdownElement.innerHTML = `Tournament starts in: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.innerHTML = "Tournament has started!";
+                    // Add logic to start the tournament here
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Add event listener for Cancel button
+        document.getElementById("cancelBtn").addEventListener("click", function() {
+            alert("You have canceled your participation in the tournament.");
+            modal.style.display = "none";
+            // Here you can add logic to handle cancellation
+            // call endpoint of player leave tournament 
+        });
+
+        const httpUrl = 'http://10.11.7.2:8000/tournament/'
+        const wsUrl = 'ws://10.11.7.2:8000/';
+
+        async function List_Tournaments() {
+            try {
+                const List_Tournament = "list_tournaments/";
+                const response = await fetch(`${httpUrl}${List_Tournament}`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+        async function Join_Tournament() {
+            try {
+                tournamentId = 1;
+                const playerId = id;
+                const response = await fetch(`${httpUrl}tournament/${tournamentId}/player/${playerId}/`, {
+                    method: 'POST'
+                });
+                if (!response.ok) {
+                    const data = await response.json();
+                    console.log(JSON.stringify(data, null, 2));
+                    throw new Error(`${response.status}  ${data.statusText}`);
+                }
+                const data = await response.json();
+                // console.log(JSON.stringify(data, null, 2));
+                useWebsocket(data);
+            } catch(error) {
+                console.error('Error of player join tournament: ', error);
+            }
+        }
+        function useWebsocket(data) {
+            tournament_id = data.tournament_id;
+            const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
+            tournamentSocket.onopen = function() {
+                console.log('WebSocket connection of Tournament is opened');
+                if(data.number_of_players == data.players.length)
+                {
+                    update_start_date();
+                    tournamentSocket.send(JSON.stringify({'type': 'play_cancel','message': 'Tournament is starting in 2 minutes'}));
+                }
+            };
+            tournamentSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                console.log(data);
+                showTournamentModal();
+            };
+            tournamentSocket.onclose = function() {
+                console.log('WebSocket connection of tournament closed');
+            };
+            tournamentSocket.onerror = function(error) {
+                console.error('WebSocket tournament error:', error);
+            };
+        }
+
+        async function update_start_date() {
+            try {
+                // const tournamentId = data.tournament_id;
+                const now = new Date();
+                // console.log(now);
+                // console.log("\n===\n");
+                const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
+                // console.log(start_date);
+                const Tournament = {
+                    tournamentId : tournamentId,
+                    start_date : start_date,
+                }
+                const response = await fetch(`${httpUrl}SetStartDate/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Tournament),
+                });
+                if (!response.ok) {
+                    const data = await response.json();
+                    console.log(JSON.stringify(data, null, 2));
+                    throw new Error(`${response.status}  ${data.statusText}`);
+                }
+                const data = await response.json();
+                // console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                console.error('Error of update start date: ', error);
+            }
+        }
+
+        async function get_players_ids() {
+            const tournamentData = await getTournamentData(); // Function to get tournament data
+            console.log(JSON.stringify(tournamentData, null, 2));
+
+            const playerIds = tournamentData.players.map(player => player.id); // Extract sorted player IDs
+            console.log(playerIds);
+            return playerIds;
+        }
+
+        async function getTournamentData() {
+            try {
+                const id = "1/";
+                const response = await fetch(`${httpUrl}tournament/${tournamentId}/`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+
+        function findOpponentId(playerId, playerIds, totalPlayers) {
+            const pairing_sum = totalPlayers - 1;
+            const index = playerIds.indexOf(playerId);
+            if (index === -1) return null; // Player ID not found in the list
+            // Calculate the index for the opponent
+            const opponentIndex = pairing_sum - index; // Subtract 1 for zero-based index
+            return playerIds[opponentIndex];
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!-- const user = JSON.parse(localStorage.getItem('loggedInUser'));
+const totalPlayers = getTotalPlayers(); // Function that returns the total number of players in the current tournament
+const pairing_sum = totalPlayers + 1;
+
+document.getElementById("playBtn").addEventListener("click", async function() {
+    playerId = user.id;
+    OpenentId = pairing_sum - playerId;
+    lobby(playerId, OpenentId);
+});
+
+function getTotalPlayers() {
+    // This function should return the total number of players in the current tournament.
+    // For example, if there are 8 players, it should return 8.
+    // You need to implement this logic based on how your system manages the players.
+    // Example:
+    return 8; // Replace with dynamic logic
+} -->
