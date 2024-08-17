@@ -11,30 +11,48 @@ export class SettingsItem extends HTMLElement {
     }
 
     connectedCallback() {
+        this.style.width = this.width;
+        this.style.height = this.height;
         this.style.borderColor = this.color;
         this.style.color = this.color;
+        this.style.backgroundColor = this.backgroundColor;
     }
 
     disconnectedCallback() {
 
     }
 
+    set height(val) { this.setAttribute("height", val);}
+    get height() {return this.getAttribute("height");}
+
+    set width(val) { this.setAttribute("width", val);}
+    get width() {return this.getAttribute("width");}
+
     set color(val) { this.setAttribute("color", val);}
     get color() {return this.getAttribute("color");}
+    
+    set backgroundColor(val) { this.setAttribute("background-color", val);}
+    get backgroundColor() {return this.getAttribute("background-color");}
     
     set borderSize(val) { this.setAttribute("border-size", val);}
     get borderSize() {return this.getAttribute("border-size");}
 
-    static observedAttributes = ["color", "border-size"];
+    static observedAttributes = ["color", "background-color", "border-size", "width", "height"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
-        if (attrName == "color")
+        if (attrName == "width")
+            this.style.width = newValue;
+        else if (attrName == "height")
+            this.style.height = newValue;
+        else if (attrName == "color")
         {
             this.style.borderColor = newValue;
             this.style.color = newValue;
         }
-        if (attrName == "border-size")
+        else if (attrName == "border-size")
             this.style.borderWidth = newValue;
+        else if (attrName == "background-color")
+            this.style.backgroundColor = newValue;
     }
 
 }
@@ -49,9 +67,13 @@ const cssContent = /*css*/`
     justify-content: center;
     border: 1px solid #d9d9d9;
     color: #d9d9d9;
-    font-size: 22px;
     font-family: 'Sansation bold';
     min-width: 150px;
+    font-size: 22px;
+}
+
+::slotted(h3) {
+    font-size: 16px;
 }
 
 `;
