@@ -1,7 +1,7 @@
 import { GameOver } from "./GameOver.js";
 import { LaunchingGame } from "./launchingGame.js";
 import { userInfo, opponentInfo } from "./Lobby.js";
-
+import { ip } from "../../conf.js";
 const game_page = document.createElement('template');
 
 let score = {
@@ -36,15 +36,17 @@ export class GameTable extends HTMLElement{
 
     constructor(room_name)
     {
+        this.socket = new WebSocket(`ws://${ip}:8000/ws/game/${room_name}/`);
         super();
-        this.racquet_size = { width: 5, height: 90 };
+        console.log('game table');
+        this.racquet = { width: 5, height: 90 };
         this.player = { 
             x: 0, 
             y: CANVAS_HEIGHT / 2,
             color: 'white'
         };
         this.opponent = { 
-            x: CANVAS_WIDTH - this.racquet_size.width, 
+            x: CANVAS_WIDTH - this.racquet.width, 
             y: CANVAS_HEIGHT / 2, 
             color: '#00b9be'
         };
@@ -55,12 +57,12 @@ export class GameTable extends HTMLElement{
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
         const message = {
-            'message': 'AsingData',
+            'message': 'firstdata',
             'canvas_width': CANVAS_WIDTH,
             'canvas_height': CANVAS_HEIGHT,
-            'racquet_size': {
-                'height': this.racquet_size.height,
-                'width': this.racquet_size.width,
+            'racquet': {
+                'height': this.racquet.height,
+                'width': this.racquet.width,
             },
         }
         socket.send(JSON.stringify(message))
@@ -74,33 +76,55 @@ export class GameTable extends HTMLElement{
     }
     async getMessages() {
         socket.onmessage = async (event) => {
-            console.log('message : ', event.data);
             const data = JSON.parse(event.data);
-            if (data.status === 'RoundOver') {
-                score.player = data.score.player;
-                score.opponent = data.score.opponent;
+            const message = data.message;
+
+            const player_1 = message.player_1;
+            const player_2 = message.player_2;
+            const status = message.status;
+            if (status === 'RoundOver') {
+                if (userInfo.id === Number(player_1.id)) {
+                    score.player = player_1.score;
+                    score.opponent = player_2.score;
+                } else if (userInfo.id === Number(player_2.id)) {
+                    score.player = player_2.score;
+                    score.opponent = player_1.score;
+                }
                 await this.RoundOver();
-                console.log('score : ', score);
-            } else if (data.status === 'RoundStart') {
+            } else if (status === 'RoundStart') {
                 this.luanching = true;
-                this.round = data.round;
-                console.log('round : ', this.round);
+                this.round = message.round;
                 await this.resetGame();
-            } else if (data.status === 'GameOver') {
+            } else if (status === 'GameOver') {
+                let player_state = '';
+                if (userInfo.id === Number(player_1.id)) {
+                    player_state = player_1.game_state;
+                } else if (userInfo.id === Number(player_2.id)) {
+                    player_state = player_2.game_state;
+                }
                 this.luanching = false;
-                await this.GameOver(data.player_state);
-                console.log('game over');
-            } else if (data.status === 'move') {
-                const opponent_y = data.opponent_y;
-                this.updateOpponentPosition(opponent_y);
-                console.log('opponent move');
-            } else {
-                const ball_y = data.ball.y;
-                const ball_x = data.ball.x;
-                const ball_radius = data.ball.radius;
-                const dx = data.ball.dx;
-                const dy = data.ball.dy;
-                console.log('ball move');
+                await this.GameOver(player_state);
+            } else if (status === 'move') {
+                if (userInfo.id === Number(player_1.id)) {
+                    this.updatePlayerPosition(player_1.y);
+                    this.updateOpponentPosition(player_2.y);
+                } else if (userInfo.id === Number(player_2.id)) {
+                    this.updatePlayerPosition(player_2.y);
+                    this.updateOpponentPosition(player_1.y);
+                }
+            } else if(status === 'Game'){
+                const ball_y = message.ball.y;
+                const ball_radius = message.ball.radius;
+                const dy = message.ball.dy;
+                let ball_x = 0;
+                let dx = 0;
+                if (userInfo.id === Number(player_1.id)) {
+                    ball_x = player_1.ball_x;
+                    dx = player_1.ball_dx;
+                } else if (userInfo.id === Number(player_2.id)) {
+                    ball_x = player_2.ball_x;
+                    dx = player_2.ball_dx;
+                }
                 this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
             }
         }
@@ -133,7 +157,7 @@ export class GameTable extends HTMLElement{
     }
 
     getRacketSize = () => {
-        return this.racquet_size;
+        return this.racquet;
     }
     setCoordonates(x, y, radius, dx, dy){
         this.concoordonate = {
@@ -152,7 +176,7 @@ export class GameTable extends HTMLElement{
         document.body.appendChild(gameOver);
     }
     async LuncheGame(ctx){
-        console.log('lunching');
+        // console.log('lunching');
         document.body.querySelector('game-header').classList.toggle('blur', true)
 		document.body.querySelector('game-table').classList.toggle('blur', true)
         if(this.luanching === false)
@@ -193,7 +217,7 @@ export class GameTable extends HTMLElement{
 
     async RanderRackit(ctx, player){
         ctx.fillStyle = player.color;
-        ctx.fillRect(player.x, player.y, this.racquet_size.width, this.racquet_size.height);
+        ctx.fillRect(player.x, player.y, this.racquet.width, this.racquet.height);
     }
     async renderBall(ctx){
         const coordonate = this.getCoordonates();
@@ -233,7 +257,7 @@ export class GameTable extends HTMLElement{
             await this.resetGame();
     }
     async runder (){
-        console.log('rendering');
+        // console.log('rendering');
 
         const container = game_page.querySelector('.table_container');
         const canvas = this.querySelector('#table');
@@ -307,12 +331,11 @@ export class GameTable extends HTMLElement{
         this.updatePlayerPosition(player.y);
     }
     moveDown(player){
-        if(player.y + this.racquet_size.height <= CANVAS_HEIGHT)
+        if(player.y + this.racquet.height <= CANVAS_HEIGHT)
             player.y += 10;
         const message = {
-            'status': 'move',
-            'room_name': this.room_name,
-            'position': player.y
+            'message': 'move',
+            'y': player.y
         }
         socket.send(JSON.stringify(message));
     }
@@ -320,9 +343,8 @@ export class GameTable extends HTMLElement{
         if(player.y >= 0)
             player.y -= 10;
         const message = {
-            'status': 'move',
-            'room_name': this.room_name,
-            'position': player.y,
+            'message': 'move',
+            'y': player.y,
         }
         socket.send(JSON.stringify(message));
     }
