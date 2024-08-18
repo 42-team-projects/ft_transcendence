@@ -2,7 +2,6 @@ import json
 import asyncio
 class GameLoop :
     def __init__(self, controler, opponent):
-        print('hiiiiiii')
         self.controler = controler
         self.opponent = opponent
 
@@ -22,12 +21,24 @@ class GameLoop :
             'width': 10
         }
 
-    def assign_racquet(self, data, ws):
-        # print('data', data)
-        if ws == self.controler.ws:
+    async def assign_racquet(self, data, ws):
+        print('data', data)
+        if ws == self.controler:
             self.controler.y = data['y']
         else:
             self.opponent.y = data['y']
+        message = {
+            'status': 'Racquet',
+            'player_1': {
+                'id': self.controler.id,
+                'y': self.controler.y
+            },
+            'player_2': {
+                'id': self.opponent.id,
+                'y': self.opponent.y
+            }
+        }
+        await ws.send_message(message, 'game_message')
     
     async def assign_data(self, data):
         # print('data', data)
@@ -78,7 +89,7 @@ class GameLoop :
                 'status': 'Game',
                 'player_1': {
                     'id': self.controler.id,
-                    'ball_x': -ball_x,
+                    'ball_x':  canvas_width - ball_x,
                     'ball_dx': -ball_dx,
 
                 },
@@ -110,13 +121,11 @@ class GameLoop :
     async def round_over(self):
         message = {
             'status': 'RoundOver',
-            'score': {
-                'player_1': {
-                    'id': self.controler.id, 'score': self.controler.score 
-                    },
-                'player_2': {
-                    'id': self.opponent.id, 'score': self.opponent.score
-                }
+            'player_1': {
+                'id': self.controler.id, 'score': self.controler.score 
+            },
+            'player_2': {
+                'id': self.opponent.id, 'score': self.opponent.score
             }
         }
         await self.send_message(message)
@@ -134,7 +143,6 @@ class GameLoop :
         await self.send_message(message)
 
     async def main(self):
-        print('main')
         #rounds
         self._rounds = 5
         for i in range(1, self._rounds + 1):
@@ -158,11 +166,6 @@ class GameLoop :
                 'message': message
             }
         )
-    # async def sendData(self, data, ws):
-    #     if ws == self.controler.ws:
-    #         await self.opponent.ws.send(json.dumps(data))
-    #     else:
-    #         await self.controler.ws.send(json.dumps(data))
 
     # async def set_player_y(self, ws, y):
     #     if ws == self.controler.ws:
@@ -198,7 +201,8 @@ class GameLoop :
 
     # def setracquet_size(self, racquet_size):
     #     self.racquet = racquet_size
-
+    def get_players(self):
+        return self.controler, self.opponent
     async def reset_players(self):
         self.controler.y = 0
         self.opponent.y = 0
