@@ -1,5 +1,8 @@
 //app.js
 
+import { Login } from "./login.js";
+window.customElements.define('login-page', Login);
+
 import { ChatComponent } from "./ChatComponents/ChatComponent.js";
 import { ChatItemComponent } from "./ChatComponents/ChatList/ChatItemComponent.js";
 import { ChatListComponent } from "./ChatComponents/ChatList/ChatListComponent.js";
@@ -103,3 +106,6 @@ customElements.define("custom-graph", CustomGraph);
 customElements.define("date-component", DateComponent);
 customElements.define("custom-table", CustomTable);
 customElements.define("profile-component", ProfileComponent);
+
+
+

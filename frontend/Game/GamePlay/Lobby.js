@@ -8,7 +8,6 @@ const opponentSlot = document.createElement('template');
 const AiGameTemplate = document.createElement('template');
 const OnlineGameTemplate = document.createElement('template');
 const timer = document.createElement('template')
-let time = 0;
 
 let searching_images = [
 	{
@@ -35,12 +34,12 @@ let searching_images = [
 
 export let userInfo = {
 	picture: `http://${ip}:8000/media/24/08/10/img3.jpg`,
-	username: 'GOJO'
+	username: 'GOJO',
 }
 
 export let opponentInfo = {
 	picture: `http://${ip}:8000/media/24/08/10/img3.jpg`,
-	username: 'GOJO'
+	username: 'GOJO',
 }
 
 playerSlot.innerHTML = /*html*/ `
@@ -96,6 +95,7 @@ export class Lobby extends HTMLElement{
 	constructor()
 	{
 		super();
+		this.time = 0;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
 	}
@@ -179,8 +179,9 @@ export class Lobby extends HTMLElement{
 	// }
 	async OnlineGame()
 	{
-		const userId = Math.floor(Math.random() * 15) + 1;
-	    window.socket = new WebSocket(`ws://${ip}:8000/ws/game/${userId}/`);
+		//get user id from local storage
+		const userId = Number(localStorage.getItem('userId'));
+	    this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
@@ -189,40 +190,37 @@ export class Lobby extends HTMLElement{
 		let delay = 0; 
 		let delayNumber = (turnTime / 2) / Players.length;
 		
-		let start = Date.now();
-		socket.onopen = (e) => {
+		this.socket.onopen = (e) => {
 			console.log('socket open');
 		};
 
-		socket.onmessage = (e) => {
+		this.socket.onmessage = (e) => {
 			var data = JSON.parse(e.data).message;
+			console.log("data", data);
 			if (Number(data.user_id_1) === userId) {
 				setTimeout(() => this.setPlayer(data.user_id_2), 5000);
 				setTimeout(() => this.gameMode(data.room_name), 6000);
-			}
-			else if (Number(data.user_id_2) === userId) {
+			} else if (Number(data.user_id_2) === userId) {
 				setTimeout(() => this.setPlayer(data.user_id_1), 5000);
 				setTimeout(() => this.gameMode(data.room_name), 6000);
-			}
-			else {
-				time = data.time;
+			} else {
+				this.time = data.time;
 				this.updateTimer();
 			}
 		};
 		
-		socket.onclose = (e) => {
+		this.socket.onclose = (e) => {
 			console.log('socket close');
 			document.body.innerHTML = '';
 		};
 
-		socket.onerror = (e) => {
+		this.socket.onerror = (e) => {
 			console.log('socket error');
 		};
 		searching_images = await this.getData(`http://${ip}:8000/game/players/`);
 		userInfo = await this.getData(`http://${ip}:8000/game/players/${userId}/`);
 
 		p_img.src = userInfo.picture;
-		// console.log('userInfo : ', userInfo);
 		p_h1.textContent = userInfo.username;
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
@@ -274,7 +272,7 @@ export class Lobby extends HTMLElement{
 		root.appendChild(this);
 	}
 	gameMode(){
-		socket.send(JSON.stringify({'message': 'start'}));
+		this.socket.send(JSON.stringify({'message': 'start'}));
 		const PlayerS = this.querySelectorAll('.PlayerS')
 		PlayerS.forEach((element, index)=>{
 			if(index !== 0)
@@ -283,8 +281,7 @@ export class Lobby extends HTMLElement{
 				element.style.animation = 'none';
 				this.createTimer();
 				const countdown = setInterval(()=>{
-					// time -= 1;
-					if(time < 0){
+					if(this.time <= 0){
 						const header = new GameHeader()
 						const game = new GameTable();
 						document.body.innerHTML = ``;
@@ -300,14 +297,14 @@ export class Lobby extends HTMLElement{
 		timer.innerHTML = /*html*/ `
 			<link rel="stylesheet", href="./Game/GamePlay/Timer.css">
 			<div class="descounter">
-				<h1>${time}</h1>
+				<h1>${this.time}</h1>
 			</div>
 		`
 		this.shadowRoot.appendChild(timer.content.cloneNode(true));
 	}
 	updateTimer(){
 		const h1 = this.shadowRoot.querySelector('.descounter h1');
-		h1.textContent = time;
+		h1.textContent = this.time;
 	}
 }
 
