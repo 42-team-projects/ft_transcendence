@@ -1,6 +1,7 @@
 import { fetchData } from "../../Utils/Fetcher.js";
 
-let APIUrl = "http://localhost:8080/api/v1/conversations/sender=2&receiver="
+// let APIUrl = "http://localhost:8080/api/v1/conversations/sender=2&receiver="
+let APIUrl = "http://127.0.0.1:9000/chat/";
 let fakeData = [];
 
 let league;
@@ -27,13 +28,13 @@ export class ChatRoomComponent extends HTMLElement {
     static observedAttributes = ["target-id"];
 
     async attributeChangedCallback(attrName, oldValue, newValue) {
-        // if (attrName === "target-id")
-        // {
-        //     this.shadowRoot.querySelector("chat-header").innerHTML = "";
-        //     await this.renderHeader("http://localhost:8080/api/v1/users/" + newValue);
-        //     this.shadowRoot.querySelector(".body").innerHTML = "";
-        //     await this.renderConversation(APIUrl + newValue);
-        // }
+        if (attrName === "target-id")
+        {
+            this.shadowRoot.querySelector("chat-header").innerHTML = "";
+            // await this.renderHeader("http://localhost:8080/api/v1/users/" + newValue);
+            this.shadowRoot.querySelector(".body").innerHTML = "";
+            await this.renderConversation(APIUrl + newValue);
+        }
     }
     // <div class="timer">
     //     <p>12:05 PM</p>
