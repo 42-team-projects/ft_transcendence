@@ -42,9 +42,13 @@ export class ChatListComponent extends HTMLElement {
     
         chatItem.backgroundColor = "transparent";
         chatItem.opacity = 0.6;
-        // chatItem.lastMessage = item.lastMessage;
-        chatItem.time = item.created_at.split("-")[0];
-        // chatItem.numberOfMessage = item.numberOfMessage;
+        const data = await fetchData("http://127.0.0.1:9000/chat/last_message/" + item.conversation_name);
+        if (data)
+        {
+            chatItem.lastMessage = data.content;
+            chatItem.time = data.sent_at.split("-")[0];
+        }
+        chatItem.numberOfMessage = "2";
         return chatItem;
     }
     
@@ -58,7 +62,7 @@ export class ChatListComponent extends HTMLElement {
                     const chatItem = await this.createChatItem(item);
                     list.appendChild(chatItem);
                 }
-                // this.eventListener();
+                this.eventListener();
             }
         } catch (error) {
             console.error('Error fetching chat data:', error);
@@ -76,8 +80,8 @@ export class ChatListComponent extends HTMLElement {
                 }
                 item.backgroundColor = "#051d31";
                 item.opacity = 1;
-                this.selectItem = item.id;
-                this.shadowRoot.querySelector("chat-room").targetId = item.id;
+                this.selectItem = item.title;
+                this.shadowRoot.querySelector("chat-room").targetId = item.title;
             });
         });
     }
