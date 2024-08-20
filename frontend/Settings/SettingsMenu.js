@@ -16,7 +16,6 @@ export class SettingsMenu extends HTMLElement {
             <settings-item> GAME </settings-item>
             <settings-item> SOUND </settings-item>
             <settings-item> SOUND </settings-item>
-            <settings-item> SOUND </settings-item>
         `;
     }
 
