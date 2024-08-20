@@ -36,9 +36,20 @@ export class GameTable extends HTMLElement{
 
     constructor(room_name)
     {
-        this.socket = new WebSocket(`ws://${ip}:8000/ws/game/${room_name}/`);
         super();
-        console.log('game table');
+        this.socket = new WebSocket(`ws://${ip}:8000/ws/game/${room_name}/`);
+        this.socket.onopen = () => {
+            console.log('connected');
+        }
+
+        this.socket.onclose = () => {
+            console.log('disconnected');
+        }
+
+        this.socket.onerror = (error) => {
+            console.log('error', error);
+        }
+
         this.racquet = { width: 5, height: 90 };
         this.player = { 
             x: 0, 
@@ -56,18 +67,9 @@ export class GameTable extends HTMLElement{
         this.appendChild(game_page.content.cloneNode(true))
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
-        const message = {
-            'message': 'firstdata',
-            'canvas_width': CANVAS_WIDTH,
-            'canvas_height': CANVAS_HEIGHT,
-            'racquet': {
-                'height': this.racquet.height,
-                'width': this.racquet.width,
-            },
-        }
-        socket.send(JSON.stringify(message))
+        
         // document.addEventListener('visibilitychange', (event)=>{
-        //     socket.send(JSON.stringify({'status': 'pause'}))
+        //     this.socket.send(JSON.stringify({'status': 'pause'}))
         // })
     }
     async connectedCallback(){
@@ -75,14 +77,25 @@ export class GameTable extends HTMLElement{
         await this.getMessages();
     }
     async getMessages() {
-        socket.onmessage = async (event) => {
+        this.socket.onmessage = async (event) => {
             const data = JSON.parse(event.data);
             const message = data.message;
-
             const player_1 = message.player_1;
             const player_2 = message.player_2;
             const status = message.status;
-            if (status === 'RoundOver') {
+            if (status === 'game_start') {
+                const message = {
+                    'message': 'firstdata',
+                    'canvas_width': CANVAS_WIDTH,
+                    'canvas_height': CANVAS_HEIGHT,
+                    'id': userInfo.id,
+                    'racquet': {
+                        'height': this.racquet.height,
+                        'width': this.racquet.width,
+                    },
+                }
+                this.socket.send(JSON.stringify(message))
+            } else if (status === 'RoundOver') {
                 if (userInfo.id === Number(player_1.id)) {
                     score.player = player_1.score;
                     score.opponent = player_2.score;
@@ -337,7 +350,7 @@ export class GameTable extends HTMLElement{
             'message': 'move',
             'y': player.y
         }
-        socket.send(JSON.stringify(message));
+        this.socket.send(JSON.stringify(message));
     }
     moveUp(player){
         if(player.y >= 0)
@@ -346,6 +359,6 @@ export class GameTable extends HTMLElement{
             'message': 'move',
             'y': player.y,
         }
-        socket.send(JSON.stringify(message));
+        this.socket.send(JSON.stringify(message));
     }
 }
