@@ -1,6 +1,7 @@
-import { CustomInputField } from "./CustomInputField.js";
+import { CustomInputField } from "../CustomInputField.js";
+import { CustomToggleSwitch } from "../CustomToggleSwitch.js";
 
-export class SettingsContent extends HTMLElement {
+export class AccountContent extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({
@@ -12,9 +13,10 @@ export class SettingsContent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="container">
-                <custom-input-field width="30%" label="USERNAME" placeholder="esalim" type="text"></custom-input-field>
-                <custom-input-field width="30%" label="EMAIL" placeholder="elmehdi.salim@gmail.com" type="email"></custom-input-field>
-                <custom-input-field width="30%" label="PASSWORD" placeholder="elmehdi.salim@gmail.com" type="password"></custom-input-field>
+                <custom-input-field label="USERNAME" description="Username must be unique." placeholder="esalim" type="text"></custom-input-field>
+                <custom-input-field label="EMAIL" description="the email will not be modified until you verified it" placeholder="elmehdi.salim@gmail.com" type="email"></custom-input-field>
+                <custom-input-field label="PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="elmehdi.salim@gmail.com" type="password"></custom-input-field>
+                <custom-toggle-switch></custom-toggle-switch>
             </div>
             <div class="actions">
                 <settings-item background-color="#c8000080" color="#c8000090" border-size="2px" width="200px" height="40px"><h3>DELETE ACCOUNT</h3></settings-item>
@@ -37,6 +39,7 @@ const cssContent = /*css*/`
         flex: 4;
         height: 70%;
         display: flex;
+        gap: 50px;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
@@ -48,13 +51,16 @@ const cssContent = /*css*/`
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 50px;
     }
 
     .actions {
         display: flex;
+        flex-wrap: wrap-reverse;
+        gap: 20px;
         width: 90%;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-around;
     }
 
     h3 {
@@ -62,4 +68,4 @@ const cssContent = /*css*/`
     }
 `;
 
-customElements.define("settings-content", SettingsContent);
+customElements.define("account-content", AccountContent);
