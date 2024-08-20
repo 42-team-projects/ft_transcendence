@@ -4,7 +4,6 @@ class GameLoop :
     def __init__(self, controler, opponent):
         self.controler = controler
         self.opponent = opponent
-
         self.controler.y = 0
         self.opponent.y = 0
 
@@ -20,9 +19,9 @@ class GameLoop :
             'height': 50,
             'width': 10
         }
+        self.ready = 0
 
     async def assign_racquet(self, data, ws):
-        print('data', data)
         if ws == self.controler:
             self.controler.y = data['y']
         else:
@@ -40,11 +39,15 @@ class GameLoop :
         }
         await ws.send_message(message, 'game_message')
     
-    async def assign_data(self, data):
+    async def assign_data(self, data, ws):
         # print('data', data)
         self.canvas_width = data['canvas_width']
         self.canvas_height = data['canvas_height']
         self.racquet = data['racquet']
+        if ws == self.controler:
+            self.controler.id = data['id']
+        else:
+            self.opponent.id = data['id']
         self.ready += 1
         if self.ready == 2:
             asyncio.create_task(self.main())
