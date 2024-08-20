@@ -1,5 +1,6 @@
-import { SettingsMenu } from "./SettignsMenu.js";
-import { SettingsContent } from "./SettignsContent.js";
+import { SettingsMenu } from "./SettingsMenu.js";
+import { AccountContent } from "./Contents/AccountContent.js";
+import { SettingsContent } from "./SettingsContent.js";
 
 export class SettingsComponent extends HTMLElement {
     constructor () {
