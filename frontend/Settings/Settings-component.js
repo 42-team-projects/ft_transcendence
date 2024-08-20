@@ -7,9 +7,6 @@ export class SettingsComponent extends HTMLElement {
         super();
         this.attachShadow({mode: "open"});
         
-    }
-
-    connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
                 ${cssContent}
@@ -24,6 +21,11 @@ export class SettingsComponent extends HTMLElement {
                 <settings-content></settings-content> 
             </div>
         `;
+    }
+
+    connectedCallback() {
+
+
     }
 
     disconnectedCallback() {

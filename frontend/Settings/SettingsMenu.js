@@ -6,17 +6,25 @@ export class SettingsMenu extends HTMLElement {
         this.attachShadow({
             mode: "open"
         });
+        this.shadowRoot.innerHTML = `
+            <style> ${cssContent} </style>
+            <settings-item id="account"> ACCOUNT </settings-item>
+            <settings-item id="profile"> PROFILE </settings-item>
+            <settings-item id="game"> GAME </settings-item>
+            <settings-item id="sound"> SOUND </settings-item>
+        `;
     }
 
     connectedCallback() {
-        this.shadowRoot.innerHTML = `
-            <style> ${cssContent} </style>
-            <settings-item color="#00fffc" border-size="2px"> ACCOUNT </settings-item>
-            <settings-item> PROFILE </settings-item>
-            <settings-item> GAME </settings-item>
-            <settings-item> SOUND </settings-item>
-            <settings-item> SOUND </settings-item>
-        `;
+        const settingsItems = this.shadowRoot.querySelectorAll("settings-item");
+        console.log(settingsItems);
+        settingsItems.forEach(elem => {
+            elem.addEventListener("click", (e) => {
+                elem.color = "aqua";
+                elem.borderSize = "2px";
+                console.log("hello world");
+            })
+        });
     }
 
     disconnectedCallback() {
@@ -29,7 +37,6 @@ const cssContent = /*css*/`
         margin: 0;
         padding: 0;
     }
-
     :host {
         flex: 1;
         height: 100%;
