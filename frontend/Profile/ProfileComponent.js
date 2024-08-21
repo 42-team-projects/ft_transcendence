@@ -202,16 +202,16 @@ export class ProfileComponent extends HTMLElement {
 
     async connectedCallback() {
 
-        try {
-            const response = await fetch(APIUrl);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-            const json = await response.json();
-            fakeData = json;
-        } catch (error) {
-            console.error(error.message);
-        }
+        // try {
+        //     const response = await fetch(APIUrl);
+        //     if (!response.ok) {
+        //         throw new Error(`Response status: ${response.status}`);
+        //     }
+        //     const json = await response.json();
+        //     fakeData = json;
+        // } catch (error) {
+        //     console.error(error.message);
+        // }
 
         this.setUpProfileInfo();
 
