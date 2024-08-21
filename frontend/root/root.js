@@ -70,6 +70,7 @@ class Root extends HTMLElement{
     }
     connectedCallback()
     {
+        this.ChangeRootContent = "home-page";
         this.clickEvent()
     }
 }
