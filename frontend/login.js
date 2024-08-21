@@ -53,14 +53,14 @@ export class Login extends HTMLElement{
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                console.log('Success:', data.player.id);
                 
                 const queryParams = new URLSearchParams({
-                    userId: data.id,    // Assuming 'data' contains 'userId'
+                    userId: data.player.id,    // Assuming 'data' contains 'userId'
                 }).toString();
 
                 //storing the data in local storage
-                localStorage.setItem('userId', data.id);
+                localStorage.setItem('userId', data.player.id);
 
                 document.body.innerHTML = afterLogin.innerHTML;
             })
