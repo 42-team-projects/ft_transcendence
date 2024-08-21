@@ -3,7 +3,7 @@ const signInButton = document.getElementById('signIn');
 const container = document.querySelector('.container');
 // const apiUrl = 'http://10.11.1.2:8000/game/';
 // const apiUrl = 'http://10.11.4.8:8000/game/';
-const apiUrl = 'http://10.11.7.2:8000/game/';
+const apiUrl = 'http://127.0.0.1:8000/game/';
 
 
 
@@ -72,7 +72,7 @@ async function login()
             throw new Error(`${response.status}  ${response.statusText}`);
         }
         const data = await response.json();
-        console.log(JSON.stringify(data, null, 2));
+        console.log("data : ", data);
         if (data.status === 'success') {
             // Store user data in local storage
             localStorage.setItem('loggedInUser', JSON.stringify(data.player));
