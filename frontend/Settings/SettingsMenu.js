@@ -14,15 +14,22 @@ export class SettingsMenu extends HTMLElement {
             <settings-item id="sound"> SOUND </settings-item>
         `;
     }
-
     connectedCallback() {
         const settingsItems = this.shadowRoot.querySelectorAll("settings-item");
-        console.log(settingsItems);
         settingsItems.forEach(elem => {
             elem.addEventListener("click", (e) => {
+                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
+                if (selectItemcomponent)
+                {
+                    selectItemcomponent.color = "#d9d9d9";
+                    selectItemcomponent.borderSize = "1px";
+                }
+                this.selectItem = elem.id;
                 elem.color = "aqua";
                 elem.borderSize = "2px";
-                console.log("hello world");
+                const settingsContent = this.parentNode.querySelector("settings-content");
+                settingsContent.innerHTML = `<${elem.id}-content></${elem.id}-content>`;
+                console.log(settingsContent);
             })
         });
     }
@@ -30,6 +37,10 @@ export class SettingsMenu extends HTMLElement {
     disconnectedCallback() {
 
     }
+
+    selectItem;
+
+    get selectItem() { return this.selectItem; }
 }
 
 const cssContent = /*css*/`
