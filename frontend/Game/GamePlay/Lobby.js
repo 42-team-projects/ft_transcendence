@@ -97,8 +97,17 @@ export class Lobby extends HTMLElement{
 		this.time = 0;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
+		this.setSlots(playerSlot.content, 'false')
+		this.setSlots(opponentSlot.content, 'true')
+		setTimeout(() => {
+			document.body.classList.toggle('body-game-shrink', true);   
+		}, 1000);
 		if(opponentId)
 			this.OnlineGame(opponentId);
+		else{
+			this.headerAnimation();
+			this.sidebarAnimation();
+		}
 	}
 
 	headerAnimation(){
@@ -140,16 +149,7 @@ export class Lobby extends HTMLElement{
 		this.shadowRoot.appendChild(border.cloneNode(true))
 	}
 
-	connectedCallback()
-	{
-		this.setSlots(playerSlot.content, 'false')
-		this.setSlots(opponentSlot.content, 'true')
-		this.headerAnimation();
-		this.sidebarAnimation();
-		setTimeout(() => {
-			document.body.classList.toggle('body-game-shrink', true);   
-		}, 1000);
-	}
+
 
 	async getData(str)
 	{
@@ -195,7 +195,7 @@ export class Lobby extends HTMLElement{
 		const turnTime = 1;
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
 		let delayNumber = (turnTime / 2) / Players.length;
-		searching_images = await this.getData(`http://${ip}:8000/game/players/`);
+		// searching_images = await this.getData(`http://${ip}:8000/game/players/`);
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
