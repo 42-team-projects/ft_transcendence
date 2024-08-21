@@ -41,7 +41,8 @@ def get_all_conversations(request):
 
 @api_view(['GET'])
 def last_message(request, conversation_name):
-    conversation = get_object_or_404(Conversation)
+    conversation = get_object_or_404(Conversation, conversation_name=conversation_name
+    )
     message = Message.objects.filter(conversation=conversation.id).last()
     if message:
         message_serializer = MessageSerializer(message)

@@ -176,7 +176,7 @@ export class CustomTable extends HTMLElement {
     connectedCallback() {
         const styleSheet = document.createElement("link");
         styleSheet.rel = `stylesheet`;
-        styleSheet.href = `./ProfileComponents/TableComponents/CustomTable.css`;
+        styleSheet.href = `./Profile/TableComponents/CustomTable.css`;
         this.shadowRoot.appendChild(styleSheet);
 
         const tableContainer = document.createElement("div");

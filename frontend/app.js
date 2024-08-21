@@ -2,34 +2,34 @@
 
 
 
-import { ChatComponent } from "./ChatComponents/ChatComponent.js";
-import { ChatItemComponent } from "./ChatComponents/ChatList/ChatItemComponent.js";
-import { ChatListComponent } from "./ChatComponents/ChatList/ChatListComponent.js";
-import { ChatFooterComponent } from "./ChatComponents/ChatRoom/ChatFooterComponent.js";
-import { ChatHeaderComponent } from "./ChatComponents/ChatRoom/ChatHeaderComponent.js";
-import { ChatRoomComponent } from "./ChatComponents/ChatRoom/ChatRoomComponent.js";
-import { ReceiverMessageContainerComponent } from "./ChatComponents/ChatRoom/MessageComponents/ReceiverMessageContainer.js";
-import { SenderMessageContainerComponent } from "./ChatComponents/ChatRoom/MessageComponents/SenderMessageContainerComponent.js";
-import { ReceiverComponent } from "./ChatComponents/ChatRoom/ReceiverComponent.js";
-import { SenderComponent } from "./ChatComponents/ChatRoom/SenderComponent.js";
-import { FriendItemComponent } from "./ChatComponents/Friends/FriendItemComponent.js";
-import { FriendsListComponent } from "./ChatComponents/Friends/FriendsListComponent.js";
-import { CoverComponent } from "./ProfileComponents/CoverComponent.js";
-import { CustomGraph } from "./ProfileComponents/GraphComponent/CustomGraph.js";
-import { ProfileComponent } from "./ProfileComponents/ProfileComponent.js";
-import { CustomProgressBar } from "./ProfileComponents/StatsComponents/LeagueComponents/CustomProgressBar.js";
-import { LeagueInfo } from "./ProfileComponents/StatsComponents/LeagueComponents/LeagueInfo.js";
-import { LeagueItem } from "./ProfileComponents/StatsComponents/LeagueComponents/LeagueItem.js";
-import { RecordComponent } from "./ProfileComponents/StatsComponents/RecordMatchesComponents/RecordComponent.js";
-import { StatsContainer } from "./ProfileComponents/StatsComponents/StatsContainer.js";
-import { DateComponent } from "./ProfileComponents/TableComponents/BodyComponents/Date/DateComponent.js";
-import { CustomTable } from "./ProfileComponents/TableComponents/CustomTable.js";
-import { AchievementComponent } from "./ProfileComponents/UserInfosComponents/AchievementComponent.js";
-import { LinkComponent } from "./ProfileComponents/UserInfosComponents/LinkComponent.js";
-import { ProfileInfoComponent } from "./ProfileComponents/UserInfosComponents/ProfileInfoComponent.js";
-import { UserInfoComponent } from "./ProfileComponents/UserInfosComponents/UserInfoComponent.js";
-import { UserInfoContainerComponent } from "./ProfileComponents/UserInfosComponents/UserInfoContainer.js";
-import { TournamentComponent } from "./TournamentComponents/TournamentComponent.js";
+import { ChatComponent } from "./Chat/ChatComponent.js";
+import { ChatItemComponent } from "./Chat/ChatList/ChatItemComponent.js";
+import { ChatListComponent } from "./Chat/ChatList/ChatListComponent.js";
+import { ChatFooterComponent } from "./Chat/ChatRoom/ChatFooterComponent.js";
+import { ChatHeaderComponent } from "./Chat/ChatRoom/ChatHeaderComponent.js";
+import { ChatRoomComponent } from "./Chat/ChatRoom/ChatRoomComponent.js";
+import { ReceiverMessageContainerComponent } from "./Chat/ChatRoom/MessageComponents/ReceiverMessageContainer.js";
+import { SenderMessageContainerComponent } from "./Chat/ChatRoom/MessageComponents/SenderMessageContainerComponent.js";
+import { ReceiverComponent } from "./Chat/ChatRoom/ReceiverComponent.js";
+import { SenderComponent } from "./Chat/ChatRoom/SenderComponent.js";
+import { FriendItemComponent } from "./Chat/Friends/FriendItemComponent.js";
+import { FriendsListComponent } from "./Chat/Friends/FriendsListComponent.js";
+import { CoverComponent } from "./Profile/CoverComponent.js";
+import { CustomGraph } from "./Profile/GraphComponent/CustomGraph.js";
+import { ProfileComponent } from "./Profile/ProfileComponent.js";
+import { CustomProgressBar } from "./Profile/StatsComponents/LeagueComponents/CustomProgressBar.js";
+import { LeagueInfo } from "./Profile/StatsComponents/LeagueComponents/LeagueInfo.js";
+import { LeagueItem } from "./Profile/StatsComponents/LeagueComponents/LeagueItem.js";
+import { RecordComponent } from "./Profile/StatsComponents/RecordMatchesComponents/RecordComponent.js";
+import { StatsContainer } from "./Profile/StatsComponents/StatsContainer.js";
+import { DateComponent } from "./Profile/TableComponents/BodyComponents/Date/DateComponent.js";
+import { CustomTable } from "./Profile/TableComponents/CustomTable.js";
+import { AchievementComponent } from "./Profile/UserInfosComponents/AchievementComponent.js";
+import { LinkComponent } from "./Profile/UserInfosComponents/LinkComponent.js";
+import { ProfileInfoComponent } from "./Profile/UserInfosComponents/ProfileInfoComponent.js";
+import { UserInfoComponent } from "./Profile/UserInfosComponents/UserInfoComponent.js";
+import { UserInfoContainerComponent } from "./Profile/UserInfosComponents/UserInfoContainer.js";
+import { TournamentComponent } from "./Tournament/TournamentComponent.js";
 
 // Game
 import { Lobby } from "./Game/GamePlay/Lobby.js"
@@ -54,16 +54,15 @@ import { Profile } from './Header/profile.js'
 import { SideBarButtonIcons } from './side-bar/sb-icon.js'
 import { SideBarButtonText } from './side-bar/sb-text.js'
 import { SideBarButton } from './side-bar/sb-button.js'
-import { CustomButton } from "./TournamentComponents/CustomButton.js";
-import { TournamentsTable } from "./TournamentComponents/TournamentsTable.js";
-import { CreateTournament } from "./TournamentComponents/CreateTournament.js";
-import { PlayersAndStages } from "./TournamentComponents/PlayersAndStages.js";
-import { Visibility } from "./TournamentComponents/VisibillitySettings.js";
-import { TournamentRules } from "./TournamentComponents/TournamentRules.js";
-import { TournamentRound } from "./TournamentComponents/TournamentRound.js";
+import { CustomButton } from "./Tournament/CustomButton.js";
+import { TournamentsTable } from "./Tournament/TournamentsTable.js";
+import { CreateTournament } from "./Tournament/CreateTournament.js";
+import { PlayersAndStages } from "./Tournament/PlayersAndStages.js";
+import { Visibility } from "./Tournament/VisibillitySettings.js";
+import { TournamentRules } from "./Tournament/TournamentRules.js";
+import { TournamentRound } from "./Tournament/TournamentRound.js";
 
 import { SettingsComponent } from "./Settings/Settings-component.js"
-
 
 customElements.define("tournament-round", TournamentRound);
 customElements.define("visibillity-settings", Visibility);
