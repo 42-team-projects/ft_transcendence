@@ -11,12 +11,12 @@ export class GameContent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="container">
-                <custom-sliders label="GAME PLAY" game-color="#00fffc"></custom-sliders>
+                <custom-sliders label="GAME PLAY" game-color="#ffffff"></custom-sliders>
                 <custom-field label="GAME PLAY COLOR" description="chose the color you want play on it.">
-                    <input type="color" id="gamePlayColor" name="body" value="#00fffc" />
+                    <input type="color" id="gamePlayColor" name="body" value="#ffffff"></input>
                 </custom-field>
                 <custom-field label="FIRST RACKET" description="chose the color of the first racket.">
-                    <input type="color" id="firstRacketColor" name="body" value="#f6b73c" />
+                    <input type="color" id="firstRacketColor" name="body" value="#f6b73c"></input>
                 </custom-field>
                 <custom-field label="SECOND RACKET" description="chose the color of the second racket.">
                     <input type="color" id="secondRacketColor" name="body" value="#b23def" />
@@ -46,9 +46,7 @@ export class GameContent extends HTMLElement {
                     counter = 0;
                 }
                 if (counter >= 3000)
-                {
                     clearInterval(this.interval);
-                }
                 console.log("hello from game play selector : ", this.interval);
                 counter += 100;
             }, 100);
