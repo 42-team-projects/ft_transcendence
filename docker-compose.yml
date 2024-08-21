@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: django
+    volumes:
+      - ./backend/:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - ft_transcendence
+
+  chat:
+    build:
+      dockerfile: ChatDockerfile
+    container_name: chat
+    volumes:
+      - ./myproject/:/app
+    ports:
+      - "9000:8000"
+    networks:
+      - ft_transcendence
+
+  front-end:
+    container_name: front-end
+    image: nginx:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./frontend/:/usr/share/nginx/html
+    networks:
+      - ft_transcendence
+    depends_on:
+      - web
+      - chat
+
+networks:
+  ft_transcendence:
+    
+# volumes:
+#     frontend:
+#       name: "frontend"
+#       driver_opts:
+#         type: none
+#         o: bind
+#         device: "./frontend"
+
+    # backend:
+    #   name: "backend"
+    #   driver_opts:
+    #     type: none
+    #     o: bind
+    #     device: "$HOME/Desktop/42cursus/ft_transcendence/backend/"
+
+    # myproject:
+    #   name: "myproject"
+    #   driver_opts:
+    #     type: none
+    #     o: bind
+    #     device: "$HOME/Desktop/42cursus/ft_transcendence/myproject/"
