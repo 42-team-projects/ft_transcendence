@@ -1,5 +1,4 @@
 import { SettingsMenu } from "./SettingsMenu.js";
-import { AccountContent } from "./Contents/AccountContent.js";
 import { SettingsContent } from "./SettingsContent.js";
 
 export class SettingsComponent extends HTMLElement {
@@ -24,8 +23,6 @@ export class SettingsComponent extends HTMLElement {
     }
 
     connectedCallback() {
-
-
     }
 
     disconnectedCallback() {
@@ -65,6 +62,18 @@ const cssContent = /*css*/`
         width: 4px;
         height: 70%;
         background-color: #d9d9d960;
+    }
+
+    settings-content {
+            flex: 4;
+            height: calc(100% - 40px);
+            display: flex;
+            overflow: scroll;
+            margin: 20px 0;
+        }
+    
+    settings-content::-webkit-scrollbar {
+        display: none;
     }
 `;
 
