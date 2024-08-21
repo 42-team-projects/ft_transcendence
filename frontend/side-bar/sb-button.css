@@ -1,0 +1,83 @@
+sb-icon{
+    position: relative;
+    display: flex;
+    background: transparent;
+    width: 4.5rem; 
+    aspect-ratio: 1;
+    transition: width 0.5s ease;
+    transform: rotate(270deg);
+    justify-content: center;
+}
+sb-icon.on{
+    width: 4.7rem;
+}
+.left{
+    transform: translateX(-100%);
+}
+.transform-1s
+{
+    transition: transform 1s ease;
+}
+.AppearanceOfLeft-0 {
+    animation: AppearanceOfLeft 2s forwards;
+}
+@keyframes AppearanceOfLeft {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+sb-icon::before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    clip-path: polygon(24.5% 1%, 31% 1.7%, 5.6% 18.6%, 5.1% 38%, 1.5% 33%, 2% 16%);
+    position: absolute;
+    top: 12.8%;
+    left: 10.8%;
+    z-index: 2;
+    position: absolute;
+}
+
+sb-icon::after{
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    clip-path: polygon(24.5% 2%, 31% 2.7%, 5.6% 18.6%, 5.3% 38%, 1.5% 33%, 2% 16%);
+    position: absolute;
+    bottom: 12.1%;
+    right: 10.5%;
+    z-index: 2;
+    transform: rotate(179deg);
+    position: absolute;
+}
+sb-text{
+    position: absolute;
+    width: 99%;
+    aspect-ratio: 8 / 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00fffb;
+    clip-path: polygon(8% 15%, 85% 15%, 98% 50%, 85% 94%, 0.3% 94%,7.5% 50%, 4.5% 33.5%,4.4% 31.5%);
+}
+
+.c-sb-text{
+    position: absolute;
+    width: 15.3rem;
+    left: 17.5%;
+    aspect-ratio: 8 / 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: width 0.5s ease;
+}
+
+.c-sb-text.on{
+    width: 16.3rem;
+}
