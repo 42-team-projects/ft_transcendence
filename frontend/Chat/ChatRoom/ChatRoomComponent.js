@@ -2,7 +2,6 @@ import { fetchData } from "../../Utils/Fetcher.js";
 
 // let APIUrl = "http://localhost:8080/api/v1/conversations/sender=2&receiver="
 let APIUrl = "http://127.0.0.1:9000/chat/";
-let fakeData = [];
 
 let league;
 let profileImage;
@@ -23,17 +22,25 @@ export class ChatRoomComponent extends HTMLElement {
 
 
     set targetId(val) {this.setAttribute("target-id", val); }
-    get targetId() { return this,this.getAttribute("val"); }
+    get targetId() { return this.getAttribute("target-id"); }
+
+    webSocket;
 
     static observedAttributes = ["target-id"];
 
     async attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "target-id")
         {
+            
+            this.setUpWebSocket(6, 5);
             this.shadowRoot.querySelector("chat-header").innerHTML = "";
-            // await this.renderHeader("http://localhost:8080/api/v1/users/" + newValue);
+            await this.renderHeader(newValue);
+            const conversations = await this.getConversations(APIUrl + newValue);
             this.shadowRoot.querySelector(".body").innerHTML = "";
-            await this.renderConversation(APIUrl + newValue);
+            await this.renderConversation(conversations);
+            this.shadowRoot.querySelector("chat-footer").webSocket = this.webSocket;
+            const body = this.shadowRoot.querySelector(".body");
+            body.scrollTop = body.scrollHeight;
         }
     }
     // <div class="timer">
@@ -42,83 +49,123 @@ export class ChatRoomComponent extends HTMLElement {
 
 
     async renderHeader(url) {
+        console.log("url : ", url);
+        // const targetUserData = await fetchData(url);
+        // if (!targetUserData)
+        // {
+        //     // console.log("this.shadowRoot.innerHTML = '';");
+        //     // this.shadowRoot.innerHTML = '';
+        //     return ;
+        // }
+        const header = this.shadowRoot.querySelector("chat-header");
+        console.log("this.targetId : ", url);
+        header.targetId = url;
+        // header.userName = targetUserData.userName;
+        header.userName = url;
+        // if (targetUserData.stats)
+        // {
+            header.league = "gold";
+            league = "gold";
+        // }
+        header.active = false;
+        profileImage = "../../assets/profile-assets/tanjuro.jpg";
+        header.profileImage = "../../assets/profile-assets/tanjuro.jpg";
+        return true;
+    }
+
+    async getConversations(apiurl) {
         try {
-            const targetUserData = await fetchData(url);
-            if (!targetUserData)
-            {
-                // console.log("this.shadowRoot.innerHTML = '';");
-                // this.shadowRoot.innerHTML = '';
-                return ;
+            const response = await fetch(apiurl);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
             }
-            const header = this.shadowRoot.querySelector("chat-header");
-            header.targetId = targetUserData.id;
-            header.userName = targetUserData.userName;
-            if (targetUserData.stats)
-            {
-                header.league = targetUserData.stats.league;
-                league = targetUserData.stats.league;
-            }
-            header.active = targetUserData.active;
-            header.profileImage = targetUserData.profileImage;
-            profileImage = targetUserData.profileImage;
-            return true;
+
+            return await response.json();
         } catch (error) {
-            console.error('Error fetching user info:', error);
+            return null;
         }
     }
 
-    async renderConversation(apiurl) {
-        // try {
-        //     const response = await fetch(apiurl);
-        //     if (!response.ok) {
-        //         throw new Error(`Response status: ${response.status}`);
-        //     }
-        //     const json = await response.json();
-        //     fakeData = json;
-        // } catch (error) {
-        //     console.error(error.message);
-        // }
-        // const chatBdoy = this.shadowRoot.querySelector(".body");
-        // let receiverComponent = document.createElement("receiver-component");
-        // let senderComponent = document.createElement("sender-component");
-        // for (let index = 0; index < fakeData.length; index++) {
-        //     const element = fakeData[index];
-        //     if (element.receiverId === 2)
-        //     {
-        //         const receiverMessageContainer = document.createElement("receiver-message-container");
-        //         receiverMessageContainer.textContent = element.message;
-        //         if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
-        //         {
-        //             receiverMessageContainer.setAttribute("corner", "");
-        //             receiverComponent = document.createElement("receiver-component")
-        //         }
-        //         receiverMessageContainer.time = element.time.split(" ")[1];
-        //         receiverComponent.league = league;
-        //         receiverComponent.profileImage = profileImage;
-        //         receiverComponent.appendChild(receiverMessageContainer);
-        //         chatBdoy.appendChild(receiverComponent);
-        //     }
-        //     else
-        //     {
-        //         const senderMessageContainer = document.createElement("sender-message-container");
-        //         senderMessageContainer.textContent = element.message;
-        //         if (index === 0 || index > 0 && fakeData[index - 1].receiverId != element.receiverId)
-        //         {
-        //             senderMessageContainer.setAttribute("corner", "");
-        //             senderComponent = document.createElement("sender-component");
-        //         }
-        //         senderMessageContainer.time = element.time.split(" ")[1];
-        //         senderComponent.appendChild(senderMessageContainer);
-        //         chatBdoy.appendChild(senderComponent);
-        //     }
-        // }
+    async setUpWebSocket(sender_id, receiver_id) {
+        let sender = sender_id
+        let receiver = receiver_id
+        let room_name;
+        if (sender < receiver)
+            room_name = sender + '_' + receiver
+        else
+            room_name = receiver + '_' + sender
+        
+        if (!this.webSocket)
+        {
+            let url = `ws://${window.location.hostname}:9000/ws/chat/${this.targetId}/`;
+            console.log("url : ", url);
+            this.webSocket = new WebSocket(url)
+        }
+        
+        console.log("webSocket : ", this.webSocket);
+        this.webSocket.onmessage = (e) => {
+            let data = JSON.parse(e.data)
+        
+            if (data.Error) {
+                console.log(data.Error)
+            }
+            else {
+                this.renderConversation([data]);
+                const body = this.shadowRoot.querySelector(".body");
+                body.scrollTop = body.scrollHeight;
+            }
+        }
+    }
+    checker;
+    async renderConversation(conversations) {
+        const chatBody = this.shadowRoot.querySelector(".body");
+        let receiverComponent = document.createElement("receiver-component");
+        let senderComponent = document.createElement("sender-component");
+        for (let index = 0; index < conversations.length; index++) {
+            const element = conversations[index];
+            if (element.sender === 6)
+            {
+                const receiverMessageContainer = document.createElement("receiver-message-container");
+                receiverMessageContainer.textContent = element.content;
+                if (this.checker != element.sender)
+                {
+                    receiverMessageContainer.setAttribute("corner", "");
+                    receiverComponent = document.createElement("receiver-component")
+                }
+                receiverMessageContainer.time = element.sent_at.split("-")[0];
+                receiverComponent.league = "gold";
+                receiverComponent.profileImage = "../../assets/profile-assets/tanjuro.jpg";
+                receiverComponent.appendChild(receiverMessageContainer);
+                chatBody.appendChild(receiverComponent);
+            }
+            else
+            {
+                const senderMessageContainer = document.createElement("sender-message-container");
+                senderMessageContainer.textContent = element.content;
+                if (this.checker != element.sender)
+                {
+                    senderMessageContainer.setAttribute("corner", "");
+                    senderComponent = document.createElement("sender-component");
+                }
+                senderMessageContainer.time = element.sent_at.split("-")[0];
+                senderComponent.appendChild(senderMessageContainer);
+                chatBody.appendChild(senderComponent);
+            }
+            this.checker = conversations[index].sender;
+        }
+
     }
 
     async connectedCallback() {
-        // if (!this.targetId)
-        //     return ;
-        // await this.renderHeader("http://localhost:8080/api/v1/users/" + this.targetId);
-        // await this.renderConversation(APIUrl);
+        if (!this.targetId)
+            return ;
+        this.setUpWebSocket(6, 5);
+        await this.renderHeader(this.targetId);
+        const conversations = await this.getConversations(APIUrl + this.targetId);
+        await this.renderConversation(conversations);
+        this.shadowRoot.querySelector("chat-footer").webSocket = this.webSocket;
+        const body = this.shadowRoot.querySelector(".body");
+        body.scrollTop = body.scrollHeight;
     }
 
     disconnectedCallback() {
