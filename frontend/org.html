@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Tournament</title>
+    <style>
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            margin-top: 40px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .play-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        .cancel-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>WebSocket Tournament</h2>
+    <div id="user-info"></div>
+    <br></br>
+    <button type="submit" id="btn1" >Join Tournament</button>
+    <br></br>
+    <button type="submit" id="btn2" >List Tournament</button>
+    <br></br>
+    <button type="submit" id="btn3" >Update Start Date</button>
+    <br></br>
+    <button type="submit" id="btn4" >Get Start Date</button>
+    <br></br>
+    <button type="submit" id="btn5" >Get Players Ids</button>
+    <!-- The Modal -->
+    <div id="tournamentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Tournament Starting Soon</h2>
+            <p>The tournament is starting in 2 minutes.</p>
+            <p> Are you ready to play?</p>
+            <div class="modal-buttons">
+                <button class="play-button" id="playBtn">Play Tournament</button>
+                <button class="cancel-button" id="cancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <script src="./org.js" type="module" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!-- const user = JSON.parse(localStorage.getItem('loggedInUser'));
+const totalPlayers = getTotalPlayers(); // Function that returns the total number of players in the current tournament
+const pairing_sum = totalPlayers + 1;
+
+document.getElementById("playBtn").addEventListener("click", async function() {
+    playerId = user.id;
+    OpenentId = pairing_sum - playerId;
+    lobby(playerId, OpenentId);
+});
+
+function getTotalPlayers() {
+    // This function should return the total number of players in the current tournament.
+    // For example, if there are 8 players, it should return 8.
+    // You need to implement this logic based on how your system manages the players.
+    // Example:
+    return 8; // Replace with dynamic logic
+} -->
