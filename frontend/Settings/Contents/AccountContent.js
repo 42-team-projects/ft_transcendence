@@ -37,7 +37,7 @@ const cssContent = /*css*/`
     }
     :host {
         flex: 4;
-        height: 70%;
+        height: calc(100% - 50px);
         display: flex;
         gap: 50px;
         flex-direction: column;
@@ -47,6 +47,7 @@ const cssContent = /*css*/`
 
     .container {
         width: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
