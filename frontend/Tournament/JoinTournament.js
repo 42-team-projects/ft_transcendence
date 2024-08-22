@@ -68,7 +68,7 @@ export class JoinTournament extends HTMLElement {
     useWebsocket(data) {
         const tournament_id = data.tournament_id;
         const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
-        tournamentSocket.onopen = async function() {
+        tournamentSocket.onopen = async () => {
             console.log('WebSocket connection of Tournament is opened');
             console.log(data);
             if(data.number_of_players == data.players.length)
@@ -80,7 +80,7 @@ export class JoinTournament extends HTMLElement {
         };
         tournamentSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            console.log(data);
+            console.log("tournamentSocket.onmessage.data : ", data);
             const mainContainer = this.shadowRoot.querySelector(".mainContainer");
             mainContainer.innerHTML = `<tournament-alert></tournament-alert>`
             // TODO: Tournament Alert
@@ -119,7 +119,7 @@ export class JoinTournament extends HTMLElement {
                 console.log(JSON.stringify(data, null, 2));
                 throw new Error(`${response.status}  ${data.statusText}`);
             }
-            const data = await response.json();
+            // const data = await response.json();
             // console.log(JSON.stringify(data, null, 2));
         } catch(error) {
             console.error('Error of update start date: ', error);
