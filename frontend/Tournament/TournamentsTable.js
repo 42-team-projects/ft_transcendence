@@ -185,10 +185,11 @@ export class TournamentsTable extends HTMLElement {
         };
         tournamentSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            window
+            const tournamentAlert = window.document.querySelector(".tournament-alert");
+            tournamentAlert.style.display = "flex";
             console.log("tournamentSocket.onmessage.data : ", data);
-            const mainContainer = this.querySelector(".mainContainer");
-            mainContainer.innerHTML = `<tournament-alert></tournament-alert>`
+            // const mainContainer = this.querySelector(".mainContainer");
+            // mainContainer.innerHTML = `<tournament-alert></tournament-alert>`
             // TODO: Tournament Alert
             // showTournamentModal();
 
