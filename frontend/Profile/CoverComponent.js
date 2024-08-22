@@ -42,3 +42,5 @@ export class CoverComponent extends HTMLElement {
         this.shadowRoot.querySelector(".profile-cover").style.background = "url(" + this.src + ") center top / cover no-repeat";
     }
 }
+
+customElements.define("cover-component", CoverComponent);
