@@ -16,6 +16,8 @@ export class StatsContainer extends HTMLElement {
     }
 }
 
+customElements.define("stats-container", StatsContainer);
+
 const cssContent = /*css*/`
 
     :host {

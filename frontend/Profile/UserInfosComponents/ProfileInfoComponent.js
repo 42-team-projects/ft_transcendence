@@ -107,6 +107,7 @@ export class ProfileInfoComponent extends HTMLElement {
     }
 }
 
+customElements.define("profile-info-component", ProfileInfoComponent);
 
 const cssContent = /*css*/`
     :host * {

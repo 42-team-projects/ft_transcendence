@@ -34,3 +34,5 @@ export class SenderComponent extends HTMLElement {
 
     }
 }
+
+customElements.define("sender-component", SenderComponent);
