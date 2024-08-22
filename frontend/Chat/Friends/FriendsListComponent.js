@@ -1,3 +1,5 @@
+import { FriendItemComponent } from "./FriendItemComponent.js";
+
 const APIUrl = "http://localhost:8080/api/v1/users/all";
 let fakeData = [];
 export class FriendsListComponent extends HTMLElement {
