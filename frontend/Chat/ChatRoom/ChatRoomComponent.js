@@ -1,4 +1,8 @@
 import { fetchData } from "../../Utils/Fetcher.js";
+import { ChatHeaderComponent } from "./ChatHeaderComponent.js";
+import { ChatFooterComponent } from "./ChatFooterComponent.js";
+import { SenderComponent } from "./SenderComponent.js";
+import { ReceiverComponent } from "./ReceiverComponent.js";
 
 // let APIUrl = "http://localhost:8080/api/v1/conversations/sender=2&receiver="
 let APIUrl = "http://127.0.0.1:9000/chat/";

@@ -1,4 +1,6 @@
 import { AddPlayerComponent } from "./AddPlayerComponent.js";
+import { CustomButton } from "./CustomButton.js";
+import { TournamentRound } from "./TournamentRound.js";
 
 export class GenerateRounds extends HTMLElement {
     constructor () {
