@@ -1,4 +1,4 @@
-import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
+import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 
 const forms = `
@@ -149,7 +149,67 @@ export class JoinTournament extends HTMLElement {
     async addPlayerToTournament(tournament_id) {
         const data = await this.player_join_tournament(tournament_id);
         if (data)
+        {
             this.shadowRoot.getElementById(tournament_id).remove();
+            this.useWebsocket(data);
+        }
+    }
+
+    useWebsocket(data) {
+        const tournament_id = data.tournament_id;
+        const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
+        tournamentSocket.onopen = async function() {
+            console.log('WebSocket connection of Tournament is opened');
+            console.log(data);
+            if(data.number_of_players == data.players.length)
+            {
+                await this.update_start_date(data);
+                console.log(data.tournament_name);
+                tournamentSocket.send(JSON.stringify({'type': 'play_cancel','message': 'Tournament is starting in 2 minutes'}));
+            }
+        };
+        tournamentSocket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            console.log(data);
+            // showTournamentModal();
+        };
+        tournamentSocket.onclose = function () {
+            console.log('WebSocket connection of tournament closed');
+        };
+        tournamentSocket.onerror = (error) => {
+            console.error('WebSocket tournament error:', error);
+        };
+    }
+
+    async  update_start_date(data) {
+        try {
+            const tournamentId = data.tournament_id;
+            const now = new Date();
+            // console.log(now);
+            // console.log("\n===\n");
+            const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
+            // console.log(start_date);
+            const Tournament = {
+                tournamentId : tournamentId,
+                start_date : start_date,
+            }
+            const response = await fetch(`${apiUrl}SetStartDate/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Tournament),
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+                throw new Error(`${response.status}  ${data.statusText}`);
+            }
+            const data = await response.json();
+            // console.log(JSON.stringify(data, null, 2));
+        } catch(error) {
+            console.error('Error of update start date: ', error);
+        }
     }
 
     joinToPrivateTournament(tournamentData) {
@@ -352,10 +412,6 @@ export class JoinTournament extends HTMLElement {
             console.error('Error of player join tournament: ', error);
         }
     }
-    
-    
-
-
 }
 
 const cssContent = /*css*/`

@@ -304,13 +304,13 @@ export class TournamentsTable extends HTMLElement {
         const deadlineTimeNodes = tbody.querySelectorAll(".deadLineTime");
         const unfinishedTournament = Array.from(deadlineTimeNodes).filter((time) => time.textContent !== "finished");
 
-        this.dateInterval = setInterval(async () => {
-            numberOfTournament = await this.updateTournamentsTable(Number(numberOfTournament), tbody);
-            // console.log("setInterval function: ", numberOfTournament);
-            unfinishedTournament.forEach((time) => {
-                time.textContent = calculateTimeDifferents(time.dataset.createdAt);
-            });
-        }, 1000);
+        // this.dateInterval = setInterval(async () => {
+        //     numberOfTournament = await this.updateTournamentsTable(Number(numberOfTournament), tbody);
+        //     // console.log("setInterval function: ", numberOfTournament);
+        //     unfinishedTournament.forEach((time) => {
+        //         time.textContent = calculateTimeDifferents(time.dataset.createdAt);
+        //     });
+        // }, 1000);
     }
 
     async updateTournamentsTable(numberOfTournament, tbody) {
