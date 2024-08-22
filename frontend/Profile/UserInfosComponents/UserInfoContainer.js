@@ -24,7 +24,7 @@ export class UserInfoContainerComponent extends HTMLElement {
     set icon(value) { return this.setAttribute("icon", value);}
 }
 
-//assets/profile-assets/trophy.svg
+customElements.define("user-info-container", UserInfoContainerComponent);
 
 const cssContent = /*css*/`
 

@@ -101,3 +101,5 @@ export class CustomButton extends HTMLElement {
 
     }
 }
+
+customElements.define("custom-button", CustomButton);

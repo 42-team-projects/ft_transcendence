@@ -110,6 +110,8 @@ export class ChatItemComponent extends HTMLElement {
 
 }
 
+customElements.define("chat-item", ChatItemComponent);
+
 const cssContent = /*css*/`
     :host {
         font-family: 'Sansation bold';

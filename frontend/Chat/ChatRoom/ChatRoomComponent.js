@@ -177,6 +177,9 @@ export class ChatRoomComponent extends HTMLElement {
     }
 }
 
+customElements.define("chat-room", ChatRoomComponent);
+
+
 const cssContent = /*css*/`
         :host {
             font-family: 'Sansation bold';

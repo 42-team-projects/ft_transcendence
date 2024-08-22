@@ -51,3 +51,5 @@ export class TournamentComponent extends HTMLElement {
         // Handle attribute changes if needed
     }
 }
+
+customElements.define("tournament-page", TournamentComponent);

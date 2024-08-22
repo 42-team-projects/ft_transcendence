@@ -107,6 +107,9 @@ export class ChatHeaderComponent extends HTMLElement {
 
 }
 
+customElements.define("chat-header", ChatHeaderComponent);
+
+
 const cssContent = /*css*/ `
     :host {
         font-family: 'Sansation bold';

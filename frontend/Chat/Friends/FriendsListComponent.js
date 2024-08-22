@@ -43,6 +43,8 @@ export class FriendsListComponent extends HTMLElement {
     }
 }
 
+customElements.define("friends-list", FriendsListComponent);
+
 const cssContent = /*css*/`
 
     :host {
