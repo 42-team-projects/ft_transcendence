@@ -247,7 +247,7 @@ export class JoinTournament extends HTMLElement {
                     const tournaments = await this.get_Available_Tournaments("tournament_name=" + input.value);
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
-                        if (element.players.length && element.players[0].id != playerId)
+                        if (data.owner.id != playerId)
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
 

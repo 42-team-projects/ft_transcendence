@@ -180,8 +180,7 @@ export class TournamentsTable extends HTMLElement {
         {
             const td = document.createElement("td");
             td.textContent = "unknown";
-            if (data.players.length)
-                td.textContent = data.players[0].username;
+            td.textContent = data.owner.username;
             tr.appendChild(td);
         }
         {
@@ -240,7 +239,7 @@ export class TournamentsTable extends HTMLElement {
             const actionsContainer = document.createElement("div");
             actionsContainer.className = "actions";
 
-            if (data.players.length && data.players[0].id != playerId)
+            if (data.owner.id != playerId)
                 actionsContainer.appendChild(exitButton);
 
             actionsContainer.appendChild(displayButton);
@@ -272,7 +271,9 @@ export class TournamentsTable extends HTMLElement {
                 tournament_name: data.name,
                 number_of_players: data.num_players,
                 is_accessible: data.access.toLowerCase() == "public" ? true : false,
-                access_password: data.password
+                access_password: data.password,
+                owner: null
+
             }
             const create_tournament = "create/player/";
             const response = await fetch(`${apiUrl}${create_tournament}${playerId}/`, {
@@ -349,6 +350,7 @@ export class TournamentsTable extends HTMLElement {
                 const data = this.querySelector("create-tournament").data;
                 if (data) {
                     try {
+                        console.log("data : ", data);
                         const response = await this.createTournament(data);
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
