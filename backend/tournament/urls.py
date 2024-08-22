@@ -6,7 +6,7 @@ urlpatterns = [
     path("list_tournaments/", views.list_tournaments, name="list_tournaments"),
     path('tournament/<int:tournamentId>/player/<int:playerId>/', views.player_join_tournament, name='player_join_tournament'),
     path('SetStartDate/', views.SetStartDate, name='SetStartDate'),
-    path('tournament/<int:tournamentId>/', views.get_tournament_by_id, name='get_tournament_by_id'),
+    # path('tournament/<int:tournamentId>/', views.get_tournament_by_id, name='get_tournament_by_id'),
 
 
     path('player/<int:player_id>/', views.get_tournaments_by_player_id, name='get_tournaments_by_player_id'),
