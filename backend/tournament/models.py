@@ -16,6 +16,8 @@ class Tournament(models.Model):
     number_of_players = models.IntegerField(choices=[(4, '4 Players'), (8, '8 Players'), (16, '16 Players')])
     is_accessible = models.BooleanField(default=True)
     access_password = models.IntegerField(null=True, blank=True)
+    owner = models.ForeignKey(Player, on_delete=models.CASCADE, blank=True, null=True)
+
 
     players = models.ManyToManyField(Player, related_name='tournaments', blank=True)
 
