@@ -287,23 +287,32 @@ game-over{
 }
 
 .alertContainer {
-    width: 40%;
-    height: 40%;
+    width: 800px;
+    height: 400px;
     background-color: #cccccc60;
-    border-radius: 10px;
+    border-radius: 1px;
 }
 
 .alertHeader {
     width: 100%;
-    height: 15%;
-    background-color: blue;
+    height: 40px;
+    clip-path: polygon(100% 7px, 100% 0px, 0px 0px, 0px 100%, calc(100% - (40px + 40px)) 100%, calc(100% - (20px + 40px)) 7.5px, calc(100% - (10px + 40px)) 7.5px, calc(100% - (30px + 40px)) 100%, calc(100% - (20px + 40px)) 100%, calc(100% - 40px) 8px, 100% 7px);
+    background: rgb(12,176,176);
+    background: linear-gradient(90deg, rgba(12,176,176,1) 36%, rgba(68,223,223,1) 99%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .alertBody {
     width: 100%;
     float: bottom;
-    height: 70%;
-    background-color: aqua;
+    height: calc(100% - 104px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
 }
 
 .alertActions {
