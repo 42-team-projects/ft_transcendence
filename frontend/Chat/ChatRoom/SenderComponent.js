@@ -1,3 +1,5 @@
+import { SenderMessageContainerComponent } from "./MessageComponents/SenderMessageContainerComponent.js";
+
 export class SenderComponent extends HTMLElement {
     constructor() {
         super();

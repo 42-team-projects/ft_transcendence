@@ -1,4 +1,6 @@
 import { fetchData } from "../../Utils/Fetcher.js";
+import { ChatItemComponent } from "./ChatItemComponent.js";
+import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {

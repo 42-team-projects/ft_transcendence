@@ -1,3 +1,8 @@
+import { PlayersAndStages } from "./PlayersAndStages.js";
+import { TournamentRules } from "./TournamentRules.js";
+import { Visibility } from "./VisibillitySettings.js";
+
+
 export class CreateTournament extends HTMLElement {
     constructor() {
         super();
