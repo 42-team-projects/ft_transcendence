@@ -1,6 +1,7 @@
 import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
+import { TournamentAlert } from "./configs/TournamentAlert.js";
 
 const cssContent = /*css*/`
 :host {
@@ -185,8 +186,9 @@ export class TournamentsTable extends HTMLElement {
         };
         tournamentSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            const tournamentAlert = window.document.querySelector(".tournament-alert");
-            tournamentAlert.style.display = "flex";
+            const tournamentAlert = window.document.querySelector("body");
+            if (!window.document.querySelector("body tournament-alert"))
+                tournamentAlert.appendChild(new TournamentAlert());
             console.log("tournamentSocket.onmessage.data : ", data);
             // const mainContainer = this.querySelector(".mainContainer");
             // mainContainer.innerHTML = `<tournament-alert></tournament-alert>`
@@ -371,13 +373,13 @@ export class TournamentsTable extends HTMLElement {
         const deadlineTimeNodes = tbody.querySelectorAll(".deadLineTime");
         const unfinishedTournament = Array.from(deadlineTimeNodes).filter((time) => time.textContent !== "finished");
 
-        // this.dateInterval = setInterval(async () => {
-        //     numberOfTournament = await this.updateTournamentsTable(Number(numberOfTournament), tbody);
-        //     // console.log("setInterval function: ", numberOfTournament);
-        //     unfinishedTournament.forEach((time) => {
-        //         time.textContent = calculateTimeDifferents(time.dataset.createdAt);
-        //     });
-        // }, 1000);
+        this.dateInterval = setInterval(async () => {
+            numberOfTournament = await this.updateTournamentsTable(Number(numberOfTournament), tbody);
+            // console.log("setInterval function: ", numberOfTournament);
+            unfinishedTournament.forEach((time) => {
+                time.textContent = calculateTimeDifferents(time.dataset.createdAt);
+            });
+        }, 1000);
     }
 
     async updateTournamentsTable(numberOfTournament, tbody) {

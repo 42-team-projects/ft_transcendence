@@ -273,54 +273,78 @@ game-over{
     display: none;
 }
 
-
-.tournament-alert {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   background-color: #00142b50;
-   z-index: 99;
-   display: none;
-   align-items: center;
-   justify-content: center;
-   color: white;
-}
-
-.alertContainer {
-    width: 800px;
-    height: 400px;
-    background-color: #cccccc60;
-    border-radius: 1px;
-}
-
-.alertHeader {
+tournament-alert {
+    position: absolute;
     width: 100%;
-    height: 40px;
-    clip-path: polygon(100% 7px, 100% 0px, 0px 0px, 0px 100%, calc(100% - (40px + 40px)) 100%, calc(100% - (20px + 40px)) 7.5px, calc(100% - (10px + 40px)) 7.5px, calc(100% - (30px + 40px)) 100%, calc(100% - (20px + 40px)) 100%, calc(100% - 40px) 8px, 100% 7px);
-    background: rgb(12,176,176);
-    background: linear-gradient(90deg, rgba(12,176,176,1) 36%, rgba(68,223,223,1) 99%);
+    height: 100%;
+    background-color: #00142b99;
+    z-index: 99;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.alertBody {
-    width: 100%;
-    float: bottom;
-    height: calc(100% - 104px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-}
-
-.alertActions {
-    width: 100%;
-    height: 64px;
-    background-color: green;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-}
+    color: white;
+ 
+ }
+ 
+ .alertContainer {
+     position: relative;
+     width: 800px;
+     height: 400px;
+     background: #00142b;
+     border: 1px solid #00fffc80;
+ }
+ 
+ 
+ .closeButton {
+     position: absolute;
+     width: 16px;
+     height: 16px;
+     right: 9px;
+     top: 14px;
+     color: white;
+ }
+ 
+ 
+ .alertHeader {
+     width: 100%;
+     height: 40px;
+     clip-path: polygon(100% 7px, 100% 0px, 0px 0px, 0px 100%, calc(100% - (40px + 40px)) 100%, calc(100% - (20px + 40px)) 7.5px, calc(100% - (10px + 40px)) 7.5px, calc(100% - (30px + 40px)) 100%, calc(100% - (20px + 40px)) 100%, calc(100% - 40px) 8px, 100% 7px);
+     background: rgb(12,176,176);
+     background: linear-gradient(90deg, rgba(12,176,176,1) 36%, rgba(68,223,223,1) 99%);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-family: 'Sansation bold';
+ }
+ 
+ .alertBody {
+     width: 100%;
+     float: bottom;
+     height: calc(100% - 130px);
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 30px;
+     font-family: 'Sansation';
+ }
+ 
+ .alertActions {
+     width: 100%;
+     height: 80px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border-top: 1px solid #00fffc70;
+     padding: 10px;
+     gap: 30px;
+     font-family: 'Sansation bold';
+ 
+ }
+ 
+ .line {
+     width: 100%;
+     height: 2px;
+     margin-top: 10px;
+     background-color: #00fffc30;
+ }

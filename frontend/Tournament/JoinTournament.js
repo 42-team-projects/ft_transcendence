@@ -61,7 +61,8 @@ export class JoinTournament extends HTMLElement {
         if (data)
         {
             this.shadowRoot.getElementById(tournament_id).remove();
-            this.useWebsocket(data);
+            if (data.number_of_players == data.players.length)
+                this.remove();
         }
     }
 
