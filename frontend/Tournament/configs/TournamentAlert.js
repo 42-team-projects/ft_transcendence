@@ -1,11 +1,9 @@
 import { playerId } from "../../Utils/GlobalVariables.js";
 
-export class TournamentAlert extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = `
-            <!-- The Modal -->
+
+/*
+
+<!-- The Modal -->
             <div id="tournamentModal" class="modal">
                 <div class="modal-content">
                     <span class="close">&times;</span>
@@ -18,19 +16,41 @@ export class TournamentAlert extends HTMLElement {
                     </div>
                 </div>
             </div>
+
+*/
+
+export class TournamentAlert extends HTMLElement {
+    constructor() {
+        super();
+        this.innerHTML = `
+            <div class="alertContainer">
+                <img class="closeButton" src="./assets/icons/close-x-icon.svg"></img>
+                <div class="alertHeader">
+                    <h2>Tournament Starting Soon</h2>
+                </div>
+                <div class="line"></div>
+                <div class="alertBody">
+                    <h2>The tournament is starting in 2 minutes.</h2>
+                    <h2> Are you ready to play?</h2>
+                    <h4 class="countDown">00h 01m 59s</h4>
+                </div>
+                <div class="alertActions">
+                    <custom-button id="playBtn" width="160px" height="48px" reverse>PLAY</custom-button>
+                    <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
+                </div>
+            </div>
         `;
     }
 
     connectedCallback() {
-        var modal = this.shadowRoot.querySelector("#tournamentModal");
         // Get the <span> element that closes the modal
-        var span = this.shadowRoot.querySelector(".close");
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+        const closeButton = this.querySelector(".closeButton");
+        closeButton.addEventListener("click", () => {
+            this.remove();
+        });
 
-        this.shadowRoot.querySelector("#playBtn").addEventListener("click", async function() {
-            modal.style.display = "none";
+        this.querySelector("#playBtn").addEventListener("click", async function() {
+            this.remove();
             const start_date = await this.get_start_date();
             console.log(start_date);
             // console.log(tournamentId);
@@ -73,13 +93,12 @@ export class TournamentAlert extends HTMLElement {
         });
 
         // Add event listener for Cancel button
-        this.shadowRoot.querySelector("#cancelBtn").addEventListener("click", function() {
+        this.querySelector("#cancelBtn").addEventListener("click", () => {
             alert("You have canceled your participation in the tournament.");
-            modal.style.display = "none";
+            this.remove();
             // Here you can add logic to handle cancellation
             // call endpoint of player leave tournament 
         });
-        modal.style.display = "block";
     }
 
     /* ----*/
@@ -123,35 +142,18 @@ export class TournamentAlert extends HTMLElement {
 
 
     startCountdown(timeLeft) {
-        const countdownElement = document.createElement('h2');
-        document.body.appendChild(countdownElement);
-        
-        // Apply styles to the countdown element
-        countdownElement.style.position = 'fixed';
-        countdownElement.style.top = '50%';
-        countdownElement.style.left = '50%';
-        countdownElement.style.transform = 'translate(-50%, -50%)';
-        countdownElement.style.fontSize = '48px';
-        countdownElement.style.color = '#FFFFFF';
-        countdownElement.style.textShadow = '2px 2px 8px rgba(0, 0, 0, 0.7)';
-        countdownElement.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        countdownElement.style.padding = '20px';
-        countdownElement.style.borderRadius = '10px';
-        countdownElement.style.border = '3px solid #4CAF50';
-        countdownElement.style.textAlign = 'center';
-        countdownElement.style.fontFamily = 'Arial, sans-serif';
-        countdownElement.style.zIndex = '9999';
+        const countDown = this.querySelector(".countDown");
 
         
         const countdownInterval = setInterval(function() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
 
-            countdownElement.innerHTML = `Tournament starts in: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+            countDown.innerHTML = `Tournament starts in: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 
             if (timeLeft <= 0) {
                 clearInterval(countdownInterval);
-                countdownElement.innerHTML = "Tournament has started!";
+                countDown.innerHTML = "Tournament has started!";
                 // Add logic to start the tournament here
             }
             timeLeft--;
@@ -160,7 +162,5 @@ export class TournamentAlert extends HTMLElement {
 
 
 }
-
-
 
 customElements.define("tournament-alert", TournamentAlert)
