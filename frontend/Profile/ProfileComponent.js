@@ -311,194 +311,196 @@ export class ProfileComponent extends HTMLElement {
     }
 }
 
+customElements.define("profile-component", ProfileComponent);
+
 const cssContent = /*css*/`
 
-:host {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    margin-right: 50px;
-    margin-left: 50px;
-    font-family: 'Sansation Bold', 'Sansation';
-    background-color: #00ffff10;
-    border-radius: 5px;
-}
+    :host {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        margin-right: 50px;
+        margin-left: 50px;
+        font-family: 'Sansation Bold', 'Sansation';
+        background-color: #00ffff10;
+        border-radius: 5px;
+    }
 
-:host * {
-    margin: 0;
-}
+    :host * {
+        margin: 0;
+    }
 
-.child{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: aqua;
-    clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
-}
+    .child{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background-color: aqua;
+        clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
+    }
 
-.main-profile-container::-webkit-scrollbar { 
-    display: none;
-}
-
-
-.main-profile-container
-{
-    scrollbar-width:none;
-    scroll-behavior: smooth;
-    scrollbar-color: #003347 transparent;
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    overflow-y: scroll;
-    width: 100%;
-    height: 100%;
-}
-
-.profile-rank-2 {
-    position: absolute;
-    width: 80px;
-    top: -3px;
-    right: -8px;
-    margin: 0;
-    padding: 0;
-    z-index: 99;
-}
-
-.rank-label {
-    padding-top: 20px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.rank-label h1 {
-    width: 100%;
-    height: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-page-name {
-    z-index: 30;
-}
+    .main-profile-container::-webkit-scrollbar { 
+        display: none;
+    }
 
 
-.profile-cover
-{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-    width: 100%;
-    height: 35%;
-    min-height: 300px;
-    max-height: 600px;
-    color: white;
-    /* border: 1px solid white; */
-    background-image: url(./images/xxxxxx.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: top;
-    background-attachment: local;
-    opacity: 0.7;
-    z-index: 1;
-}
-.profile-data
-{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 100%;
-    flex: 1;
-}
+    .main-profile-container
+    {
+        scrollbar-width:none;
+        scroll-behavior: smooth;
+        scrollbar-color: #003347 transparent;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        overflow-y: scroll;
+        width: 100%;
+        height: 100%;
+    }
 
-.profile-data-stats
-{
-    flex: 3;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    .profile-rank-2 {
+        position: absolute;
+        width: 80px;
+        top: -3px;
+        right: -8px;
+        margin: 0;
+        padding: 0;
+        z-index: 99;
+    }
 
-}
+    .rank-label {
+        padding-top: 20px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.statsClass {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-}
+    .rank-label h1 {
+        width: 100%;
+        height: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.graphClass {
-    flex: 2;
-    width: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.profile-data-stats::-webkit-scrollbar { 
-    display: none;
-}
+    page-name {
+        z-index: 30;
+    }
 
 
-/* ================= profile data stats league section ===================== */
+    .profile-cover
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        width: 100%;
+        height: 35%;
+        min-height: 300px;
+        max-height: 600px;
+        color: white;
+        /* border: 1px solid white; */
+        background-image: url(./images/xxxxxx.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top;
+        background-attachment: local;
+        opacity: 0.7;
+        z-index: 1;
+    }
+    .profile-data
+    {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+        flex: 1;
+    }
 
-.league-bar {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: #d9d9d910;
-    flex: 2;
-    gap: 15px;
-    padding: 40px 0;
-    justify-content: center;
-}
+    .profile-data-stats
+    {
+        flex: 3;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+    }
+
+    .statsClass {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .graphClass {
+        flex: 2;
+        width: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-data-stats::-webkit-scrollbar { 
+        display: none;
+    }
 
 
-.match-record {
-    padding: 20px 0;
-    margin-top: 20px;
-    position: relative;
-    width: 100%;
-    gap: 40px;
-    font-family: 'Sansation Bold', 'Sansation';
-    background-color: #d9d9d920;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+    /* ================= profile data stats league section ===================== */
+
+    .league-bar {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #d9d9d910;
+        flex: 2;
+        gap: 15px;
+        padding: 40px 0;
+        justify-content: center;
+    }
+
+
+    .match-record {
+        padding: 20px 0;
+        margin-top: 20px;
+        position: relative;
+        width: 100%;
+        gap: 40px;
+        font-family: 'Sansation Bold', 'Sansation';
+        background-color: #d9d9d920;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
 
 
-/* Profile data infos container */
+    /* Profile data infos container */
 
-.profile-data-infos-container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding-bottom: 20px;
-}
+    .profile-data-infos-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding-bottom: 20px;
+    }
 
 
-.gridClass {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 20px;
-}
+    .gridClass {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 20px;
+    }
 
-.flexClass {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-right: 70px;
-}
+    .flexClass {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-right: 70px;
+    }
 
 `;

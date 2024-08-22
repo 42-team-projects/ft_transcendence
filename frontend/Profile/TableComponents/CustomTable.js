@@ -81,7 +81,11 @@ export class CustomTable extends HTMLElement {
         super();
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = `
-            <style> ${cssContent} </style>
+            <style> 
+                :host {
+                    padding: 10px 0;
+                }
+            </style>
         `;
     }
 
@@ -201,11 +205,4 @@ export class CustomTable extends HTMLElement {
 
 }
 
-
-const cssContent = /*css*/`
-
-:host {
-    padding: 10px 0;
-}
-
-`;
+customElements.define("custom-table", CustomTable);

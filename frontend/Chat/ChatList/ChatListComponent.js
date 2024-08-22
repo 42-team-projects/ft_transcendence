@@ -88,6 +88,8 @@ export class ChatListComponent extends HTMLElement {
     }
 }
 
+customElements.define("chat-list", ChatListComponent);
+
 const cssContent = /*css*/`
 
     :host {

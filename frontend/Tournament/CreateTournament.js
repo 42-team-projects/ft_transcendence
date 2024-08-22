@@ -66,6 +66,8 @@ export class CreateTournament extends HTMLElement {
 
 }
 
+customElements.define("create-tournament", CreateTournament);
+
 const cssContent = /*css*/`
 
 :host {

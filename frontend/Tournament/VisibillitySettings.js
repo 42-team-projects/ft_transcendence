@@ -92,6 +92,8 @@ export class Visibility extends HTMLElement {
     }
 }
 
+customElements.define("visibillity-settings", Visibility);
+
 const cssContent = /*css*/`
 
 :host {

@@ -40,6 +40,8 @@ export class TournamentRules extends HTMLElement {
     
 }
 
+customElements.define("tournament-rules", TournamentRules);
+
 const cssContent = /*css*/`
 :host {
     flex: 1.5;
