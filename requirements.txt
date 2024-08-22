@@ -4,3 +4,5 @@ djangorestframework
 django-cors-headers
 Pillow
 daphne
+
+channels
