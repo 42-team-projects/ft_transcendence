@@ -1,3 +1,4 @@
+import { playerId } from "../../Utils/GlobalVariables.js";
 
 export class TournamentAlert extends HTMLElement {
     constructor() {
@@ -21,16 +22,16 @@ export class TournamentAlert extends HTMLElement {
     }
 
     connectedCallback() {
-        var modal = this.shadowRoot.getElementById("tournamentModal");
+        var modal = this.shadowRoot.querySelector("#tournamentModal");
         // Get the <span> element that closes the modal
-        var span = this.shadowRoot.getElementsByClassName("close")[0];
+        var span = this.shadowRoot.querySelector(".close");
         span.onclick = function() {
             modal.style.display = "none";
         }
 
-        this.shadowRoot.getElementById("playBtn").addEventListener("click", async function() {
+        this.shadowRoot.querySelector("#playBtn").addEventListener("click", async function() {
             modal.style.display = "none";
-            const start_date = await get_start_date();
+            const start_date = await this.get_start_date();
             console.log(start_date);
             // console.log(tournamentId);
             const currentDate = new Date();
@@ -46,12 +47,12 @@ export class TournamentAlert extends HTMLElement {
             const totalCountdownTime = 60; // 1 minutes in seconds
             const timeLeft = totalCountdownTime - timespent;
             //
-            const playerIds = await get_players_ids();
+            const playerIds = playerId;
             const totalPlayers = playerIds.length;
-            const playerId = id;
-            const opponentId = findOpponentId(playerId, playerIds, totalPlayers);
+            const pId = id;
+            const opponentId = this.findOpponentId(pId, playerIds, totalPlayers);
             if (opponentId) {
-                console.log("playerID:     ", playerId, "opponentId:    ", opponentId);
+                console.log("playerID:     ", pId, "opponentId:    ", opponentId);
                 // alert(`playerID:      ${playerId}   opponentId:     ${opponentId}`);
                 // lobby(playerId, opponentId);
             } else {
@@ -64,7 +65,7 @@ export class TournamentAlert extends HTMLElement {
             // document.body.innerHTML = '';
             // document.body.appendChild(lobby);
             /* -------    call nordine code here -------- */
-            startCountdown(timeLeft);
+            this.startCountdown(timeLeft);
     
             // Here you can add logic to start the game or redirect to the game page
             // Here i need page of counter start with 2 minutes and decrement if 2 minutes is ended tournment is started
@@ -72,29 +73,25 @@ export class TournamentAlert extends HTMLElement {
         });
 
         // Add event listener for Cancel button
-        this.shadowRoot.getElementById("cancelBtn").addEventListener("click", function() {
+        this.shadowRoot.querySelector("#cancelBtn").addEventListener("click", function() {
             alert("You have canceled your participation in the tournament.");
             modal.style.display = "none";
             // Here you can add logic to handle cancellation
             // call endpoint of player leave tournament 
         });
-    }
-
-    // Open the modal when WebSocket message is received
-    showTournamentModal() {
         modal.style.display = "block";
     }
 
     /* ----*/
 
-    async get_players_ids() {
-        const tournamentData = await getTournamentData(); // Function to get tournament data
-        console.log(JSON.stringify(tournamentData, null, 2));
+    // async get_players_ids() {
+    //     const tournamentData = await getTournamentData(); // Function to get tournament data
+    //     console.log(JSON.stringify(tournamentData, null, 2));
 
-        const playerIds = tournamentData.players.map(player => player.id); // Extract sorted player IDs
-        console.log(playerIds);
-        return playerIds;
-    }
+    //     const playerIds = tournamentData.players.map(player => player.id); // Extract sorted player IDs
+    //     console.log(playerIds);
+    //     return playerIds;
+    // }
 
 
     async get_start_date() {
@@ -115,9 +112,9 @@ export class TournamentAlert extends HTMLElement {
 
 
 
-    findOpponentId(playerId, playerIds, totalPlayers) {
+    findOpponentId(pId, playerIds, totalPlayers) {
         const pairing_sum = totalPlayers - 1;
-        const index = playerIds.indexOf(playerId);
+        const index = playerIds.indexOf(pId);
         if (index === -1) return null; // Player ID not found in the list
         // Calculate the index for the opponent
         const opponentIndex = pairing_sum - index; // Subtract 1 for zero-based index
