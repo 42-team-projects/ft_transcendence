@@ -59,13 +59,17 @@ export class CustomInputField extends HTMLElement {
         }
 
         const editIcon = this.shadowRoot.querySelector(".edit-icon");
-        editIcon.addEventListener("click", () => {
-            const inputs = this.shadowRoot.querySelectorAll("input");
-            inputs.forEach(elem => {
-                elem.removeAttribute("readonly");
-                elem.classList.add("active");
+        if (editIcon)
+        {
+            editIcon.addEventListener("click", () => {
+                const inputs = this.shadowRoot.querySelectorAll("input");
+                inputs.forEach(elem => {
+                    elem.removeAttribute("readonly");
+                    elem.classList.add("active");
+                });
             });
-        });
+        }
+
     }
 
     disconnectedCallback() {

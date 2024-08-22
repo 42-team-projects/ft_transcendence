@@ -1,3 +1,6 @@
+import { ChatListComponent } from "./ChatList/ChatListComponent.js";
+import { FriendsListComponent } from "./Friends/FriendsListComponent.js";
+
 export class ChatComponent extends HTMLElement {
     constructor () {
         super();

@@ -1,4 +1,14 @@
 import { getLeagueColor, getLeagueImage } from "../Utils/LeaguesData.js";
+import { CoverComponent } from "./CoverComponent.js";
+import { ProfileInfoComponent } from "./UserInfosComponents/ProfileInfoComponent.js";
+import { UserInfoContainerComponent } from "./UserInfosComponents/UserInfoContainerComponent.js";
+import { UserInfoComponent } from "./UserInfosComponents/UserInfoComponent.js";
+import { LinkComponent } from "./UserInfosComponents/LinkComponent.js";
+import { AchievementComponent } from "./UserInfosComponents/AchievementComponent.js";
+import { CustomTable } from "./TableComponents/CustomTable.js";
+import { StatsContainer } from "./StatsComponents/StatsContainer.js";
+import { CustomGraph } from "./GraphComponent/CustomGraph.js";
+
 
 let fakeData = {
     id: 1,

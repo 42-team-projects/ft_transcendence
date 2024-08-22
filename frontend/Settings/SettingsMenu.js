@@ -29,7 +29,6 @@ export class SettingsMenu extends HTMLElement {
                 elem.borderSize = "2px";
                 const settingsContent = this.parentNode.querySelector("settings-content");
                 settingsContent.innerHTML = `<${elem.id}-content></${elem.id}-content>`;
-                console.log(settingsContent);
             })
         });
     }
