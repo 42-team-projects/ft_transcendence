@@ -22,6 +22,8 @@ export class ChatComponent extends HTMLElement {
     }
 }
 
+customElements.define("chat-page", ChatComponent);
+
 const cssContent = /*css*/`
 :host {
     font-family: 'Sansation bold';

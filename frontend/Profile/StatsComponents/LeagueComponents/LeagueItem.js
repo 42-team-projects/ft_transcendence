@@ -62,3 +62,5 @@ export class LeagueItem extends HTMLElement {
             this.shadowRoot.querySelector(".league-name").textContent = newValue.toUpperCase();
     }
 }
+
+customElements.define("league-item", LeagueItem);

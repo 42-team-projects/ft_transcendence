@@ -50,6 +50,7 @@ export class ChatFooterComponent extends HTMLElement {
     }
 }
 
+customElements.define("chat-footer", ChatFooterComponent);
 
 const cssContent = /*css*/ `
     :host {

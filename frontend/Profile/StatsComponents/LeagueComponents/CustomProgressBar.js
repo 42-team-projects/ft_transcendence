@@ -66,3 +66,5 @@ export class CustomProgressBar extends HTMLElement {
         element.style.width = this.value;
     }
 }
+
+customElements.define("custom-progress-bar", CustomProgressBar);
