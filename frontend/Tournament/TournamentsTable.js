@@ -1,6 +1,10 @@
 import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
+import { CustomButton } from "./CustomButton.js";
+import { JoinTournament } from "./JoinTournament.js";
+import { CreateTournament } from "./CreateTournament.js";
+import { GenerateRounds } from "./GenerateRounds.js";
 
 const cssContent = /*css*/`
 :host {
