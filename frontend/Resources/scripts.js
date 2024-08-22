@@ -1,7 +1,7 @@
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.querySelector('.container');
-const apiUrl = 'http://127.0.0.1:8000/';
+const apiUrl = 'http://127.0.0.1:8001/';
 
 signUpButton.addEventListener('click', async () => {
     container.classList.add('right-panel-active');   
