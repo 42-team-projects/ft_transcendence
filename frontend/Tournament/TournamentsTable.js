@@ -1,11 +1,12 @@
 import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
-import { get_tournaments_by_player_id } from "./configs/TournamentAPIConfigs.js";
+import { get_tournament_by_id, get_tournaments_by_player_id } from "./configs/TournamentAPIConfigs.js";
 import { CustomButton } from "./CustomButton.js";
 import { JoinTournament } from "./JoinTournament.js";
 import { CreateTournament } from "./CreateTournament.js";
 import { GenerateRounds } from "./GenerateRounds.js";
+import { initWebSocket } from "../Utils/TournamentWebSocketManager.js";
 
 const cssContent = /*css*/`
 :host {
