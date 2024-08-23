@@ -112,7 +112,7 @@
 
 .Online-text h1{
     color: white;
-    font-size: clamp(1rem, 1.6vw, 2.3rem);
+    font-size: 2.3rem;
 }
 .O-buttonC {
     position: relative;
@@ -126,17 +126,22 @@
     align-items: center;
 }
 
-.O-buttonC p{
-    width: 75%;
-    font-size: clamp(0rem, 1vw, 1.1rem);
+p{
+    width: 80%;
+    font-size: 1.5rem;
     text-align: center;
     color: wheat;
+    margin: 0;
+}
+@media (max-width: 1600px){
+    p{
+        font-size: 1.2rem;
+    }
 }
 
 
-
 .O-buttonC h1{
-    font-size: clamp(1rem, 2vw, 2.8rem);
+    font-size: 2.8rem;
     text-align: center;
     text-wrap:wrap ;
     color: wheat;

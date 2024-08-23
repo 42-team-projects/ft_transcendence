@@ -1,9 +1,5 @@
 const root = document.createElement('template')
 
-const sideBar = document.querySelector('side-bar')
-const header = document.querySelector('header-bar')
-const footer = document.querySelector('footer')
-
 
 const rootContent = ['home-page',
      'game-selection',
@@ -24,12 +20,13 @@ class Root extends HTMLElement{
     }
 
     set ChangeRootContent(component){
-        console.log('hiiiiiiiii')
+        // console.log('hiiiiiiiii')
         const content = document.createElement(component)
         this.innerHTML = ``
         this.appendChild(content);
     }
     clickEvent() {
+        const sideBar = document.querySelector('side-bar')
         const buttons = sideBar.shadowRoot.querySelectorAll('sb-button')
         buttons.forEach((button, index) => {
             button.addEventListener('click', () => {
@@ -41,6 +38,7 @@ class Root extends HTMLElement{
                 }
             });
         })
+        const header = document.querySelector('header-bar')
         const profile = header.querySelector('c-profile')
         const userRunk = header.querySelector('user-rank');
         profile.addEventListener('click', () => {
@@ -59,6 +57,7 @@ class Root extends HTMLElement{
                 sideBar.activeButton.querySelector('img').classList.toggle('on')
             }
         })
+        const footer = document.querySelector('footer')
         const logout = footer.querySelector('.logout')
 
         logout.addEventListener('click', () => {
@@ -70,7 +69,6 @@ class Root extends HTMLElement{
     }
     connectedCallback()
     {
-        this.ChangeRootContent = "home-page";
         this.clickEvent()
     }
 }
