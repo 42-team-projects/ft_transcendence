@@ -61,7 +61,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if text_data_json['message'] == 'firstdata':
             await GameConsumer.rooms[self.room_group_name].assign_data(text_data_json, self)
         if text_data_json['message'] == 'move':
-            await GameConsumer.rooms[self.room_group_name].assing_racquet(text_data_json, self)
+            await GameConsumer.rooms[self.room_group_name].assign_racquet(text_data_json, self)
     
     async def disconnect(self, close_code):
         await remove_from_queue(
