@@ -1,6 +1,6 @@
 import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
-import { TournamentAlert } from "./configs/TournamentAlert.js";
+import { CustomAlert } from "./CustomAlert.js";
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -83,7 +83,7 @@ export class JoinTournament extends HTMLElement {
             const data = JSON.parse(e.data);
             console.log("tournamentSocket.onmessage.data : ", data);
             const mainContainer = this.shadowRoot.querySelector(".mainContainer");
-            mainContainer.innerHTML = `<tournament-alert></tournament-alert>`
+            mainContainer.innerHTML = `<custom-alert></custom-alert>`
             // TODO: Tournament Alert
             // showTournamentModal();
 
