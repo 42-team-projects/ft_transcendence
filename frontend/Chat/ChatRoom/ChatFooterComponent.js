@@ -12,7 +12,7 @@ export class ChatFooterComponent extends HTMLElement {
             </style>
             <div class="container">
                 <input type="text" placeholder="write your message ..." />
-                <img src="./assets/profile-assets/send-icon.svg"   width="32">
+                <img loading="lazy" src="./assets/profile-assets/send-icon.svg"   width="32">
             </div>
             <div class="corner" ></div>
             `;

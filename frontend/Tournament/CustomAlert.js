@@ -7,7 +7,7 @@ export class CustomAlert extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="alertContainer">
-                <img class="closeButton" src="./assets/icons/close-x-icon.svg"></img>
+                <img loading="lazy" class="closeButton" src="./assets/icons/close-x-icon.svg"></img>
                 <div class="alertHeader">
                     <slot name="header"></slot>
                 </div>
@@ -41,16 +41,16 @@ export class CustomAlert extends HTMLElement {
         //     // console.log(tournamentId);
         //     const currentDate = new Date();
             
-            const parsedStartDate = new Date(start_date);
-            // Calculate the difference in milliseconds
-            const timeDifference = currentDate - parsedStartDate;
-            console.log("Current date:", currentDate);
-            console.log("parsedStartDate date:", parsedStartDate);
-            // Convert the difference from milliseconds to seconds
-            let timespent = Math.floor(timeDifference / 1000);
-            console.log("timespent:    ", timespent);
-            const totalCountdownTime = 60; // 1 minutes in seconds
-            const timeLeft = totalCountdownTime - timespent;
+            // const parsedStartDate = new Date(start_date);
+            // // Calculate the difference in milliseconds
+            // const timeDifference = currentDate - parsedStartDate;
+            // console.log("Current date:", currentDate);
+            // console.log("parsedStartDate date:", parsedStartDate);
+            // // Convert the difference from milliseconds to seconds
+            // let timespent = Math.floor(timeDifference / 1000);
+            // console.log("timespent:    ", timespent);
+            // const totalCountdownTime = 60; // 1 minutes in seconds
+            // const timeLeft = totalCountdownTime - timespent;
             //
             // const playerIds = playerId;
             // const totalPlayers = playerIds.length;
@@ -70,12 +70,12 @@ export class CustomAlert extends HTMLElement {
             // document.body.innerHTML = '';
             // document.body.appendChild(lobby);
             /* -------    call nordine code here -------- */
-            this.startCountdown(timeLeft);
+            // this.startCountdown(timeLeft);
     
             // Here you can add logic to start the game or redirect to the game page
             // Here i need page of counter start with 2 minutes and decrement if 2 minutes is ended tournment is started
             // like that tournament starts in : 01:59
-        });
+        // });
 
         // // Add event listener for Cancel button
         // this.shadowRoot.querySelector("#cancelBtn").addEventListener("click", () => {
@@ -98,21 +98,21 @@ export class CustomAlert extends HTMLElement {
     // }
 
 
-    async get_start_date() {
-        try {
-            console.log(tournamentId);
-            const response = await fetch(`${httpUrl}tournament/${tournamentId}/`);
-            if (!response.ok) {
-                throw new Error(`${response.status}  ${response.statusText}`);
-            }
-            const data = await response.json();
-            // console.log(data.start_date);
-            // console.log(JSON.stringify(data, null, 2));
-            return data.start_date;
-        } catch(error) {
-            console.error('Error of tournament list: ', error);
-        }
-    }
+    // async get_start_date() {
+    //     try {
+    //         console.log(tournamentId);
+    //         const response = await fetch(`${httpUrl}tournament/${tournamentId}/`);
+    //         if (!response.ok) {
+    //             throw new Error(`${response.status}  ${response.statusText}`);
+    //         }
+    //         const data = await response.json();
+    //         // console.log(data.start_date);
+    //         // console.log(JSON.stringify(data, null, 2));
+    //         return data.start_date;
+    //     } catch(error) {
+    //         console.error('Error of tournament list: ', error);
+    //     }
+    // }
 
 
 
@@ -126,24 +126,24 @@ export class CustomAlert extends HTMLElement {
     // }
 
 
-    startCountdown(timeLeft) {
-        const countDown = this.querySelector(".countDown");
+    // startCountdown(timeLeft) {
+    //     const countDown = this.querySelector(".countDown");
 
         
-        const countdownInterval = setInterval(function() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
+    //     const countdownInterval = setInterval(function() {
+    //         const minutes = Math.floor(timeLeft / 60);
+    //         const seconds = timeLeft % 60;
 
-            countDown.innerHTML = `Tournament starts in: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    //         countDown.innerHTML = `Tournament starts in: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 
-            if (timeLeft <= 0) {
-                clearInterval(countdownInterval);
-                countDown.innerHTML = "Tournament has started!";
-                // Add logic to start the tournament here
-            }
-            timeLeft--;
-        }, 1000);
-    }
+    //         if (timeLeft <= 0) {
+    //             clearInterval(countdownInterval);
+    //             countDown.innerHTML = "Tournament has started!";
+    //             // Add logic to start the tournament here
+    //         }
+    //         timeLeft--;
+    //     }, 1000);
+    // }
 
 
 }
@@ -196,7 +196,8 @@ const cssContent = /*css*/`
     font-family: 'Sansation bold';
 }
 
-.alertBody {
+.alertBody,
+.alertBody ::slotted(div) {
     width: 100%;
     float: bottom;
     height: calc(100% - 130px);

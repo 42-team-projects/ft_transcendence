@@ -50,7 +50,7 @@ playerSlot.innerHTML = /*html*/ `
 
 AiGameTemplate.innerHTML = /*html*/ `
     <link rel="stylesheet" href="./Game/GamePlay/AiLobby.css">
-    <img id='Player' class="Player" slot="PlayerImg" alt="Player" />
+    <img loading="lazy" id='Player' class="Player" slot="PlayerImg" alt="Player" />
     <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
     <h1 id='Opponent' class="Opponent" slot="searshing"></h1>
     <h1 id='NOpponent' class="Name" slot="OpponentName"></h1>
@@ -59,14 +59,14 @@ AiGameTemplate.innerHTML = /*html*/ `
 OnlineGameTemplate.innerHTML = /*html*/ `
     <link rel="stylesheet" href="./Game/GamePlay/OnlineGameLobby.css">
 	<div class="searshingImgs" slot="searshing">
-		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
-		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
-		<img id='Opponent3' class="PlayerS" alt="searchingImg"/>
-		<img id='Opponent4' class="PlayerS" alt="searchingImg"/>
-		<img id='Opponent5' class="PlayerS" alt="searchingImg"/>
+		<img loading="lazy" id='Opponent1' class="PlayerS" alt="searchingImg"/>
+		<img loading="lazy" id='Opponent2' class="PlayerS" alt="searchingImg"/>
+		<img loading="lazy" id='Opponent3' class="PlayerS" alt="searchingImg"/>
+		<img loading="lazy" id='Opponent4' class="PlayerS" alt="searchingImg"/>
+		<img loading="lazy" id='Opponent5' class="PlayerS" alt="searchingImg"/>
 	</div>
 
-    <img id='Player' class="Player" slot="PlayerImg" alt="" />
+    <img loading="lazy" id='Player' class="Player" slot="PlayerImg" alt="" />
     <h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 `
 
