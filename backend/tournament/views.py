@@ -8,7 +8,6 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 
-
 # Create your views here.
 
 def index(request):

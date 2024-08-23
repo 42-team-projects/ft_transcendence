@@ -31,6 +31,8 @@ import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManag
 // import { UserInfoContainerComponent } from "./Profile/UserInfosComponents/UserInfoContainer.js";
 import { TournamentComponent } from "./Tournament/TournamentComponent.js";
 
+import { Login } from "./login.js";
+window.customElements.define('login-page', Login);
 // Game
 import { Lobby } from "./Game/GamePlay/Lobby.js"
 import { Buttons } from "./Game/GamePlay/buttons.js"
