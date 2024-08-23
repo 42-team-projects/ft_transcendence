@@ -21,6 +21,8 @@ export class UserInfoComponent extends HTMLElement {
 
 }
 
+customElements.define("user-info-component", UserInfoComponent);
+
 const cssContent = /*css*/`
 
 p {

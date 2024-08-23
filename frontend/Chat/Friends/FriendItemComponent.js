@@ -74,3 +74,5 @@ export class FriendItemComponent extends HTMLElement {
     set profileImage(val) { this.setAttribute("profile-image", val);}
     get profileImage() { return this.getAttribute("profile-image");}
 }
+
+customElements.define("friend-item", FriendItemComponent);

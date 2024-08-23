@@ -16,6 +16,8 @@ export class LeagueInfo extends HTMLElement {
     }
 }
 
+customElements.define("league-info", LeagueInfo);
+
 const cssContent = /*css*/`
         :host {
             width: 100%;

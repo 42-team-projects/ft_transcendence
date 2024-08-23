@@ -58,6 +58,7 @@ export class RecordComponent extends HTMLElement {
     }
 }
 
+customElements.define("record-component", RecordComponent);
 
 const cssContent = /*css*/`
 

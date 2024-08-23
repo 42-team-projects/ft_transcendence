@@ -11,6 +11,16 @@ services:
     networks:
       - ft_transcendence
 
+  chat:
+    build:
+      dockerfile: ChatDockerfile
+    container_name: chat
+    volumes:
+      - ./myproject/:/app
+    ports:
+      - "9000:8000"
+    networks:
+      - ft_transcendence
 
   front-end:
     container_name: front-end
@@ -23,7 +33,7 @@ services:
       - ft_transcendence
     depends_on:
       - web
-
+      - chat
 
 networks:
   ft_transcendence:

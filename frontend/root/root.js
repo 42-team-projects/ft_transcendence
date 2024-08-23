@@ -1,4 +1,3 @@
-
 import { ChatComponent } from "../Chat/ChatComponent.js";
 import { ProfileComponent } from "../Profile/ProfileComponent.js";
 import { TournamentComponent } from "../Tournament/TournamentComponent.js";
