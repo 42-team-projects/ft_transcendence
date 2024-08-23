@@ -4,8 +4,6 @@ class GameLoop :
     def __init__(self, controler, opponent):
         self.controler = controler
         self.opponent = opponent
-        self.controler.y = 0
-        self.opponent.y = 0
 
         self.controler.score = 0
         self.opponent.score = 0
@@ -26,8 +24,9 @@ class GameLoop :
             self.controler.y = data['y']
         else:
             self.opponent.y = data['y']
+        print('racquet', self.controler.y, self.opponent.y)
         message = {
-            'status': 'Racquet',
+            'status': 'move',
             'player_1': {
                 'id': self.controler.id,
                 'y': self.controler.y
@@ -43,6 +42,7 @@ class GameLoop :
         # print('data', data)
         self.canvas_width = data['canvas_width']
         self.canvas_height = data['canvas_height']
+        self.reset_players()
         self.racquet = data['racquet']
         if ws == self.controler:
             self.controler.id = data['id']
@@ -91,13 +91,13 @@ class GameLoop :
             self.ball_data = {
                 'status': 'Game',
                 'player_1': {
-                    'id': self.controler.id,
+                    'id': self.opponent.id,
                     'ball_x':  canvas_width - ball_x,
                     'ball_dx': -ball_dx,
 
                 },
                 'player_2': {
-                    'id': self.opponent.id,
+                    'id': self.controler.id,
                     'ball_x': ball_x,
                     'ball_dx': ball_dx,
                 },
@@ -207,8 +207,8 @@ class GameLoop :
     def get_players(self):
         return self.controler, self.opponent
     async def reset_players(self):
-        self.controler.y = 0
-        self.opponent.y = 0
+        self.controler.y = self.canvas_height / 2
+        self.opponent.y = self.canvas_height / 2
 
 class Client :
     def __init__(self, ws, id):
