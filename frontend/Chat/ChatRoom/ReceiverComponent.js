@@ -34,7 +34,7 @@ export class ReceiverComponent extends HTMLElement {
                 }
             </style>
             <c-hexagon class="profile" width="48px" height="47px" apply="true" bcolor="aqua">
-                <img loading="lazy" slot="content" draggable="false" width="48px">
+                <img   slot="content" draggable="false" width="48px">
             </c-hexagon>
             <div class="content">
                 <slot ></slot>

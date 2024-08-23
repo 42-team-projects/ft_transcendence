@@ -1,6 +1,6 @@
 //app.js
 
-
+import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js";
 
 // import { ChatComponent } from "./Chat/ChatComponent.js";
 // import { ChatItemComponent } from "./Chat/ChatList/ChatItemComponent.js";
@@ -92,6 +92,8 @@ customElements.define("multi-player", MultiPlayer)
 customElements.define("online-game", OnlineGame)
 customElements.define('c-button', Buttons)
 customElements.define('game-selection', GameSelection)
+
+createWebSocketsForTournaments();
 
 // customElements.define("sender-component", SenderComponent);
 // customElements.define("receiver-component", ReceiverComponent);

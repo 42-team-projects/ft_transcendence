@@ -1,7 +1,8 @@
 import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
-import { CustomAlert } from "./CustomAlert.js";
+import { closeWebSocket, initWebSocket } from "../Utils/TournamentWebSocketManager.js";
+import { get_tournaments_by_player_id, createTournament, player_leave_tournament, get_tournament_by_id } from "./configs/TournamentAPIConfigs.js";
 
 const cssContent = /*css*/`
 :host {
@@ -171,83 +172,7 @@ export class TournamentsTable extends HTMLElement {
     }
 
 
-    useWebsocket(data) {
-        // TODO: Tournament Alert
-        const tournament_id = data.tournament_id;
-        const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
-        tournamentSocket.onopen = async () => {
-            console.log('WebSocket connection of Tournament is opened');
-            console.log(data);
-            if(data.number_of_players == data.players.length)
-            {
-                await this.update_start_date(data);
-                console.log(data.tournament_name);
-                tournamentSocket.send(JSON.stringify({'type': 'play_cancel','message': 'Tournament is starting in 2 minutes'}));
-            }
-        };
-        tournamentSocket.onmessage = (e) => {
-            const response = JSON.parse(e.data);
-            const alertsConrtainer = window.document.querySelector("body .alerts");
-            alertsConrtainer.style.display = "flex";
-            if (!alertsConrtainer.querySelector(".id_" + data.tournament_id))
-            {
-                const alert = new CustomAlert();
-                alert.className = "id_" + data.tournament_id;
-                alert.innerHTML = `
-                    <h2 slot="header"> Tournament Alert</h2>
-                    <h2 slot="body"> ${data.tournament_name} Tournament will start soon</h2>
-                    <div slot="footer" class="alert-footer">
-                        <custom-button id="playBtn" width="160px" height="48px" reverse>PLAY</custom-button>
-                        <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
-                    </div>
-                `;
-                alertsConrtainer.appendChild(alert);
-            }
-            console.log("tournamentSocket.onmessage.data : ", response);
-
-        };
-        tournamentSocket.onclose = () => {
-            console.log('WebSocket connection of tournament closed');
-        };
-        tournamentSocket.onerror = (error) => {
-            console.error('WebSocket tournament error:', error);
-        };
-    }
-
-    async  update_start_date(data) {
-        try {
-            const tournamentId = data.tournament_id;
-            const now = new Date();
-            // console.log(now);
-            // console.log("\n===\n");
-            const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
-            // console.log(start_date);
-            const Tournament = {
-                tournamentId : tournamentId,
-                start_date : start_date,
-            }
-            const response = await fetch(`${apiUrl}SetStartDate/`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Tournament),
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                console.log(JSON.stringify(data, null, 2));
-                throw new Error(`${response.status}  ${data.statusText}`);
-            }
-            // const data = await response.json();
-            // console.log(JSON.stringify(data, null, 2));
-        } catch(error) {
-            console.error('Error of update start date: ', error);
-        }
-    }
-
     createRow(data) {
-
-        this.useWebsocket(data);
 
         const tr = document.createElement("tr");
         tr.id = data.id;
@@ -293,7 +218,8 @@ export class TournamentsTable extends HTMLElement {
             exitButton.src = "./images/logout.svg";
             exitButton.width = 24;
             exitButton.addEventListener("click", async () => {
-                this.player_leave_tournament(data.id);
+                player_leave_tournament(data.id);
+                closeWebSocket(data.tournament_id);
                 tr.remove();
             });
 
@@ -305,7 +231,7 @@ export class TournamentsTable extends HTMLElement {
             displayButton.addEventListener("click", async () => {
                 clearInterval(this.dateInterval);
                 this.innerHTML = '';
-                const response = await this.get_tournament_by_id(data.id);
+                const response = await get_tournament_by_id(data.id);
                 if (!response)
                     throw new Error(`${response.status}  ${response.statusText}`);
                 this.innerHTML = '';
@@ -330,48 +256,8 @@ export class TournamentsTable extends HTMLElement {
         return tr;
     }
 
-    async get_tournaments_by_player_id() {
-        try {
-            const player = "player/";
-            const response = await fetch(`${apiUrl}${player}${playerId}/`);
-            if (!response.ok) {
-                return null;
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('Error of tournament list: ', error);
-            return null;
-        }
-    }
-
-    async createTournament(data) {
-        try {
-            const Tournament = {
-                tournament_name: data.name,
-                number_of_players: data.num_players,
-                is_accessible: data.access.toLowerCase() == "public" ? true : false,
-                access_password: data.password,
-                owner: null
-
-            }
-            const create_tournament = "create/player/";
-            const response = await fetch(`${apiUrl}${create_tournament}${playerId}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Tournament),
-            });
-            if (!response.ok)
-                throw new Error(`${response.status}  ${response.statusText}`);
-            return await response.json();
-        } catch (error) {
-            console.error('Error creating Tournament: ', error);
-        }
-    }
-
     async createTournamentTable() {
-        const tournamentsAPIData = await this.get_tournaments_by_player_id();
+        const tournamentsAPIData = await get_tournaments_by_player_id();
         if (!tournamentsAPIData)
             return;
         let numberOfTournament = tournamentsAPIData.length;
@@ -384,8 +270,7 @@ export class TournamentsTable extends HTMLElement {
         const unfinishedTournament = Array.from(deadlineTimeNodes).filter((time) => time.textContent !== "finished");
 
         this.dateInterval = setInterval(async () => {
-            numberOfTournament = await this.updateTournamentsTable(Number(numberOfTournament), tbody);
-            // console.log("setInterval function: ", numberOfTournament);
+            numberOfTournament = await this.updateTournamentsTable(numberOfTournament, tbody);
             unfinishedTournament.forEach((time) => {
                 time.textContent = calculateTimeDifferents(time.dataset.createdAt);
             });
@@ -393,12 +278,16 @@ export class TournamentsTable extends HTMLElement {
     }
 
     async updateTournamentsTable(numberOfTournament, tbody) {
-        const tmpTournamentsAPIData = await this.get_tournaments_by_player_id();
+        const tmpTournamentsAPIData = await get_tournaments_by_player_id();
         const tournamentsCount = tmpTournamentsAPIData.length;
-        if (tmpTournamentsAPIData && Number(numberOfTournament) < Number(tournamentsCount)) {
+        if (tournamentsCount && Number(numberOfTournament) < Number(tournamentsCount)) {
             const rest = tournamentsCount - numberOfTournament;
             for (let index = 0; index < rest; index++)
-                tbody.prepend(this.createRow(tmpTournamentsAPIData.pop()));
+            {
+                const newData = tmpTournamentsAPIData.pop();
+                tbody.prepend(this.createRow(newData));
+                await initWebSocket(newData);
+            }
         }
         return tournamentsCount;
     }
@@ -429,11 +318,11 @@ export class TournamentsTable extends HTMLElement {
                 const data = this.querySelector("create-tournament").data;
                 if (data) {
                     try {
-                        console.log("data : ", data);
-                        const response = await this.createTournament(data);
+                        const response = await createTournament(data);
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
+                        initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
@@ -459,34 +348,6 @@ export class TournamentsTable extends HTMLElement {
         clearInterval(this.dateInterval);
     }
 
-    async player_leave_tournament(tournamentId) {
-        try {
-            const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/leave/`, {
-                method: 'POST'
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                console.log(JSON.stringify(data, null, 2));
-                throw new Error(`${response.status}  ${data.statusText}`);
-            }
-            const data = await response.json();
-            console.log(JSON.stringify(data, null, 2));
-        } catch (error) {
-            console.error('Error of player leave tournament: ', error);
-        }
-    }
-
-    async get_tournament_by_id(id) {
-        try {
-            const response = await fetch(`${apiUrl}${id}`);
-            if (!response.ok) {
-                throw new Error(`${response.status}  ${response.statusText}`);
-            }
-            return await response.json();
-        } catch(error) {
-            console.error('Error of tournament list: ', error);
-        }
-    }
 }
 
 customElements.define('tournaments-table', TournamentsTable);
