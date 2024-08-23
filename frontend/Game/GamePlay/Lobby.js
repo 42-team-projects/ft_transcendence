@@ -2,6 +2,8 @@ import { PlayerBorder } from "./PlayerBorder.js";
 import { GameHeader } from "./GameHeader.js"
 import { GameTable } from "./GameTable.js"
 import { ip } from "../../conf.js";
+import { playerId } from "../../Utils/GlobalVariables.js";
+
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
@@ -208,7 +210,7 @@ export class Lobby extends HTMLElement{
 	async OnlineGame(opponentId)
 	{
 		//get user id from local storage
-		const userId = Number(localStorage.getItem('userId'));
+		const userId = playerId;
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
