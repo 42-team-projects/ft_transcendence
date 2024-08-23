@@ -22,7 +22,6 @@ export class SideBarButton extends HTMLElement{
         })
         this.shadowRoot.appendChild(SB_ButtonTemplate.content.cloneNode(true))
         const a = this.shadowRoot.querySelector('a')
-        console.log(a)
         a.href = this.href
         a.addEventListener('click', (event) => {
             event.preventDefault()
