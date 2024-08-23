@@ -1,6 +1,97 @@
-import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
+import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
-import { CustomAlert } from "./CustomAlert.js";
+
+const forms = `
+<div class="mainHeader">
+<img src="../assets/icons/back-icon.svg" id="back"/>
+<div class="tournament-search" style="border: none;">
+    <h2>Private Tournament</h2>
+</div>
+<div></div>
+</div>
+<div class="join-form">
+<div class="tournamentId">
+    <h2>Tournament ID:</h2>
+    <input id="tournamentId" type="text" placeholder="Enter Tournament Id"/>
+</div>
+<div class="password">
+    <h2>Password:</h2>
+    <input id="tournamentPassword" type="password" placeholder="Enter Password"/>
+</div>
+</div>
+<button class="join-private-tournament">JOIN</button>
+`;
+
+
+const filterContent = `
+    <div class="filterContainer">
+        <div class="filterSection">
+            <div class="searchBySection">
+                <h3>Search By:</h3>
+                <div class="options">
+                    <select name="searchLabel" id="searchLabel">
+                        <option value="tournament_name">Tournament Name</option>
+                        <option value="tournament_id">Tournament Id</option>
+                    </select>
+                </div>
+            </div>
+            <div class="playersSection">
+                <h3>Players:</h3>
+                <div class="options">
+                    <div class="chooseContainer" id="4">
+                        <div id="4" class="choice">
+                        </div>
+                        <p>4</p>
+                    </div>
+                    <div class="chooseContainer" id="8">
+                        <div id="8" class="choice">
+                        </div>
+                        <p>8</p>
+                    </div>
+                    <div class="chooseContainer" id="16">
+                        <div id="16" class="choice">
+                        </div>
+                        <p>16</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accessibleSection">
+                <h3>Accessible:</h3>
+                <div class="options">
+                    <div class="chooseContainer" id="public">
+                        <div id="public" class="checkbox"></div>
+                        <p>Public</p>
+                    </div>
+                    <div class="chooseContainer" id="private">
+                        <div id="private" class="checkbox"></div>
+                        <p>Private</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+`;
+
+const list = `
+        <div class="mainHeader">
+            <img id="close-button" src="../assets/icons/close-x-icon.svg"/>
+            <div class="searchAndFilterContainer">
+                <div class="tournament-search">
+                    <input type="text" placeholder="Tournament Name"/>
+                    <img src="../images/svg-header/search.svg">
+                </div>
+                <img id="filter-tournaments" src="../assets/icons/filter-icon.svg">
+            </div>
+            <img id="private-tournament" src="../assets/icons/lock-icon.svg">
+        </div>
+        ${filterContent}
+        <div class="line">
+            <img class="separator" src="../assets/login-assets/separator.svg"/>
+        </div>
+        <div class="tournaments-list">
+            <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>
+        </div>
+`;
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -15,7 +106,6 @@ export class JoinTournament extends HTMLElement {
             </div>
         `;
     }
-
     deadlineInterval;
     createTournamentItem(tournamentData) {
         const tournamentItem = document.createElement("div");
@@ -254,102 +344,11 @@ export class JoinTournament extends HTMLElement {
             console.error('Error of player join tournament: ', error);
         }
     }
+    
+    
+
+
 }
-
-
-
-const forms = `
-<div class="mainHeader">
-<img loading="lazy" src="../assets/icons/back-icon.svg" id="back"/>
-<div class="tournament-search" style="border: none;">
-    <h2>Private Tournament</h2>
-</div>
-<div></div>
-</div>
-<div class="join-form">
-<div class="tournamentId">
-    <h2>Tournament ID:</h2>
-    <input id="tournamentId" type="text" placeholder="Enter Tournament Id"/>
-</div>
-<div class="password">
-    <h2>Password:</h2>
-    <input id="tournamentPassword" type="password" placeholder="Enter Password"/>
-</div>
-</div>
-<button class="join-private-tournament">JOIN</button>
-`;
-
-
-const filterContent = `
-    <div class="filterContainer">
-        <div class="filterSection">
-            <div class="searchBySection">
-                <h3>Search By:</h3>
-                <div class="options">
-                    <select name="searchLabel" id="searchLabel">
-                        <option value="tournament_name">Tournament Name</option>
-                        <option value="tournament_id">Tournament Id</option>
-                    </select>
-                </div>
-            </div>
-            <div class="playersSection">
-                <h3>Players:</h3>
-                <div class="options">
-                    <div class="chooseContainer" id="4">
-                        <div id="4" class="choice">
-                        </div>
-                        <p>4</p>
-                    </div>
-                    <div class="chooseContainer" id="8">
-                        <div id="8" class="choice">
-                        </div>
-                        <p>8</p>
-                    </div>
-                    <div class="chooseContainer" id="16">
-                        <div id="16" class="choice">
-                        </div>
-                        <p>16</p>
-                    </div>
-                </div>
-            </div>
-            <div class="accessibleSection">
-                <h3>Accessible:</h3>
-                <div class="options">
-                    <div class="chooseContainer" id="public">
-                        <div id="public" class="checkbox"></div>
-                        <p>Public</p>
-                    </div>
-                    <div class="chooseContainer" id="private">
-                        <div id="private" class="checkbox"></div>
-                        <p>Private</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-`;
-
-const list = `
-        <div class="mainHeader">
-            <img loading="lazy" id="close-button" src="../assets/icons/close-x-icon.svg"/>
-            <div class="searchAndFilterContainer">
-                <div class="tournament-search">
-                    <input type="text" placeholder="Tournament Name"/>
-                    <img loading="lazy" src="../images/svg-header/search.svg">
-                </div>
-                <img loading="lazy" id="filter-tournaments" src="../assets/icons/filter-icon.svg">
-            </div>
-            <img loading="lazy" id="private-tournament" src="../assets/icons/lock-icon.svg">
-        </div>
-        ${filterContent}
-        <div class="line">
-            <img loading="lazy" class="separator" src="../assets/login-assets/separator.svg"/>
-        </div>
-        <div class="tournaments-list">
-            <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>
-        </div>
-`;
-
 
 const cssContent = /*css*/`
     * {

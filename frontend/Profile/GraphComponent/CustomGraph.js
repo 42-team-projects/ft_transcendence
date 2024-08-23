@@ -151,3 +151,5 @@ export class CustomGraph extends HTMLElement {
     get dataObject() { return this.getAttribute("data-object"); }
 
 }
+
+customElements.define("custom-graph", CustomGraph);

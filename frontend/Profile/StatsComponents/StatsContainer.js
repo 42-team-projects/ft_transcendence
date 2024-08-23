@@ -1,3 +1,8 @@
+import { CustomProgressBar } from "./LeagueComponents/CustomProgressBar.js";
+import { LeagueInfo } from "./LeagueComponents/LeagueInfo.js";
+import { LeagueItem } from "./LeagueComponents/LeagueItem.js";
+import { RecordComponent } from "./RecordMatchesComponents/RecordComponent.js";
+
 
 export class StatsContainer extends HTMLElement {
     constructor() {
@@ -15,6 +20,8 @@ export class StatsContainer extends HTMLElement {
     connectedCallback() {
     }
 }
+
+customElements.define("stats-container", StatsContainer);
 
 const cssContent = /*css*/`
 
