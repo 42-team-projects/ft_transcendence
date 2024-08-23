@@ -194,7 +194,9 @@ export class TournamentsTable extends HTMLElement {
                 alert.className = "id_" + data.tournament_id;
                 alert.innerHTML = `
                     <h2 slot="header"> Tournament Alert</h2>
-                    <h2 slot="body"> ${data.tournament_name} Tournament will start soon</h2>
+                    <div slot="body">
+                        <h2> ${data.tournament_name} Tournament will start soon</h2>
+                    </div>
                     <div slot="footer" class="alert-footer">
                         <custom-button id="playBtn" width="160px" height="48px" reverse>PLAY</custom-button>
                         <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
