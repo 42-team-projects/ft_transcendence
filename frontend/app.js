@@ -2,7 +2,7 @@
 
 import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js";
 
-// import { ChatComponent } from "./Chat/ChatComponent.js";
+import { ChatComponent } from "./Chat/ChatComponent.js";
 // import { ChatItemComponent } from "./Chat/ChatList/ChatItemComponent.js";
 // import { ChatListComponent } from "./Chat/ChatList/ChatListComponent.js";
 // import { ChatFooterComponent } from "./Chat/ChatRoom/ChatFooterComponent.js";
@@ -16,7 +16,7 @@ import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManag
 // import { FriendsListComponent } from "./Chat/Friends/FriendsListComponent.js";
 // import { CoverComponent } from "./Profile/CoverComponent.js";
 // import { CustomGraph } from "./Profile/GraphComponent/CustomGraph.js";
-// import { ProfileComponent } from "./Profile/ProfileComponent.js";
+import { ProfileComponent } from "./Profile/ProfileComponent.js";
 // import { CustomProgressBar } from "./Profile/StatsComponents/LeagueComponents/CustomProgressBar.js";
 // import { LeagueInfo } from "./Profile/StatsComponents/LeagueComponents/LeagueInfo.js";
 // import { LeagueItem } from "./Profile/StatsComponents/LeagueComponents/LeagueItem.js";
@@ -64,7 +64,7 @@ import { Visibility } from "./Tournament/VisibillitySettings.js";
 import { TournamentRules } from "./Tournament/TournamentRules.js";
 import { TournamentRound } from "./Tournament/TournamentRound.js";
 
-import { SettingsComponent } from "./Settings/Settings-component.js"
+import { SettingsComponent } from "./Settings/SettingsComponent.js"
 
 customElements.define("tournament-round", TournamentRound);
 customElements.define("visibillity-settings", Visibility);
