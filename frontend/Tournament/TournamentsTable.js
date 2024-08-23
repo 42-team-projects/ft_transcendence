@@ -1,7 +1,7 @@
 import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
-import { TournamentAlert } from "./configs/TournamentAlert.js";
+import { CustomAlert } from "./CustomAlert.js";
 
 const cssContent = /*css*/`
 :host {
@@ -185,13 +185,26 @@ export class TournamentsTable extends HTMLElement {
             }
         };
         tournamentSocket.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-            const tournamentAlert = window.document.querySelector("body");
-            if (!window.document.querySelector("body tournament-alert"))
-                tournamentAlert.appendChild(new TournamentAlert());
-            console.log("tournamentSocket.onmessage.data : ", data);
+            const response = JSON.parse(e.data);
+            const alertsConrtainer = window.document.querySelector("body .alerts");
+            alertsConrtainer.style.display = "flex";
+            if (!alertsConrtainer.querySelector(".id_" + data.tournament_id))
+            {
+                const alert = new CustomAlert();
+                alert.className = "id_" + data.tournament_id;
+                alert.innerHTML = `
+                    <h2 slot="header"> Tournament Alert</h2>
+                    <h2 slot="body"> ${data.tournament_name} Tournament will start soon</h2>
+                    <div slot="footer" class="alert-footer">
+                        <custom-button id="playBtn" width="160px" height="48px" reverse>PLAY</custom-button>
+                        <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
+                    </div>
+                `;
+                alertsConrtainer.appendChild(alert);
+            }
+            console.log("tournamentSocket.onmessage.data : ", response);
             // const mainContainer = this.querySelector(".mainContainer");
-            // mainContainer.innerHTML = `<tournament-alert></tournament-alert>`
+            // mainContainer.innerHTML = `<custom-alert></custom-alert>`
             // TODO: Tournament Alert
             // showTournamentModal();
 
