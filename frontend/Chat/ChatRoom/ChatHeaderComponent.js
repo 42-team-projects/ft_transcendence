@@ -50,7 +50,6 @@ export class ChatHeaderComponent extends HTMLElement {
             this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
         else
             this.shadowRoot.querySelector(".c-hexagon-content").style.display = "none";
-
         const element = this.shadowRoot.querySelector(".online");
         element.bcolor = this.active === "true" ? "#00ffff" : "#d9d9d9";
         element.querySelector("div").style.backgroundColor = this.active === "true" ? "#00ffff" : "#d9d9d9";
@@ -63,6 +62,9 @@ export class ChatHeaderComponent extends HTMLElement {
         {
             this.shadowRoot.querySelector(".infos h1").textContent = newValue;
             this.shadowRoot.querySelector(".infos").style.display = "flex";
+            this.shadowRoot.querySelectorAll("img").forEach(elem => {
+                elem.style.display = "flex";
+            });
         }
         else if (attrName === "active")
         {
@@ -71,7 +73,11 @@ export class ChatHeaderComponent extends HTMLElement {
             this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
         }
         else if (attrName === "league")
-            this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(newValue);
+        {
+            const profile = this.shadowRoot.querySelector(".profile");
+            profile.bcolor = getLeagueColor(newValue);
+            profile.style.display = "flex";
+        }
         else if (attrName === "profile-image")
         {
             const profileComponent = this.shadowRoot.querySelector(".c-hexagon-content").style;
@@ -99,6 +105,9 @@ export class ChatHeaderComponent extends HTMLElement {
 
 
 }
+
+customElements.define("chat-header", ChatHeaderComponent);
+
 
 const cssContent = /*css*/ `
     :host {

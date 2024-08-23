@@ -39,3 +39,5 @@ export class AchievementComponent extends HTMLElement {
     get league() { return this.getAttribute("league");}
     set league(value) { return this.setAttribute("league", value);}
 }
+
+customElements.define("achievement-component", AchievementComponent);

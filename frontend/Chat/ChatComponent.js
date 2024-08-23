@@ -1,3 +1,6 @@
+import { ChatListComponent } from "./ChatList/ChatListComponent.js";
+import { FriendsListComponent } from "./Friends/FriendsListComponent.js";
+
 export class ChatComponent extends HTMLElement {
     constructor () {
         super();
@@ -21,6 +24,8 @@ export class ChatComponent extends HTMLElement {
     connectedCallback() {
     }
 }
+
+customElements.define("chat-page", ChatComponent);
 
 const cssContent = /*css*/`
 :host {

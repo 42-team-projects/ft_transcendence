@@ -1,6 +1,6 @@
 import { fetchData } from "../../Utils/Fetcher.js";
-
-let fakeData = [];
+import { ChatItemComponent } from "./ChatItemComponent.js";
+import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
@@ -24,14 +24,14 @@ export class ChatListComponent extends HTMLElement {
     
     async createChatItem(item) {
         const chatItem = document.createElement("chat-item");
-        chatItem.id = item.id;
+        chatItem.id = item.conversation_name;
     
         try {
             // const userInfo = await fetchData("http://localhost:8080/api/v1/users/" + item.id);
             // if (userInfo)
             // {
                 chatItem.userName = item.conversation_name;
-                chatItem.profileImage = "/frontend/assets/profile-assets/tanjuro.jpg";
+                chatItem.profileImage = "../assets/profile-assets/tanjuro.jpg";
                 chatItem.active = true;
                 // if (userInfo.stats)
                     chatItem.league = "gold";
@@ -45,7 +45,10 @@ export class ChatListComponent extends HTMLElement {
         const data = await fetchData("http://127.0.0.1:9000/chat/last_message/" + item.conversation_name);
         if (data)
         {
-            chatItem.lastMessage = data.content;
+            if (data.content.length > 100)
+                chatItem.lastMessage = data.content.slice(0, 99) + "...";
+            else
+                chatItem.lastMessage = data.content;
             chatItem.time = data.sent_at.split("-")[0];
         }
         chatItem.numberOfMessage = "2";
@@ -80,12 +83,14 @@ export class ChatListComponent extends HTMLElement {
                 }
                 item.backgroundColor = "#051d31";
                 item.opacity = 1;
-                this.selectItem = item.title;
-                this.shadowRoot.querySelector("chat-room").targetId = item.title;
+                this.selectItem = item.id;
+                this.shadowRoot.querySelector("chat-room").targetId = item.id;
             });
         });
     }
 }
+
+customElements.define("chat-list", ChatListComponent);
 
 const cssContent = /*css*/`
 
@@ -120,47 +125,3 @@ const cssContent = /*css*/`
         display: none;
     }
 `;
-
-
-function chat(sender_id, receiver_id) {
-    sender = sender_id
-    receiver = receiver_id
-    if (sender < receiver)
-        room_name = sender + '_' + receiver
-    else
-        room_name = receiver + '_' + sender
-
-    url = 'ws://' + `${window.location.host}/ws/chat/${room_name}/`
-
-
-    const webSocket = new WebSocket(url)
-
-
-    webSocket.onmessage = function(e) {
-        let data = JSON.parse(e.data)
-
-        console.log(data)
-        if (data.Error) {
-            console.log(data.Error)
-        }
-        else {
-            let messages = document.getElementById('messages')
-            messages.insertAdjacentHTML('afterbegin', `<div>
-                <p> ${data.content} </p>
-            </div>`)
-            console.log(data.content)
-        }
-    }
-
-    let form = document.getElementById('form')
-    form.addEventListener('submit', (e)=> {
-        e.preventDefault()
-        let message = e.target.message.value
-        webSocket.send(JSON.stringify({
-            'message' : message,
-            'sender' : sender,
-            'receiver' : receiver
-        }))
-        form.reset()
-    })
-}

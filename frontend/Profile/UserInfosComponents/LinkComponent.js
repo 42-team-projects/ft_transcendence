@@ -20,6 +20,8 @@ export class LinkComponent extends HTMLElement {
 
 }
 
+customElements.define("link-component", LinkComponent);
+
 const cssContent = /*css*/`
 .profile-data-infos-container-item-content {
     color: #d9d9d9;

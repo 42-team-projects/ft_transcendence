@@ -82,6 +82,9 @@ export class TournamentRound extends HTMLElement {
     }
 }
 
+customElements.define("tournament-round", TournamentRound);
+
+
 const cssContent = /*css*/`
     :host {
         width: 100%;
