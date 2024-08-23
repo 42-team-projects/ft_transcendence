@@ -73,7 +73,7 @@ html, body {
 }
 
 body{
-    background: linear-gradient(73deg, #00142ba8 10%,#003347a8 100%),url(./images/background.svg);
+    background: linear-gradient(73deg, #00142ba8 10%,#003347a8 100%),url(./images/background.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

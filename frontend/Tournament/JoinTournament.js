@@ -260,7 +260,7 @@ export class JoinTournament extends HTMLElement {
 
 const forms = `
 <div class="mainHeader">
-<img src="../assets/icons/back-icon.svg" id="back"/>
+<img loading="lazy" src="../assets/icons/back-icon.svg" id="back"/>
 <div class="tournament-search" style="border: none;">
     <h2>Private Tournament</h2>
 </div>
@@ -331,19 +331,19 @@ const filterContent = `
 
 const list = `
         <div class="mainHeader">
-            <img id="close-button" src="../assets/icons/close-x-icon.svg"/>
+            <img loading="lazy" id="close-button" src="../assets/icons/close-x-icon.svg"/>
             <div class="searchAndFilterContainer">
                 <div class="tournament-search">
                     <input type="text" placeholder="Tournament Name"/>
-                    <img src="../images/svg-header/search.svg">
+                    <img loading="lazy" src="../images/svg-header/search.svg">
                 </div>
-                <img id="filter-tournaments" src="../assets/icons/filter-icon.svg">
+                <img loading="lazy" id="filter-tournaments" src="../assets/icons/filter-icon.svg">
             </div>
-            <img id="private-tournament" src="../assets/icons/lock-icon.svg">
+            <img loading="lazy" id="private-tournament" src="../assets/icons/lock-icon.svg">
         </div>
         ${filterContent}
         <div class="line">
-            <img class="separator" src="../assets/login-assets/separator.svg"/>
+            <img loading="lazy" class="separator" src="../assets/login-assets/separator.svg"/>
         </div>
         <div class="tournaments-list">
             <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>

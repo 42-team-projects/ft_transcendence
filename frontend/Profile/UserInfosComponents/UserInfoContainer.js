@@ -9,7 +9,7 @@ export class UserInfoContainerComponent extends HTMLElement {
         <style> ${cssContent} </style>
         <div class="profile-data-infos-container-item">
             <div class="title">
-                <img   src="${this.icon}" width="32">
+                <img loading="lazy"   src="${this.icon}" width="32">
                 <p>${this.label}</p>
             </div>
             <slot></slot>
