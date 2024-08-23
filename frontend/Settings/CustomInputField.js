@@ -59,6 +59,8 @@ export class CustomInputField extends HTMLElement {
         }
 
         const editIcon = this.shadowRoot.querySelector(".edit-icon");
+        if (!editIcon)
+            return ;
         editIcon.addEventListener("click", () => {
             const inputs = this.shadowRoot.querySelectorAll("input");
             inputs.forEach(elem => {

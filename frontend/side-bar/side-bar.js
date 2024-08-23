@@ -28,15 +28,15 @@ const Sidebar_button_contetn = [
         text : "Chat",
     },
     {
-        src : './images/friends.svg',
+        src : './images/Friends.svg',
         text : "Friends",
     },
     {
-        src : './images/settings.svg',
+        src : './images/Settings.svg',
         text : "Tournament",
     },
     {
-        src : './images/settings.svg',
+        src : './images/Settings.svg',
         text : "Settings",
     }
 ]

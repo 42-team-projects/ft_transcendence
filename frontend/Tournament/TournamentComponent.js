@@ -1,6 +1,4 @@
-import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
-import { GenerateRounds } from "./GenerateRounds.js";
-import { JoinTournament } from "./JoinTournament.js";
+import { TournamentsTable } from "./TournamentsTable.js";
 
 export class TournamentComponent extends HTMLElement {
     constructor () {
@@ -51,3 +49,5 @@ export class TournamentComponent extends HTMLElement {
         // Handle attribute changes if needed
     }
 }
+
+customElements.define("tournament-page", TournamentComponent);

@@ -61,3 +61,5 @@ export class DateComponent extends HTMLElement {
     }
 
 }
+
+customElements.define("date-component", DateComponent);

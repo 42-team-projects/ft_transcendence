@@ -2,7 +2,7 @@ export class SenderMessageContainerComponent extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = /*css*/`
+        this.shadowRoot.innerHTML = `
             <style>
                 :host {
                     margin: 4px;
@@ -95,3 +95,5 @@ export class SenderMessageContainerComponent extends HTMLElement {
     }
 
 }
+
+customElements.define("sender-message-container", SenderMessageContainerComponent);

@@ -64,6 +64,9 @@ export class PlayersAndStages extends HTMLElement {
 
 }
 
+customElements.define("players-and-stages", PlayersAndStages);
+
+
 const cssContent = /*css*/`
 :host {
     width: 100%;
