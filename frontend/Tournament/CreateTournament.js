@@ -1,4 +1,7 @@
-import { playerId } from "../Utils/GlobalVariables.js";
+import { PlayersAndStages } from "./PlayersAndStages.js";
+import { TournamentRules } from "./TournamentRules.js";
+import { Visibility } from "./VisibillitySettings.js";
+
 
 export class CreateTournament extends HTMLElement {
     constructor() {
@@ -67,6 +70,8 @@ export class CreateTournament extends HTMLElement {
     attributeChangedCallback(attrName, oldVdalue, newValue) {}
 
 }
+
+customElements.define("create-tournament", CreateTournament);
 
 const cssContent = /*css*/`
 

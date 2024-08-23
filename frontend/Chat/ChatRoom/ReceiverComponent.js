@@ -1,4 +1,5 @@
 import { getLeagueColor } from "../../Utils/LeaguesData.js";
+import { ReceiverMessageContainerComponent } from "./MessageComponents/ReceiverMessageContainerComponent.js";
 
 export class ReceiverComponent extends HTMLElement {
 
@@ -63,3 +64,5 @@ export class ReceiverComponent extends HTMLElement {
     get profileImage() { return this.getAttribute("profile-image");}
 
 }
+
+customElements.define("receiver-component", ReceiverComponent);

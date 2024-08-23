@@ -1,11 +1,10 @@
 
+let ws;
+
 export class ChatFooterComponent extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
-    }
-
-    connectedCallback() {
         this.shadowRoot.innerHTML = `
             <style>
                 ${cssContent}
@@ -14,10 +13,44 @@ export class ChatFooterComponent extends HTMLElement {
                 <input type="text" placeholder="write your message ..." />
                 <img loading="lazy" src="./assets/profile-assets/send-icon.svg"   width="32">
             </div>
-            <div class="corner" ></div>
-            `;
+            <div class="corner"></div>
+        `;
+    }
+
+    connectedCallback() {
+        const sendButton = this.shadowRoot.querySelector("img");
+        const inputArea = this.shadowRoot.querySelector("input");
+        sendButton.addEventListener("click", () => {
+            const message = inputArea.value.trim();
+            if (message.length)
+            {
+                this.chat(5, 6, message);
+                console.log("the message has been successfully send !!");
+            }
+            inputArea.value = '';
+        });
+    }
+
+    set targetId(val) {this.setAttribute("target-id", val); }
+    get targetId() { return this,this.getAttribute("val"); }
+
+    // webSocket;
+    set webSocket(val) { ws = val;}
+    get webSocket() {return ws;}
+
+
+    chat(sender_id, receiver_id, message) {
+        console.log("webSocket webSocket : ", this.webSocket);
+        console.log("message : ", message);
+        this.webSocket.send(JSON.stringify({
+            'message' : message,
+            'sender' : sender_id,
+            'receiver' : receiver_id
+        }))
     }
 }
+
+customElements.define("chat-footer", ChatFooterComponent);
 
 const cssContent = /*css*/ `
     :host {
