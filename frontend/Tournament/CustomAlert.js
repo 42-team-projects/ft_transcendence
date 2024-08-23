@@ -34,7 +34,7 @@ export class CustomAlert extends HTMLElement {
 
         });
 
-        // this.querySelector("#playBtn").addEventListener("click", async function() {
+        // this.shadowRoot.querySelector("#playBtn").addEventListener("click", async function() {
         //     this.remove();
         //     const start_date = await this.get_start_date();
         //     console.log(start_date);
@@ -78,7 +78,7 @@ export class CustomAlert extends HTMLElement {
         // });
 
         // // Add event listener for Cancel button
-        // this.querySelector("#cancelBtn").addEventListener("click", () => {
+        // this.shadowRoot.querySelector("#cancelBtn").addEventListener("click", () => {
         //     alert("You have canceled your participation in the tournament.");
         //     this.remove();
         //     // Here you can add logic to handle cancellation

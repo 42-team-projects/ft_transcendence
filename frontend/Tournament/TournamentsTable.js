@@ -172,6 +172,7 @@ export class TournamentsTable extends HTMLElement {
 
 
     useWebsocket(data) {
+        // TODO: Tournament Alert
         const tournament_id = data.tournament_id;
         const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
         tournamentSocket.onopen = async () => {
@@ -203,13 +204,9 @@ export class TournamentsTable extends HTMLElement {
                 alertsConrtainer.appendChild(alert);
             }
             console.log("tournamentSocket.onmessage.data : ", response);
-            // const mainContainer = this.querySelector(".mainContainer");
-            // mainContainer.innerHTML = `<custom-alert></custom-alert>`
-            // TODO: Tournament Alert
-            // showTournamentModal();
 
         };
-        tournamentSocket.onclose = function () {
+        tournamentSocket.onclose = () => {
             console.log('WebSocket connection of tournament closed');
         };
         tournamentSocket.onerror = (error) => {
