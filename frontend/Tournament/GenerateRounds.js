@@ -48,7 +48,7 @@ export class GenerateRounds extends HTMLElement {
                     <h4>${PlayerName}</h4>
                 `;
         else
-            player.innerHTML = `<img class="addPlayer" src="../assets/profile-assets/add-friends-icon.svg" width="24px"/>`;
+            player.innerHTML = `<img loading="lazy" class="addPlayer" src="../assets/profile-assets/add-friends-icon.svg" width="24px"/>`;
         return player;
     }
 
@@ -168,10 +168,10 @@ export class GenerateRounds extends HTMLElement {
                 addPlayerContainer.innerHTML = `
                 <div class="box">
                     <div class="friendsList">
-                        <img class="closeButton" src="../assets/icons/close-x-icon.svg"/>
+                        <img loading="lazy" class="closeButton" src="../assets/icons/close-x-icon.svg"/>
                         <h2>YOUR FRIENDS</h2>
                         <div class="line">
-                            <img class="separator" src="../assets/login-assets/separator.svg"/>
+                            <img loading="lazy" class="separator" src="../assets/login-assets/separator.svg"/>
                         </div>
                         <add-player-component></add-player-component>
                     </div>

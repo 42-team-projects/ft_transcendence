@@ -15,7 +15,7 @@ export class CustomInputField extends HTMLElement {
                     <div class="inputContainer">
                         <input type="text" accept="image/png, image/jpeg" readonly/>
                     </div>
-                    <img class="edit-icon" src="../assets/icons/pencil-icon.svg"></img>
+                    <img loading="lazy" class="edit-icon" src="../assets/icons/pencil-icon.svg"></img>
                 </div>
             </div>
         `;
@@ -30,7 +30,7 @@ export class CustomInputField extends HTMLElement {
         {
             this.shadowRoot.querySelector(".inputContainer").innerHTML = `
                 <div class="uploadcontainer">
-                    <img src="../../assets/icons/upload-icon.svg"></img>
+                    <img loading="lazy" src="../../assets/icons/upload-icon.svg"></img>
                     <h4>Upload Image</h4>
                 </div>
                 <input type="text" accept="image/png, image/jpeg" readonly/>
@@ -89,7 +89,7 @@ export class CustomInputField extends HTMLElement {
             {
                 this.shadowRoot.querySelector(".inputContainer").innerHTML = `
                     <div class="uploadcontainer">
-                        <img src="../../assets/icons/upload-icon.svg"></img>
+                        <img loading="lazy" src="../../assets/icons/upload-icon.svg"></img>
                         <h4>Upload Image</h4>
                     </div>
                     <input type="text" accept="image/png, image/jpeg" readonly/>

@@ -14,7 +14,7 @@ export class CustomUnorderedList extends HTMLElement {
                         <h2></h2>
                         <p></p>
                     </div>
-                    <img class="add-icon" src="../assets/icons/plus-icon.svg"></img>
+                    <img loading="lazy" class="add-icon" src="../assets/icons/plus-icon.svg"></img>
                 </div>
                 <div class="box"></div>
             </div>
