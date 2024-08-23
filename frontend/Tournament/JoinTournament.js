@@ -171,7 +171,6 @@ export class JoinTournament extends HTMLElement {
         const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
         tournamentsList.innerHTML = '';
         const tournaments = await this.get_Available_Tournaments();
-        console.log(JSON.stringify(tournaments, null, 2));
         for (let index = tournaments.length - 1; index >= 0; index--) {
             const element = tournaments[index];
             if (element.players.length && !Array.from(element.players).find( p => p.id == playerId))
@@ -290,7 +289,6 @@ export class JoinTournament extends HTMLElement {
     async get_Available_Tournaments(queries) {
         try {
             let Available_Tournaments = "available_tournaments?" + (queries || "");
-            console.log("Available_Tournaments: " + Available_Tournaments);
             const response = await fetch(`${apiUrl}${Available_Tournaments}`);
             if (!response.ok) {
                 throw new Error(`${response.status}  ${response.statusText}`);
