@@ -39,23 +39,24 @@ export class GameHeader extends HTMLElement{
     constructor(){
         super();
         this.appendChild(HeaderTemplate.content.cloneNode(true))
-        this.updateScore({player1:0, player2:0})
+        this.updateScore({player:0, opponent:0})
     }
     updateScore(score){
+        // console.log('update : ', score);
         const player1 = this.querySelector('.playerscor')
         const player1Img = this.querySelector('.GamePlayer')
         const player1Name = this.querySelector('.playerinfo')
-        player1.querySelector('h1').textContent = score.player1
+        player1.querySelector('h1').textContent = score.player
         player1Img.src = userInfo.picture;
         player1Name.querySelector('p').textContent = userInfo.username
 
         const player2 = this.querySelector('.playerscor1')
         const player2Img = this.querySelector('.GamePlayer1')
         const player2Name = this.querySelector('.playerinfo1')
-        player2.querySelector('h1').textContent = score.player2
+        player2.querySelector('h1').textContent = score.opponent
         player2Img.src = opponentInfo.picture;
-        console.log(player1Name);
-        console.log(player2Name);
+        // console.log(player1Name);
+        // console.log(player2Name);
         player2Name.querySelector('p').textContent = opponentInfo.username
     }
 }
