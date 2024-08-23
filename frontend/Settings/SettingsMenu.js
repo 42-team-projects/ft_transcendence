@@ -1,4 +1,5 @@
 import { SettingsItem } from "./SettingsItem.js";
+import { ReportContent } from "./Contents/ReportContent.js";
 
 export class SettingsMenu extends HTMLElement {
     constructor() {
@@ -12,6 +13,7 @@ export class SettingsMenu extends HTMLElement {
             <settings-item id="profile"> PROFILE </settings-item>
             <settings-item id="game"> GAME </settings-item>
             <settings-item id="sound"> SOUND </settings-item>
+            <settings-item id="report"> FEEDBACK </settings-item>
         `;
     }
     connectedCallback() {
