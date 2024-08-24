@@ -18,9 +18,11 @@ export class ReportContent extends HTMLElement {
                 <div class="feedback-block">
                     <div class="label">
                         <h2>MESSAGE</h2>
-                        <p>Please insert anythings you want here.</p>
+                        <p>Please put anythings you want here.</p>
                     </div>
-                    <textarea ></textarea>
+                    <div class="box">
+                        <textarea></textarea>
+                    </div>
                 </div>
             </div>
             <div class="actions">
@@ -74,36 +76,46 @@ const cssContent = /*css*/`
 
     .feedback-block {
         width: 90%;
-        height: 50%;
         max-height: 600px;
+        height: 50%;
+        flex-wrap: wrap;
         display: flex;
-        flex-direction: column;
         align-items: start;
         justify-content: center;
         gap: 10px;
 
     }
 
-    textarea {
-        min-height: 48px;
-        display: flex;
-        background: transparent;
-        border: none;
-        outline: none;
-        color: white;
-        border-radius: 5px;
-        padding: 0px 10px;
-        font-size: 16px;
-        width: 70%;
-        height: 50%;
-        border: 1px solid aqua;
-        border-radius: 6px;
-        margin-left: 50px;
+    .label {
+        flex: 1;
+        min-width: 250px;
     }
 
-    textarea::-webkit-scrollbar {
-        display: none;
-    } 
+    .box {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 250px;
+        height: 100%;
+        gap: 10px;
+    }
+
+    textarea {
+        display: flex;
+        align-items: center;
+        width: calc(100% - 40px);
+        height: calc(100% - 20px);
+        background: transparent;
+        border: 1px solid aqua;
+        outline: none;
+        color: white;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 16px;
+        margin: 0 20px;
+        resize: none;
+    }
+
 
     p {
         margin: 0;
