@@ -25,6 +25,7 @@ urlpatterns = [
     path('tournament/', include('tournament.urls')),
     path('Profile/', include('Profile.urls')),
     path('chat/', include("chat.urls")),
+    path('api/v1/auth/', include('accounts.urls')),
 ]
 
 if settings.DEBUG: 
