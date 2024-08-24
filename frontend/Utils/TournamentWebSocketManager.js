@@ -97,8 +97,8 @@ async function displayAlert(e, data) {
             // store the player id in the local storage
             // localStorage.setItem('userId', playerId);
             // const lobby = new Lobby(opponentId);
-            // document.body.innerHTML = '';
-            // document.body.appendChild(lobby);
+            // document.body.querySelector('root-content').innerHTML = '';
+            // document.body.querySelector('root-content').appendChild(lobby);
             /* -------    call nordine code here -------- */
             startCountdown(customAlert, timeLeft);
             customAlert.querySelector(".buttons").remove();
