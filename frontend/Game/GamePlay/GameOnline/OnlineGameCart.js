@@ -4,7 +4,7 @@ const OnlineGameTemplate = document.createElement('template')
 
 OnlineGameTemplate.innerHTML = /*html*/ `
 	<link rel="stylesheet" href="Game/GamePlay/GameOnline/OnlineGame.css">
-	<img class="OrangeCartImg" src="images/OrangeCart/OrangeCartImg.svg" alt="">
+	<img loading="lazy" class="OrangeCartImg" src="images/OrangeCart/OrangeCartImg.svg" alt="">
 	<div class="shapes3-4">
 		<div class="Online-text">
 			<h1>ONLINE GAME</h1>

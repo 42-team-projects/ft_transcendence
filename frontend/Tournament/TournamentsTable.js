@@ -1,10 +1,12 @@
 import { convertTimeStampIntoDate } from "../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
+import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "./configs/TournamentAPIConfigs.js";
 import { CustomButton } from "./CustomButton.js";
 import { JoinTournament } from "./JoinTournament.js";
 import { CreateTournament } from "./CreateTournament.js";
 import { GenerateRounds } from "./GenerateRounds.js";
+import { closeWebSocket, initWebSocket } from "../Utils/TournamentWebSocketManager.js";
 
 const cssContent = /*css*/`
 :host {
@@ -173,159 +175,19 @@ export class TournamentsTable extends HTMLElement {
         `;
     }
 
-    createRow(data) {
-        const tr = document.createElement("tr");
-        tr.id = data.id;
-        {
-            const td = document.createElement("td");
-            td.textContent = data.tournament_name;
-            tr.appendChild(td);
-        }
-        {
-            const td = document.createElement("td");
-            td.textContent = "unknown";
-            if (data.players.length)
-                td.textContent = data.players[0].username;
-            tr.appendChild(td);
-        }
-        {
-            const td = document.createElement("td");
-            td.textContent = convertTimeStampIntoDate(data.created_at);
-            tr.appendChild(td);
-        }
-        {
-            const td = document.createElement("td");
-            td.textContent = data.players.length + " / " + data.number_of_players;
-            tr.appendChild(td);
-        }
-        {
-            const td = document.createElement("td");
-            td.className = "deadLineTime";
-            td.dataset.createdAt = data.created_at;
-            td.textContent = calculateTimeDifferents(data.created_at);
-            tr.appendChild(td);
-        }
-        {
-            const td = document.createElement("td");
-            td.textContent = data.is_accessible ? "PUBLIC" : "PRIVATE";
-            tr.appendChild(td);
-        }
-        {
-            const actions = document.createElement("td");
-
-            const exitButton = document.createElement("img");
-            exitButton.id = data.id;
-            exitButton.className = "exitAction";
-            exitButton.src = "./images/logout.svg";
-            exitButton.width = 24;
-            exitButton.addEventListener("click", async () => {
-                this.player_leave_tournament(data.id);
-                tr.remove();
-            });
-
-            const displayButton = document.createElement("img");
-            displayButton.id = data.id;
-            displayButton.className = "displayAction";
-            displayButton.src = "./assets/profile-assets/play-button.svg";
-            displayButton.width = 24;
-            displayButton.addEventListener("click", async () => {
-                clearInterval(this.dateInterval);
-                this.innerHTML = '';
-                const response = await this.get_tournament_by_id(data.id);
-                if (!response)
-                    throw new Error(`${response.status}  ${response.statusText}`);
-                this.innerHTML = '';
-                const rounds = document.createElement("generate-rounds");
-                rounds.numberOfPlayers = response.number_of_players;
-                rounds.players = response.players;
-                this.appendChild(rounds);
-            });
-
-            const actionsContainer = document.createElement("div");
-            actionsContainer.className = "actions";
-
-            if (data.players.length && data.players[0].id != playerId)
-                actionsContainer.appendChild(exitButton);
-
-            actionsContainer.appendChild(displayButton);
-
-            actions.appendChild(actionsContainer);
-
-            tr.appendChild(actions);
-        }
-        return tr;
-    }
-
-    async get_tournaments_by_player_id() {
-        try {
-            const player = "player/";
-            const response = await fetch(`${apiUrl}${player}${playerId}/`);
-            if (!response.ok) {
-                return null;
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('Error of tournament list: ', error);
-            return null;
-        }
-    }
-
-    async createTournament(data) {
-        try {
-            const Tournament = {
-                tournament_name: data.name,
-                number_of_players: data.num_players,
-                is_accessible: data.access.toLowerCase() == "public" ? true : false,
-                access_password: data.password
-            }
-            const create_tournament = "create/player/";
-            const response = await fetch(`${apiUrl}${create_tournament}${playerId}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Tournament),
-            });
-            if (!response.ok)
-                throw new Error(`${response.status}  ${response.statusText}`);
-            return await response.json();
-        } catch (error) {
-            console.error('Error creating Tournament: ', error);
-        }
-    }
 
     async createTournamentTable() {
-        const tournamentsAPIData = await this.get_tournaments_by_player_id();
+        const tournamentsAPIData = await get_tournaments_by_player_id();
         if (!tournamentsAPIData)
             return;
         let numberOfTournament = tournamentsAPIData.length;
         const tbody = this.querySelector("tbody");
 
         for (let index = tournamentsAPIData.length - 1; index >= 0; index--)
-            tbody.appendChild(this.createRow(tournamentsAPIData[index]));
+            tbody.appendChild(createRow(tournamentsAPIData[index]));
 
-        const deadlineTimeNodes = tbody.querySelectorAll(".deadLineTime");
-        const unfinishedTournament = Array.from(deadlineTimeNodes).filter((time) => time.textContent !== "finished");
-
-        this.dateInterval = setInterval(async () => {
-            numberOfTournament = await this.updateTournamentsTable(Number(numberOfTournament), tbody);
-            console.log("setInterval function: ", numberOfTournament);
-            unfinishedTournament.forEach((time) => {
-                time.textContent = calculateTimeDifferents(time.dataset.createdAt);
-            });
-        }, 1000);
     }
 
-    async updateTournamentsTable(numberOfTournament, tbody) {
-        const tmpTournamentsAPIData = await this.get_tournaments_by_player_id();
-        const tournamentsCount = tmpTournamentsAPIData.length;
-        if (tmpTournamentsAPIData && Number(numberOfTournament) < Number(tournamentsCount)) {
-            const rest = tournamentsCount - numberOfTournament;
-            for (let index = 0; index < rest; index++)
-                tbody.prepend(this.createRow(tmpTournamentsAPIData.pop()));
-        }
-        return tournamentsCount;
-    }
 
     async connectedCallback() {
         this.createTournamentTable();
@@ -347,16 +209,17 @@ export class TournamentsTable extends HTMLElement {
             }
         });
         secondButton.addEventListener("click", async () => {
-            clearInterval(this.dateInterval);
             const buttonValue = secondButton.querySelector("h3");
             if (buttonValue.textContent == "GENERATE") {
                 const data = this.querySelector("create-tournament").data;
                 if (data) {
                     try {
-                        const response = await this.createTournament(data);
+                        const response = await createTournament(data);
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
+                        console.log("tournamentResponse : ", tournamentResponse);
+                        initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
@@ -376,40 +239,93 @@ export class TournamentsTable extends HTMLElement {
         });
     }
 
-    dateInterval;
 
     disconnectedCallback() {
-        clearInterval(this.dateInterval);
     }
 
-    async player_leave_tournament(tournamentId) {
-        try {
-            const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/leave/`, {
-                method: 'POST'
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                console.log(JSON.stringify(data, null, 2));
-                throw new Error(`${response.status}  ${data.statusText}`);
-            }
-            const data = await response.json();
-            console.log(JSON.stringify(data, null, 2));
-        } catch (error) {
-            console.error('Error of player leave tournament: ', error);
-        }
-    }
+}
 
-    async get_tournament_by_id(id) {
-        try {
-            const response = await fetch(`${apiUrl}${id}`);
-            if (!response.ok) {
+export function createRow(data) {
+
+    const tr = document.createElement("tr");
+    tr.id = data.id;
+    {
+        const td = document.createElement("td");
+        td.textContent = data.tournament_name;
+        tr.appendChild(td);
+    }
+    {
+        const td = document.createElement("td");
+        td.textContent = "unknown";
+        td.textContent = data.owner.username;
+        tr.appendChild(td);
+    }
+    {
+        const td = document.createElement("td");
+        td.textContent = convertTimeStampIntoDate(data.created_at);
+        tr.appendChild(td);
+    }
+    {
+        const td = document.createElement("td");
+        td.textContent = data.players.length + " / " + data.number_of_players;
+        tr.appendChild(td);
+    }
+    {
+        const td = document.createElement("td");
+        td.className = "deadLineTime";
+        td.dataset.createdAt = data.created_at;
+        td.textContent = calculateTimeDifferents(data.created_at);
+        tr.appendChild(td);
+    }
+    {
+        const td = document.createElement("td");
+        td.textContent = data.is_accessible ? "PUBLIC" : "PRIVATE";
+        tr.appendChild(td);
+    }
+    {
+        const actions = document.createElement("td");
+
+        const exitButton = document.createElement("img");
+        exitButton.id = data.id;
+        exitButton.className = "exitAction";
+        exitButton.src = "./images/logout.svg";
+        exitButton.width = 24;
+        exitButton.addEventListener("click", async () => {
+            player_leave_tournament(data.id);
+            closeWebSocket(data.tournament_id);
+            tr.remove();
+        });
+
+        const displayButton = document.createElement("img");
+        displayButton.id = data.id;
+        displayButton.className = "displayAction";
+        displayButton.src = "./assets/profile-assets/play-button.svg";
+        displayButton.width = 24;
+        displayButton.addEventListener("click", async () => {
+            this.innerHTML = '';
+            const response = await get_tournament_by_id(data.id);
+            if (!response)
                 throw new Error(`${response.status}  ${response.statusText}`);
-            }
-            return await response.json();
-        } catch(error) {
-            console.error('Error of tournament list: ', error);
-        }
+            this.innerHTML = '';
+            const rounds = document.createElement("generate-rounds");
+            rounds.numberOfPlayers = response.number_of_players;
+            rounds.players = response.players;
+            this.appendChild(rounds);
+        });
+
+        const actionsContainer = document.createElement("div");
+        actionsContainer.className = "actions";
+
+        if (data.owner.id != playerId)
+            actionsContainer.appendChild(exitButton);
+
+        actionsContainer.appendChild(displayButton);
+
+        actions.appendChild(actionsContainer);
+
+        tr.appendChild(actions);
     }
+    return tr;
 }
 
 customElements.define('tournaments-table', TournamentsTable);

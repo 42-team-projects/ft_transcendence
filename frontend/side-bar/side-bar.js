@@ -71,6 +71,7 @@ class SideBar extends HTMLElement {
         const nav = this.shadowRoot.querySelector('.buttons')
         Sidebar_button_contetn.forEach((element, index) => {
             let clone = SideBarButtonTemplate.content.cloneNode(true);
+            clone.lastElementChild.setAttribute('href', `/${element.text}`);
             clone.lastElementChild.setAttribute('id', `${index}`);
             this.setbuttonimages(element.src, clone);
             this.setbuttontext(element.text, clone);

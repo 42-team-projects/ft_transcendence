@@ -69,14 +69,3 @@ TOURNAMENT API:
 
 
 
-
-
-/chat/conversations
-/chat/last_message/<conv_name>
-get
-/chat/messages/<conv_name>
-
-delete
-/chat/messages/<conv_name>
-
-/chat/messages/<conv_name>/count
