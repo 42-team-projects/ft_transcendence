@@ -14,13 +14,13 @@
 h1
 {
     color: #ffffff8a;
-    font-size: clamp(1rem, 1.2vw, 2rem);
+    font-size: 2rem;
 }
 h1.on
 {
     text-shadow: 0px 0px 20px #00fffb;
     color: #ffffff;
-    font-size: clamp(1rem, 1.2vw, 2rem);
+    font-size: 2rem;
 }
 .images
 {

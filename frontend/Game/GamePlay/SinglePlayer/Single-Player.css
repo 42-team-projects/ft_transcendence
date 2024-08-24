@@ -226,9 +226,9 @@
 }
 
 
-.style-2_1 h1{
+h1{
     color: white;
-    font-size: clamp(1rem, 1.6vw, 2.3rem);
+    font-size: 2.3rem;
 }
 .buttonC {
     position: relative;
@@ -242,19 +242,26 @@
     align-items: center;
 }
 
-.buttonC p{
-    width: 75%;
-    font-size: clamp(0rem, 1vw, 1.1rem);
+
+p{
+    width: 80%;
+    font-size: 1.5rem;
     text-align: center;
     color: wheat;
+    margin: 0;
+}
+@media (max-width: 1600px){
+    p{
+        font-size: 1.2rem;
+    }
 }
 
-.buttonC h1{
-    font-size: clamp(1rem, 2vw, 2.8rem);
+/* h1{
+    font-size: 2.8rem;
     text-align: center;
     text-wrap:wrap ;
     color: wheat;
-}
+} */
 
 
 

@@ -77,8 +77,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8080',   # Another example: Your frontend origin
     # Add more origins as needed
 
-    'http://localhost:5501',  # Example: Your frontend origin
+    'http://localhost:5500',  # Example: Your frontend origin
     'http://127.0.0.1:5501',
+    'http://127.0.0.1:3000',
 ]
 
 
