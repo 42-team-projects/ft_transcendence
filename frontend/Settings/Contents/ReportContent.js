@@ -1,5 +1,5 @@
-import { CustomInputField } from "../CustomInputField.js";
-import { CustomToggleSwitch } from "../CustomToggleSwitch.js";
+import { CustomInputField } from "../CustomElements/CustomInputField.js";
+import { CustomToggleSwitch } from "../CustomElements/CustomToggleSwitch.js";
 
 export class ReportContent extends HTMLElement {
     constructor() {

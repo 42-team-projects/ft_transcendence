@@ -1,8 +1,8 @@
 import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
-import { calculateTimeDifferents } from "../Utils/DateUtils.js";
-import { createRow } from "./TournamentsTable.js";
+import { hashCode } from "../Utils/Hasher.js";
 import { initWebSocket } from "../Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
+import { createRow } from "./configs/TournamentUtils.js";
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -99,7 +99,7 @@ export class JoinTournament extends HTMLElement {
 
         }
         mainContainer.querySelector(".join-private-tournament").addEventListener("click", async () => {
-            if (tournamentPassword.value == tournamentData.access_password) {
+            if (hashCode(tournamentPassword.value) == tournamentData.access_password) {
                 tournamentPassword.style.border = "1px solid aqua";
                 // mainContainer.innerHTML = list;
                 this.addPlayerToTournament(tournamentData);
