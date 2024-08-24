@@ -1,7 +1,7 @@
-import { CustomInputField } from "../CustomInputField.js";
-import { CustomToggleSwitch } from "../CustomToggleSwitch.js";
-import { CustomUnorderedList } from "../CustomUnorderedList.js";
-import { CustomUnorderedListItem } from "../CustomUnorderedListItem.js";
+import { CustomInputField } from "../CustomElements/CustomInputField.js";
+import { CustomToggleSwitch } from "../CustomElements/CustomToggleSwitch.js";
+import { CustomUnorderedList } from "../CustomElements/CustomUnorderedList.js";
+import { CustomUnorderedListItem } from "../CustomElements/CustomUnorderedListItem.js";
 
 export class ProfileContent extends HTMLElement {
     constructor() {
