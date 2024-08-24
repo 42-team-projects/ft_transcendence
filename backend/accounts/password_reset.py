@@ -8,7 +8,7 @@ from rest_framework import status
 import jwt
 
 @api_view(['POST'])
-@ratelimit(key='ip', rate='1/d', block=True)
+# @ratelimit(key='ip', rate='1/d', block=True)
 def reset_password(req):
     email = req.data.get('email')
 
@@ -24,7 +24,7 @@ def reset_password(req):
             }, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@ratelimit(key='ip', rate='1/d', block=True)
+# @ratelimit(key='ip', rate='1/d', block=True)
 def verify_token(req, token):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
@@ -38,7 +38,7 @@ def verify_token(req, token):
 
 
 @api_view(['POST'])
-@ratelimit(key='ip', rate='1/d', block=True)
+# @ratelimit(key='ip', rate='1/d', block=True)
 def confirm_reset_password(req, token):
     new_password = req.data.get('new_password')
 
