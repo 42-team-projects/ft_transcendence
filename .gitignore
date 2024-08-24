@@ -2,3 +2,7 @@ ignore
 .vscode
 .DS_Store
 env
+.venv/
+*.pyc
+__pycache__/
+*.DS_Store

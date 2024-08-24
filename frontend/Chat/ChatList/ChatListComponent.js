@@ -125,4 +125,3 @@ const cssContent = /*css*/`
         display: none;
     }
 `;
-

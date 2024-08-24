@@ -15,8 +15,8 @@ export class CustomUnorderedListItem extends HTMLElement {
                 <div class="inputContainer">
                     <input class="link" type="text" readonly/>
                 </div>
-                <img class="edit-icon" src="../assets/icons/pencil-icon.svg"></img>
-                <img class="remove-icon" src="../assets/icons/close-x-icon.svg"></img>
+                <img loading="lazy" class="edit-icon" src="../assets/icons/pencil-icon.svg"></img>
+                <img loading="lazy" class="remove-icon" src="../assets/icons/close-x-icon.svg"></img>
             </div>
         `;
     }
