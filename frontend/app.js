@@ -21,6 +21,13 @@ import { Profile } from './Header/profile.js'
 import { SideBarButtonIcons } from './side-bar/sb-icon.js'
 import { SideBarButtonText } from './side-bar/sb-text.js'
 import { SideBarButton } from './side-bar/sb-button.js'
+import { CustomButton } from "./Tournament/CustomButton.js";
+import { TournamentComponent } from "./Tournament/TournamentComponent.js";
+
+import { SettingsComponent } from "./Settings/SettingsComponent.js"
+
+import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js";
+
 
 
 customElements.define("header-bar", HeaderBar)
@@ -44,3 +51,25 @@ customElements.define("online-game", OnlineGame)
 customElements.define('c-button', Buttons)
 customElements.define('game-selection', GameSelection)
 
+createWebSocketsForTournaments();
+import User from './cpn/User.js'
+import SignupPage from "./cpn/SignupPage.js";
+import LoginPage from "./cpn/LoginPage.js";
+import { EmailConf, HomePage } from "./cpn/EmailConf.js";
+import OAuth from "./cpn/Oauth.js";
+import { router } from './cpn/Router.js';
+
+
+
+customElements.define("user-cpn", User);
+customElements.define("signup-page", SignupPage);
+customElements.define("login-page", LoginPage);
+customElements.define("email-page", EmailConf);
+customElements.define("home-page", HomePage);
+customElements.define("oauth-callback", OAuth);
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    window.addEventListener("popstate", () =>
+        router.handleRoute(window.location.pathname)
+    );
+});

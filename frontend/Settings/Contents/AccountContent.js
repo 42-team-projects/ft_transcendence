@@ -13,9 +13,9 @@ export class AccountContent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="container">
-                <custom-input-field label="USERNAME" description="Username must be unique." placeholder="esalim" type="text"></custom-input-field>
-                <custom-input-field label="EMAIL" description="the email will not be modified until you verified it" placeholder="elmehdi.salim@gmail.com" type="email"></custom-input-field>
-                <custom-input-field label="PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="elmehdi.salim@gmail.com" type="password"></custom-input-field>
+                <custom-input-field label="USERNAME" description="Username must be unique." placeholder="esalim" type="text" readonly="true"></custom-input-field>
+                <custom-input-field label="EMAIL" description="the email will not be modified until you verified it" placeholder="elmehdi.salim@gmail.com" type="email" readonly="true"></custom-input-field>
+                <custom-input-field label="PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="elmehdi.salim@gmail.com" type="password" readonly="true"></custom-input-field>
                 <custom-toggle-switch></custom-toggle-switch>
             </div>
             <div class="actions">

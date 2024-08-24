@@ -41,7 +41,7 @@ export class CreateTournament extends HTMLElement {
 
 
     get data() {
-        let apiData = {name: null, num_players: 0, access: false, password: null};
+        let apiData = {name: null, num_players: 0, access: false, password: null, owner: null};
         const name = this.shadowRoot.querySelector(".item .settingsform input");
         if (name)
         {
