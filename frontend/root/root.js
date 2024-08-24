@@ -10,7 +10,6 @@ const sideBar = document.querySelector('side-bar')
 const header = document.querySelector('header-bar')
 const footer = document.querySelector('footer')
 
-
 const rootContent = ['home-page',
      'game-selection',
      'chat-page',
@@ -18,6 +17,14 @@ const rootContent = ['home-page',
      'tournament-page',
      'settings-page'
 ]
+// const rootContent = [   
+//     { '/home': 'home-page' },
+//     { '/game': 'game-selection' },
+//     { '/chat': 'chat-page' },
+//     { '/freinds': 'freinds-page' },
+//     { '/tournament': 'tournament-page' },
+//     { '/settings': 'settings-page' }
+// ]
 
 root.innerHTML = /*html*/ `
 `
@@ -30,12 +37,12 @@ class Root extends HTMLElement{
     }
 
     set ChangeRootContent(component){
-        console.log('hiiiiiiiii')
         const content = document.createElement(component)
         this.innerHTML = ``
         this.appendChild(content);
     }
     clickEvent() {
+        
         const buttons = sideBar.shadowRoot.querySelectorAll('sb-button')
         buttons.forEach((button, index) => {
             button.addEventListener('click', () => {
@@ -81,3 +88,9 @@ class Root extends HTMLElement{
     }
 }
 customElements.define("root-content", Root)
+
+
+window.addEventListener("popstate", function() {
+    console.log("Hash changed! New URL: " + window.location.href);
+});
+  
