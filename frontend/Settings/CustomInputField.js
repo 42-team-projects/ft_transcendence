@@ -12,8 +12,8 @@ export class CustomInputField extends HTMLElement {
                     <p></p>
                 </div>
                 <div class="box">
-                    <div class="inputContainer">
-                        <input type="text" accept="image/png, image/jpeg" readonly/>
+                    <div class="inputContainer active">
+                        <input type="text" accept="image/png, image/jpeg"/>
                     </div>
                     <img loading="lazy" class="edit-icon" src="../assets/icons/pencil-icon.svg"></img>
                 </div>
@@ -62,12 +62,18 @@ export class CustomInputField extends HTMLElement {
         if (!editIcon)
             return ;
         editIcon.addEventListener("click", () => {
-            const inputs = this.shadowRoot.querySelectorAll("input");
-            inputs.forEach(elem => {
-                elem.removeAttribute("readonly");
-                elem.classList.add("active");
-            });
+            const inputs = this.shadowRoot.querySelector(".inputContainer");
+            inputs.querySelector("input").removeAttribute("readonly");
+            inputs.classList.add("active");
         });
+        this.shadowRoot.querySelector("img").hidden = true;
+        if (this.readonly)
+        {
+            const inputContainer = this.shadowRoot.querySelector(".inputContainer");
+            inputContainer.classList.toggle("active");
+            inputContainer.querySelector("input").setAttribute("readonly", true);
+            this.shadowRoot.querySelector("img").hidden = false;
+        }
     }
 
     disconnectedCallback() {
@@ -79,13 +85,13 @@ export class CustomInputField extends HTMLElement {
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName == "width")
             this.shadowRoot.querySelector(".box").style.width = newValue;
-        if (attrName == "height")
+        else if (attrName == "height")
             this.shadowRoot.querySelector(".box").style.height = newValue;
-        if (attrName == "label")
+        else if (attrName == "label")
             this.shadowRoot.querySelector("h2").textContent = newValue;
-        if (attrName == "description")
+        else if (attrName == "description")
             this.shadowRoot.querySelector("p").textContent = newValue;
-        if (attrName == "type")
+        else if (attrName == "type")
         {
             if (this.type == "file")
             {
@@ -103,15 +109,25 @@ export class CustomInputField extends HTMLElement {
             this.shadowRoot.querySelector("input").type = newValue;
 
         }
-        if (attrName == "placeholder")
+        else if (attrName == "placeholder")
             this.shadowRoot.querySelector("input").value = newValue;
-
+        else if (attrName == "readonly") {
+            const inputContainer = this.shadowRoot.querySelector(".inputContainer");
+            inputContainer.classList.toggle("active");
+            const input = inputContainer.querySelector("input");
+            input.style.background = "transparent";
+            input.setAttribute("readonly", true);
+            this.shadowRoot.querySelector("img").hidden = false;
+        }
 
     }
 
 
     set placeholder(value) { this.setAttribute("placeholder", value)};
     get placeholder() { return this.getAttribute("placeholder")};
+
+    set readonly(value) { this.setAttribute("readonly", value)};
+    get readonly() { return this.getAttribute("readonly")};
 
     set type(value) { this.setAttribute("type", value)};
     get type() { return this.getAttribute("type")};
@@ -171,6 +187,7 @@ const cssContent = /*css*/`
         max-width: 600px;
         width: 100%;
         height: 100%;
+        background: #d9d9d950;
         border: 1px solid #d9d9d950;
         border-radius: 6px;
         position: relative;
@@ -181,9 +198,8 @@ const cssContent = /*css*/`
         display: flex;
         align-items: center;
         height: 100%;
-        background: green;
+        background: transparent;
         width: 100%;
-        background: #d9d9d950;
         border: none;
         outline: none;
         color: white;

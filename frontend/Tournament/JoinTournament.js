@@ -1,5 +1,291 @@
-import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
+import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
 import { calculateTimeDifferents } from "../Utils/DateUtils.js";
+import { createRow } from "./TournamentsTable.js";
+import { initWebSocket } from "../Utils/TournamentWebSocketManager.js";
+import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
+
+export class JoinTournament extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({mode: "open"});
+        this.shadowRoot.innerHTML = `
+            <style> ${cssContent} </style>
+            <div class="box">
+                <div class="mainContainer">
+                    ${list}
+                </div>
+            </div>
+        `;
+    }
+    deadlineInterval;
+
+    createTournamentItem(tournamentData) {
+        const tournamentItem = document.createElement("div");
+        tournamentItem.className = "tournament-item";
+        tournamentItem.id = "id_" + tournamentData.id;
+        tournamentItem.innerHTML = `
+            <div class="leftContainer">
+                <h1 class="tournament-name">${tournamentData.tournament_name}</h1>
+                <div class="tournament-info">
+                    <div>
+                        <p>OWNER: </p>
+                        <p class="tournament-owner">${tournamentData.players[0].username}</p>
+                    </div>
+                    <p class="number-of-players">${tournamentData.players.length + " / " + tournamentData.number_of_players}</p>
+                </div>
+            </div>
+            <div class="rightContainer">
+                <h5 class="deadline"></h5>
+                <button class="join-button"/>
+            </div>
+        `;
+        const deadline = tournamentItem.querySelector(".deadline");
+        this.deadlineInterval = setInterval(() => {
+            deadline.textContent = calculateTimeDifferents(tournamentData.created_at);
+        }, 1000);
+        const joinButton = tournamentItem.querySelector(".join-button");
+        joinButton.id = tournamentData.id;
+        if (tournamentData.is_accessible == false)
+            joinButton.className = "lock-button";
+        joinButton.addEventListener("click", async () => {
+            if (joinButton.className == "lock-button") {
+                this.joinToPrivateTournament(tournamentData);
+            }
+            else {
+                await this.addPlayerToTournament(tournamentData);
+            }
+        });
+        return tournamentItem;
+    }
+
+
+    async updateTournamentsTable(tournamentData, tbody) {
+        tbody.prepend(createRow(tournamentData));
+        await initWebSocket(tournamentData);
+    }
+
+    async addPlayerToTournament(tournamentData) {
+        const data = await player_join_tournament(tournamentData.id);
+        if (data)
+        {
+            const tbody = this.parentElement.querySelector("tbody");
+            const deadlineTimeNodes = tbody.querySelectorAll(".deadLineTime");
+            const unfinishedTournament = Array.from(deadlineTimeNodes).filter((time) => time.textContent !== "finished");
+            await this.updateTournamentsTable(data, tbody);
+            unfinishedTournament.forEach((time) => {
+                time.textContent = calculateTimeDifferents(time.dataset.createdAt);
+            });
+            this.shadowRoot.getElementById("id_" + data.id).remove();
+            if (data.number_of_players == data.players.length)
+                this.remove();
+        }
+    }
+
+    joinToPrivateTournament(tournamentData) {
+        const mainContainer = this.shadowRoot.querySelector(".mainContainer");
+        mainContainer.innerHTML = forms;
+        mainContainer.querySelector("#back").addEventListener("click", () => {
+            mainContainer.innerHTML = list;
+            this.bindingApiDataIntoComponents();
+        });
+        const tournamentId = mainContainer.querySelector(".tournamentId #tournamentId");
+        const tournamentPassword = mainContainer.querySelector(".password #tournamentPassword");
+        if (tournamentData) {
+            tournamentId.value = tournamentData.tournament_id;
+            tournamentId.setAttribute("readonly", true);
+        }
+        else {
+            // tournamentData = get_tournament_by_tournament_id();
+
+        }
+        mainContainer.querySelector(".join-private-tournament").addEventListener("click", async () => {
+            if (tournamentPassword.value == tournamentData.access_password) {
+                tournamentPassword.style.border = "1px solid aqua";
+                // mainContainer.innerHTML = list;
+                this.addPlayerToTournament(tournamentData);
+            }
+            else {
+                tournamentPassword.style.border = "1px solid red";
+                console.log("ERROR: wrong password !!!");
+            }
+        });
+    }
+
+
+    async bindingApiDataIntoComponents() {
+        const privateTournament = this.shadowRoot.getElementById("private-tournament");
+        privateTournament.addEventListener("click", () => {
+            this.joinToPrivateTournament(null);
+        });
+        const closeButton = this.shadowRoot.getElementById("close-button");
+        closeButton.addEventListener("click", () => {
+            this.remove();
+            return ;
+        });
+
+        const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
+        tournamentsList.innerHTML = '';
+        const tournaments = await get_Available_Tournaments();
+        for (let index = tournaments.length - 1; index >= 0; index--) {
+            const element = tournaments[index];
+            if (element.players.length && !Array.from(element.players).find( p => p.id == playerId))
+                tournamentsList.appendChild(this.createTournamentItem(element));
+            
+        }
+    }
+
+    getQueryStatement(input, searchBy, players, accessible) {
+        let statement = "?" + searchBy.value + "=" + input.value;
+        if (players.length > 0 && players.length < 3)
+        {
+            statement += "&number_of_player=";
+            for (let index = 0; index < players.length; index++) {
+                statement += players[index].id;
+                if (index + 1 != players.length)
+                    statement += "_";
+            }
+        }
+        if (accessible.length == 1)
+            statement += "&accessible=" + accessible[0].id;
+        console.log("statement : ", statement);
+        return statement;
+    }
+
+
+    searchInterval;
+    connectedCallback() {
+
+        this.bindingApiDataIntoComponents();
+
+        const tournamentSearch = this.shadowRoot.querySelector(".tournament-search");
+        const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
+        
+        this.createWebSocket(tournamentsList);
+
+
+        const input = tournamentSearch.querySelector("input");
+        let searchDefaultValue;
+        let storeFilterValues = {searchBy: "name", players: 0, accessible: 0};
+        const searchBy = this.shadowRoot.querySelector("select");
+        tournamentSearch.addEventListener("click", () => {
+            let checker = false;
+            this.searchInterval = setInterval(async () => {
+                const players = this.shadowRoot.querySelectorAll(".aqua");
+                const accessible = this.shadowRoot.querySelectorAll(".aqua-border");
+                if (input.value && 
+                        (searchDefaultValue != input.value || 
+                        storeFilterValues.searchBy != searchBy.value ||
+                        storeFilterValues.players != players.length ||
+                        storeFilterValues.accessible != accessible.length)
+                    ) {
+
+                    this.getQueryStatement(input, searchBy, players, accessible);
+                    tournamentsList.innerHTML = '';
+                    const tournaments = await get_Available_Tournaments("tournament_name=" + input.value);
+                    for (let index = tournaments.length - 1; index >= 0; index--) {
+                        const element = tournaments[index];
+                        if (element.owner.id != playerId)
+                            tournamentsList.appendChild(this.createTournamentItem(element));
+                    }
+
+                    storeFilterValues.searchBy = searchBy.value;
+                    storeFilterValues.players = players.length;
+                    storeFilterValues.accessible = accessible.length;
+
+                    searchDefaultValue = input.value;
+                    checker = true;
+                }
+                else if (!input.value && checker) {
+                    const tournaments = await get_Available_Tournaments();
+                    for (let index = tournaments.length - 1; index >= 0; index--) {
+                        const element = tournaments[index];
+                        if (element.owner.id != playerId)
+                            tournamentsList.appendChild(this.createTournamentItem(element));
+                    }
+                    checker = false;
+                }
+
+            }, 500); 
+        });
+
+        this.setUpFilterOptions();
+
+        const filterButton = this.shadowRoot.getElementById("filter-tournaments");
+        filterButton.addEventListener("click", () => {
+            const filterContainer = this.shadowRoot.querySelector(".filterContainer");
+            if (filterContainer.style.display == "none") {
+                filterContainer.style.display = "flex";
+                filterButton.src = "../assets/icons/close-x-icon.svg";
+            }
+            else {
+                filterContainer.style.display = "none";
+                filterButton.src = "../assets/icons/filter-icon.svg";
+            }
+
+
+        });
+
+    }
+
+    createWebSocket(tournamentsList) {
+        const tournament_name = "Tournament";
+        const tournamentSocket = new WebSocket(`${wsUrl}tournament/sync/` + tournament_name + '/');
+        tournamentSocket.onopen = function () {
+            console.log('WebSocket connection of Tournament is opened !!!!!!!!!!!!!!!!!!!!');
+        };
+        tournamentSocket.onmessage = (e) => {
+            const newData = JSON.parse(e.data);
+            const newTournament = newData.dataTest;
+            if (newTournament.players.length && !Array.from(newTournament.players).find(p => p.id == playerId))
+                tournamentsList.prepend(this.createTournamentItem(newTournament));
+            // here get data of tournament for update because A new tournament has been created
+        };
+        tournamentSocket.onclose = function () {
+            console.log('WebSocket connection of tournament closed');
+        };
+        tournamentSocket.onerror = function (error) {
+            console.error('WebSocket tournament error:', error);
+        };
+    }
+
+    setUpFilterOptions() {
+        this.shadowRoot.querySelectorAll(".chooseContainer").forEach(elem => {
+            elem.addEventListener("click", e => {
+                this.playersOptions(elem);
+                this.accessibilityOptions(elem);
+            });
+        });
+    }
+
+    playersOptions(elem) {
+        if (!elem.querySelector(".choice"))
+            return ;
+        if (elem.querySelector(".aqua"))
+            elem.querySelector(".choice").className = "choice";
+        else
+            elem.querySelector(".choice").className = "choice aqua";
+    }
+
+    accessibilityOptions(elem) {
+        if (!elem.querySelector(".checkbox"))
+            return;
+        if (elem.querySelector(".aqua-border"))
+            elem.querySelector(".checkbox").className = "checkbox";
+        else
+            elem.querySelector(".checkbox").className = "checkbox aqua-border";
+    }
+
+    disconnectedCallback() {
+        clearInterval(this.searchInterval);
+        clearInterval(this.deadlineInterval);
+    }
+
+    
+    
+
+
+}
+
 
 const forms = `
 <div class="mainHeader">
@@ -93,262 +379,6 @@ const list = `
         </div>
 `;
 
-export class JoinTournament extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = `
-            <style> ${cssContent} </style>
-            <div class="box">
-                <div class="mainContainer">
-                    ${list}
-                </div>
-            </div>
-        `;
-    }
-    deadlineInterval;
-    createTournamentItem(tournamentData) {
-        const tournamentItem = document.createElement("div");
-        tournamentItem.className = "tournament-item";
-        tournamentItem.id = tournamentData.id;
-        tournamentItem.innerHTML = `
-            <div class="leftContainer">
-                <h1 class="tournament-name">${tournamentData.tournament_name.toUpperCase()}</h1>
-                <div class="tournament-info">
-                    <div>
-                        <p>OWNER: </p>
-                        <p class="tournament-owner">${tournamentData.players[0].username}</p>
-                    </div>
-                    <p class="number-of-players">${tournamentData.players.length + " / " + tournamentData.number_of_players}</p>
-                </div>
-            </div>
-            <div class="rightContainer">
-                <h5 class="deadline"></h5>
-                <button class="join-button"/>
-            </div>
-        `;
-        const deadline = tournamentItem.querySelector(".deadline");
-        this.deadlineInterval = setInterval(() => {
-            deadline.textContent = calculateTimeDifferents(tournamentData.created_at);
-        }, 1000);
-        const joinButton = tournamentItem.querySelector(".join-button");
-        joinButton.id = tournamentData.id;
-        if (tournamentData.is_accessible == false)
-            joinButton.className = "lock-button";
-        joinButton.addEventListener("click", async () => {
-            if (joinButton.className == "lock-button") {
-                this.joinToPrivateTournament(tournamentData);
-            }
-            else {
-                await this.addPlayerToTournament(tournamentData.id);
-            }
-        });
-        return tournamentItem;
-    }
-
-    async addPlayerToTournament(tournament_id) {
-        const data = await this.player_join_tournament(tournament_id);
-        if (data)
-        {
-            this.shadowRoot.getElementById(tournament_id).remove();
-            if (data.number_of_players == data.players.length)
-                this.remove();
-        }
-    }
-
-    joinToPrivateTournament(tournamentData) {
-        const mainContainer = this.shadowRoot.querySelector(".mainContainer");
-        mainContainer.innerHTML = forms;
-        mainContainer.querySelector("#back").addEventListener("click", () => {
-            mainContainer.innerHTML = list;
-            this.bindingApiDataIntoComponents();
-        });
-        const tournamentId = mainContainer.querySelector(".tournamentId #tournamentId");
-        const tournamentPassword = mainContainer.querySelector(".password #tournamentPassword");
-        if (tournamentData) {
-            tournamentId.value = tournamentData.tournament_id;
-            tournamentId.setAttribute("readonly", true);
-        }
-        else {
-            // tournamentData = get_tournament_by_tournament_id();
-
-        }
-        mainContainer.querySelector(".join-private-tournament").addEventListener("click", async () => {
-            if (tournamentPassword.value == tournamentData.access_password) {
-                tournamentPassword.style.border = "1px solid aqua";
-                // mainContainer.innerHTML = list;
-                this.addPlayerToTournament(tournamentData.tournament_id);
-            }
-            else {
-                tournamentPassword.style.border = "1px solid red";
-                console.log("ERROR: wrong password !!!");
-            }
-        });
-    }
-
-    async bindingApiDataIntoComponents() {
-        const privateTournament = this.shadowRoot.getElementById("private-tournament");
-        privateTournament.addEventListener("click", () => {
-            this.joinToPrivateTournament(null);
-        });
-        const closeButton = this.shadowRoot.getElementById("close-button");
-        closeButton.addEventListener("click", () => {
-            this.remove();
-            return ;
-        });
-
-        const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
-        tournamentsList.innerHTML = '';
-        const tournaments = await this.get_Available_Tournaments();
-        for (let index = tournaments.length - 1; index >= 0; index--) {
-            const element = tournaments[index];
-            if (element.players.length && !Array.from(element.players).find( p => p.id == playerId))
-                tournamentsList.appendChild(this.createTournamentItem(element));
-            
-        }
-    }
-
-    getQueryStatement(input, searchBy, players, accessible) {
-        let statement = "?" + searchBy.value + "=" + input.value;
-        if (players.length > 0 && players.length < 3)
-        {
-            statement += "&number_of_player=";
-            for (let index = 0; index < players.length; index++) {
-                statement += players[index].id;
-                if (index + 1 != players.length)
-                    statement += "_";
-            }
-        }
-        if (accessible.length == 1)
-            statement += "&accessible=" + accessible[0].id;
-        console.log("statement : ", statement);
-        return statement;
-    }
-
-    searchInterval;
-    connectedCallback() {
-        this.bindingApiDataIntoComponents();
-        const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
-        const tournamentSearch = this.shadowRoot.querySelector(".tournament-search");
-        const input = tournamentSearch.querySelector("input");
-        let searchDefaultValue;
-        let storeFilterValues = {searchBy: "name", players: 0, accessible: 0};
-        const searchBy = this.shadowRoot.querySelector("select");
-        tournamentSearch.addEventListener("click", () => {
-            this.searchInterval = setInterval(async () => {
-                const players = this.shadowRoot.querySelectorAll(".aqua");
-                const accessible = this.shadowRoot.querySelectorAll(".aqua-border");
-                if (input.value && 
-                        (searchDefaultValue != input.value || 
-                        storeFilterValues.searchBy != searchBy.value ||
-                        storeFilterValues.players != players.length ||
-                        storeFilterValues.accessible != accessible.length)
-                    ) {
-
-                    this.getQueryStatement(input, searchBy, players, accessible);
-                    tournamentsList.innerHTML = '';
-                    const tournaments = await this.get_Available_Tournaments("tournament_name=" + input.value);
-                    for (let index = tournaments.length - 1; index >= 0; index--) {
-                        const element = tournaments[index];
-                        if (data.owner.id != playerId)
-                            tournamentsList.appendChild(this.createTournamentItem(element));
-                    }
-
-                    storeFilterValues.searchBy = searchBy.value;
-                    storeFilterValues.players = players.length;
-                    storeFilterValues.accessible = accessible.length;
-
-                    searchDefaultValue = input.value;
-                    console.log("heyyyyyyyyy");
-                }
-            }, 500); 
-        });
-
-        this.setUpFilterOptions();
-
-        const filterButton = this.shadowRoot.getElementById("filter-tournaments");
-        filterButton.addEventListener("click", () => {
-            const filterContainer = this.shadowRoot.querySelector(".filterContainer");
-            if (filterContainer.style.display == "none") {
-                filterContainer.style.display = "flex";
-                filterButton.src = "../assets/icons/close-x-icon.svg";
-            }
-            else {
-                filterContainer.style.display = "none";
-                filterButton.src = "../assets/icons/filter-icon.svg";
-            }
-
-
-        });
-
-    }
-
-    setUpFilterOptions() {
-        this.shadowRoot.querySelectorAll(".chooseContainer").forEach(elem => {
-            elem.addEventListener("click", e => {
-                this.playersOptions(elem);
-                this.accessibilityOptions(elem);
-            });
-        });
-    }
-
-    playersOptions(elem) {
-        if (!elem.querySelector(".choice"))
-            return ;
-        if (elem.querySelector(".aqua"))
-            elem.querySelector(".choice").className = "choice";
-        else
-            elem.querySelector(".choice").className = "choice aqua";
-    }
-
-    accessibilityOptions(elem) {
-        if (!elem.querySelector(".checkbox"))
-            return;
-        if (elem.querySelector(".aqua-border"))
-            elem.querySelector(".checkbox").className = "checkbox";
-        else
-            elem.querySelector(".checkbox").className = "checkbox aqua-border";
-    }
-
-    disconnectedCallback() {
-        clearInterval(this.searchInterval);
-        clearInterval(this.deadlineInterval);
-    }
-
-    async get_Available_Tournaments(queries) {
-        try {
-            let Available_Tournaments = "available_tournaments?" + (queries || "");
-            const response = await fetch(`${apiUrl}${Available_Tournaments}`);
-            if (!response.ok) {
-                throw new Error(`${response.status}  ${response.statusText}`);
-            }
-            return await response.json();
-        } catch(error) {
-            console.error('Error of tournament list: ', error);
-        }
-    }
-
-    async player_join_tournament(tournamentId)
-    {
-        try {
-            const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/`, {
-                method: 'POST'
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                console.log(JSON.stringify(data, null, 2));
-                throw new Error(`${response.status}  ${data.statusText}`);
-            }
-            return await response.json();
-        } catch(error) {
-            console.error('Error of player join tournament: ', error);
-        }
-    }
-    
-    
-
-
-}
 
 const cssContent = /*css*/`
     * {
@@ -490,7 +520,6 @@ const cssContent = /*css*/`
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 0 40px;
         margin-bottom: 10px;
         gap: 24px;
         overflow-y: scroll;
@@ -498,17 +527,18 @@ const cssContent = /*css*/`
 
 
     .tournament-item {
-        padding: 0 10px;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+     width: 100%;
+     min-width: 500px;
+     display: flex;
+     align-items: center;
     }
 
     .leftContainer {
         display: flex;
         flex-direction: column;
         gap: 4px;
+        flex: 1;
+        align-items: start;
     }
 
     .tournament-name {
@@ -518,8 +548,9 @@ const cssContent = /*css*/`
     .tournament-info {
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        gap: 10px;
+        justify-content: start;
+        gap: 30px;
+
     }
 
     .tournament-info div {

@@ -40,7 +40,6 @@ export async function closeWebSocket(socketId) {
         webSocketIdQueue.splice(index, 1);
         webSocketQueue[index].close();
         webSocketQueue.splice(index, 1);
-        console.log(webSocketQueue);
     }
 }
 
@@ -102,7 +101,7 @@ async function displayAlert(e, data) {
             // document.body.appendChild(lobby);
             /* -------    call nordine code here -------- */
             startCountdown(customAlert, timeLeft);
-            alert.querySelector(".buttons").remove();
+            customAlert.querySelector(".buttons").remove();
 
     
             // Here you can add logic to start the game or redirect to the game page
@@ -140,7 +139,6 @@ export function useWebsocket(data) {
         if(data.number_of_players == data.players.length || !data.can_join)
         {
             await update_start_date(data);
-            console.log(data.tournament_name);
             tournamentSocket.send(JSON.stringify({'type': 'play_cancel','message': 'Tournament is starting in 2 minutes'}));
         }
     };
