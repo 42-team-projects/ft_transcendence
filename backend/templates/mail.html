@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Registration Confirmation</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    .mail-body {
+      display: block;
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .mail-wrapper {
+      width: 100%;
+      display: block;
+      overflow: hidden;
+      box-sizing: border-box;
+      color: #222;
+      background: #f2f2fd;
+      font-size: 18px;
+      font-weight: normal;
+      font-family: "Baloo 2", "Open Sans", "Roboto", "Segoe UI",
+        "Helvetica Neue", Helvetica, Tahoma, Arial, monospace, sans-serif;
+    }
+
+    .mail-table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      border: 0px;
+      width: 640px;
+      max-width: 90%;
+      margin: 100px auto;
+      box-shadow: 0px 20px 48px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .mail-table tr {
+      background: #ffffff;
+    }
+
+    .mail-table td,
+    .mail-table th {
+      border: 0px;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+
+    .mail-table tr td {
+      padding: 0px 40px;
+      box-sizing: border-box;
+    }
+
+    .mail-margin {
+      float: left;
+      width: 100%;
+      overflow: hidden;
+      height: 40px;
+      padding-bottom: 0px;
+      box-sizing: border-box;
+    }
+
+    .mail-table h1,
+    .mail-table h2,
+    .mail-table h3,
+    .mail-table h4 {
+      float: left;
+      width: 100%;
+      margin: 0px 0px 20px 0px !important;
+      padding: 0px;
+    }
+
+    .mail-table h1 {
+      font-size: 33px;
+    }
+
+    .mail-table h2 {
+      font-size: 26px;
+    }
+
+    .mail-table h3 {
+      font-size: 23px;
+    }
+
+    .mail-table p {
+      float: left;
+      width: 100%;
+      font-size: 18px;
+      margin: 0px 0px 20px 0px !important;
+    }
+
+    .mail-table a {
+      color: #6d49fc;
+      font-weight: bold;
+    }
+
+    .mail-table a:hover {
+      color: #55cc55;
+    }
+
+    .mail-table a:active {
+      color: #ff6600;
+    }
+
+    .mail-table a:visited {
+      color: #ff00ff;
+    }
+
+    .mail-table img,
+    .mail-table a img {
+      display: block;
+      max-width: 100%;
+      margin-bottom: 20px;
+      border: 0px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .mail-table a.mail-button {
+      display: inline-block;
+      font-weight: bold;
+      font-size: 17px;
+      padding: 15px 40px;
+      margin: 20px 0px;
+      color: #ffffff !important;
+      background: #4fb0b9 !important;
+      border-radius: 10px;
+      text-decoration: none;
+      outline: none;
+    }
+
+    .mail-table a.mail-button:hover {
+      color: #ffffff !important;
+      background: #2f6f7b !important;
+    }
+  </style>
+</head>
+
+<body class="mail-body">
+  <div class="mail-wrapper">
+    <table class="mail-table">
+      <tbody>
+        <tr class="mail-tr">
+          <td class="mail-td" colspan="10">
+            <div class="mail-margin"></div>
+            <center>
+              <h1>Welcome, {{ username }}</h1>
+              <img src="https://raw.githubusercontent.com/ogorfti/django-rest/master/images/4282924.jpg" alt="Image" />
+            </center>
+            <h2>Confirm Your Email Address</h2>
+            <p>
+              Thank you for joining our ping pong community. To start playing
+              and competing with others, please confirm your email address by
+              clicking the button below. If you did not register for our game,
+              you can safely ignore this email.
+            </p>
+          </td>
+        </tr>
+
+        <tr class="mail-tr">
+          <td class="mail-td" colspan="10">
+            <center>
+              <!-- confirm-email -->
+              <!-- <a href="http://{{ domain }}/api/v1/auth/confirm-email/{{ token }}/" class="mail-button" -->
+              <a href="http://127.0.0.1:3000/html/confirm-email.html?token={{ token }}" class="mail-button" target="_blank">Confirm Email</a>
+              </center>
+          </td>
+        </tr>
+        <tr class="mail-tr">
+          <td class="mail-td" colspan="10">
+            <p>
+              The ft_transcendence Team, <br />
+              Have a nice day!
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
