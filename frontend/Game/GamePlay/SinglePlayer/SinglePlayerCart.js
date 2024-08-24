@@ -4,8 +4,8 @@ const singlePlayerTemplate = document.createElement('template')
 
 singlePlayerTemplate.innerHTML = /*html*/ `
     <link rel="stylesheet" href="Game/GamePlay/SinglePlayer/Single-Player.css">
-    <img class="GreenCartImg" src="images/GreenCart/img-singleplayer.svg" alt="GreenImg">
-    <img class="GreenCart" src="images/GreenCart/Single.svg" alt="Green">
+    <img loading="lazy" class="GreenCartImg" src="images/GreenCart/img-singleplayer.svg" alt="GreenImg">
+    <img loading="lazy" class="GreenCart" src="images/GreenCart/Single.svg" alt="Green">
     <div class="style-0">
         <div class="style-1">
             <div class="style-2">

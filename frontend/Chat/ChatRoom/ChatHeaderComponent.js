@@ -23,9 +23,9 @@ export class ChatHeaderComponent extends HTMLElement {
                 </div>
             </div>
         </div>
-        <img loading="lazy" src="./images/Game.svg">
-        <img loading="lazy" src="./assets/profile-assets/account-icon.svg">
-        <img loading="lazy" src="./assets/profile-assets/block-icon.svg">
+        <img loading="lazy"   src="./images/Game.svg">
+        <img loading="lazy"   src="./assets/profile-assets/account-icon.svg">
+        <img loading="lazy"   src="./assets/profile-assets/block-icon.svg">
     `;
     }
 
@@ -84,7 +84,6 @@ export class ChatHeaderComponent extends HTMLElement {
             profileComponent.background = "url(" + newValue + ") center / cover no-repeat";
             profileComponent.display = "flex";
         }
-
 
     }
 

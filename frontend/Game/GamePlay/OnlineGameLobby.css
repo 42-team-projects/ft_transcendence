@@ -26,7 +26,7 @@
 .Name{
     z-index: 0;
     position: absolute;
-    font-size: clamp(0.3rem, 1.5vw, 2rem);
+    font-size: 2rem;
     color: white;
     top:100%;
     margin: 0;
