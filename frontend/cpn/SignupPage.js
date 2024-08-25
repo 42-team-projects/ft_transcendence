@@ -1,6 +1,6 @@
 import Header from './Header.js';
 import Shape from './Shape.js';
-import { router } from './Router.js';
+import { router } from './../root.js';
 import config from './../conf.js';
 
 export default class SignupPage extends HTMLElement {
