@@ -1,5 +1,5 @@
 import { apiUrl, playerId } from "../../Utils/GlobalVariables.js";
-import { hashCode } from "../../Utils/Hasher.js";
+import { hashPassword } from "../../Utils/Hasher.js";
 
 
 export async function get_tournaments_by_player_id() {
@@ -22,9 +22,9 @@ export async function createTournament(data) {
             tournament_name: data.name,
             number_of_players: data.num_players,
             is_accessible: data.access.toLowerCase() == "public" ? true : false,
-            access_password: hashCode(data.password),
+            access_password: await hashPassword(data.password),
             owner: null
-
+            
         }
         const create_tournament = "create/player/";
         const response = await fetch(`${apiUrl}${create_tournament}${playerId}/`, {

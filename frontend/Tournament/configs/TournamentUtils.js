@@ -1,6 +1,8 @@
 import { convertTimeStampIntoDate } from "../../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { playerId } from "../../Utils/GlobalVariables.js";
+import { apiUrl, playerId, wsUrl } from "../../Utils/GlobalVariables.js";
+import { closeWebSocket } from "../../Utils/TournamentWebSocketManager.js";
+import { get_tournament_by_id, player_leave_tournament } from "./TournamentAPIConfigs.js";
 
 
 const TABLEHEADER = `
@@ -21,15 +23,15 @@ const TABLEHEADER = `
 </table>
 `;
 
-export function createTournamentTable(mainContainer, data) {
+export function createTournamentTable(parentNode, mainContainer, data) {
     mainContainer.innerHTML = TABLEHEADER;
     const tbody = mainContainer.querySelector("tbody");
     for (let index = data.length - 1; index >= 0; index--)
-        tbody.appendChild(createRow(data[index]));
+        tbody.appendChild(createRow(parentNode, data[index]));
 
 }
 
-export function createRow(data) {
+export function createRow(parentNode, data) {
 
     const tr = document.createElement("tr");
     tr.id = data.id;
@@ -86,15 +88,16 @@ export function createRow(data) {
         displayButton.src = "./assets/profile-assets/play-button.svg";
         displayButton.width = 24;
         displayButton.addEventListener("click", async () => {
-            this.innerHTML = '';
+            parentNode.innerHTML = '';
             const response = await get_tournament_by_id(data.id);
             if (!response)
                 throw new Error(`${response.status}  ${response.statusText}`);
-            this.innerHTML = '';
+            parentNode.innerHTML = '';
             const rounds = document.createElement("generate-rounds");
             rounds.numberOfPlayers = response.number_of_players;
+            console.log("response.players: ", response.players);
             rounds.players = response.players;
-            this.appendChild(rounds);
+            parentNode.appendChild(rounds);
         });
 
         const actionsContainer = document.createElement("div");
