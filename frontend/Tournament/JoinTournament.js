@@ -1,6 +1,7 @@
+import { calculateTimeDifferents } from "../Utils/DateUtils.js";
 import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
-import { hashCode } from "../Utils/Hasher.js";
-import { initWebSocket } from "../Utils/TournamentWebSocketManager.js";
+import { hashPassword } from "../Utils/Hasher.js";
+import { closeWebSocket, initWebSocket } from "../Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
 import { createRow } from "./configs/TournamentUtils.js";
 
@@ -25,7 +26,7 @@ export class JoinTournament extends HTMLElement {
         tournamentItem.id = "id_" + tournamentData.id;
         tournamentItem.innerHTML = `
             <div class="leftContainer">
-                <h1 class="tournament-name">${tournamentData.tournament_name}</h1>
+                <h2 class="tournament-name">${tournamentData.tournament_name}</h2>
                 <div class="tournament-info">
                     <div>
                         <p>OWNER: </p>
@@ -48,19 +49,17 @@ export class JoinTournament extends HTMLElement {
         if (tournamentData.is_accessible == false)
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
-            if (joinButton.className == "lock-button") {
+            if (joinButton.className == "lock-button") 
                 this.joinToPrivateTournament(tournamentData);
-            }
-            else {
+            else
                 await this.addPlayerToTournament(tournamentData);
-            }
         });
         return tournamentItem;
     }
 
 
     async updateTournamentsTable(tournamentData, tbody) {
-        tbody.prepend(createRow(tournamentData));
+        tbody.prepend(createRow(this, tournamentData));
         await initWebSocket(tournamentData);
     }
 
@@ -75,7 +74,9 @@ export class JoinTournament extends HTMLElement {
             unfinishedTournament.forEach((time) => {
                 time.textContent = calculateTimeDifferents(time.dataset.createdAt);
             });
-            this.shadowRoot.getElementById("id_" + data.id).remove();
+            const elem = this.shadowRoot.getElementById("id_" + data.id);
+            if (elem)
+                elem.remove();
             if (data.number_of_players == data.players.length)
                 this.remove();
         }
@@ -99,14 +100,17 @@ export class JoinTournament extends HTMLElement {
 
         }
         mainContainer.querySelector(".join-private-tournament").addEventListener("click", async () => {
-            if (hashCode(tournamentPassword.value) == tournamentData.access_password) {
+            const passValue = await hashPassword(tournamentPassword.value);
+            if (tournamentData && passValue == tournamentData.access_password) {
                 tournamentPassword.style.border = "1px solid aqua";
-                // mainContainer.innerHTML = list;
-                this.addPlayerToTournament(tournamentData);
+                mainContainer.innerHTML = list;
+                await this.addPlayerToTournament(tournamentData);
+                console.log("tournamentData: ", tournamentData);
+                this.remove();
             }
             else {
                 tournamentPassword.style.border = "1px solid red";
-                console.log("ERROR: wrong password !!!");
+                console.log("OPPPPS!!!: wrong password !!!");
             }
         });
     }
@@ -196,6 +200,7 @@ export class JoinTournament extends HTMLElement {
                     checker = true;
                 }
                 else if (!input.value && checker) {
+                    tournamentsList.innerHTML = '';
                     const tournaments = await get_Available_Tournaments();
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
@@ -226,24 +231,24 @@ export class JoinTournament extends HTMLElement {
         });
 
     }
-
+    tournamentSocket;
     createWebSocket(tournamentsList) {
         const tournament_name = "Tournament";
-        const tournamentSocket = new WebSocket(`${wsUrl}tournament/sync/` + tournament_name + '/');
-        tournamentSocket.onopen = function () {
+        this.tournamentSocket = new WebSocket(`${wsUrl}tournament/sync/` + tournament_name + '/');
+        this.tournamentSocket.onopen = function () {
             console.log('WebSocket connection of Tournament is opened !!!!!!!!!!!!!!!!!!!!');
         };
-        tournamentSocket.onmessage = (e) => {
+        this.tournamentSocket.onmessage = (e) => {
             const newData = JSON.parse(e.data);
             const newTournament = newData.dataTest;
             if (newTournament.players.length && !Array.from(newTournament.players).find(p => p.id == playerId))
                 tournamentsList.prepend(this.createTournamentItem(newTournament));
             // here get data of tournament for update because A new tournament has been created
         };
-        tournamentSocket.onclose = function () {
+        this.tournamentSocket.onclose = function () {
             console.log('WebSocket connection of tournament closed');
         };
-        tournamentSocket.onerror = function (error) {
+        this.tournamentSocket.onerror = function (error) {
             console.error('WebSocket tournament error:', error);
         };
     }
@@ -278,11 +283,8 @@ export class JoinTournament extends HTMLElement {
     disconnectedCallback() {
         clearInterval(this.searchInterval);
         clearInterval(this.deadlineInterval);
+        this.tournamentSocket.close();
     }
-
-    
-    
-
 
 }
 
@@ -528,7 +530,7 @@ const cssContent = /*css*/`
 
     .tournament-item {
      width: 100%;
-     min-width: 500px;
+     min-width: 200px;
      display: flex;
      align-items: center;
     }
@@ -564,7 +566,8 @@ const cssContent = /*css*/`
 
 
     .rightContainer {
-        min-width: 200px;
+        flex: 1;
+        min-width: 150px;
         height: 100%;
         display: flex;
         align-items: center;
