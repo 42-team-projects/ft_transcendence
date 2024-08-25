@@ -17,19 +17,37 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: end;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
-    flex: 5;
-    padding-right: 30px;
-    min-width: 400px;
+    gap: 30px;
+    flex: 2;
+    padding: 0 20px;
 }
+
+
+.notification-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 99;
+}
+
+
+@media (width <= 1000px)  {
+    .notification-container {
+        display: none;
+    }
+}
+
 
 .search-box {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
     flex: 1;
     gap: 20px;
@@ -121,11 +139,34 @@ c-profile{
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: #ffffff;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .c-hexagon-content {
     width: 32px;
     height: 32px;
+}
+           
+.content {
+    display: flex;
+    flex: 3;
+    height: 100%;
+    align-items: center;
+    color: #ffffff;
+    gap: 10px;
+}
+
+.actions {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.actions img {
+    width: 24px;
 }
