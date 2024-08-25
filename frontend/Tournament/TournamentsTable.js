@@ -36,15 +36,14 @@ export class TournamentsTable extends HTMLElement {
         if (!tournamentsAPIData)
             return;
         const mainContainer = this.querySelector(".mainContainer");
-        createTournamentTable(mainContainer, tournamentsAPIData);
+        createTournamentTable(this, mainContainer, tournamentsAPIData);
 
         const firstButton = this.querySelector("#firstButton");
         const secondButton = this.querySelector("#secondButton");
         firstButton.addEventListener("click", () => {
             const buttonValue = firstButton.querySelector("h3");
             if (buttonValue.textContent == "CANCEL") {
-                mainContainer.innerHTML = TABLEHEADER;
-                this.createTournamentTable();
+                createTournamentTable(this, mainContainer, tournamentsAPIData);
                 buttonValue.textContent = "JOIN TOURNAMENT";
                 secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
             } else {
@@ -64,7 +63,6 @@ export class TournamentsTable extends HTMLElement {
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
-                        console.log("tournamentResponse : ", tournamentResponse);
                         initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
