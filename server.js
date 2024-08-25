@@ -32,10 +32,10 @@ app.use((req, res, next) => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'user.html'));
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 
-app.listen(3003, '0.0.0.0', () => {
+app.listen(3000, '0.0.0.0', () => {
     console.log('Server is running on port 3000 and is accessible on the network');
 });
