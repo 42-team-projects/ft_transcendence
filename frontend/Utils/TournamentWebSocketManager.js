@@ -39,6 +39,7 @@ export async function closeWebSocket(socketId) {
     {
         webSocketIdQueue.splice(index, 1);
         webSocketQueue[index].close();
+        console.log("disconnected from socket: ", socketId);
         webSocketQueue.splice(index, 1);
     }
 }

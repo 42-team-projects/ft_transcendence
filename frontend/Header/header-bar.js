@@ -1,3 +1,5 @@
+import { NotificationComponent } from "../Notification/NotificationComponent.js";
+
 const HeaderTemplate =  document.createElement('template');
 
 HeaderTemplate.innerHTML = /*html*/`
@@ -5,13 +7,18 @@ HeaderTemplate.innerHTML = /*html*/`
         <img loading="lazy" draggable="false" src="./images/svg-header/pingpong-icon.svg" alt="pingpong">
     </div>
     <div class="notification-search">
-        <search-bar></search-bar>
-        <div class="notification-icon" >
-            <img loading="lazy" draggable="false" src="./images/svg-header/alarm.svg" alt="notification">
+        <div class="search-box">
+            <search-bar></search-bar>
+            <div class="notification-icon" >
+                <img loading="lazy" draggable="false" src="./images/svg-header/alarm.svg" alt="notification">
+                <div class="number-of-notifications">99</div>
+            </div>
+        </div>
+        <div class="notification-container">
         </div>
     </div>
     <c-profile></c-profile>
-    `
+`
 
         
 export class HeaderBar extends HTMLElement{
