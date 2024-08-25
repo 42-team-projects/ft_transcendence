@@ -13,17 +13,11 @@ HeaderTemplate.innerHTML = /*html*/`
                 <img loading="lazy" draggable="false" src="./images/svg-header/alarm.svg" alt="notification">
             </div>
         </div>
-        <notification-component width="30%">
-            <div class="notification-content">
-                <c-hexagon class="profile" width="56px" height="55px" apply="true" bcolor="#d9d9d9">
-                    <div slot="content" class="c-hexagon-content"></div>
-                </c-hexagon>
-                <h3>hello world</h3>
-            </div>
-        </notification-component>
+        <div class="notification-container">
+        </div>
     </div>
     <c-profile></c-profile>
-    `
+`
 
         
 export class HeaderBar extends HTMLElement{
