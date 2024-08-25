@@ -11,6 +11,7 @@ HeaderTemplate.innerHTML = /*html*/`
             <search-bar></search-bar>
             <div class="notification-icon" >
                 <img loading="lazy" draggable="false" src="./images/svg-header/alarm.svg" alt="notification">
+                <div class="number-of-notifications">99</div>
             </div>
         </div>
         <div class="notification-container">
