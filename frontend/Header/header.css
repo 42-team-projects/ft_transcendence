@@ -1,15 +1,14 @@
 
 #pingpong-logo
 {
-    height: 80px;
-    width: 80px;
+    flex: 1px;
     margin-left: 4%;
 }
 
 #pingpong-logo > img
 {
-    height: 100%;
-    width: 100%;
+    height: 80px;
+    width: 80px;
     object-fit: cover;
 }
 
@@ -20,10 +19,39 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
+    flex: 2;
+    padding: 0 20px;
+}
+
+
+.notification-container {
     flex: 1;
-    max-width: 40%;
-    min-width: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 99;
+}
+
+
+@media (width <= 1000px)  {
+    .notification-container {
+        display: none;
+    }
+}
+
+
+.search-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: end;
+    align-items: center;
+    flex: 1;
+    gap: 20px;
+    min-width: 400px;
 }
 
 search-bar
@@ -31,6 +59,7 @@ search-bar
     border: 1px solid #00FFFC;
     border-radius: 10px;
     flex: 1;
+    max-width: 1000px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -79,10 +108,27 @@ search-bar
 .notification-icon
 {
     display: flex;
-    height: 5%;
-    width: 5%;
+    width: 32px;
+    height: 32px;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.number-of-notifications {
+    width: 16px;
+    height: 16px;
+    border-radius: 100px;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    right: 1px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Sansation bold';
 }
 
 c-profile{
@@ -95,7 +141,6 @@ c-profile{
     cursor: pointer;
 }
 
-
 /* user-rank
 {
     position: absolute;
@@ -104,3 +149,41 @@ c-profile{
     align-items: center;
     clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 60%, 50% 90%,10% 60%);
 } */
+
+
+.notification-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.c-hexagon-content {
+    width: 32px;
+    height: 32px;
+}
+           
+.content {
+    display: flex;
+    flex: 3;
+    height: 100%;
+    align-items: center;
+    color: #ffffff;
+    gap: 10px;
+}
+
+.actions {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.actions img {
+    width: 24px;
+}

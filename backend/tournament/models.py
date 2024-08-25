@@ -15,7 +15,7 @@ class Tournament(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     number_of_players = models.IntegerField(choices=[(4, '4 Players'), (8, '8 Players'), (16, '16 Players')])
     is_accessible = models.BooleanField(default=True)
-    access_password = models.IntegerField(null=True, blank=True)
+    access_password = models.CharField(null=True, blank=True, max_length=255)
     owner = models.ForeignKey(Player, on_delete=models.CASCADE, blank=True, null=True)
 
 

@@ -195,8 +195,11 @@ export class GenerateRounds extends HTMLElement {
     static observedAttributes = ["players"];
 
     attributeChangedCallback(attrName, oldVdalue, newValue) {
-        // if (attrName == "players")
-        //     this.generateRoundsGraph(JSON.stringify(newValue));
+        if (attrName == "players")
+        {
+            this.generateRoundsGraph(this.convertPlayersDataIntoRounds(newValue));
+            this.addPlayerEventListener();
+        }
     }
 
 }
