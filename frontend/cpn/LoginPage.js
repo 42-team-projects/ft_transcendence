@@ -1,4 +1,4 @@
-import { router } from './Router.js';
+import { router } from './../root.js';
 import config from './../conf.js';
 
 export default class LoginPage extends HTMLElement {
