@@ -112,6 +112,23 @@ search-bar
     height: 32px;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.number-of-notifications {
+    width: 16px;
+    height: 16px;
+    border-radius: 100px;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    right: 1px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Sansation bold';
 }
 
 c-profile{
