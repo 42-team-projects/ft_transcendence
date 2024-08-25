@@ -1,15 +1,14 @@
 
 #pingpong-logo
 {
-    height: 80px;
-    width: 80px;
+    flex: 1px;
     margin-left: 4%;
 }
 
 #pingpong-logo > img
 {
-    height: 100%;
-    width: 100%;
+    height: 80px;
+    width: 80px;
     object-fit: cover;
 }
 
@@ -18,12 +17,23 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    flex: 5;
+    padding-right: 30px;
+    min-width: 400px;
+}
+
+.search-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    gap: 20px;
     flex: 1;
-    max-width: 40%;
-    min-width: 460px;
+    gap: 20px;
+    min-width: 400px;
 }
 
 search-bar
@@ -31,6 +41,7 @@ search-bar
     border: 1px solid #00FFFC;
     border-radius: 10px;
     flex: 1;
+    max-width: 1000px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -79,8 +90,8 @@ search-bar
 .notification-icon
 {
     display: flex;
-    height: 5%;
-    width: 5%;
+    width: 32px;
+    height: 32px;
     justify-content: center;
     align-items: center;
 }
@@ -95,7 +106,6 @@ c-profile{
     cursor: pointer;
 }
 
-
 /* user-rank
 {
     position: absolute;
@@ -104,3 +114,18 @@ c-profile{
     align-items: center;
     clip-path: polygon(10% 0%, 50% 0% ,90% 0%, 90% 60%, 50% 90%,10% 60%);
 } */
+
+
+.notification-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    gap: 10px;
+}
+
+.c-hexagon-content {
+    width: 32px;
+    height: 32px;
+}
