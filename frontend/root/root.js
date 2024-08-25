@@ -2,7 +2,7 @@ import { ChatComponent } from "../Chat/ChatComponent.js";
 import { ProfileComponent } from "../Profile/ProfileComponent.js";
 import { TournamentComponent } from "../Tournament/TournamentComponent.js";
 import { SettingsComponent } from "../Settings/SettingsComponent.js";
-import { router } from "../cpn/Router.js";
+import { router } from "../User/Router.js";
 
 const root = document.createElement('template')
 
