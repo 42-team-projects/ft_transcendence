@@ -3,10 +3,6 @@
 body {
     color: #ffffff;
 
-    background: url('../svg/bg.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100vh;
     background-position: center;
     display: flex;
     justify-content: center;
