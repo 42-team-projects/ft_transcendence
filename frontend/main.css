@@ -139,6 +139,7 @@ header-bar{
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
+    min-width: 700px;
 }
 
 root-content {
