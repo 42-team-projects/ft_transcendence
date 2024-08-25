@@ -7,4 +7,6 @@ export function displayNotification(notificationContent) {
     notification.width = "100%";
     notification.innerHTML = notificationContent;
     notificationContainer.appendChild(notification);
+    const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
+    notificationIcon.textContent = Number(notificationIcon.textContent) + 1;
 }
