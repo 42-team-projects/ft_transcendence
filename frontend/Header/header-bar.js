@@ -3,7 +3,7 @@ import { NotificationComponent } from "../Components/Notification/NotificationCo
 const HeaderTemplate =  document.createElement('template');
 
 HeaderTemplate.innerHTML = /*html*/`
-    <link rel="stylesheet" href="./header.css">
+    <link rel="stylesheet" href="./Header/header.css">
     <div id="pingpong-logo">
         <img loading="lazy" draggable="false" src="./images/svg-header/pingpong-icon.svg" alt="pingpong">
     </div>
@@ -25,8 +25,8 @@ HeaderTemplate.innerHTML = /*html*/`
 export class HeaderBar extends HTMLElement{
     constructor(){
         super();
-        this.attachShadow({mode : 'open'})
-        this.shadowRoot.appendChild(HeaderTemplate.content.cloneNode(true));
+        // this.attachShadow({mode : 'open'})
+        this.appendChild(HeaderTemplate.content.cloneNode(true));
     }
 }
 
