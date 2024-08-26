@@ -21,7 +21,7 @@ def group_conversation(request):
 @api_view(['GET'])
 def get_chat_conversation(request):
     conversation_name = request.GET.get('cn')
-    conversation = Conversation.objects.filter(conversation_name=conversation_name).first()
+    conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
     messages = Message.objects.filter(conversation=conversation)
     message_serializer = MessageSerializer(messages, many=True)
     return Response(message_serializer.data)
@@ -30,16 +30,24 @@ def get_chat_conversation(request):
 def group_conversations(request):
     user = get_object_or_404(User, id=request.user.id) 
     conversations = Conversation.objects.filter(status='G', users=user)
-    conversation_serializer = ConversationSerializer(conversations, many=True)
-    return Response(conversation_serializer.data)
+    if conversations.exists():
+        conversation_serializer = ConversationSerializer(conversations, many=True)
+        return Response(conversation_serializer.data)
+    else:
+        return Response({'error' : 'no conversation found'})
+        
 
 
 @api_view(['GET'])
 def chat_conversations(request):
     user = get_object_or_404(User, id=request.user.id) 
     conversations = Conversation.objects.filter(status='C', users=user)
-    conversation_serializer = ConversationSerializer(conversations, many=True)
-    return Response(conversation_serializer.data)
+    if conversations.exists():
+        conversation_serializer = ConversationSerializer(conversations, many=True)
+        return Response(conversation_serializer.data)
+    else:
+        return Response({'error' : 'no conversation found'})
+
 
 
 

@@ -89,16 +89,11 @@ class ChatConversationConsumer(WebsocketConsumer):
         conversation = Conversation.objects.filter(conversation_name=self.group_name).first()
         if conversation:
             return conversation
-        conversation_data = {
-            'status' : 'C',
-            'conversation_name' : self.group_name
-        }
-        conversation_serializer = ConversationSerializer(data=conversation_data)
-        if conversation_serializer.is_valid():
-            conversation = conversation_serializer.save()
+        conversation = Conversation.objects.create(status='C', conversation_name=self.group_name)
+        if conversation:
             return conversation
         else:
-            self.send_error(conversation_serializer.errors)
+            self.send_error({'error': 'data not store in database!'})
             return None
 
     def broadcast_message(self, message_data):
