@@ -8,6 +8,11 @@ sb-icon{
     transform: rotate(270deg);
     justify-content: center;
 }
+
+a {
+    display: flex;
+    align-items: center;
+}
 sb-icon.on{
     width: 4.7rem;
 }
