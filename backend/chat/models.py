@@ -1,5 +1,5 @@
 from django.db import models
-# from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 
 class User(models.Model):
     name = models.CharField(max_length=255)
@@ -27,16 +27,17 @@ class Conversation(models.Model):
         return self.conversation_name
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     sent_at = models.DateTimeField(auto_now_add=True)
 
     # def save(self, *args, **kwargs):
-    #     conv = Conversation.objects.filter(users=self.sender ,conversation_name=self.conversation.conversation_name)
+    #     conv = Conversation.objects.filter(users=self.receiver, conversation_name=self.conversation.conversation_name)
     #     if not conv:
-    #         raise ValidationError(f"{self.sender.name} is not part of the conversation {self.conversation.conversation_name}.")
+    #         raise ValidationError(f"{self.receiver.name} is not part of the conversation {self.conversation.conversation_name}.")
     #     super().save(*args, **kwargs)
+        
     def __str__(self):
-        return f'{self.sender.name} send message to conversation {self.conversation.conversation_name}'
+        return f'{self.receiver.name} send message to conversation {self.conversation.conversation_name}'
 
