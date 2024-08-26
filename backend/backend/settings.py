@@ -33,6 +33,8 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'daphne', #new
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,8 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework', #new
-    'channels',
-    'chat',
     'corsheaders', #new
 
     # 'Tournament', #new
@@ -50,6 +50,10 @@ INSTALLED_APPS = [
     'game', #new
     'Profile', #new
     # 'accounts', #new ogorfti
+
+
+    'chat',          #dokoko
+    'notification',  #dokoko
     
 
 ]
