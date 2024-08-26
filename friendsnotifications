@@ -1,0 +1,14 @@
+[
+    {
+        "message"   :   "User1 send friend request."
+    },
+    {
+        "message"   :   "User2 accepted your friend request."
+    },
+    {
+        "message"   :   "User2 send message."
+    },
+    {
+        "message"   :   "User1 like your message."
+    }
+]

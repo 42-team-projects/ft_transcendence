@@ -43,11 +43,11 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'chat',
+    'notification',
 ]
 
 ASGI_APPLICATION = 'myproject.asgi.application'
-
-WSGI_APPLICATION = 'myproject.wsgi.application'
+# WSGI_APPLICATION = 'myproject.wsgi.application'
 
 ROOT_URLCONF = 'myproject.urls'
 

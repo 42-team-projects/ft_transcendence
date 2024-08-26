@@ -9,8 +9,20 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 
 urlpatterns = [
-    path('', chat_views.chat, name='chat'),
-    path('conversations/', chat_views.get_all_conversations, name='conversations'),
-    path('<str:conversation_name>/', chat_views.get_all_messages, name='messages'),
-    path('last_message/<str:conversation_name>/', chat_views.last_message, name='last_message'),
+    path('conversation/', chat_views.get_chat_conversation, name='get_chat_conversation'),
+    path('group_conversations/', chat_views.group_conversations, name='group_conversations'),
+    path('chat_conversations/', chat_views.chat_conversations, name='chat_conversations'),
+    
+    
+    
+    
+    
+    
+    path('chat_conversation/', chat_views.chat_conversation, name='chat-conversation'),
+    path('group_conversation/', chat_views.group_conversation, name='group-conversation'),
+    # path('last_message/<str:conversation_name>/', chat_views.last_message, name='last_message'),
+    
+    
+    
+    
 ]
