@@ -1,3 +1,5 @@
+
+
 export class Router {
     constructor() {
         this.routes = [
@@ -7,7 +9,7 @@ export class Router {
             { path: "*", view: "login-page" },
             
             { path: '/home', view: 'home-page' },
-            { path: '/play', view: 'game-selection' },
+            { path: '/Game', view: 'game-selection' },
             { path: '/chat', view: 'chat-page' },
             { path: '/friends', view: 'game-selection' },
             { path: '/tournament', view: 'tournament-page' },
@@ -20,14 +22,20 @@ export class Router {
 
     handleRoute(path) {
         console.log(path);
+        // get access token from local storage
+        const accessToken = localStorage.getItem('accessToken');
         if (window.location.pathname !== path)
             window.history.pushState({}, "", path);
 
         let matchedRoute = this.routes.find((route) => route.path === path);
-        if (!matchedRoute)
+        if (!matchedRoute && !accessToken)
             matchedRoute = this.routes.find((route) => route.path === "*");
+        if (!matchedRoute && accessToken)
+            matchedRoute = this.routes.find((route) => route.path === "/home");
 
+        console.log(this.rootContent);
         this.rootContent.innerHTML = "";
+        this.rootContent.changeStyle();
         this.rootContent.appendChild(document.createElement(matchedRoute.view));
         this.addLinkEventListeners();
     }

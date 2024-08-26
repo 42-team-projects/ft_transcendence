@@ -73,6 +73,7 @@ html, body {
 }
 
 body{
+    color: #ffffff;
     background: linear-gradient(73deg, #00142ba8 10%,#003347a8 100%),url(./images/background.jpg);
     background-size: cover;
     background-position: center;
@@ -134,11 +135,7 @@ side-bar{
 
 header-bar{
     grid-area: head;
-    justify-content: space-between;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
+    display: grid;
 }
 
 root-content {
@@ -149,6 +146,7 @@ root-content {
     width: 100%;
     height: 100%;
     padding: 2%;
+    margin: 0;
 }
 
 game-table{
@@ -202,73 +200,6 @@ game-over{
     font-size: 1.5rem;
 }
 
-.blur{
-    filter: blur(5px);
-}
-
-
-.transform-1s
-{
-    transition: transform 1s ease;
-}
-.p-animation{
-    transition-delay: 0.5s;
-}
-.shrink-50 {
-    animation: shrink 1s forwards;
-}
-
-.drop-100 {
-    animation: drop 2s forwards;
-}
-.rise-0 {
-    animation: rise 2s forwards;
-}
-@keyframes drop {
-    from{
-        height: 0%;
-        top: 2rem;
-    }
-    to {
-        height: 100%;
-        top:0;
-    }
-}
-
-@keyframes rise {
-    from {
-        height: 100%;
-        top: 0;
-    }
-    to {
-        height: 0%;
-        top: 3rem;
-    }
-}
-@keyframes shrink {
-    to {
-      height: 0%;
-    }
-}
-.down-60{
-    transform: translateY(60%);
-}
-.down-50{
-    transform: translateY(50%);
-}
-.down-100{
-    transform: translateY(100%);
-}
-.up-50{
-    transform: translateY(-50%);
-}
-.up-100{
-    transform: translateY(-100%);
-}
-
-.left{
-    transform: translateX(-150%);
-}
 
 *::-webkit-scrollbar { 
     display: none;
