@@ -1,7 +1,7 @@
-import { CustomAlert } from "../Tournament/CustomAlert.js";
-import { get_tournaments_by_player_id, player_leave_tournament } from "../Tournament/configs/TournamentAPIConfigs.js";
+import { CustomAlert } from "../Components/Tournament/CustomAlert.js";
+import { get_tournaments_by_player_id, player_leave_tournament } from "../Components/Tournament/configs/TournamentAPIConfigs.js";
 import { apiUrl, playerId, wsUrl } from "./GlobalVariables.js";
-import { Lobby } from "../Game/GamePlay/Lobby.js";
+import { Lobby } from "../Components/Game/GamePlay/Lobby.js";
 
 
 let webSocketIdQueue = [];
@@ -39,8 +39,8 @@ export async function closeWebSocket(socketId) {
     {
         webSocketIdQueue.splice(index, 1);
         webSocketQueue[index].close();
+        console.log("disconnected from socket: ", socketId);
         webSocketQueue.splice(index, 1);
-        console.log(webSocketQueue);
     }
 }
 
@@ -59,7 +59,7 @@ async function displayAlert(e, data) {
                 <h4> ${response.message} </h4>
                 <h1 class="countDown"></h1>
             </div>
-            <div slot="footer" class="alert-footer">
+            <div slot="footer" class="alert-footer buttons">
                 <custom-button id="playBtn" width="160px" height="48px" reverse>PLAY</custom-button>
                 <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
             </div>
@@ -83,25 +83,27 @@ async function displayAlert(e, data) {
             const totalCountdownTime = 120; // 2 minutes in seconds
             const timeLeft = totalCountdownTime - timespent;
             //
-            const playerIds = data.players;
-            const totalPlayers = playerIds.length;
-            const pId = playerId;
-            const opponentId = findOpponentId(pId, playerIds, totalPlayers);
-            if (opponentId) {
-                console.log("playerID:     ", pId, "opponentId:    ", opponentId);
-                // alert(`playerID:      ${playerId}   opponentId:     ${opponentId}`);
-                // lobby(playerId, opponentId);
-            } else {
-                console.log('No opponent found or already paired.');
-            }
+            // const playerIds = data.players;
+            // const totalPlayers = playerIds.length;
+            // const pId = playerId;
+            // const opponentId = findOpponentId(pId, playerIds, totalPlayers);
+            // if (opponentId) {
+            //     console.log("playerID:     ", pId, "opponentId:    ", opponentId);
+            //     // alert(`playerID:      ${playerId}   opponentId:     ${opponentId}`);
+            //     // lobby(playerId, opponentId);
+            // } else {
+            //     console.log('No opponent found or already paired.');
+            // }
             /* -------    call nordine code here -------- */
             // store the player id in the local storage
-            localStorage.setItem('userId', playerId);
-            const lobby = new Lobby(opponentId);
-            document.body.querySelector('root-content').innerHTML = '';
-            document.body.querySelector('root-content').appendChild(lobby);
+            // localStorage.setItem('userId', playerId);
+            // const lobby = new Lobby(opponentId);
+            // document.body.querySelector('root-content').innerHTML = '';
+            // document.body.querySelector('root-content').appendChild(lobby);
             /* -------    call nordine code here -------- */
             startCountdown(customAlert, timeLeft);
+            customAlert.querySelector(".buttons").remove();
+
     
             // Here you can add logic to start the game or redirect to the game page
             // Here i need page of counter start with 2 minutes and decrement if 2 minutes is ended tournment is started
@@ -135,15 +137,14 @@ export function useWebsocket(data) {
     const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
     tournamentSocket.onopen = async () => {
         console.log('WebSocket connection of Tournament is opened');
-        if(data.number_of_players == data.players.length)
+        if(data.number_of_players == data.players.length || !data.can_join)
         {
             await update_start_date(data);
-            console.log(data.tournament_name);
             tournamentSocket.send(JSON.stringify({'type': 'play_cancel','message': 'Tournament is starting in 2 minutes'}));
         }
     };
 
-    tournamentSocket.onmessage = (e) => { displayAlert(e, data);};
+    tournamentSocket.onmessage = (e) => { displayAlert(e, data); };
 
     tournamentSocket.onclose = () => { console.log('WebSocket connection of tournament closed'); };
 
@@ -214,7 +215,6 @@ function findOpponentId(pId, playerIds, totalPlayers) {
 
 function startCountdown(alert, timeLeft) {
     const countDown = alert.querySelector(".countDown");
-    
     const countdownInterval = setInterval(function() {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
