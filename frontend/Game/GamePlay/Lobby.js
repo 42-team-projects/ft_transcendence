@@ -1,7 +1,7 @@
 import { PlayerBorder } from "./PlayerBorder.js";
 import { GameHeader } from "./GameHeader.js"
 import { GameTable } from "./GameTable.js"
-import { ip } from "../../conf.js";
+import { ip } from "../../Utils/GlobalVariables.js";
 import { playerId } from "../../Utils/GlobalVariables.js";
 
 const lobby = document.createElement('template');

@@ -1,7 +1,7 @@
 import Header from './Header.js';
 import Shape from './Shape.js';
 import { router } from '../root/Router.js';
-import config from '../conf.js';
+import config from '../../Utils/GlobalVariables.js';
 
 export default class SignupPage extends HTMLElement {
     connectedCallback() {

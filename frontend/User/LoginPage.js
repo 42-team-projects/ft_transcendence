@@ -1,5 +1,5 @@
 import { router } from '../root/Router.js';
-import config from '../conf.js';
+import config from '../../Utils/GlobalVariables.js';
 
 export default class LoginPage extends HTMLElement {
 	constructor() {
