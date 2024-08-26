@@ -1,4 +1,4 @@
-import { getLeagueColor } from "../../Utils/LeaguesData.js"
+import { getLeagueColor } from "../../../Utils/LeaguesData.js"
 
 export class FriendItemComponent extends HTMLElement {
     constructor () {

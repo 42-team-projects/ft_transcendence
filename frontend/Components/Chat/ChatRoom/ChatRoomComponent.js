@@ -1,4 +1,4 @@
-import { fetchData } from "../../Utils/Fetcher.js";
+import { fetchData } from "../../../Utils/Fetcher.js";
 import { ChatHeaderComponent } from "./ChatHeaderComponent.js";
 import { ChatFooterComponent } from "./ChatFooterComponent.js";
 import { SenderComponent } from "./SenderComponent.js";
