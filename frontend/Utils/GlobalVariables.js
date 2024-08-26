@@ -9,3 +9,9 @@ localStorage.setItem('accessToken', 'token');
 // get acsses token in local storage
 export const accessToken = localStorage.getItem('accessToken');
 console.log(accessToken);
+export const ip = '10.11.3.7';
+const config = {
+    serverIP: ip,
+};
+
+export default config;

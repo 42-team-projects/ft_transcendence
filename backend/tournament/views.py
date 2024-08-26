@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from game.models import Player
 from rest_framework import status
 from rest_framework.parsers import JSONParser
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 
 # Create your views here.
@@ -58,14 +60,27 @@ def player_join_tournament(request, tournamentId, playerId):
 
             tournament.players.add(player)
             tournament.save()
+            serializer = TournamentSerializer(tournament)
+            # Send a message to the WebSocket group
+            channel_layer = get_channel_layer()
+            tournament_name = "Tournament"
+            room_group_name = f'tournament_{tournament_name}'
+            
+            async_to_sync(channel_layer.group_send)(
+                room_group_name,
+                {
+                    'type': 'tournament_message',
+                    'message': 'A new tournament has been created!',
+                    'dataTest': serializer.data,
+                    'join': True
+                }
+            )
             if tournament.players.count() >= tournament.number_of_players:
                 tournament.can_join = False
                 tournament.save()
                 # launch_tournament(tournament) # here call launch_tournament function
-                serializer = TournamentSerializer(tournament)
-                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+                # return JsonResponse(serializer.data, status=status.HTTP_200_OK)
                 # return JsonResponse({'success': launch_tournament(tournament)}, status=200)
-            serializer = TournamentSerializer(tournament)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
             # return JsonResponse({'success': 'Player successfully joined the tournament'}, status=200)
         except Player.DoesNotExist:
@@ -104,14 +119,14 @@ def get_available_tournaments(request):
     if request.method == 'GET':
 
         tournamentName = request.GET.get("tournament_name")
-        tournamentId = request.GET.get("id")
+        tournamentId = request.GET.get("tournament_id")
         
         if tournamentId and tournamentName:
-            tournaments = Tournament.objects.filter(can_join=True, tournament_id=tournamentId, tournament_name=tournamentName)
+            tournaments = Tournament.objects.filter(can_join=True, tournament_id=tournamentId, tournament_name__contains=tournamentName)
         elif tournamentId : 
             tournaments = Tournament.objects.filter(can_join=True, tournament_id=tournamentId)
         elif tournamentName : 
-            tournaments = Tournament.objects.filter(can_join=True, tournament_name=tournamentName)
+            tournaments = Tournament.objects.filter(can_join=True, tournament_name__contains=tournamentName)
         else :
             tournaments = Tournament.objects.filter(can_join=True)
 
@@ -151,6 +166,24 @@ def create_tournament(request, player_id):
             tournament.players.add(player)
             tournament.owner = player
             tournament.save()
+
+            # tournaments = Tournament.objects.filter(can_join=True)
+            # serializers = TournamentSerializer(tournaments, many=True)
+
+            # Send a message to the WebSocket group
+            channel_layer = get_channel_layer()
+            tournament_name = "Tournament"
+            room_group_name = f'tournament_{tournament_name}'
+            
+            async_to_sync(channel_layer.group_send)(
+                room_group_name,
+                {
+                    'type': 'tournament_message',
+                    'message': 'A new tournament has been created!',
+                    'dataTest': serializer.data,
+                    'join': False
+                }
+            )
             return JsonResponse({'status': 'success', 'tournament': serializer.data}, status=201)
         print(serializer.errors)
         # logger.debug("Validation errors:", serializer.errors)
