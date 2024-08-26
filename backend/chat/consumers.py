@@ -61,10 +61,13 @@ class ChatConversationConsumer(WebsocketConsumer):
         try:
             # Parse incoming message data
             data = json.loads(text_data)
-            # sender = self.user.id
             
-            receiver = self.get_user(data['receiver'])
-            sender = self.get_user(1)
+            sender_id = 1
+            receiver_id = data['receiver']
+            
+            sender = self.get_user(sender_id)
+            receiver = self.get_user(receiver_id)
+            
             if not sender or not receiver:
                 self.send_error('user do not exist in the database.')
                 return
@@ -85,7 +88,7 @@ class ChatConversationConsumer(WebsocketConsumer):
         conversation = self.get_or_create_conversation()
         conversation.users.add(sender, receiver)
         message_data = {
-            'sender': sender.id,
+            'receiver': receiver.id,
             'content': content,
             'conversation': conversation.id
         }
