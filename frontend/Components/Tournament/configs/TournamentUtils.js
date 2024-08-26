@@ -85,7 +85,7 @@ export function createRow(parentNode, data) {
         const displayButton = document.createElement("img");
         displayButton.id = data.id;
         displayButton.className = "displayAction";
-        displayButton.src = "./assets/profile-assets/play-button.svg";
+        displayButton.src = "./assets/images/profile/play-button.svg";
         displayButton.width = 24;
         displayButton.addEventListener("click", async () => {
             parentNode.innerHTML = '';

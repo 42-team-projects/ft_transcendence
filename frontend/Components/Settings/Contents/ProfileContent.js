@@ -73,7 +73,7 @@ const cssContent = /*css*/`
     .c-hexagon-content {
         width: 100%;
         height: 100%;
-        background: url("../../assets/profile-assets/tanjuro.jpg");
+        background: url("../../assets/images/profile/tanjuro.jpg");
         background-position: center;
         background-size: cover;
     }
