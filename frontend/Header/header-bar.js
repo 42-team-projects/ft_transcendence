@@ -1,4 +1,4 @@
-import { NotificationComponent } from "../Notification/NotificationComponent.js";
+import { NotificationComponent } from "../Components/Notification/NotificationComponent.js";
 
 const HeaderTemplate =  document.createElement('template');
 

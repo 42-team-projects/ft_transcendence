@@ -1,11 +1,11 @@
-import { calculateTimeDifferents } from "../Utils/DateUtils.js";
-import { apiUrl, playerId } from "../Utils/GlobalVariables.js";
+import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
+import { apiUrl, playerId } from "../../Utils/GlobalVariables.js";
 import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "./configs/TournamentAPIConfigs.js";
 import { CustomButton } from "./CustomButton.js";
 import { JoinTournament } from "./JoinTournament.js";
 import { CreateTournament } from "./CreateTournament.js";
 import { GenerateRounds } from "./GenerateRounds.js";
-import { closeWebSocket, initWebSocket } from "../Utils/TournamentWebSocketManager.js";
+import { closeWebSocket, initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
 import { createTournamentTable } from "./configs/TournamentUtils.js";
 
 

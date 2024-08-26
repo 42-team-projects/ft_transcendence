@@ -21,10 +21,10 @@ import { Profile } from './Header/profile.js'
 import { SideBarButtonIcons } from './side-bar/sb-icon.js'
 import { SideBarButtonText } from './side-bar/sb-text.js'
 import { SideBarButton } from './side-bar/sb-button.js'
-import { CustomButton } from "./Tournament/CustomButton.js";
-import { TournamentComponent } from "./Tournament/TournamentComponent.js";
+import { CustomButton } from "./Components/Tournament/CustomButton.js";
+import { TournamentComponent } from "./Components/Tournament/TournamentComponent.js";
 
-import { SettingsComponent } from "./Settings/SettingsComponent.js"
+import { SettingsComponent } from "./Components/Settings/SettingsComponent.js"
 
 import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js";
 
