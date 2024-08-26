@@ -1,5 +1,5 @@
 
-import { getLeagueColor } from "../../Utils/LeaguesData.js";
+import { getLeagueColor } from "../../../Utils/LeaguesData.js";
 
 export class ChatHeaderComponent extends HTMLElement {
     constructor () {

@@ -1,8 +1,8 @@
 import { displayNotification } from "../Notification/NotificationUtils.js";
-import { calculateTimeDifferents } from "../Utils/DateUtils.js";
-import { apiUrl, playerId, wsUrl } from "../Utils/GlobalVariables.js";
-import { hashPassword } from "../Utils/Hasher.js";
-import { closeWebSocket, initWebSocket } from "../Utils/TournamentWebSocketManager.js";
+import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
+import { apiUrl, playerId, wsUrl } from "../../Utils/GlobalVariables.js";
+import { hashPassword } from "../../Utils/Hasher.js";
+import { closeWebSocket, initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
 import { createRow } from "./configs/TournamentUtils.js";
 

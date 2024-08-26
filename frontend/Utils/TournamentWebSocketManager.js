@@ -1,5 +1,5 @@
-import { CustomAlert } from "../Tournament/CustomAlert.js";
-import { get_tournaments_by_player_id, player_leave_tournament } from "../Tournament/configs/TournamentAPIConfigs.js";
+import { CustomAlert } from "../Components/Tournament/CustomAlert.js";
+import { get_tournaments_by_player_id, player_leave_tournament } from "../Components/Tournament/configs/TournamentAPIConfigs.js";
 import { apiUrl, playerId, wsUrl } from "./GlobalVariables.js";
 import { Lobby } from "../Game/GamePlay/Lobby.js";
 
