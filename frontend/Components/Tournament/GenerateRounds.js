@@ -45,12 +45,12 @@ export class GenerateRounds extends HTMLElement {
         if (PlayerName)
             player.innerHTML = `
                     <c-hexagon class="${slot}" width="32px" height="32px" apply="true" bcolor="aqua">
-                        <div slot="content" class="c-hexagon-content" style="background: url(../assets/profile-assets/tanjuro.jpg) center / cover no-repeat;"></div>
+                        <div slot="content" class="c-hexagon-content" style="background: url(../assets/images/profile/tanjuro.jpg) center / cover no-repeat;"></div>
                     </c-hexagon>
                     <h4>${PlayerName}</h4>
                 `;
         else
-            player.innerHTML = `<img loading="lazy" class="addPlayer" src="../assets/profile-assets/add-friends-icon.svg" width="24px"/>`;
+            player.innerHTML = `<img loading="lazy" class="addPlayer" src="../assets/images/profile/add-friends-icon.svg" width="24px"/>`;
         return player;
     }
 
@@ -173,7 +173,7 @@ export class GenerateRounds extends HTMLElement {
                         <img loading="lazy" class="closeButton" src="../assets/icons/close-x-icon.svg"/>
                         <h2>YOUR FRIENDS</h2>
                         <div class="line">
-                            <img loading="lazy" class="separator" src="../assets/login-assets/separator.svg"/>
+                            <img loading="lazy" class="separator" src="../assets/images/tournament/separator.svg"/>
                         </div>
                         <add-player-component></add-player-component>
                     </div>
