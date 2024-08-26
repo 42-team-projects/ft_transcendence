@@ -88,7 +88,7 @@ class ChatConversationConsumer(WebsocketConsumer):
         conversation = self.get_or_create_conversation()
         conversation.users.add(sender, receiver)
         message_data = {
-            'receiver': receiver.id,
+            'sender': sender.id,
             'content': content,
             'conversation': conversation.id
         }
@@ -102,6 +102,7 @@ class ChatConversationConsumer(WebsocketConsumer):
     def get_or_create_conversation(self):
         conversation = Conversation.objects.filter(conversation_name=self.group_name).first()
         if conversation:
+            conversation
             return conversation
         conversation = Conversation.objects.create(status='C', conversation_name=self.group_name)
         if conversation:

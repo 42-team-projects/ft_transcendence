@@ -63,13 +63,13 @@
                 let message = e.target.message.value
                 websocket.send(JSON.stringify({
                     'message' : message,
-                    'receiver' : 2
+                    'receiver' : receiver_id
                 }))
                 form.reset()
             })
         }
 
-        chat(2, 1)
+        chat(3, 2)
     </script>
 </body>
 </html>
