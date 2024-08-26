@@ -73,19 +73,19 @@ let fakeData = {
     achievements: [
         {
             name: "Bronze",
-            img: "./assets/leagues-logo/bronze-league.svg"
+            img: "./assets/images/leagues/bronze-league.svg"
         },
         {
             name: "Silver",
-            img: "./assets/leagues-logo/silver-league.svg"
+            img: "./assets/images/leagues/silver-league.svg"
         },
         {
             name: "Gold",
-            img: "./assets/leagues-logo/gold-league.svg"
+            img: "./assets/images/leagues/gold-league.svg"
         },
         {
             name: "Platinum",
-            img: "./assets/leagues-logo/platinum-league.svg"
+            img: "./assets/images/leagues/platinum-league.svg"
         }
     ],
     history: {
@@ -127,9 +127,9 @@ export class ProfileComponent extends HTMLElement {
                             <profile-info-component></profile-info-component>
 
                             <div class="profile-data-infos-container">
-                                <user-info-container id="userInfo" label="Account Information" icon="assets/profile-assets/account-icon.svg"></user-info-container>
-                                <user-info-container id="links" label="Links" icon="assets/profile-assets/chain-for-links.svg"></user-info-container>
-                                <user-info-container id="achievements" label="Achievements" icon="assets/profile-assets/trophy.svg"> </user-info-container>
+                                <user-info-container id="userInfo" label="Account Information" icon="assets/images/profile/account-icon.svg"></user-info-container>
+                                <user-info-container id="links" label="Links" icon="assets/images/profile/chain-for-links.svg"></user-info-container>
+                                <user-info-container id="achievements" label="Achievements" icon="assets/images/profile/trophy.svg"> </user-info-container>
                             </div>
 
                         </div>

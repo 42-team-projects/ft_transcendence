@@ -93,13 +93,13 @@ export class ProfileInfoComponent extends HTMLElement {
                         </c-hexagon>
                     </div>
                     <div class="joined-date">
-                        <img loading="lazy"   src="./assets/profile-assets/Calendar.svg" width="20px"/>
+                        <img loading="lazy"   src="./assets/images/profile/Calendar.svg" width="20px"/>
                         <p class="joined-text">joined:</p>
                         <p class="joined-date-text"> </p>
                     </div>
                 </div>
                 <div class="add-friend">
-                    <img loading="lazy"   src="./assets/profile-assets/add-friends-icon.svg" width="32"/>
+                    <img loading="lazy"   src="./assets/images/profile/add-friends-icon.svg" width="32"/>
                 </div>
             </div>
 

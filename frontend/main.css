@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'Sansation';
-    src: url('./sansation/Sansation_Regular.ttf');
+    src: url('./assets/fonts/sansation/Sansation_Regular.ttf');
 }
 
 @font-face {
     font-family: 'Sansation Bold';
-    src: url('./sansation/Sansation_Bold.ttf');
+    src: url('./assets/fonts/sansation/Sansation_Bold.ttf');
 }
 
 *{

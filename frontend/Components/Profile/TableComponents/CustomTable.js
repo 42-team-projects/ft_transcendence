@@ -156,7 +156,7 @@ export class CustomTable extends HTMLElement {
                     tableData.appendChild(parag);
                 } else if (counter == 6)  {
                     const icon = document.createElement("img");
-                    icon.src = "./assets/profile-assets/play-button.svg";
+                    icon.src = "./assets/images/profile/play-button.svg";
                     icon.width = 24;
                     tableData.appendChild(icon);
                 } else {
