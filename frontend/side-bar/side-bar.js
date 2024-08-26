@@ -40,14 +40,13 @@ const Sidebar_button_contetn = [
         text : "Settings",
     }
 ]
-class SideBar extends HTMLElement {
+export class SideBar extends HTMLElement {
 
     constructor (){
         super();
         this.attachShadow({
             mode: 'open'
         })
-        this.shadowRoot.appendChild(SideBarTemplate.content.cloneNode(true))
     }
 
     setbuttonimages(image, templat)
@@ -79,9 +78,7 @@ class SideBar extends HTMLElement {
         });
     }
     connectedCallback(){
-        this.setbuttons()
-        this.activeButton = this.shadowRoot.querySelectorAll('sb-button')[0]
-        this.clickEvent = 0;
+        
     }
     set activeButton(button){
         this.active_button = button;
@@ -106,6 +103,15 @@ class SideBar extends HTMLElement {
             button.shadowRoot.querySelector('.c-sb-text').classList.add('on')
             this.active_button = button;
         }
+    }
+    render(){
+        this.shadowRoot.appendChild(SideBarTemplate.content.cloneNode(true));
+        this.setbuttons()
+        this.activeButton = this.shadowRoot.querySelectorAll('sb-button')[0]
+        this.clickEvent = 0;
+    }
+    remove(){
+        this.shadowRoot.innerHTML = '';
     }
 }
 
