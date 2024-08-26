@@ -180,7 +180,7 @@ export class CustomTable extends HTMLElement {
     connectedCallback() {
         const styleSheet = document.createElement("link");
         styleSheet.rel = `stylesheet`;
-        styleSheet.href = `./Profile/TableComponents/CustomTable.css`;
+        styleSheet.href = `./Components/Profile/TableComponents/CustomTable.css`;
         this.shadowRoot.appendChild(styleSheet);
 
         const tableContainer = document.createElement("div");
