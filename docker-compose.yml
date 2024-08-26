@@ -9,16 +9,6 @@ services:
     networks:
       - ft_transcendence
 
-  chat:
-    build: .
-    container_name: chat
-    volumes:
-      - ./myproject/:/app
-    ports:
-      - "9000:8000"
-    networks:
-      - ft_transcendence
-
   front-end:
     container_name: front-end
     image: nginx:latest
@@ -30,7 +20,6 @@ services:
       - ft_transcendence
     depends_on:
       - back-end
-      - chat
 
 networks:
   ft_transcendence:

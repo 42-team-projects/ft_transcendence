@@ -24,9 +24,11 @@ urlpatterns = [
     path('game/', include('game.urls')),
     path('tournament/', include('tournament.urls')),
     path('Profile/', include('Profile.urls')),
-    path('chat/', include("chat.urls")),
-    # path('api/v1/auth/', include('accounts.urls')),
+    path('chat/', include("chat.urls"), name="chat"),
+    path('notification/', include("notification.urls"), name="notification"),
+        # path('api/v1/auth/', include('accounts.urls')),
 ]
+
 
 if settings.DEBUG: 
     urlpatterns += static(settings.MEDIA_URL,

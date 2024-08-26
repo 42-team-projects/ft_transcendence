@@ -1,10 +1,10 @@
 export class Router {
     constructor() {
         this.routes = [
-            { path: "/signup", view: "signup-page" },
-            { path: "/confirm-email", view: "email-page" },
-            { path: "/oauth", view: "oauth-callback" },
-            { path: "*", view: "login-page" },
+            // { path: "/signup", view: "signup-page" },
+            // { path: "/confirm-email", view: "email-page" },
+            // { path: "/oauth", view: "oauth-callback" },
+            { path: "*", view: "home-page" },
             
             { path: '/home', view: 'home-page' },
             { path: '/play', view: 'game-selection' },
