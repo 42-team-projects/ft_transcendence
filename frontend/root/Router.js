@@ -8,15 +8,15 @@ export class Router {
             { path: "/oauth", view: "oauth-callback" },
             { path: "*", view: "login-page" },
             
-            { path: '/home', view: 'home-page' },
+            { path: '/Home', view: 'home-page' },
             { path: '/Game', view: 'game-selection' },
-            { path: '/chat', view: 'chat-page' },
-            { path: '/friends', view: 'game-selection' },
-            { path: '/tournament', view: 'tournament-page' },
-            { path: '/settings', view: 'settings-page' },
+            { path: '/Chat', view: 'chat-page' },
+            { path: '/Friends', view: 'freinds-page' },
+            { path: '/Tournament', view: 'tournament-page' },
+            { path: '/Settings', view: 'settings-page' },
         ];
-        
         this.rootContent = document.querySelector("root-content");
+        this.sideBar = document.querySelector("side-bar")
         this.handleRoute(window.location.pathname);
     }
 
@@ -32,11 +32,18 @@ export class Router {
             matchedRoute = this.routes.find((route) => route.path === "*");
         if (!matchedRoute && accessToken)
             matchedRoute = this.routes.find((route) => route.path === "/home");
-
-        console.log(this.rootContent);
+        
+        if(accessToken)
+        {
+            this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
+                if(button.shadowRoot.href === matchedRoute)
+                    sideBar.clickEvent = index;
+            });
+        }
         this.rootContent.innerHTML = "";
         this.rootContent.changeStyle();
         this.rootContent.appendChild(document.createElement(matchedRoute.view));
+        this.rootContent.clickEvent();
         this.addLinkEventListeners();
     }
 

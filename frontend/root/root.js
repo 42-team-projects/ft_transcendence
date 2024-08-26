@@ -1,8 +1,10 @@
-import { ChatComponent } from "../Chat/ChatComponent.js";
-import { ProfileComponent } from "../Profile/ProfileComponent.js";
-import { TournamentComponent } from "../Tournament/TournamentComponent.js";
-import { SettingsComponent } from "../Settings/SettingsComponent.js";
-
+import { ChatComponent } from "../Components/Chat/ChatComponent.js";
+import { ProfileComponent } from "../Components/Profile/ProfileComponent.js";
+import { TournamentComponent } from "../Components/Tournament/TournamentComponent.js";
+import { SettingsComponent } from "../Components/Settings/SettingsComponent.js";
+import { NotificationsList } from "../Components/Notification/NotificationsList.js";
+// import { router } from "../User/Router.js";
+import { accessToken } from "../Utils/GlobalVariables.js";
 const root = document.createElement('template')
 
 const sideBar = document.querySelector('side-bar')
@@ -33,11 +35,15 @@ class Root extends HTMLElement{
     {
         super();
         this.appendChild(root.content.cloneNode(true))
+        this.randred = false;
     }
     changeStyle(){
-        document.body.classList.add('body-default-shrink')
-        header.render()
-        sideBar.render()
+        if(accessToken && !this.randred){
+            document.body.classList.add('body-default-shrink')
+            header.render()
+            sideBar.render()
+            this.randred = true;
+        }
         // document.body.querySelector('footer').render()
     }
     // set ChangeRootContent(component){
@@ -53,7 +59,6 @@ class Root extends HTMLElement{
             button.addEventListener('click', () => {
                 if(button.classList.length === 0)
                 {
-                    this.ChangeRootContent = rootContent[index]
                     sideBar.clickEvent = index;
                     sideBar.activeButton = button;
                 }
@@ -61,22 +66,22 @@ class Root extends HTMLElement{
         })
         const profile = header.querySelector('c-profile')
         const userRunk = header.querySelector('user-rank');
-        profile.addEventListener('click', () => {
-            if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
-                this.ChangeRootContent = 'profile-component'
-            if(sideBar.activeButton.classList.length)
-            {
-                userRunk.classList.toggle('drop-100', false);
-                userRunk.classList.toggle('transform-1s', true);
-                userRunk.classList.toggle('down-60', false);
-                userRunk.classList.toggle('rise-0', true);
-                sideBar.activeButton.classList.toggle('on')
-                sideBar.activeButton.shadowRoot.querySelector('sb-icon').classList.toggle('on')
-                sideBar.activeButton.shadowRoot.querySelector('.c-sb-text').classList.toggle('on')
-                sideBar.activeButton.querySelector('h1').classList.toggle('on')
-                sideBar.activeButton.querySelector('img').classList.toggle('on')
-            }
-        })
+        // profile.addEventListener('click', () => {
+        //     if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
+        //         this.ChangeRootContent = 'profile-component'
+        //     if(sideBar.activeButton.classList.length)
+        //     {
+        //         userRunk.classList.toggle('drop-100', false);
+        //         userRunk.classList.toggle('transform-1s', true);
+        //         userRunk.classList.toggle('down-60', false);
+        //         userRunk.classList.toggle('rise-0', true);
+        //         sideBar.activeButton.classList.toggle('on')
+        //         sideBar.activeButton.shadowRoot.querySelector('sb-icon').classList.toggle('on')
+        //         sideBar.activeButton.shadowRoot.querySelector('.c-sb-text').classList.toggle('on')
+        //         sideBar.activeButton.querySelector('h1').classList.toggle('on')
+        //         sideBar.activeButton.querySelector('img').classList.toggle('on')
+        //     }
+        // })
         const logout = footer.querySelector('.logout')
 
         logout.addEventListener('click', () => {
@@ -85,10 +90,6 @@ class Root extends HTMLElement{
             sideBar.clickEvent = 0;
             sideBar.activeButton = buttons[0];
         })
-    }
-    connectedCallback()
-    {
-        this.clickEvent()
     }
 }
 customElements.define("root-content", Root)
