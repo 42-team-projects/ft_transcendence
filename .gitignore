@@ -1,8 +1,20 @@
 ignore
-.vscode
+
+#Ignore all vscode settings
+**/.vscode
+
+#Ignore all .DS_Store files.
 .DS_Store
-env
-.venv/
+**/.DS_Store
+
+#Ignore all docker environments
+**/.env
+
+#Ignore all virtual environment
+**/.venv
+
+# Ignore all Python bytecode files
 *.pyc
-__pycache__/
-*.DS_Store
+
+# Ignore __pycache__ directories
+**/__pycache__/
