@@ -31,7 +31,7 @@ export class ChatListComponent extends HTMLElement {
             // if (userInfo)
             // {
                 chatItem.userName = item.conversation_name;
-                chatItem.profileImage = "../assets/profile-assets/tanjuro.jpg";
+                chatItem.profileImage = "../assets/images/profile/tanjuro.jpg";
                 chatItem.active = true;
                 // if (userInfo.stats)
                     chatItem.league = "gold";

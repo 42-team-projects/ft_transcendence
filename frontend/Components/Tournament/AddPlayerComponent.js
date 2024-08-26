@@ -2,22 +2,22 @@ import { playerId } from "../../Utils/GlobalVariables.js";
 
 const fakeData = [
     {
-        profileImage: "../assets/profile-assets/mudoria.jpg",
+        profileImage: "../assets/images/profile/mudoria.jpg",
         username: "esalim",
         active: true
     },
     {
-        profileImage: "../assets/profile-assets/mudoria.jpg",
+        profileImage: "../assets/images/profile/mudoria.jpg",
         username: "oussama",
         active: false
     },
     {
-        profileImage: "../assets/profile-assets/mudoria.jpg",
+        profileImage: "../assets/images/profile/mudoria.jpg",
         username: "zeroual",
         active: false
     },
     {
-        profileImage: "../assets/profile-assets/mudoria.jpg",
+        profileImage: "../assets/images/profile/mudoria.jpg",
         username: "nourdine",
         active: true
     }
@@ -43,7 +43,7 @@ export class AddPlayerComponent extends HTMLElement {
             <h1>${userName}</h1>
             <h6>${isActive == true ? "online" : "offline"}</h6>
         </div>
-        <img loading="lazy" class="sendRequest" src="../assets/profile-assets/add-friends-icon.svg"/>
+        <img loading="lazy" class="sendRequest" src="../assets/images/profile/add-friends-icon.svg"/>
     `;
     container.querySelector(".c-hexagon-content").style.background = "url(" + profileImage + ") center / cover no-repeat";
     return container;
