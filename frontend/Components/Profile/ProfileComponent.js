@@ -1,4 +1,4 @@
-import { getLeagueColor, getLeagueImage } from "../Utils/LeaguesData.js";
+import { getLeagueColor, getLeagueImage } from "../../Utils/LeaguesData.js";
 import { CoverComponent } from "./CoverComponent.js";
 import { ProfileInfoComponent } from "./UserInfosComponents/ProfileInfoComponent.js";
 import { UserInfoContainerComponent } from "./UserInfosComponents/UserInfoContainerComponent.js";
