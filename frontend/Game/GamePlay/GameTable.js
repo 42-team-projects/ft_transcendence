@@ -1,7 +1,7 @@
 import { GameOver } from "./GameOver.js";
 import { LaunchingGame } from "./launchingGame.js";
 import { userInfo, opponentInfo } from "./Lobby.js";
-import { ip } from "../../conf.js";
+import { ip } from "../../Utils/GlobalVariables.js";
 const game_page = document.createElement('template');
 
 let score = {
