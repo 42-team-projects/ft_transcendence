@@ -1,57 +1,5 @@
-export class NotificationComponent extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = `
-            <style> ${cssContent} </style>
-            <div class="parent-box active"></div>
-            <div class="content">
-                <div class="top-line"></div>
-                <div class="main-box">
-                    <div class="mainContainer">
-                        <slot></slot>
-                    </div>
-                </div>
-                <div class="bottom-box"></div>
-            </div>
-        `;
-    }
-
-    connectedCallback() {
-        this.style.width = this.width;
-        this.style.height = this.height;
-        // const interval = setInterval(() => {
-        //     clearInterval(interval);
-        //     this.remove();
-        // }, 5000);
-    }
-
-    disconnectedCallback() {
-
-    }
-
-    static observedAttributes = ["width", "height"];
-
-    attributeChangedCallback(attrName, oldValue, newValue) {
-        if (attrName == "width")
-            this.style.width = newValue;
-        else if (attrName == "height")
-            this.style.height = newValue;
-
-    }
-
-    set width(val) {this.setAttribute("width", val);}
-    get width() { return this.getAttribute("width"); }
-
-    set height(val) {this.setAttribute("height", val);}
-    get height() { return this.getAttribute("height"); }
-}
-
-customElements.define("notification-component", NotificationComponent);
 
 const cssContent = /*css*/`
-/* Google Fonts - Poppins */
-
 * {
   margin: 0;
   padding: 0;
@@ -69,7 +17,6 @@ const cssContent = /*css*/`
     min-width: 200px;
     position: relative;
     box-shadow: 2px 2px 10px 2px #00fffc40, inset 2px 2px 10px 2px #00fffc40;
-    animation: slide-right 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
 .parent-box {
@@ -181,3 +128,54 @@ const cssContent = /*css*/`
 }   
 
 `;
+
+export class NotificationComponent extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({mode: "open"});
+        this.shadowRoot.innerHTML = `
+            <style> ${cssContent} </style>
+            <div class="parent-box active"></div>
+            <div class="content">
+                <div class="top-line"></div>
+                <div class="main-box">
+                    <div class="mainContainer">
+                        <slot></slot>
+                    </div>
+                </div>
+                <div class="bottom-box"></div>
+            </div>
+        `;
+    }
+
+    connectedCallback() {
+        this.style.width = this.width;
+        this.style.height = this.height;
+        // const interval = setInterval(() => {
+        //     clearInterval(interval);
+        //     this.remove();
+        // }, 5000);
+    }
+
+    disconnectedCallback() {
+
+    }
+
+    static observedAttributes = ["width", "height"];
+
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        if (attrName == "width")
+            this.style.width = newValue;
+        else if (attrName == "height")
+            this.style.height = newValue;
+
+    }
+
+    set width(val) {this.setAttribute("width", val);}
+    get width() { return this.getAttribute("width"); }
+
+    set height(val) {this.setAttribute("height", val);}
+    get height() { return this.getAttribute("height"); }
+}
+
+customElements.define("notification-component", NotificationComponent);
