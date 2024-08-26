@@ -8,24 +8,7 @@ export class NotificationsList extends HTMLElement {
                 <h3>NOTIFICATIONS</h3>
             </div>
             <div class="notificationsBar-body">
-                <div class="notification-list">
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                </div>
+                <div class="notification-list"></div>
             </div>
             <div class="notificationsBar-footer">
                 <h5>Clear All</h5>
@@ -48,6 +31,7 @@ export class NotificationsList extends HTMLElement {
     appendNotification(notification) {
         const notificationsList = this.querySelector(".notification-list");
         notificationsList.appendChild(notification);
+        console.log("hello world 11222:", notification);
     }
 
     static observedAttributes = ["width", "height"];
