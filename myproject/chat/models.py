@@ -8,7 +8,17 @@ class User(models.Model):
         return self.name
 
 class Conversation(models.Model):
+    STATUS_CHOICES = [
+        ('C', 'Chat'),
+        ('G', 'Group')
+    ]
+
+
     users = models.ManyToManyField(User, related_name='users')
+    status = models.CharField(
+        max_length=1,
+        choices=STATUS_CHOICES
+    )
     conversation_name = models.CharField(max_length=255, unique=True)
     # last_message = models.ForeignKey(Message, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
