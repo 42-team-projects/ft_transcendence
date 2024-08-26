@@ -56,7 +56,7 @@ import SignupPage from "./User/SignupPage.js";
 import LoginPage from "./User/LoginPage.js";
 import EmailConf from "./User/EmailConf.js";
 import OAuth from "./User/Oauth.js";
-import { router } from './root/Router.js';
+// import { router } from './root/Router.js';
 
 
 customElements.define("signup-page", SignupPage);
@@ -64,8 +64,8 @@ customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);
 customElements.define("oauth-callback", OAuth);
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    window.addEventListener("popstate", () =>
-        router.handleRoute(window.location.pathname)
-    );
-});
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     window.addEventListener("popstate", () =>
+//         router.handleRoute(window.location.pathname)
+//     );
+// });
