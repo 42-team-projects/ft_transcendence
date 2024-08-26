@@ -376,7 +376,7 @@ const list = `
         </div>
         ${filterContent}
         <div class="line">
-            <img class="separator" src="../assets/login-assets/separator.svg"/>
+            <img class="separator" src="../assets/images/tournament/separator.svg"/>
         </div>
         <div class="tournaments-list">
             <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>

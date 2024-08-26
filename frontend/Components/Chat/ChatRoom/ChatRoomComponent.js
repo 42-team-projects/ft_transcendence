@@ -72,8 +72,8 @@ export class ChatRoomComponent extends HTMLElement {
             league = "gold";
         // }
         header.active = false;
-        profileImage = "../../assets/profile-assets/tanjuro.jpg";
-        header.profileImage = "../../assets/profile-assets/tanjuro.jpg";
+        profileImage = "../../assets/images/profile/tanjuro.jpg";
+        header.profileImage = "../../assets/images/profile/tanjuro.jpg";
         return true;
     }
 
@@ -138,7 +138,7 @@ export class ChatRoomComponent extends HTMLElement {
                 }
                 receiverMessageContainer.time = element.sent_at.split("-")[0];
                 receiverComponent.league = "gold";
-                receiverComponent.profileImage = "../../assets/profile-assets/tanjuro.jpg";
+                receiverComponent.profileImage = "../../assets/images/profile/tanjuro.jpg";
                 receiverComponent.appendChild(receiverMessageContainer);
                 chatBody.appendChild(receiverComponent);
             }
