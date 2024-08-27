@@ -8,12 +8,10 @@ export class NotificationsList extends HTMLElement {
                 <h3>NOTIFICATIONS</h3>
             </div>
             <div class="notificationsBar-body">
-                <div class="notification-list">
-                    <notification-component></notification-component>
-                </div>
+                <div class="notification-list"></div>
             </div>
             <div class="notificationsBar-footer">
-                <h4>Clear All</h4>
+                <h4 class="clear-all">Clear All</h4>
             </div>
         `;
     }
@@ -23,7 +21,9 @@ export class NotificationsList extends HTMLElement {
         this.style.height = this.height;
         const notificationList = this.querySelector(".notificationsBar-body");
         notificationList.scrollTop = notificationList.scrollHeight;
-
+        this.querySelector(".clear-all").addEventListener("click", () => {
+            this.querySelector(".notification-list").innerHTML = '';
+        });
     }
 
     disconnectedCallback() {
@@ -31,7 +31,10 @@ export class NotificationsList extends HTMLElement {
     }
 
 
-    appendNotification(notification) {
+    appendNotification(notificationContent) {
+        const notification = new NotificationComponent();
+        notification.width = "100%";
+        notification.innerHTML = notificationContent;
         this.querySelector(".notification-list").prepend(notification);
     }
 
