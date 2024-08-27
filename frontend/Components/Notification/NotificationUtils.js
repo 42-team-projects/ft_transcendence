@@ -1,4 +1,5 @@
 import { NotificationComponent } from "./NotificationComponent.js";
+import { NewFriendNotification } from "./templates/NewFriendNotification.js";
 
 export function displayNotification(notificationContent) {
     const notificationContainer = window.document.querySelector(".notification-search .notification-container");
@@ -6,8 +7,7 @@ export function displayNotification(notificationContent) {
     const notification = new NotificationComponent();
     notification.width = "100%";
     notification.innerHTML = notificationContent;
-    const nList = window.document.querySelector("notifications-list");
-    nList.appendNotification(notification.cloneNode());
+    window.document.querySelector("notifications-list").appendNotification(notificationContent);
     notificationContainer.appendChild(notification);
     const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
     notificationIcon.textContent = Number(notificationIcon.textContent) + 1;
