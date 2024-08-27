@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'tournament', #new
     'game', #new
     'Profile', #new
-    # 'accounts', #new ogorfti
+    'accounts', #new ogorfti
     
 
 ]
