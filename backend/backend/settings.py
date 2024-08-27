@@ -233,7 +233,7 @@ OAUTH_PROVIDERS = {
         'CLIENT_ID': env('GOOGLE_CLIENT_ID'),
         'CLIENT_SECRET': env('GOOGLE_CLIENT_SECRET'),
         'REDIRECT_URI': env('GOOGLE_REDIRECT_URI'),
-        # 'AUTHORIZE_URL': 'https://accounts.google.com/o/oauth2/v2/auth',
+        'AUTHORIZE_URL': 'https://accounts.google.com/o/oauth2/v2/auth',
         'TOKEN_URL': 'https://oauth2.googleapis.com/token',
         'USER_INFO_URL': 'https://openidconnect.googleapis.com/v1/userinfo',
         'SCOPE': 'profile email',
