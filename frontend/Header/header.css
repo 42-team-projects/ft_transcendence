@@ -47,63 +47,13 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: end;
     align-items: center;
     flex: 1;
     gap: 20px;
     min-width: 400px;
 }
 
-search-bar
-{
-    border: 1px solid #00FFFC;
-    border-radius: 10px;
-    flex: 1;
-    max-width: 1000px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: 3.5rem;
-    margin: 10px;
-}
 
-.search-icon{
-    width: 8%;
-    height: 60%;
-    margin-left: 20px;
-    margin-right: 10px;
-}
-
-.vertical-line {
-    background-color: #00FFFC;
-    width: 2px;
-    height: 60%;
-    margin-left: 20px;
-}
-
-
-.search-input{
-    flex: 1;
-    height: 100%;
-    border-radius: 10px;
-    border: none;
-    width: 100%;
-    background-color: transparent;
-    font-family: 'Sansation';
-    font-size: 25px;
-    color: #ffffff;
-    margin-left: 10px;
-    padding-left: 10px;
-    outline: none;
-}
-
-.search-input::placeholder{
-    color: #ffffff;
-    font-family: 'Sansation';
-    opacity: 0.7;
-    font-size: 24px;
-}
 
 .notification-icon
 {
@@ -186,4 +136,40 @@ c-profile{
 
 .actions img {
     width: 24px;
+}
+
+
+
+/*
+    @SETTINGS
+*/
+
+.search-sections {
+    width: calc(100% - 40px);
+    display: flex;
+    margin: 0 20px;
+    flex-direction: column;
+    max-height: 400px;
+}
+
+.result-section-content {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+
+.profile-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
