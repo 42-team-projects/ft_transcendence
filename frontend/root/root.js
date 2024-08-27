@@ -3,6 +3,9 @@ import { ProfileComponent } from "../Components/Profile/ProfileComponent.js";
 import { TournamentComponent } from "../Components/Tournament/TournamentComponent.js";
 import { SettingsComponent } from "../Components/Settings/SettingsComponent.js";
 import { NotificationsList } from "../Components/Notification/NotificationsList.js";
+import { MessageNotification } from "../Components/Notification/templates/MessageNotification.js";
+import { NewFriendNotification } from "../Components/Notification/templates/NewFriendNotification.js";
+// import { TournamentNotification } from "../Components/Notification/templates/TournamentNotification.js";
 // import { router } from "../User/Router.js";
 
 const root = document.createElement('template')
