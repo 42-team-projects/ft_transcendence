@@ -86,13 +86,15 @@ export class SideBar extends HTMLElement {
     set clickEvent(id){
         const button = this.shadowRoot.querySelectorAll('sb-button')[id]
         if (!button.classList.contains('on')) {
-            this.active_button.classList.remove('on')
-            this.active_button.querySelector('img').classList.remove('on')
-            this.active_button.shadowRoot.querySelector('sb-icon').classList.remove('on')
-            this.active_button.shadowRoot.querySelector('.c-sb-text').classList.remove('on')
-            this.active_button.querySelector('h1').classList.remove('on')
-            this.active_button.classList.remove('on')
+            if(this.active_button){
 
+                this.active_button.classList.remove('on')
+                this.active_button.querySelector('img').classList.remove('on')
+                this.active_button.shadowRoot.querySelector('sb-icon').classList.remove('on')
+                this.active_button.shadowRoot.querySelector('.c-sb-text').classList.remove('on')
+                this.active_button.querySelector('h1').classList.remove('on')
+                this.active_button.classList.remove('on')
+            }
             button.classList.add('on')
             button.querySelector('img').classList.add('on')
             button.querySelector('h1').classList.add('on')

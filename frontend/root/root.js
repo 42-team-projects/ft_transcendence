@@ -44,7 +44,6 @@ class Root extends HTMLElement{
             sideBar.render()
             this.randred = true;
         }
-        // document.body.querySelector('footer').render()
     }
     // set ChangeRootContent(component){
     //     const content = document.createElement(component)
@@ -54,16 +53,16 @@ class Root extends HTMLElement{
 
     clickEvent() {
         
-        const buttons = sideBar.shadowRoot.querySelectorAll('sb-button')
-        buttons.forEach((button, index) => {
-            button.addEventListener('click', () => {
-                if(button.classList.length === 0)
-                {
-                    sideBar.clickEvent = index;
-                    sideBar.activeButton = button;
-                }
-            });
-        })
+        // const buttons = sideBar.shadowRoot.querySelectorAll('sb-button')
+        // buttons.forEach((button, index) => {
+        //     button.addEventListener('click', () => {
+        //         if(button.classList.length === 0)
+        //         {
+        //             sideBar.clickEvent = index;
+        //             sideBar.activeButton = button;
+        //         }
+        //     });
+        // })
         const profile = header.querySelector('c-profile')
         const userRunk = header.querySelector('user-rank');
         // profile.addEventListener('click', () => {
