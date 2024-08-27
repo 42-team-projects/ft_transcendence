@@ -1,5 +1,4 @@
 
-
 export class Router {
     constructor() {
         this.routes = [
@@ -22,7 +21,6 @@ export class Router {
 
     handleRoute(path) {
         console.log(path);
-        // get access token from local storage
         const accessToken = localStorage.getItem('accessToken');
         if (window.location.pathname !== path)
             window.history.pushState({}, "", path);
@@ -31,15 +29,22 @@ export class Router {
         if (!matchedRoute && !accessToken)
             matchedRoute = this.routes.find((route) => route.path === "*");
         if (!matchedRoute && accessToken)
-            matchedRoute = this.routes.find((route) => route.path === "/home");
-        
+            matchedRoute = this.routes.find((route) => route.path === "/Home");
         if(accessToken)
         {
-            this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
-                if(button.shadowRoot.href === matchedRoute)
-                    sideBar.clickEvent = index;
-            });
+            console.log(this.sideBar.shadowRoot);
+            setTimeout(() => {
+                this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
+                    let a = button.shadowRoot.querySelector('a');
+                    let url = new URL(a.href);
+                    if(url.pathname === matchedRoute.path){
+                        this.sideBar.clickEvent = index;
+                    }
+                });
+            }, 100);
         }
+        // else
+        //     matchedRoute = this.routes.find((route) => route.path === "*");
         this.rootContent.innerHTML = "";
         this.rootContent.changeStyle();
         this.rootContent.appendChild(document.createElement(matchedRoute.view));
