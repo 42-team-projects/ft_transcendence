@@ -40,10 +40,12 @@ class LoginSerializer(serializers.ModelSerializer):
         email = attrs.get('email')
         password = attrs.get('password')
         request = self.context.get('request')
+        print("here 0", email, password)
         user = authenticate(request=request, email=email, password=password)
+        print("here 1", User.objects.all())
 
         if not user:
-            raise AuthenticationFailed('Invalid email or password')
+            raise AuthenticationFailed('Invalid email or password --')
         if not user.is_verified:
             raise AuthenticationFailed('Email is not verified')
         
