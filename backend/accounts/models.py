@@ -7,16 +7,6 @@ from .managers import UserManager
 AUTH_PROVIDERS = {'email':'email', 'google':'google', 'github':'github'}
 
 class User(AbstractBaseUser, PermissionsMixin):
-    groups = models.ManyToManyField(
-        'auth.Group',
-        blank=True,
-        related_name='accounts_user_set',
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        blank=True,
-        related_name='accounts_user_set',
-    )
     username = models.CharField(max_length=255, unique=True, verbose_name=_('Username'))
     email = models.EmailField(max_length=255, unique=True, verbose_name=_('Email Address'))
 
@@ -46,10 +36,3 @@ class User(AbstractBaseUser, PermissionsMixin):
             'refresh_token': str(refresh),
         }
         return tokens
-
-class OTP(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    otp = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f"{self.user.username}--otpcode"
