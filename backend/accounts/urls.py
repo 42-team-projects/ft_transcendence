@@ -3,12 +3,12 @@ from . import password_reset
 from . import views
 from . import oauth
 from .twofa import enable_2fa, verify_2fa, disable_2fa
+from .views import user_data
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
     path('login/', views.login, name='login'),
     
-    # path('verify-email/', VerifyOTPView.as_view(), name='verify'),
     path('confirm-email/<str:token>/', views.confirm_email_view, name='confirm-email'),
     path('resend-confirm/', views.resend_confirmation_email, name='resend_confirmation_email'),
 
@@ -28,4 +28,6 @@ urlpatterns = [
     path('2fa/enable/', enable_2fa, name='enable_2fa'),
     path('2fa/verify/', verify_2fa, name='verify_2fa'),
     path('2fa/disable/', disable_2fa, name='disable_2fa'),
+
+    path('user-data/', views.user_data, name='user_data'),
 ]
