@@ -1,36 +1,9 @@
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.conf import settings
-from .models import User, OTP
 from datetime import timedelta, datetime, timezone
-import random
+from django.conf import settings
 import jwt
-
-def send_otp(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        user = User.objects.get(email=email)
-        otp_code = random.randint(100000, 999999)
-        
-        subject = 'OTP Verification'
-        body = f"""
-        Hello {user.username},
-
-        Your OTP is {otp_code}
-
-        Thank you,
-        Your Team
-        """
-        message = EmailMessage(
-            subject,
-            body,
-            settings.EMAIL_HOST_USER,
-            [email],
-        )
-        OTP.objects.create(user=user, otp=otp_code)
-        # not raise an exception
-        message.send(fail_silently=True)
 
 def gen_email_token(user, days = 0, minutes = 0):
     payload = {
