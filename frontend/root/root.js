@@ -4,7 +4,6 @@ import { TournamentComponent } from "../Components/Tournament/TournamentComponen
 import { SettingsComponent } from "../Components/Settings/SettingsComponent.js";
 import { NotificationsList } from "../Components/Notification/NotificationsList.js";
 // import { router } from "../User/Router.js";
-import { accessToken } from "../Utils/GlobalVariables.js";
 const root = document.createElement('template')
 
 const sideBar = document.querySelector('side-bar')
@@ -37,12 +36,19 @@ class Root extends HTMLElement{
         this.appendChild(root.content.cloneNode(true))
         this.randred = false;
     }
-    changeStyle(){
-        if(accessToken && !this.randred){
+    changeStyle(access_token){
+        console.log(access_token)
+        if(access_token && !this.randred){
             document.body.classList.add('body-default-shrink')
             header.render()
             sideBar.render()
             this.randred = true;
+        }
+        else if(!access_token){
+            document.body.classList.remove('body-default-shrink')
+            header.remove()
+            sideBar.remove()
+            this.randred = false;
         }
     }
     // set ChangeRootContent(component){
