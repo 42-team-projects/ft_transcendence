@@ -35,7 +35,8 @@ export class HeaderBar extends HTMLElement{
         // });
     }
     remove(){
-        this.shadowRoot.innerHTML = '';
+        console.log('remove');
+        this.innerHTML = '';
     }
 }
 
