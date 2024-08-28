@@ -120,7 +120,7 @@ def resend_confirmation_email(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def whoami(request):
-    return Response({'username': request.user.username})
+    return Response({'username': request.user.username, 'id': request.user.id})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
