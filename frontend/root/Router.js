@@ -1,3 +1,55 @@
+const fetchWithToken = async (url, options) => {
+    const response = await fetch(url, options);
+
+    if (response.status === 401) {
+        const refreshResponse = await fetch(
+            "http://127.0.0.1:8000/api/v1/auth/refresh/",
+            {
+                method: "POST",
+                credentials: "include",
+            }
+        );
+
+        if (refreshResponse.ok) {
+            const data = await refreshResponse.json();
+            const accessToken = data.access_token;
+            localStorage.setItem("accessToken", accessToken);
+            options.headers.Authorization = `Bearer ${accessToken}`;
+            return fetch(url, options);
+        }
+
+        throw new Error("Unable to refresh token");
+    }
+    return response;
+};
+async function fetchWhoAmI(accessToken) {
+
+    try {
+        const response = await fetchWithToken(
+            "http://127.0.0.1:8000/api/v1/auth/whoami/",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            console.log(document.cookie);
+        }
+    } catch (error) {
+        console.log('====>', error);
+        if (error.message === "Unable to refresh token") {
+            window.location.href = '../html/login.html';
+        } else {
+            console.error("Error:", error);
+        }
+    }
+}
 
 export class Router {
     constructor() {
@@ -32,6 +84,7 @@ export class Router {
             matchedRoute = this.routes.find((route) => route.path === "/Home");
         if(accessToken)
         {
+            fetchWhoAmI(accessToken);
             console.log(this.sideBar.shadowRoot);
             setTimeout(() => {
                 this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
@@ -43,12 +96,14 @@ export class Router {
                 });
             }, 100);
         }
-        // else
-        //     matchedRoute = this.routes.find((route) => route.path === "*");
+        else{
+            // go to 127.0.0.1:3000/login
+            // window.location.href = 'http:/
+        }
         this.rootContent.innerHTML = "";
-        this.rootContent.changeStyle();
+        this.rootContent.changeStyle(accessToken);
         this.rootContent.appendChild(document.createElement(matchedRoute.view));
-        this.rootContent.clickEvent();
+        // this.rootContent.clickEvent();
         this.addLinkEventListeners();
     }
 

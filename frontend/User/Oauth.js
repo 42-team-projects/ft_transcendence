@@ -1,7 +1,7 @@
 
 export default class OAuth extends HTMLElement {
     async connectedCallback() {
-        const { router } = await import('./Router.js');
+        const { router } = await import('./../root/Router.js');
         const params = new URLSearchParams(window.location.search);
         const accessToken = params.get('access_token');
 
