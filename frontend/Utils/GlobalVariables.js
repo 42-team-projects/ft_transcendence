@@ -10,7 +10,7 @@ export const wsUrl = 'ws://127.0.0.1:8000/';
 // export const accessToken = localStorage.getItem('accessToken');
 // console.log(accessToken);
 // remove acsses token in local storage
-localStorage.removeItem('accessToken');
+// localStorage.removeItem('accessToken');
 export const ip = '127.0.0.1';
 const config = {
     serverIP: ip,
