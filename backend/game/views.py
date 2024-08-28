@@ -8,13 +8,13 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse, JsonResponse
 
-class ListPlayer(generics.ListAPIView):
-    queryset = Player.objects.all()
-    serializer_class = PlayerSerializer
+# class ListPlayer(generics.ListAPIView):
+#     queryset = Player.objects.all()
+#     serializer_class = PlayerSerializer
 
-class DetailsPlayer(generics.RetrieveAPIView):
-    queryset = Player.objects.all()
-    serializer_class = PlayerSerializer
+# class DetailsPlayer(generics.RetrieveAPIView):
+#     queryset = Player.objects.all()
+#     serializer_class = PlayerSerializer
 
 # @api_view(['POST'])
 # def login(request):
