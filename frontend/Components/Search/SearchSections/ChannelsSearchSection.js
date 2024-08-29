@@ -9,7 +9,7 @@ export class ChannelsSearchSection extends HTMLElement {
                         <div class="profile-item">
                             <p>ESALIM</p>
                         </div>
-                        <div class="notification-actions">
+                        <div class="search-actions">
                             <img src="../../assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
                         </div>
                     </div>

@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import User, User_Profile
-from .serializers import UserSerializer, UserProfileSerializer
+from .Models.UserModel import User
+from .Models.UserProfileModel import UserProfile
+from .Serializers.UserSerializer import UserSerializer
+from .Serializers.UserProfileSerializer import UserProfileSerializer
+
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
@@ -32,7 +35,7 @@ def printRequest(request):
 def index(request):
     return (HttpResponse("Teeeeest"))
 
-def Get_User_Data(request):
+def getAllUsersProfile(request):
     if request.method == 'GET':
         Users = User.objects.all()
         serializer = UserSerializer(Users, many=True)
@@ -40,17 +43,17 @@ def Get_User_Data(request):
 
 def Get_UserProfile_Data(request):
     if request.method == 'GET':
-        UserProfiles = User_Profile.objects.all()
+        UserProfiles = UserProfile.objects.all()
         serializer = UserProfileSerializer(UserProfiles, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 def Get_UserProfile_Data_With_id(request, id):
     if request.method == 'GET':
         try:
-            user_profile = User_Profile.objects.get(id=id)
-            serializer = UserProfileSerializer(user_profile)
+            UserProfile = UserProfile.objects.get(id=id)
+            serializer = UserProfileSerializer(UserProfile)
             return JsonResponse(serializer.data, safe=False)
-        except User_Profile.DoesNotExist:
+        except UserProfile.DoesNotExist:
             return JsonResponse({'error': 'Member not found'}, status=404, safe=False)
 
 @csrf_exempt
@@ -59,14 +62,14 @@ def EditProfile(request, id):
     if request.method == 'PUT':
         data = JSONParser().parse(request)
         try:
-            user_profile = User_Profile.objects.get(id=id)
-            user_profile.user.name = data.get('name')
-            user_profile.stats.win = data.get('win')
-            user_profile.stats.loss = data.get('loss')
-            user_profile.stats.rank = data.get('rank')
-            user_profile.user.save()
-            user_profile.stats.save()
-            user_profile.save()
+            UserProfile = UserProfile.objects.get(id=id)
+            UserProfile.user.name = data.get('name')
+            UserProfile.stats.win = data.get('win')
+            UserProfile.stats.loss = data.get('loss')
+            UserProfile.stats.rank = data.get('rank')
+            UserProfile.user.save()
+            UserProfile.stats.save()
+            UserProfile.save()
             return JsonResponse("profile updated successfully", safe=False)
-        except User_Profile.DoesNotExist:
+        except UserProfile.DoesNotExist:
             return JsonResponse("user profile does not exist", safe=False)

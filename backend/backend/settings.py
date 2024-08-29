@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'tournament', #new
     'game', #new
     'Profile', #new
-    # 'accounts', #new ogorfti
+    'accounts', #new ogorfti
 
 
     'chat',          #dokoko
@@ -126,7 +126,8 @@ DATABASES = {
     }
 }
 
-# AUTH_USER_MODEL="accounts.User"
+
+AUTH_USER_MODEL = "accounts.User"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
