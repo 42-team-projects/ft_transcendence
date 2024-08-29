@@ -141,7 +141,7 @@ c-profile{
 
 
 /*
-    @SETTINGS
+    @SEARCH
 */
 
 .search-sections {
@@ -166,6 +166,12 @@ c-profile{
     width: 100%;
 }
 
+.search-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
 
 .profile-item {
     flex: 1;
