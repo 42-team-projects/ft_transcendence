@@ -8,6 +8,7 @@ from .serializers               import *
 
 from django.shortcuts           import get_object_or_404
 
+
 # from django.db.models import Q
 # import json
 # from django.core.serializers import serialize
@@ -20,8 +21,8 @@ def user2(request):
     return render(request, 'chat/user2.html')
 
 
-# def group_conversation(request):
-#     return render(request, 'chat/group_conversation.html')
+def group_conversation(request):
+    return render(request, 'chat/group_conversation.html')
 
 
 @api_view(['GET'])
@@ -34,15 +35,18 @@ def messages(request):
 
 @api_view(['GET'])
 def conversation_list(request):
-    conversations = get_object_or_404(Conversation, status='C', participants=request.user)
-    conversation_serializer = ConversationSerializer(
-        conversations,
-        many=True,
-        context={
-            'request': request
-        })
-    return Response(conversation_serializer.data)
-
+    # user = get_object_or_404(User, id=request.user.id)
+    conversations = Conversation.objects.filter(status='C', participants=request.user)
+    if conversations.exists():
+        conversation_serializer = ConversationSerializer(
+            conversations,
+            many=True,
+            context={
+                'request': request
+            })
+        return Response(conversation_serializer.data)
+    else:
+        return Response({'error' : 'no conversation found'}, status=404)
 
 
 # def mark_messages_as_read(request, conversation_name):
