@@ -1,0 +1,148 @@
+:host{
+    background-image: url(../../../../images/OrangeCart/OrangeCart.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    grid-area : online;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    aspect-ratio: 0.56;
+}
+
+:host:hover{
+    transform: scale(1.03);
+}
+.OrangeCartImg{
+    position: absolute;
+    top: 0.5%;
+    width: 98%;
+    z-index: 0;
+}
+
+:host::before{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/OrangeCart/BorderShapes.svg);
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    top: 0%;
+    background-repeat: no-repeat;
+    /* border: 1px solid red; */
+    z-index: 1;
+
+}
+:host::after{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/OrangeCart/RL-Lines.svg);
+    width:  99%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 15.5%;
+}
+
+.shapes3-4{
+    /* border: 1px solid red; */
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.shapes3-4::before{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/OrangeCart/shape3.svg);
+    width: 45%;
+    height: 13%;
+    left: 5%;
+    top: -1.5%;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* .shapes4-5::after{
+    position: absolute;
+    content: "";
+    background: url(../../../images/OrangeCart/shape5.svg);
+    width: 14%;
+    height: 40%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    right: 0%;
+    bottom: 4%;
+} */
+
+.Online-text{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    position: absolute;
+    /* border: 1px solid blue; */
+    width: 100%;
+    height: 50%;
+}
+
+.Online-text::before{
+    /* border: 1px solid blue; */
+    position: absolute;
+    content: "";
+    background: url(../../../../images/OrangeCart/shape1.svg);
+    width: 96.5%;
+    height: 23%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    left: 0.2%;
+    top: 52.5%;
+}
+
+.Online-text::after{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/OrangeCart/shape2.svg);
+    width: 93.1%;
+    height: 0.5%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 100%;
+}
+
+
+.Online-text h1{
+    color: white;
+    font-size: 2.3rem;
+}
+.O-buttonC {
+    position: relative;
+    width: 100%;
+    height: 47%;
+    top: 50%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+p{
+    width: 80%;
+    font-size: 1.5rem;
+    text-align: center;
+    color: wheat;
+    margin: 0;
+}
+@media (max-width: 1600px){
+    p{
+        font-size: 1.2rem;
+    }
+}
+
+
+.O-buttonC h1{
+    font-size: 2.8rem;
+    text-align: center;
+    text-wrap:wrap ;
+    color: wheat;
+}
