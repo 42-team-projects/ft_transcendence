@@ -1,26 +1,26 @@
 // Game
-import { Lobby } from "./Game/GamePlay/Lobby.js"
-import { Buttons } from "./Game/GamePlay/buttons.js"
-import { SinglePlayer } from './Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
-import { MultiPlayer } from './Game/GamePlay/MultiPlayer/MultiPlayerCart.js'
-import { OnlineGame } from './Game/GamePlay/GameOnline/OnlineGameCart.js'
-import { PageName } from "./Game/GamePlay/PageName.js";
-import { PlayerBorder } from "./Game/GamePlay/PlayerBorder.js";
-import { LaunchingGame } from './Game/GamePlay/launchingGame.js'
-import { GameTable } from './Game/GamePlay/GameTable.js'
-import { GameHeader } from './Game/GamePlay/GameHeader.js'
-import { GameOver } from './Game/GamePlay/GameOver.js';
-import { GameSelection } from './Game/GameSelection.js'
+import { Lobby } from "./Components/Game/GamePlay/Lobby.js"
+import { Buttons } from "./Components/Game/GamePlay/buttons.js"
+import { SinglePlayer } from './Components/Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
+import { MultiPlayer } from './Components/Game/GamePlay/MultiPlayer/MultiPlayerCart.js'
+import { OnlineGame } from './Components/Game/GamePlay/GameOnline/OnlineGameCart.js'
+import { PageName } from "./Components/Game/GamePlay/PageName.js";
+import { PlayerBorder } from "./Components/Game/GamePlay/PlayerBorder.js";
+import { LaunchingGame } from './Components/Game/GamePlay/launchingGame.js'
+import { GameTable } from './Components/Game/GamePlay/GameTable.js'
+import { GameHeader } from './Components/Game/GamePlay/GameHeader.js'
+import { GameOver } from './Components/Game/GamePlay/GameOver.js';
+import { GameSelection } from './Components/Game/GameSelection.js'
 
-import { HeaderBar } from './Header/header-bar.js'
-import { SearchBar } from './Header/Search-bar.js'
-import { UserRank } from './Header/UserRank.js'
-import { Hexagon } from './Header/hexagon.js'
-import { Profile } from './Header/profile.js'
+import { HeaderBar } from './Components/Header/header-bar.js'
+import { SearchBar } from './Components/Header/Search-bar.js'
+import { UserRank } from './Components/Header/UserRank.js'
+import { Hexagon } from './Components/Header/hexagon.js'
+import { Profile } from './Components/Header/profile.js'
 
-import { SideBarButtonIcons } from './side-bar/sb-icon.js'
-import { SideBarButtonText } from './side-bar/sb-text.js'
-import { SideBarButton } from './side-bar/sb-button.js'
+import { SideBarButtonIcons } from './Components/side-bar/sb-icon.js'
+import { SideBarButtonText } from './Components/side-bar/sb-text.js'
+import { SideBarButton } from './Components/side-bar/sb-button.js'
 import { CustomButton } from "./Components/Tournament/CustomButton.js";
 import { TournamentComponent } from "./Components/Tournament/TournamentComponent.js";
 
@@ -56,7 +56,7 @@ import SignupPage from "./User/SignupPage.js";
 import LoginPage from "./User/LoginPage.js";
 import EmailConf from "./User/EmailConf.js";
 import OAuth from "./User/Oauth.js";
-// import { router } from './root/Router.js';
+import { router } from './root/Router.js';
 
 
 customElements.define("signup-page", SignupPage);
@@ -64,8 +64,8 @@ customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);
 customElements.define("oauth-callback", OAuth);
 
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     window.addEventListener("popstate", () =>
-//         router.handleRoute(window.location.pathname)
-//     );
-// });
+document.addEventListener('DOMContentLoaded', (event) => {
+    window.addEventListener("popstate", () =>
+        router.handleRoute(window.location.pathname)
+    );
+});
