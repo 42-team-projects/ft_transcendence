@@ -4,113 +4,85 @@ from asgiref.sync import async_to_sync
 from .models import *
 from .serializers import *
 
+from django.core.exceptions import ObjectDoesNotExist
+
+
 
 class ChatConversationConsumer(WebsocketConsumer):
     def connect(self):
-        # if user is authenticated add user to group_name Conversation
-        
-        self.user = self.scope['user']
-        
-        print(self.scope)
-        # print(self.user)
-        
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.group_name = f"chat_{self.room_name}"
-        # self.user = self.scope['user']
-        # if self.user.is_authenticated:
-        #     # Join room group
-        #     async_to_sync(self.channel_layer.group_add)(
-        #         self.group_name,
-        #         self.channel_name
-        #     )
-        #     self.accept()
-        # else:
-        #     self.close()
-        
-
-        # Join room group
-        async_to_sync(self.channel_layer.group_add)(
-            self.group_name,
-            self.channel_name
-        )
-        self.accept()
-
+        self.current_user = self.scope['user']
+        if self.current_user.is_authenticated:
+            self.room_name = self.scope['url_route']['kwargs']['room_name']
+            self.group_name = f"chat_{self.room_name}"
+            
+            # Join room group
+            async_to_sync(self.channel_layer.group_add)(
+                self.group_name,
+                self.channel_name
+            )
+            self.accept()
+        else:
+            self.close()
     def disconnect(self, close_code):
         # if user is authenticated remove user from group_name Conversation
         
-        # if self.user.is_authenticated:
-        #     # Leave room group
-        #     async_to_sync(self.channel_layer.group_discard)(
-        #         self.group_name,
-        #         self.channel_name
-        #     )
-        
-        # Leave room group
-        async_to_sync(self.channel_layer.group_discard)(
-            self.group_name,
-            self.channel_name
-        )
-        
+        if self.current_user.is_authenticated:
+            # Leave room group
+            async_to_sync(self.channel_layer.group_discard)(
+                self.group_name,
+                self.channel_name
+            )
     def receive(self, text_data):
-        # check if user is authenticated if is authenticated 
-            # check if user is in conversation if is not
-                # error
-            # save message
-        # error
-         
-        try:
-            # Parse incoming message data
-            data = json.loads(text_data)
-            
-            sender_id = 1
-            receiver_id = data['receiver']
-            
-            sender = self.get_user(sender_id)
-            receiver = self.get_user(receiver_id)
-            
-            if not sender or not receiver:
-                self.send_error('user do not exist in the database.')
-                return
-            # Save the message and broadcast it
-            self.save_and_broadcast_message(sender, receiver, data['message'])
+        if (self.current_user.is_authenticated):
+            try:
+                # Parse incoming message data
+                data = json.loads(text_data)
+                print(data)
+                
+                self.receiver = self.get_user(data['receiver'])
+                if (self.current_user.id == self.receiver.id):
+                    self.send_error('sender and receiver is same user!')
+                else:
+                    self.save_and_broadcast_message(data['message'])
+            except ObjectDoesNotExist:
+                # Handle the case where the user does not exist
+                self.send_error('User does not exist.')
+            except json.JSONDecodeError:
+                self.send_error('Invalid JSON format.')
+            except KeyError as e:
+                self.send_error(f'Missing key: {e}')
+        else:
+            self.send_error('User not authenticated!')
 
-        except json.JSONDecodeError:
-            self.send_error('Invalid JSON format.')
-        except KeyError as e:
-            self.send_error(f'Missing key: {e}')
-
-
-
-    def get_user(self, user_id):
-        return User.objects.filter(id=user_id).first()
-
-    def save_and_broadcast_message(self, sender, receiver,content):
-        conversation = self.get_or_create_conversation()
-        conversation.users.add(sender, receiver)
+    def save_and_broadcast_message(self, content):
+        self.get_or_create_conversation()
         message_data = {
-            'sender': sender.id,
+            'sender': self.current_user.id,
             'content': content,
-            'conversation': conversation.id
+            'conversation': self.conversation.id,
         }
+        
         message_serializer = MessageSerializer(data=message_data)
         if message_serializer.is_valid():
             message = message_serializer.save()
             self.broadcast_message(message_serializer.data)
         else:
             self.send_error(message_serializer.errors)
-
     def get_or_create_conversation(self):
-        conversation = Conversation.objects.filter(conversation_name=self.group_name).first()
-        if conversation:
-            conversation
-            return conversation
-        conversation = Conversation.objects.create(status='C', conversation_name=self.group_name)
-        if conversation:
-            return conversation
+        chat_conversation = Conversation.objects.filter(participants=self.current_user).filter(
+            participants=self.receiver,
+            conversation_name=self.group_name)
+        if chat_conversation.exists():
+            self.conversation = chat_conversation.first()
         else:
-            self.send_error({'error': 'data not store in database!'})
-            return None
-
+            self.conversation = Conversation.objects.create(
+                status='C',
+                conversation_name=self.group_name)
+            self.conversation.participants.add(
+                self.current_user.id,
+                self.receiver.id)            
+    def get_user(self, user_id):
+        return User.objects.get(id=user_id) 
     def broadcast_message(self, message_data):
         async_to_sync(self.channel_layer.group_send)(
             self.group_name,
@@ -119,14 +91,11 @@ class ChatConversationConsumer(WebsocketConsumer):
                 'message': message_data
             }
         )
-
     def send_error(self, error_message):
-        self.send(text_data=json.dumps({'Error': error_message}))
-    
+        self.send(text_data=json.dumps({'Error': error_message}))  
     def send_message(self, event):
         message = event['message']
         self.send(text_data=json.dumps(message))
-
 
 
 
