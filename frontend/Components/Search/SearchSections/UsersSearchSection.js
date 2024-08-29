@@ -2,6 +2,16 @@ export class UsersSearchSection extends HTMLElement {
     constructor() {
         super();
         this.innerHTML = `
+            <style>
+
+                .search-actions {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 20px;
+                }
+
+            </style>
             <div class="search-sections">
                 <h2 class="result-section-title">USERS</h2>
                 <div class="result-section-content">
@@ -12,8 +22,9 @@ export class UsersSearchSection extends HTMLElement {
                             </c-hexagon>
                             <h4>ESALIM</h4>
                         </div>
-                        <div class="notification-actions">
-                            <img src="../../assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
+                        <div class="search-actions">
+                            <img src="../../assets/icons/manette-icon.svg" class="read-message" width="24px" height="24px"></img>
+                            <img src="../../assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
                         </div>
                     </div>
                 </div>
