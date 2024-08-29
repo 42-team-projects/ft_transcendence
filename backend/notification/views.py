@@ -6,6 +6,5 @@ from django.shortcuts import render
 def receive(request):
     return (render(request, 'notification/receive.html'))
 
-
 def send(request):
     return (render(request, 'notification/send.html'))
