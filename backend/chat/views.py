@@ -1,80 +1,118 @@
-from django.shortcuts import render
+from django.shortcuts           import render
+from rest_framework.response    import Response
+from django.http                import JsonResponse
+from rest_framework.decorators  import api_view
 
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import *
-from .serializers import *
-from django.db.models import Q
-import json
-from django.core.serializers import serialize
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
+from .models                    import *
+from .serializers               import *
+
+from django.shortcuts           import get_object_or_404
+
+# from django.db.models import Q
+# import json
+# from django.core.serializers import serialize
 
 
-def chat_conversation(request):
-    return render(request, 'chat/chat_conversation.html')
 
-def group_conversation(request):
-    return render(request, 'chat/group_conversation.html')
+def user1(request):
+    return render(request, 'chat/user1.html')
+def user2(request):
+    return render(request, 'chat/user2.html')
+
+
+# def group_conversation(request):
+#     return render(request, 'chat/group_conversation.html')
 
 
 @api_view(['GET'])
-def get_chat_conversation(request):
+def messages(request):
     conversation_name = request.GET.get('cn')
     conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
-    messages = Message.objects.filter(conversation=conversation)
+    messages = conversation.get_all_messages()
     message_serializer = MessageSerializer(messages, many=True)
     return Response(message_serializer.data)
 
 @api_view(['GET'])
-def group_conversations(request):
-    user = get_object_or_404(User, id=request.user.id) 
-    conversations = Conversation.objects.filter(status='G', users=user)
-    if conversations.exists():
-        conversation_serializer = ConversationSerializer(conversations, many=True)
-        return Response(conversation_serializer.data)
-    else:
-        return Response({'error' : 'no conversation found'})
-        
+def conversation_list(request):
+    conversations = get_object_or_404(Conversation, status='C', participants=request.user)
+    conversation_serializer = ConversationSerializer(
+        conversations,
+        many=True,
+        context={
+            'request': request
+        })
+    return Response(conversation_serializer.data)
 
 
-@api_view(['GET'])
-def chat_conversations(request):
-    user = get_object_or_404(User, id=request.user.id) 
-    conversations = Conversation.objects.filter(status='C', users=user)
-    if conversations.exists():
-        conversation_serializer = ConversationSerializer(conversations, many=True)
-        return Response(conversation_serializer.data)
-    else:
-        return Response({'error' : 'no conversation found'})
+
+# def mark_messages_as_read(request, conversation_name):
+#     conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
+#     messages = conversation.messages.filter(is_read=False).exclude(sender=request.user)
+#     print(messages)
+#     messages.update(is_read=True)
+#     return JsonResponse({'status': 'success', 'message': 'Messages marked as read'})
+
+
+# def mark_messages_as_read(request, conversation_name):
+#     conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
+#     messages = conversation.get_unread_messages(request.user)
+#     if messages.exists():
+#         messages.update(is_read=True)
+#         return JsonResponse({'status': 'success', 'message': 'Messages marked as read'})
+#     else:
+#         return JsonResponse({'status': 'success', 'message': 'No messages to mark as read'})
+
+
+
+
 
 
 
 
 # @api_view(['GET'])
-# def get_all_conversations(request):
-#     conversations = Conversation.objects.all() 
+# def block_user(request, user_id):
+#     user_to_block = User.objects.get(pk=user_id)
+#     Block.objects.get_or_create(blocker=request.user, blocked=user_to_block)
+#     return JsonResponse({'status': 'User blocked'})
+
+
+# @api_view(['GET'])
+# def unblock_user(request, user_id):
+#     user_to_unblock = User.objects.get(pk=user_id)
+#     Block.objects.filter(blocker=request.user, blocked=user_to_unblock).delete()
+#     return JsonResponse({'status': 'User unblocked'})
+
+
+
+
+# @api_view(['GET'])
+# def group_conversation_list(request):
+#     user = get_object_or_404(User, id=request.user.id) 
+#     conversations = Conversation.objects.filter(status='G', users=user)
 #     if conversations.exists():
-#         # Serialize the queryset
-#         conversations_serializer = ConversationSerializer(conversations, many=True)
-#         return Response(conversations_serializer.data)
+#         conversation_serializer = ConversationSerializer(
+#             conversations,
+#             many=True,
+#             context={
+#                 'request': request
+#             })
+#         return Response(conversation_serializer.data)
 #     else:
-#         return Response({'Error': 'No conversations found'}, status=404)
-
-@api_view(['GET'])
-def last_message(request):
-    conversation_name = request.GET.get('cn')
-    conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
-    message = Message.objects.filter(conversation=conversation.id).last()
-    if message:
-        message_serializer = MessageSerializer(message)
-        return Response(message_serializer.data)
-    else:
-        return Response({'Error': 'No message found'}, status=404)
-    
+#         return Response({'error' : 'no conversation found'})
+        
 
 
 
 
 
-    
+# @api_view(['GET'])
+# def last_message(request):
+#     conversation_name = request.GET.get('cn')
+#     conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
+#     message = Message.objects.filter(conversation=conversation.id).last()
+#     if message:
+#         message_serializer = MessageSerializer(message)
+#         return Response(message_serializer.data)
+#     else:
+#         return Response({'Error': 'No message found'}, status=404)
+

@@ -37,6 +37,7 @@
                     let message = e.target.message.value
                     websocket.send(JSON.stringify({
                         'message' : message,
+                        'receiver' : 2
                     }))
                     form.reset()
                 })
