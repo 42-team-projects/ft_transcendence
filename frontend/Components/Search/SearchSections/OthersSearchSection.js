@@ -9,7 +9,7 @@ export class OthersSearchSection extends HTMLElement {
                         <div class="profile-item">
                             <p>SETTINGS</p>
                         </div>
-                        <div class="notification-actions">
+                        <div class="search-actions">
                             <img src="../../assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
                         </div>
                     </div>
@@ -17,7 +17,7 @@ export class OthersSearchSection extends HTMLElement {
                         <div class="profile-item">
                             <p>CHAT</p>
                         </div>
-                        <div class="notification-actions">
+                        <div class="search-actions">
                             <img src="../../assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
                         </div>
                     </div>
@@ -25,7 +25,7 @@ export class OthersSearchSection extends HTMLElement {
                         <div class="profile-item">
                             <p>PROFILE</p>
                         </div>
-                        <div class="notification-actions">
+                        <div class="search-actions">
                             <img src="../../assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
                         </div>
                     </div>
