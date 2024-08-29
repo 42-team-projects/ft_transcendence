@@ -1,12 +1,17 @@
 from django.urls import path
-from .import views
+from .Views import UserProfileView, StatsView
 
 urlpatterns = [
-    path('',views.getAllUsersProfile, name='getAllUsersProfile'),
-    path('count/',views.countUsersProfile, name='getAllUsersProfile'),
-    path('<int:id>/',views.Get_UserProfile_Data_With_id, name='Get_UserProfile_Data_With_id'),
+    # recieve, create user ("GET", "POST")
+    path('',UserProfileView.getAllUsersProfile, name='getAllUsersProfile'),
+    # number of users ("GET")
+    path('count/',UserProfileView.countUsersProfile, name='countUsersProfile'),
+    # recieve, update, delete user ("GET", "PUT", "DELETE")
+    path('<int:id>/',UserProfileView.getUserProfileById, name='getUserProfileById'),
 
 
-    path('prData/',views.Get_UserProfile_Data, name='Get_UserProfile_Data'),
-    path('EditProfile/<int:id>/',views.EditProfile, name='EditProfile'),
+    path('<int:id>/stats/',StatsView.getUserStats, name='getUserStats'),
+    path('<int:id>/stats/count/',StatsView.countUserStats, name='countUserStats'),
+  
+
 ]
