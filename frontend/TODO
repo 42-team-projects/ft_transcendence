@@ -69,3 +69,36 @@ TOURNAMENT API:
 
 
 
+USER PROFILE BACKEND:
+
+    -> APIs
+
+        ** GET **
+        /users
+        /users/count
+        /users/{id}
+        /users/{id}/stats
+        /users/{id}/achievements
+        /users/{id}/links
+        /users/{id}/graph
+
+        ** POST **
+        /users
+        /users/{id}/stats
+        /users/{id}/achievements
+        /users/{id}/links
+        /users/{id}/graph
+
+        ** PUT **
+        /users/{id}
+        /users/{id}/stats/{id}
+        /users/{id}/achievements/{id}
+        /users/{id}/links/{id}
+        /users/{id}/graph/{id}
+
+        ** DELETE **
+        /users/{id}
+        /users/{id}/stats/{id}
+        /users/{id}/achievements/{id}
+        /users/{id}/links/{id}
+        /users/{id}/graph/{id}

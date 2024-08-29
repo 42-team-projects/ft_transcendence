@@ -23,10 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('game/', include('game.urls')),
     path('tournament/', include('tournament.urls')),
-    path('api/v1/users/profile', include('Profile.urls')),
+    path('api/v1/users/', include('Profile.urls')),
     path('chat/', include("chat.urls"), name="chat"),
     path('notification/', include("notification.urls"), name="notification"),
-        # path('api/v1/auth/', include('accounts.urls')),
+    path('api/v1/auth/', include('accounts.urls')),
 ]
 
 
