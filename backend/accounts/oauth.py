@@ -76,19 +76,9 @@ def oauth_callback(request, provider):
 	headers = {'Authorization': 'Bearer ' + access_token}
 	response = requests.get(conf['USER_INFO_URL'], headers=headers)
 	user_data = response.json()
-	# return Response(user_data)
-
 	user_id_field = conf['USER_ID_FIELD']
 	result = register_social_user(provider, user_data['email'], user_data[user_id_field])
-
-	# response = HttpResponseRedirect(f'http://127.0.0.1:3000?token={result["access_token"]}')
-	# response.set_cookie('refresh_token', result['refresh_token'], httponly=True)
-	# return response
 	
 	response = HttpResponseRedirect(f'http://127.0.0.1:3000/oauth?access_token={result["access_token"]}')
 	response.set_cookie('refresh_token', result['refresh_token'], httponly=True)
 	return response
-
-
-# if google_user_data["audience"] != settings.GOOGLE_CLIENT_ID:
-#     raise serializers.ValidationError(detail="could not verify user")
