@@ -1,9 +1,9 @@
-from .models import OTP, User
+from .models import User
 from rest_framework import generics
 from .serializers import UserRegisterSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from .utils import send_otp, send_confirmation_email, gen_email_token
+from .utils import send_confirmation_email, gen_email_token
 from rest_framework.decorators import api_view, permission_classes
 from django_ratelimit.decorators import ratelimit
 from rest_framework.permissions import AllowAny,IsAuthenticated
@@ -26,20 +26,6 @@ class UserRegisterView(generics.GenericAPIView):
             }, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class VerifyOTPView(generics.GenericAPIView):
-    def post(self, request):
-        otp_code = request.data.get('otp')
-        try:
-            otp = OTP.objects.get(otp=otp_code)
-            user = otp.user
-            if not user.is_verified:
-                user.is_verified = True
-                user.save()
-                return Response({'status': 'success', 'message': 'OTP verified successfully'}, status=status.HTTP_200_OK)
-            return Response({'status': 'error', 'message': 'User is already verified'}, status=status.HTTP_400_BAD_REQUEST)
-        except OTP.DoesNotExist:
-            return Response({'status': 'error', 'message': 'OTP does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def login(request):
@@ -135,3 +121,14 @@ def resend_confirmation_email(request):
 @permission_classes([IsAuthenticated])
 def whoami(request):
     return Response({'username': request.user.username})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_data(request):
+    user = request.user
+    user_data = {
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+    }
+    return Response(user_data)
