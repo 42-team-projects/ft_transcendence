@@ -31,8 +31,8 @@ export class TournamentsSearchSection extends HTMLElement {
         item.id = "id_" + tournamentData.tournament_id;
         item.innerHTML = `
             <div class="profile-item">${tournamentData.tournament_name}</div>
-            <div class="notification-actions">
-                <img src="../../assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
+            <div class="search-actions">
+                <img src="../../assets/icons/join-icon.svg" class="read-message" width="24px" height="24px"></img>
             </div>
         `;
         item.addEventListener("click", () => {
