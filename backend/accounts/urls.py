@@ -10,7 +10,6 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     
     path('confirm-email/<str:token>/', views.confirm_email_view, name='confirm-email'),
-    path('resend-confirm/', views.resend_confirmation_email, name='resend_confirmation_email'),
 
 
     path('reset-password/', password_reset.reset_password, name='reset-password'),
