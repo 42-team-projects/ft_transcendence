@@ -71,16 +71,10 @@ def refresh(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def confirm_email_view(request, token):
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'], options={'verify_exp': False})
-    
     try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
         user = User.objects.get(id=payload['user_id'])
-    except User.DoesNotExist:
-        return Response({'status': 'error', 'message': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-    try:
-        jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-        
         if user.is_verified:
             return Response(
                 {'status': 'success', 'message': 'Email is already confirmed'}, 
@@ -96,6 +90,8 @@ def confirm_email_view(request, token):
         else:
             return Response({'status': 'error', 'message': 'Email could not be confirmed'}, status=status.HTTP_400_BAD_REQUEST)
     except jwt.ExpiredSignatureError:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'], options={'verify_exp': False})
+        user = User.objects.get(id=payload['user_id'])
         if user.is_verified:
             return Response(
                 {'status': 'success', 'message': 'Email is already confirmed'}, 
@@ -104,7 +100,7 @@ def confirm_email_view(request, token):
         new_token = gen_email_token(user, days=7)
         send_confirmation_email(user, request, new_token)
         return Response({'status': 'error', 'message': 'Link expired. A new confirmation email has been sent.'}, status=status.HTTP_400_BAD_REQUEST)
-    except jwt.InvalidTokenError:
+    except (jwt.InvalidTokenError, User.DoesNotExist):
         return Response({'status': 'error', 'message': 'Invalid link'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
