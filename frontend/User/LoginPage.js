@@ -20,7 +20,7 @@ export default class LoginPage extends HTMLElement {
 						<h1>Login</h1>
 					</div>
 					
-					<div id="error-message">oracle</div>
+					<div id="error-message"></div>
 					
 					<input-field placeholder="Email" icon="./svg/email.svg"></input-field>
 					<input-field placeholder="Password" icon="./svg/pwd.svg" eye="./svg/eyeClosed.svg"></input-field>
