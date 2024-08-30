@@ -18,13 +18,13 @@
     <script type="text/javascript">
         url = `ws://${window.location.host}/ws/notification/`
         console.log(url)
-        const websocket = new WebSocket(url)
+        const ws = new WebSocket(url)
         // on socket open
-        websocket.onopen = function (e) {
+        ws.onopen = function (e) {
             console.log('Web-Socket successfully connected.');
         };
         // on socket close
-        websocket.onclose = function (e) {
+        ws.onclose = function (e) {
             console.log('Web-Socket closed unexpectedly');
         };
 
@@ -34,9 +34,9 @@
         form.addEventListener('submit', (e)=> {
             e.preventDefault()
             let message = e.target.message.value
-            websocket.send(JSON.stringify({
+            ws.send(JSON.stringify({
                 'message' : message,
-                'receiver' : 3
+                'receiver' : 1
             }))
             form.reset()
         })
