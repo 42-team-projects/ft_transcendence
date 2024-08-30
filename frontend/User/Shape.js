@@ -3,7 +3,7 @@ export default class Shape extends HTMLElement {
         const title = this.getAttribute('title');
         // console.log('==>', title)
         this.innerHTML = `
-            <link rel="stylesheet" href="../style.css" type="text/css">
+            <link rel="stylesheet" href="../user.css" type="text/css">
                 
             <div id="background"></div>
             
