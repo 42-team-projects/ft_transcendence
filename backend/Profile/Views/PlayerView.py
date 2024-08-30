@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-from ..Models.UserProfileModel import UserProfile
-from ..Serializers.UserProfileSerializer import UserProfileSerializer
+from ..Models.PlayerModel import Player
+from ..Serializers.PlayerSerializer import PlayerSerializer
 
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
@@ -13,14 +13,14 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
-def getAllUsersProfile(request):
+def getAllPlayers(request):
     if request.method == 'GET':
-        users = UserProfile.objects.all()
-        serializer = UserProfileSerializer(users, many=True)
+        users = Player.objects.all()
+        serializer = PlayerSerializer(users, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     if request.method == 'POST':
         try:
-            serializer = UserProfileSerializer(data=request.data)
+            serializer = PlayerSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()  
                 return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
@@ -29,27 +29,27 @@ def getAllUsersProfile(request):
             return JsonResponse({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def countUsersProfile(request):
+def countPlayers(request):
     if request.method == 'GET':
-        usersCount = UserProfile.objects.count()
+        usersCount = Player.objects.count()
         return JsonResponse(usersCount, safe=False)
 
 
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
-def getUserProfileById(request, id):
+def getPlayerById(request, id):
 
     try:
-        user = UserProfile.objects.get(id=id)
-    except UserProfile.DoesNotExist:
+        user = Player.objects.get(id=id)
+    except Player.DoesNotExist:
         return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
-        serializer = UserProfileSerializer(user)
+        serializer = PlayerSerializer(user)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     
     if request.method == 'PUT':
-        serializer = UserProfileSerializer(user, data=request.data, partial=True)
+        serializer = PlayerSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
