@@ -8,6 +8,8 @@ from .serializers import NotificationSerializer
 class UserNotificationConsumer(WebsocketConsumer):
     def connect(self):
         self.current_user = self.scope['user']
+        print(self.current_user.username)
+        print(self.current_user.is_authenticated)
         if self.current_user.is_authenticated:
             # self.room_name = self.scope['url_route']['kwargs']['room_name']
             self.group_name = f'notification_{self.current_user.id}'
@@ -19,8 +21,7 @@ class UserNotificationConsumer(WebsocketConsumer):
             )
             self.accept()
         else:
-            self.close()
-            
+            self.close()  
     def disconnect(self, close_code):
         if self.current_user.is_authenticated:
             # Leave room group
@@ -31,21 +32,35 @@ class UserNotificationConsumer(WebsocketConsumer):
     def receive(self, text_data):
         data = json.loads(text_data)
         print(data)
-        # self.receiver_id = data['receiver']
-        # user = User.objects.filter(id=receiver_id).first()
-        # Notification.objects.create(user=user, content=data['message'], is_read=0)
-        self.broadcast_notification(data)
+        try:
+            receiver = self.get_user(data['receiver'])
+            notification_data = {
+                'user' : receiver.id,
+                'content' : data['message']
+            }
+            notification_serializer = NotificationSerializer(data=notification_data)
+            if notification_serializer.is_valid():
+                notification_serializer.save()
+                print('notification_serializer.data')
+                print(notification_serializer.data)
+                self.broadcast_notification(notification_serializer.data)
+            else:    
+                self.send_error('notification')
+        except User.DoesNotExist:
+            self.send_error('receiver user not exists!')
 
     def broadcast_notification(self, data):
         async_to_sync(self.channel_layer.group_send)(
-            f'notification_{data["receiver"]}',
+            f'notification_{data["user"]}',
             {
                 'type': 'send_message',
                 'data': data
             }
-        )
+        )       
+    def get_user(self, user_id):
+        return (User.objects.get(id=user_id))           
     def send_error(self, error_message):
-        self.send(text_data=json.dumps({'Error': error_message}))
+        self.send(text_data=json.dumps({'Error': error_message}))  
     def send_message(self, event):
         message = event['data']
         self.send(text_data=json.dumps(message))
