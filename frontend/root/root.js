@@ -72,8 +72,8 @@ class Root extends HTMLElement{
         //         }
         //     });
         // })
-        const profile = header.querySelector('c-profile')
-        const userRunk = header.querySelector('user-rank');
+        // const profile = header.querySelector('c-profile')
+        // const userRunk = header.querySelector('user-rank');
         // profile.addEventListener('click', () => {
         //     if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
         //         this.ChangeRootContent = 'profile-component'

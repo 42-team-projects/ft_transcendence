@@ -38,11 +38,11 @@ async function fetchWhoAmI(accessToken) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
-            console.log(document.cookie);
+            // console.log(data);
+            // console.log(document.cookie);
         }
     } catch (error) {
-        console.log('====>', error);
+        // console.log('====>', error);
         if (error.message === "Unable to refresh token") {
             window.location.href = '../html/login.html';
         } else {
@@ -54,10 +54,10 @@ async function fetchWhoAmI(accessToken) {
 export class Router {
     constructor() {
         this.routes = [
-            // { path: "/signup", view: "signup-page" },
-            // { path: "/confirm-email", view: "email-page" },
-            // { path: "/oauth", view: "oauth-callback" },
-            { path: "*", view: "home-page" },
+            { path: "/signup", view: "signup-page" },
+            { path: "/confirm-email", view: "email-page" },
+            { path: "/oauth", view: "oauth-callback" },
+            { path: "*", view: "login-page" },
             
             { path: '/Home', view: 'home-page' },
             { path: '/Game', view: 'game-selection' },
@@ -65,6 +65,7 @@ export class Router {
             { path: '/Friends', view: 'freinds-page' },
             { path: '/Tournament', view: 'tournament-page' },
             { path: '/Settings', view: 'settings-page' },
+            { path: '/Profile', view: 'profile-component' },
         ];
         this.rootContent = document.querySelector("root-content");
         this.sideBar = document.querySelector("side-bar")
@@ -79,13 +80,13 @@ export class Router {
 
         let matchedRoute = this.routes.find((route) => route.path === path);
         if (!matchedRoute && !accessToken)
-            matchedRoute = this.routes.find((route) => route.path === "*");
+           matchedRoute = this.routes.find((route) => route.path === "*");
         if (!matchedRoute && accessToken)
             matchedRoute = this.routes.find((route) => route.path === "/Home");
         if(accessToken)
         {
             fetchWhoAmI(accessToken);
-            console.log(this.sideBar.shadowRoot);
+            // console.log(this.sideBar.shadowRoot);
             setTimeout(() => {
                 this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
                     let a = button.shadowRoot.querySelector('a');
