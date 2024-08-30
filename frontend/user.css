@@ -1,5 +1,5 @@
 @import url('https://fonts.cdnfonts.com/css/sansation');
-
+/* @import url('https://fonts.googleapis.com/css2?family=Sansation&display=swap'); */
 /* body {
     color: #ffffff;
 
@@ -265,4 +265,62 @@ submit-button button:hover {
 
 #error-message.show {
     visibility: visible;
+}
+
+#error-message.success {
+    color: #34C759;
+}
+
+#error-message.success::before {
+    content: "";
+    background: url('./svg/success.svg') no-repeat;
+    width: 1.5rem;
+    height: 1.2rem;
+}
+
+/* EmailConf.js */
+
+email-page {
+    /* border: #fc3d3d 1px solid; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    gap: 10rem;
+    padding-top: 10rem;
+}
+
+
+#center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+/* #center-container img {
+    border: #fc3d3d 1px solid;
+
+} */
+
+#center-container h1 {
+    /* border: #fc3d3d 1px solid; */
+    font-family: 'Sansation', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    
+}
+
+#center-container p {
+    /* all: initial; */
+    /* color: white; */
+    /* font-weight: 550 !important; */
+    /* font-size: 1rem; */
+    /* font-family: 'Sansation', sans-serif !important; */
+
+    /* font-family: 'Courier New', Courier, monospace; */
+    text-align: center;
+    opacity: 0.7;
 }
