@@ -1,7 +1,7 @@
 import { NotificationComponent } from "../Notification/NotificationComponent.js";
-
-
-
+import { displayNotification } from "../Notification/NotificationUtils.js";
+import { SearchBarComponent } from "../Search/SearchBarComponent.js";
+import { NewFriendNotification } from "../Notification/templates/NewFriendNotification.js";
 
 export class HeaderBar extends HTMLElement{
     constructor(){
@@ -14,6 +14,7 @@ export class HeaderBar extends HTMLElement{
         const notificationIcon = this.querySelector(".notification-icon");
         let checker = true;
         notificationIcon.addEventListener("click", () => {
+            displayNotification("<new-friend-notification></new-friend-notification>");
             const notificationsBar = window.document.querySelector("notifications-list");
             const headerBar = window.document.querySelector("header-bar");
             const rootContent = window.document.querySelector("root-content");
@@ -256,7 +257,7 @@ HeaderTemplate.innerHTML = /*html*/`
         </div>
         <div class="notification-search">
             <div class="search-box">
-                <search-bar></search-bar>
+                <search-bar-component></search-bar-component>
                 <div class="notification-icon" >
                     <img loading="lazy" draggable="false" src="./images/svg-header/alarm.svg" alt="notification">
                     <div class="number-of-notifications">99</div>
