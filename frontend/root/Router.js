@@ -42,7 +42,7 @@ async function fetchWhoAmI(accessToken) {
             // console.log(document.cookie);
         }
     } catch (error) {
-        // console.log('====>', error);
+        console.log('====>', error);
         if (error.message === "Unable to refresh token") {
             window.location.href = '../html/login.html';
         } else {

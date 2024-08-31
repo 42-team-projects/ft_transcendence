@@ -4,4 +4,4 @@ from ..Models.AchievementsModel import Achievements
 class AchievementsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievements
-        fields = ['name', 'img']
+        fields = ['id', 'name', 'img', 'player']

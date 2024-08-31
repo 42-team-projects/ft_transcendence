@@ -6,13 +6,13 @@ from .AchievementsSerializer import AchievementsSerializer
 from accounts.serializers import UserRegisterSerializer
 
 class PlayerSerializer(serializers.ModelSerializer):
-    user = UserRegisterSerializer()
+    # player = UserRegisterSerializer()
     links = LinksSerializer(many=True)
     stats = StatsSerializer()
     achievements = AchievementsSerializer(many=True)
     class Meta:
         model = Player
-        fields = ['id', 'user', 'fullName', 'profile_picture', 'cover', 'joinDate', 'active', 'links', 'stats', 'achievements']
+        fields = ['id', 'fullName', 'profile_picture', 'cover', 'joinDate', 'active', 'stats', 'achievements', 'links']
 
     # def update(self, instance, validated_data):
     #     user_data = validated_data.pop('user', None)
