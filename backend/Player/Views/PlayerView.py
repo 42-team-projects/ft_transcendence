@@ -24,6 +24,7 @@ def getAllPlayers(request):
         users = Player.objects.all()
         serializer = PlayerSerializer(users, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
     if request.method == 'POST':
         try:
 
