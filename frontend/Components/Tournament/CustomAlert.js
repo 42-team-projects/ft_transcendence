@@ -206,7 +206,7 @@ const cssContent = /*css*/`
     align-items: center;
     justify-content: center;
     gap: 30px;
-    font-family: 'Sansation';
+    font-family: 'Sansation Bold';
 }
 
 .alertActions,

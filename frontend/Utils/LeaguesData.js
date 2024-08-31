@@ -20,3 +20,13 @@ export function getLeagueImage(league) {
     leagueColors.set("legendary", "./assets/images/leagues/legendary-league.svg");
     return leagueColors.get(league.toLowerCase());
 }
+
+
+export function getNextLeague(currentleague) {
+    const leagues = ["bronze", "silver", "gold", "platinum", "legendary"];
+    for (let index = 0; index < leagues.length; index++) {
+        if (leagues[index] == currentleague.toLowerCase() && index + 1 < leagues.length)
+            return leagues[index + 1];
+    }
+    return leagues[0];
+}
