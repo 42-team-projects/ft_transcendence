@@ -4,4 +4,4 @@ from ..Models.LinksModel import Links
 class LinksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Links
-        fields = ['title', 'url']
+        fields = ['id', 'title', 'url', 'player']
