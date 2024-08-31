@@ -1,4 +1,4 @@
-const fetchWithToken = async (url, options) => {
+export const fetchWithToken = async (url, options) => {
     const response = await fetch(url, options);
 
     if (response.status === 401) {
@@ -22,6 +22,8 @@ const fetchWithToken = async (url, options) => {
     }
     return response;
 };
+
+
 async function fetchWhoAmI(accessToken) {
 
     try {

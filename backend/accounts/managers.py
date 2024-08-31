@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 
+from Player.PlayersManager import createNewPlayer
+
 class UserManager(BaseUserManager):
     def email_validator(self, email):
         try:
@@ -22,8 +24,10 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
 
-        
         user.save()
+        
+        createNewPlayer(user)
+
         return user
     
     def create_superuser(self, email, username, password, **extra_fields):
