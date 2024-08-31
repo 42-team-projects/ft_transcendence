@@ -119,6 +119,7 @@ const cssContent = /*css*/`
     flex-direction: row;
     align-items: center;
     margin: 10px;
+    z-index: 1000;
 }
 
 .mainContainer {
@@ -189,6 +190,7 @@ const cssContent = /*css*/`
     flex-direction: column;
     gap: 10px;
     max-height: 800px;
+    background: #01263e;
 }
 
 .filter-section {
