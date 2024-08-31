@@ -33,7 +33,7 @@ export class ProfileContent extends HTMLElement {
             if (fullNameField.value)
             {
                 profileInfos.fullName = fullNameField.value;
-                const response = await fetch("http://127.0.0.1:8000/api/v1/players/2/", {
+                const response = await fetch("http://127.0.0.1:8000/api/v1/players/5/", {
                     method: "PUT",
                     headers: {
                         'Accept': 'application/json',
