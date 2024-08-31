@@ -3,11 +3,8 @@ from .Views import PlayerView, StatsView, GraphView, AchievementsView, LinksView
 
 urlpatterns = [
     # recieve, create user ("GET", "POST")
-    path('',PlayerView.getAllPlayers, name='getAllPlayers'),
+    path('',PlayerView.getPlayer, name='getPlayer'),
     # number of Players ("GET")
-    path('count/',PlayerView.countPlayers, name='countPlayers'),
-    # recieve, update, delete user ("GET", "PUT", "DELETE")
-    path('<int:id>/',PlayerView.getPlayerById, name='getPlayerById'),
 
 
     path('<int:id>/stats/',StatsView.getPlayerStats, name='getPlayerStats'),

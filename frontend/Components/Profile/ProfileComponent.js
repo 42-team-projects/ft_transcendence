@@ -8,6 +8,7 @@ import { AchievementComponent } from "./UserInfosComponents/AchievementComponent
 import { CustomTable } from "./TableComponents/CustomTable.js";
 import { StatsContainer } from "./StatsComponents/StatsContainer.js";
 import { CustomGraph } from "./GraphComponent/CustomGraph.js";
+import { fetchWithToken } from "../../root/Router.js"
 
 
 let fakeData = {
@@ -94,7 +95,7 @@ let fakeData = {
     }
 };
 
-const APIUrl = "http://127.0.0.1:8000/api/v1/players/2/";
+const APIUrl = "http://127.0.0.1:8000/api/v1/players/";
 const emptyGraph = [{ label: "", value: 0 }];
 
 export class ProfileComponent extends HTMLElement {
@@ -212,16 +213,18 @@ export class ProfileComponent extends HTMLElement {
 
     async connectedCallback() {
 
-        try {
-            const response = await fetch(APIUrl);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-            const json = await response.json();
-            fakeData = json;
-        } catch (error) {
-            console.error(error.message);
-        }
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetchWithToken(APIUrl,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        fakeData = await response.json();
+        console.log("fake data : ", fakeData);
+
 
         this.setUpProfileInfo();
 
@@ -243,7 +246,7 @@ export class ProfileComponent extends HTMLElement {
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
         if (fakeData.stats)
             profileInfoComponent.league = fakeData.stats.league;
-        profileInfoComponent.username = fakeData.fullName || "unknown";
+        profileInfoComponent.username = fakeData.user.username;
         profileInfoComponent.src = fakeData.profileImage || "./images/svg-header/profile.jpeg";
         profileInfoComponent.joindate = fakeData.joinDate || "01 MAY 2000";
         profileInfoComponent.active = fakeData.active;
