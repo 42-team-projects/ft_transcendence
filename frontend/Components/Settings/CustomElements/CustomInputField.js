@@ -143,6 +143,19 @@ export class CustomInputField extends HTMLElement {
     
     set height(value) { this.setAttribute("height", value)};
     get height() { return this.getAttribute("height")};
+    
+    
+    get value() {
+        const value = this.shadowRoot.querySelector(".inputContainer input").value;
+        const field = this.shadowRoot.querySelector(".active");
+        if (field)
+            field.style.border = "1px solid aqua";
+        if (value)
+            return value;
+        if (field)
+            field.style.border = "1px solid red";
+        return null;
+    };
 
 
 }

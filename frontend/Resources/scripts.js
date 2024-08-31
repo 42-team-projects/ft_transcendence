@@ -42,7 +42,7 @@ async function signup()
             password: password
         }
         const signup = "signup/"
-        const response = await fetch(`${apiUrl}game/${signup}`, {
+        const response = await fetch(`${apiUrl}Components/Game/${signup}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -71,7 +71,7 @@ async function login()
             password: password
         }
         const login = "login/"
-        const response = await fetch(`${apiUrl}game/${login}`, {
+        const response = await fetch(`${apiUrl}Components/Game/${login}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
