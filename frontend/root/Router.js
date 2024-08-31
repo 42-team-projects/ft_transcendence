@@ -85,7 +85,7 @@ export class Router {
             matchedRoute = this.routes.find((route) => route.path === "/Home");
         if(accessToken)
         {
-            fetchWhoAmI(accessToken);
+            // fetchWhoAmI(accessToken);
             // console.log(this.sideBar.shadowRoot);
             setTimeout(() => {
                 this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
