@@ -1,4 +1,4 @@
-import { getLeagueColor, getLeagueImage } from "../../Utils/LeaguesData.js";
+import { getLeagueColor, getLeagueImage, getNextLeague } from "../../Utils/LeaguesData.js";
 import { CoverComponent } from "./CoverComponent.js";
 import { ProfileInfoComponent } from "./UserInfosComponents/ProfileInfoComponent.js";
 import { UserInfoContainerComponent } from "./UserInfosComponents/UserInfoContainerComponent.js";
@@ -94,7 +94,7 @@ let fakeData = {
     }
 };
 
-const APIUrl = "http://localhost:8080/api/v1/users/4";
+const APIUrl = "http://127.0.0.1:8000/api/v1/players/2/";
 const emptyGraph = [{ label: "", value: 0 }];
 
 export class ProfileComponent extends HTMLElement {
@@ -123,7 +123,7 @@ export class ProfileComponent extends HTMLElement {
                     </div>
                     <cover-component ></cover-component>
                     <div class="profile-data">
-                        <div style="flex: 1;">
+                        <div class="profile-info-component-container">
                             <profile-info-component></profile-info-component>
 
                             <div class="profile-data-infos-container">
@@ -212,16 +212,16 @@ export class ProfileComponent extends HTMLElement {
 
     async connectedCallback() {
 
-        // try {
-        //     const response = await fetch(APIUrl);
-        //     if (!response.ok) {
-        //         throw new Error(`Response status: ${response.status}`);
-        //     }
-        //     const json = await response.json();
-        //     fakeData = json;
-        // } catch (error) {
-        //     console.error(error.message);
-        // }
+        try {
+            const response = await fetch(APIUrl);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            const json = await response.json();
+            fakeData = json;
+        } catch (error) {
+            console.error(error.message);
+        }
 
         this.setUpProfileInfo();
 
@@ -243,11 +243,11 @@ export class ProfileComponent extends HTMLElement {
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
         if (fakeData.stats)
             profileInfoComponent.league = fakeData.stats.league;
-        profileInfoComponent.username = fakeData.userName || "unknown";
+        profileInfoComponent.username = fakeData.fullName || "unknown";
         profileInfoComponent.src = fakeData.profileImage || "./images/svg-header/profile.jpeg";
-        profileInfoComponent.joindate = fakeData.joinDate.split(" ")[0] || "01 MAY 2000";
+        profileInfoComponent.joindate = fakeData.joinDate || "01 MAY 2000";
         profileInfoComponent.active = fakeData.active;
-        profileInfoComponent.friend = fakeData.friend;
+        // profileInfoComponent.friend = fakeData.friend;
     }
 
     setUpStats() {
@@ -294,13 +294,13 @@ export class ProfileComponent extends HTMLElement {
         const leagueItem2 = document.createElement("league-item");
         leagueItem2.slot = "next-league";
         leagueItem2.title = "next league";
-        leagueItem2.league = fakeData.stats.nextLeague;
-        leagueItem2.color = getLeagueColor(fakeData.stats.nextLeague);
+        leagueItem2.league = getNextLeague(fakeData.stats.league);
+        leagueItem2.color = getLeagueColor(leagueItem2.league);
         const img2 = document.createElement("img");
         img2.style.margin = 0;
         img2.width = 48;
         img2.className = "next-league-logo";
-        img2.src = getLeagueImage(fakeData.stats.nextLeague);
+        img2.src = getLeagueImage(leagueItem2.league);
         leagueItem2.appendChild(img2);
         leagueInfo.appendChild(leagueItem2);
 
@@ -338,6 +338,7 @@ const cssContent = /*css*/`
 
     :host * {
         margin: 0;
+        font-family: 'Sansation Bold';
     }
 
     .child{
@@ -427,6 +428,11 @@ const cssContent = /*css*/`
         flex-wrap: wrap;
         gap: 10px;
         width: 100%;
+        flex: 1;
+    }
+
+
+    .profile-info-component-container {
         flex: 1;
     }
 
