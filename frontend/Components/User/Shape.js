@@ -3,7 +3,7 @@ export default class Shape extends HTMLElement {
         const title = this.getAttribute('title');
         // console.log('==>', title)
         this.innerHTML = `
-            <link rel="stylesheet" href="../style.css" type="text/css">
+            <link rel="stylesheet" href="./style.css" type="text/css">
                 
             <div id="background"></div>
             
@@ -14,10 +14,10 @@ export default class Shape extends HTMLElement {
                 
                 <div id="error-message"></div>
                 
-                <input-field placeholder="User name" icon="./svg/username.svg"></input-field>
-                <input-field placeholder="Email" icon="./svg/email.svg"></input-field>
-                <input-field placeholder="Password" icon="./svg/pwd.svg" eye="./svg/eyeClosed.svg"></input-field>
-                <input-field placeholder="Repeat password" icon="./svg/pwd.svg" eye="./svg/eyeClosed.svg"></input-field>
+                <input-field placeholder="User name" icon="../../assets/auth-svg/username.svg"></input-field>
+                <input-field placeholder="Email" icon="../../assets/auth-svg/email.svg"></input-field>
+                <input-field placeholder="Password" icon="../../assets/auth-svg/pwd.svg" eye="../../assets/auth-svg/eyeClosed.svg"></input-field>
+                <input-field placeholder="Repeat password" icon="../../assets/auth-svg/pwd.svg" eye="../../assets/auth-svg/eyeClosed.svg"></input-field>
             
                 <submit-button
                     title="Sign Up"
@@ -73,10 +73,10 @@ class InputField extends HTMLElement {
         const input = eyeIcon.previousElementSibling;
         if (input.type === "password") {
             input.type = "text";
-            eyeIcon.src = "./svg/eyeOpen.svg";
+            eyeIcon.src = "../../assets/auth-svg/eyeOpen.svg";
         } else {
             input.type = "password";
-            eyeIcon.src = "./svg/eyeClosed.svg";
+            eyeIcon.src = "../../assets/auth-svg/eyeClosed.svg";
         }
     }
 }
