@@ -69,3 +69,34 @@ TOURNAMENT API:
 
 
 
+USER PROFILE BACKEND:
+
+    -> APIs
+
+        /** GET **/
+    ->  /players                                            => get all players infos
+    ->  /players/count                                      => get number of players
+    ->  /players/{id}                                       => get player with a specific id
+    ->  /players/{id}/stats                                 => get the player stats
+    ->  /players/{id}/stats/graph                           => get the player stats graph
+    ->  /players/{id}/achievements                          => get the player achievements
+    ->  /players/{id}/achievements/{id}                     => get the player achievement with a specific id
+    ->  /players/{id}/links                                 => get the player links
+    ->  /players/{id}/links/{id}                            => get the player links with a specific id
+
+        /** POST **/
+    ->  /players                                            => create a new player
+    ->  /players/{id}/achievements                          => create a new achievement for the player with a specific id
+    ->  /players/{id}/links                                 => create a new link for the player with a specific id
+
+        /** PUT **/
+    ->  /players/{id}                                       => update the player
+    ->  /players/{id}/stats                                 => update the player stats
+    ->  /players/{id}/stats/graph                           => update the player stats graph
+    ->  /players/{id}/achievements/{id}                     => update the player achievement
+    ->  /players/{id}/links/{id}                            => update the player link
+
+        /** DELETE **/
+    ->  /players/{id}                                       => destroy a player with his stats and graphs
+    ->  /players/{id}/achievements/{id}                     => delete an achievement
+    ->  /players/{id}/links/{id}                            => delete a link

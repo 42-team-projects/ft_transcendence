@@ -1,3 +1,4 @@
+import { showNotifiactionsList } from "../Header/header-bar.js";
 import { NotificationComponent } from "./NotificationComponent.js";
 
 export class NotificationsList extends HTMLElement {
@@ -5,30 +6,14 @@ export class NotificationsList extends HTMLElement {
         super();
         this.innerHTML = `
             <div class="notificationsBar-header">
+                <img class="close-button" src="../../assets/icons/close-icon.svg" width="24px"/>
                 <h3>NOTIFICATIONS</h3>
             </div>
             <div class="notificationsBar-body">
-                <div class="notification-list">
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                    <notification-component width="100%" height="100px"></notification-component>
-                </div>
+                <div class="notification-list"></div>
             </div>
             <div class="notificationsBar-footer">
-                <h5>Clear All</h5>
+                <h4 class="clear-all">Clear All</h4>
             </div>
         `;
     }
@@ -38,6 +23,14 @@ export class NotificationsList extends HTMLElement {
         this.style.height = this.height;
         const notificationList = this.querySelector(".notificationsBar-body");
         notificationList.scrollTop = notificationList.scrollHeight;
+        this.querySelector(".close-button").addEventListener("click", () => {
+            showNotifiactionsList();
+        });
+        this.querySelector(".clear-all").addEventListener("click", () => {
+            this.querySelector(".notification-list").innerHTML = '';
+        });
+
+        
     }
 
     disconnectedCallback() {
@@ -45,9 +38,11 @@ export class NotificationsList extends HTMLElement {
     }
 
 
-    appendNotification(notification) {
-        const notificationsList = this.querySelector(".notification-list");
-        notificationsList.appendChild(notification);
+    appendNotification(notificationContent) {
+        const notification = new NotificationComponent();
+        notification.width = "100%";
+        notification.innerHTML = notificationContent;
+        this.querySelector(".notification-list").prepend(notification);
     }
 
     static observedAttributes = ["width", "height"];

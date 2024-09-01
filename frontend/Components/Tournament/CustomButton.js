@@ -8,6 +8,7 @@ const cssContent = /*css*/`
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Sansation Bold';
 }
 
 .center {
