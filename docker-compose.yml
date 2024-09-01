@@ -1,0 +1,25 @@
+services:
+  back-end:
+    build: .
+    container_name: back-end
+    volumes:
+      - ./backend/:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - ft_transcendence
+
+  front-end:
+    container_name: front-end
+    image: nginx:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./frontend/:/usr/share/nginx/html
+    networks:
+      - ft_transcendence
+    depends_on:
+      - back-end
+
+networks:
+  ft_transcendence:
