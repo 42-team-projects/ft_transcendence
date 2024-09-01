@@ -23,36 +23,6 @@ export const fetchWithToken = async (url, options) => {
     return response;
 };
 
-
-async function fetchWhoAmI(accessToken) {
-
-    try {
-        const response = await fetchWithToken(
-            "http://127.0.0.1:8000/api/v1/auth/whoami/",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        );
-
-        if (response.ok) {
-            const data = await response.json();
-            // console.log(data);
-            // console.log(document.cookie);
-        }
-    } catch (error) {
-        console.log('====>', error);
-        if (error.message === "Unable to refresh token") {
-            window.location.href = '../html/login.html';
-        } else {
-            console.error("Error:", error);
-        }
-    }
-}
-
 export class Router {
     constructor() {
         this.routes = [
