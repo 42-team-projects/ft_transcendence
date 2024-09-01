@@ -2,7 +2,7 @@
 const HeaderTemplate = document.createElement('template');
 import { userInfo, opponentInfo } from "./Lobby.js";
 HeaderTemplate.innerHTML = /*html*/ `
-<link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
+<link rel="stylesheet" href="Components/Game/GamePlay/GameTable.css">
 <div class="leftPlayer">
 <img loading="lazy"   class="GamePlayer" src="./images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo">

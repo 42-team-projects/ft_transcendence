@@ -33,6 +33,8 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'daphne', #new
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,15 +43,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework', #new
-    'channels',
-    'chat',
     'corsheaders', #new
 
     # 'Tournament', #new
     'tournament', #new
     'game', #new
-    'Profile', #new
+    'Player', #new
     'accounts', #new ogorfti
+
+
+    'chat',          #dokoko
+    'notification',  #dokoko
     
 
 ]
@@ -71,18 +75,18 @@ MIDDLEWARE = [
 
 
 
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:8080',  # Example: Your frontend origin
-#     'http://127.0.0.1:8080',   # Another example: Your frontend origin
-#     # Add more origins as needed
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',  # Example: Your frontend origin
+    'http://127.0.0.1:8080',   # Another example: Your frontend origin
+    # Add more origins as needed
 
-#     'http://localhost:5501',  # Example: Your frontend origin
-#     'http://127.0.0.1:5501',
-#     'http://127.0.0.1:5500',
-#     'http://127.0.0.1:3000',
-# ]
+    'http://localhost:5501',  # Example: Your frontend origin
+    'http://127.0.0.1:5501',
+    'http://127.0.0.1:5500',
+    'http://127.0.0.1:3000',
+]
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -183,9 +187,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-
-
-
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -209,7 +210,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 #     },
 # }
 
+
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+FRONTEND_BASE_URL='http://127.0.0.1:3000'
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 
