@@ -50,11 +50,11 @@ export class JoinTournament extends HTMLElement {
         if (tournamentData.is_accessible == false)
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
-            displayNotification("content");
-            if (joinButton.className == "lock-button") 
-                this.joinToPrivateTournament(tournamentData);
-            else
-                await this.addPlayerToTournament(tournamentData);
+            displayNotification("<message-notification></message-notification>");
+            // if (joinButton.className == "lock-button") 
+            //     this.joinToPrivateTournament(tournamentData);
+            // else
+            //     await this.addPlayerToTournament(tournamentData);
         });
         return tournamentItem;
     }

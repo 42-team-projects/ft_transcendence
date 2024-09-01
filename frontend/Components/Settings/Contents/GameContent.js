@@ -28,29 +28,29 @@ export class GameContent extends HTMLElement {
         `;
     }
 
-    // interval;
+    interval;
 
     connectedCallback() {
-        // const gamePlayColorSelector = this.shadowRoot.querySelector("#gamePlayColor");
-        // let gamePlayColor = gamePlayColorSelector.value;
-        // const customSliders = this.shadowRoot.querySelector("custom-sliders");
-        // gamePlayColorSelector.addEventListener("click", () => {
-        //     let counter = 0;
-        //     if (this.interval)
-        //         clearInterval(this.interval);
-        //     this.interval = setInterval(() => {
-        //         if (gamePlayColorSelector.value != gamePlayColor)
-        //         {
-        //             gamePlayColor = gamePlayColorSelector.value;
-        //             customSliders.gameColor = gamePlayColor;
-        //             counter = 0;
-        //         }
-        //         if (counter >= 3000)
-        //             clearInterval(this.interval);
-        //         console.log("hello from game play selector : ", this.interval);
-        //         counter += 100;
-        //     }, 100);
-        // });
+        const gamePlayColorSelector = this.shadowRoot.querySelector("#gamePlayColor");
+        let gamePlayColor = gamePlayColorSelector.value;
+        const customSliders = this.shadowRoot.querySelector("custom-sliders");
+        gamePlayColorSelector.addEventListener("click", () => {
+            let counter = 0;
+            if (this.interval)
+                clearInterval(this.interval);
+            this.interval = setInterval(() => {
+                if (gamePlayColorSelector.value != gamePlayColor)
+                {
+                    gamePlayColor = gamePlayColorSelector.value;
+                    customSliders.gameColor = gamePlayColor;
+                    counter = 0;
+                }
+                if (counter >= 3000)
+                    clearInterval(this.interval);
+                console.log("hello from game play selector : ", this.interval);
+                counter += 100;
+            }, 100);
+        });
     }
 
     disconnectedCallback() {

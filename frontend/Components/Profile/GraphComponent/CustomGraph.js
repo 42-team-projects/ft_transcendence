@@ -82,12 +82,9 @@ export class CustomGraph extends HTMLElement {
     drawRadarChart(canvas, data) {
         let ctx = canvas.getContext('2d');
         
-        const values = [];
-        const labels = [];
-        data.forEach(element => {
-            labels.push(element.label);
-            values.push(element.value);
-        });
+        const labels = Object.keys(data);
+        const values = Object.values(data);
+        
 
         // Chart settings
         const numAxes = values.length;
