@@ -209,11 +209,15 @@ export class Lobby extends HTMLElement{
 	async OnlineGame(opponentId)
 	{
 		//get user id from local storage
-		const userId = playerId;
+		const user_data = JSON.parse(localStorage.getItem('user_data'));
+		console.log("hiiiiii",user_data)
+		const userId = user_data.id;
+		userInfo.picture = user_data.picture;
+		userInfo.username = user_data.username;
+		console.log('id:', userId, userInfo);
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
-		userInfo = await this.getData(`http://${ip}:8000/game/players/${userId}/`);
 		p_img.src = userInfo.picture;
 		p_h1.textContent = userInfo.username;
 		if(!opponentId)
