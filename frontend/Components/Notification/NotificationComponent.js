@@ -8,15 +8,16 @@ const cssContent = /*css*/`
 
 :host {
     width: 100%;
-    min-height: 100px;
-    height: auto;
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 200px;
+    max-width: 550px;
     position: relative;
     box-shadow: 2px 2px 10px 2px #00fffc40, inset 2px 2px 10px 2px #00fffc40;
+
+    animation: slide-right 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
 .parent-box {

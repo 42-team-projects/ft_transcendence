@@ -1,4 +1,4 @@
-import { getLeagueColor, getLeagueImage } from "../../Utils/LeaguesData.js";
+import { getLeagueColor, getLeagueImage, getNextLeague } from "../../Utils/LeaguesData.js";
 import { CoverComponent } from "./CoverComponent.js";
 import { ProfileInfoComponent } from "./UserInfosComponents/ProfileInfoComponent.js";
 import { UserInfoContainerComponent } from "./UserInfosComponents/UserInfoContainerComponent.js";
@@ -8,97 +8,12 @@ import { AchievementComponent } from "./UserInfosComponents/AchievementComponent
 import { CustomTable } from "./TableComponents/CustomTable.js";
 import { StatsContainer } from "./StatsComponents/StatsContainer.js";
 import { CustomGraph } from "./GraphComponent/CustomGraph.js";
-
-
-let fakeData = {
-    id: 1,
-    userName: "Esalim",
-    joinDate: "27 JUL 2058",
-    active: true,
-    friend: false,
-    profileImage: "./images/svg-header/profile.jpeg",
-    cover: "./images/xxxxxx.png",
-    stats: {
-        win: 89,
-        loss: 11,
-        rank: 200,
-        league: "gold",
-        nextLeague: "platinum",
-        progressBar: 89,
-        graph: [
-            {
-                label: "win",
-                value: 89
-            },
-            {
-                label: "loss",
-                value: 11
-            },
-            {
-                label: "draw",
-                value: 5
-            },
-            {
-                label: "max-score",
-                value: 90
-            },
-            {
-                label: "max-score",
-                value: 90
-            },
-            {
-                label: "max-score",
-                value: 90
-            }
-        ]
-    },
-    links: [
-        {
-            title: "Twitter",
-            url: "https://www.google.com/search"
-        },
-        {
-            title: "Youtube",
-            url: "https://www.youtube.com/search"
-        },
-        {
-            title: "Twitch",
-            url: "https://www.Facebook.com/search"
-        },
-        {
-            title: "Instagram",
-            url: "https://www.Instagram.com/search"
-        }
-    ],
-    achievements: [
-        {
-            name: "Bronze",
-            img: "./assets/images/leagues/bronze-league.svg"
-        },
-        {
-            name: "Silver",
-            img: "./assets/images/leagues/silver-league.svg"
-        },
-        {
-            name: "Gold",
-            img: "./assets/images/leagues/gold-league.svg"
-        },
-        {
-            name: "Platinum",
-            img: "./assets/images/leagues/platinum-league.svg"
-        }
-    ],
-    history: {
-        srcUser: 1,
-        targetUser: 78
-    }
-};
-
-const APIUrl = "http://localhost:8080/api/v1/users/4";
-const emptyGraph = [{ label: "", value: 0 }];
+import { getApiData } from "../../Utils/APIManager.js";
+import { PROFILE_API_URL } from "../../Utils/APIUrls.js";
+import { HOST } from "../../Utils/GlobalVariables.js";
 
 export class ProfileComponent extends HTMLElement {
-
+    APIData;
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -123,7 +38,7 @@ export class ProfileComponent extends HTMLElement {
                     </div>
                     <cover-component ></cover-component>
                     <div class="profile-data">
-                        <div style="flex: 1;">
+                        <div class="profile-info-component-container">
                             <profile-info-component></profile-info-component>
 
                             <div class="profile-data-infos-container">
@@ -154,8 +69,8 @@ export class ProfileComponent extends HTMLElement {
     setUpLinks() {
         const linksContainer = this.shadowRoot.getElementById("links");
         linksContainer.innerHTML = "";
-        if (fakeData.links) {
-            fakeData.links.forEach((link) => {
+        if (this.APIData.links) {
+            this.APIData.links.forEach((link) => {
                 const linkComponent = document.createElement("link-component");
                 linkComponent.link = link.url;
                 linkComponent.textContent = link.title;
@@ -168,10 +83,10 @@ export class ProfileComponent extends HTMLElement {
 
     setUpAchievements() {
         const achievements = this.shadowRoot.getElementById("achievements");
-        if (fakeData.achievements) {
+        if (this.APIData.achievements) {
             const achievementsContainer = document.createElement("div");
             achievementsContainer.className = "flexClass";
-            fakeData.achievements.forEach((achievement) => {
+            this.APIData.achievements.forEach((achievement) => {
                 const achievementComponent = document.createElement("achievement-component");
                 achievementComponent.icon = achievement.img;
                 achievementComponent.league = achievement.name;
@@ -185,8 +100,8 @@ export class ProfileComponent extends HTMLElement {
 
     setUpGraph() {
         const graph = this.shadowRoot.getElementById("graph");
-        if (fakeData.stats)
-            graph.dataObject = (fakeData.stats.graph) ? fakeData.stats.graph : emptyGraph;
+        if (this.APIData.stats)
+            graph.dataObject = this.APIData.stats.graph;
         else
             graph.remove();
 
@@ -199,11 +114,11 @@ export class ProfileComponent extends HTMLElement {
         userInfoContainer.className = "gridClass";
         const UserKeys = ["fullName", "userName", "email", "phone", "gender", "birthday"];
         for (let key of UserKeys) {
-            if (!fakeData[key])
+            if (!this.APIData[key])
                 continue;
             const userInfoComponent = document.createElement("user-info-component");
             userInfoComponent.label = key.toUpperCase();
-            userInfoComponent.value = fakeData[key];
+            userInfoComponent.value = this.APIData[key];
             userInfoContainer.appendChild(userInfoComponent);
         }
         userInfo.appendChild(userInfoContainer);
@@ -212,16 +127,7 @@ export class ProfileComponent extends HTMLElement {
 
     async connectedCallback() {
 
-        // try {
-        //     const response = await fetch(APIUrl);
-        //     if (!response.ok) {
-        //         throw new Error(`Response status: ${response.status}`);
-        //     }
-        //     const json = await response.json();
-        //     fakeData = json;
-        // } catch (error) {
-        //     console.error(error.message);
-        // }
+        this.APIData = await getApiData(PROFILE_API_URL);
 
         this.setUpProfileInfo();
 
@@ -238,21 +144,20 @@ export class ProfileComponent extends HTMLElement {
 
     setUpProfileInfo() {
         const coverComponent = this.shadowRoot.querySelector("cover-component");
-        coverComponent.src = fakeData.cover || "./images/xxxxxx.png";
+        coverComponent.src = (HOST + this.APIData.cover) || "./images/xxxxxx.png";
 
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
-        if (fakeData.stats)
-            profileInfoComponent.league = fakeData.stats.league;
-        profileInfoComponent.username = fakeData.userName || "unknown";
-        profileInfoComponent.src = fakeData.profileImage || "./images/svg-header/profile.jpeg";
-        profileInfoComponent.joindate = fakeData.joinDate.split(" ")[0] || "01 MAY 2000";
-        profileInfoComponent.active = fakeData.active;
-        profileInfoComponent.friend = fakeData.friend;
+        profileInfoComponent.league = this.APIData.stats.league;
+        profileInfoComponent.username = this.APIData.user.username;
+        profileInfoComponent.src = (HOST + this.APIData.user.avatar);
+        profileInfoComponent.joindate = this.APIData.joinDate;
+        profileInfoComponent.active = this.APIData.active;
+        // profileInfoComponent.friend = this.APIData.friend;
     }
 
     setUpStats() {
         
-        if (!fakeData.stats)
+        if (!this.APIData.stats)
         {
             this.shadowRoot.querySelector("stats-container").remove();
             this.shadowRoot.querySelector(".profile-rank-2").remove();
@@ -261,21 +166,21 @@ export class ProfileComponent extends HTMLElement {
 
         const userRank = this.shadowRoot.querySelector("user-rank");
         const leagueBar = this.shadowRoot.querySelector(".league-bar");
-        userRank.bcolor = getLeagueColor(fakeData.stats.league);
+        userRank.bcolor = getLeagueColor(this.APIData.stats.league);
         const rank = userRank.querySelector("h1");
-        rank.textContent = fakeData.stats.rank;
+        rank.textContent = this.APIData.stats.rank;
 
 
         const leagueInfo = document.createElement("league-info");
         const leagueItem1 = document.createElement("league-item");
         leagueItem1.slot = "current-rank";
         leagueItem1.title = "current rank";
-        leagueItem1.league = fakeData.stats.league;
-        leagueItem1.color = getLeagueColor(fakeData.stats.league);
+        leagueItem1.league = this.APIData.stats.league;
+        leagueItem1.color = getLeagueColor(this.APIData.stats.league);
         const h1 = document.createElement("h1");
         h1.style.margin = 0;
         h1.className = "league-rank";
-        h1.textContent = fakeData.stats.rank;
+        h1.textContent = this.APIData.stats.rank;
         leagueItem1.appendChild(h1);
         leagueInfo.appendChild(leagueItem1);
 
@@ -287,32 +192,32 @@ export class ProfileComponent extends HTMLElement {
         img1.style.margin = 0;
         img1.width = 150;
         img1.className = "current-league-logo";
-        img1.src = getLeagueImage(fakeData.stats.league);
+        img1.src = getLeagueImage(this.APIData.stats.league);
         div.appendChild(img1);
         leagueInfo.appendChild(div);
 
         const leagueItem2 = document.createElement("league-item");
         leagueItem2.slot = "next-league";
         leagueItem2.title = "next league";
-        leagueItem2.league = fakeData.stats.nextLeague;
-        leagueItem2.color = getLeagueColor(fakeData.stats.nextLeague);
+        leagueItem2.league = getNextLeague(this.APIData.stats.league);
+        leagueItem2.color = getLeagueColor(leagueItem2.league);
         const img2 = document.createElement("img");
         img2.style.margin = 0;
         img2.width = 48;
         img2.className = "next-league-logo";
-        img2.src = getLeagueImage(fakeData.stats.nextLeague);
+        img2.src = getLeagueImage(leagueItem2.league);
         leagueItem2.appendChild(img2);
         leagueInfo.appendChild(leagueItem2);
 
         leagueBar.appendChild(leagueInfo);
         const progressBar = document.createElement("custom-progress-bar");
-        progressBar.value = fakeData.stats.progressBar;
-        progressBar.color = getLeagueColor(fakeData.stats.league);
+        progressBar.value = this.APIData.stats.progressBar;
+        progressBar.color = getLeagueColor(this.APIData.stats.league);
         leagueBar.appendChild(progressBar);
 
         const recordComponent = document.createElement("record-component");
-        recordComponent.loss = fakeData.stats.loss;
-        recordComponent.win = fakeData.stats.win;
+        recordComponent.loss = this.APIData.stats.loss;
+        recordComponent.win = this.APIData.stats.win;
         this.shadowRoot.querySelector(".match-record").appendChild(recordComponent);
 
     }
@@ -338,6 +243,7 @@ const cssContent = /*css*/`
 
     :host * {
         margin: 0;
+        font-family: 'Sansation Bold';
     }
 
     .child{
@@ -399,27 +305,6 @@ const cssContent = /*css*/`
         z-index: 30;
     }
 
-
-    .profile-cover
-    {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        align-content: center;
-        width: 100%;
-        height: 35%;
-        min-height: 300px;
-        max-height: 600px;
-        color: white;
-        /* border: 1px solid white; */
-        background-image: url(./images/xxxxxx.png);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top;
-        background-attachment: local;
-        opacity: 0.7;
-        z-index: 1;
-    }
     .profile-data
     {
         display: flex;
@@ -427,6 +312,11 @@ const cssContent = /*css*/`
         flex-wrap: wrap;
         gap: 10px;
         width: 100%;
+        flex: 1;
+    }
+
+
+    .profile-info-component-container {
         flex: 1;
     }
 
