@@ -1,9 +1,7 @@
-from django.core.mail import EmailMessage
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
 from datetime import timedelta, datetime, timezone
+from django.core.mail import EmailMessage
 from django.conf import settings
-import jwt
+import random, jwt, os
 
 def gen_email_token(user, days = 0, minutes = 0):
     payload = {
@@ -15,15 +13,14 @@ def gen_email_token(user, days = 0, minutes = 0):
     return token
 
 def send_confirmation_email(user, request, token):
-    current_site = get_current_site(request)
-    
     mail_subject = 'Activate your account.'
-    context = {
-        'username': user.username,
-        'domain': current_site.domain,
-        'token': token,
-    }
-    body = render_to_string('mail.html', context)
+    confirm_url = f'{settings.FRONTEND_BASE_URL}/confirm-email?token={token}'
+    body = (
+        f'Hi {user.username},<br><br>'
+        f'Please confirm your new account by visiting <a href="{confirm_url}">{confirm_url}</a><br><br>'
+        f'Thank you from ft_transcendence team!'
+    )
+    
     email = EmailMessage(
         mail_subject,
         body,
@@ -46,3 +43,7 @@ def send_reset_email(user, request, reset_token):
     )
     email.content_subtype = 'html'
     email.send(fail_silently=False)
+
+def get_default_avatar():
+    avatar_folder = 'media/defaults'
+    return 'defaults/' + random.choice(os.listdir(avatar_folder))
