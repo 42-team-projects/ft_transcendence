@@ -39,7 +39,7 @@ export class ProfileContent extends HTMLElement {
 
         const profileImage = this.shadowRoot.querySelector(".c-hexagon-content");
 
-        profileImage.src = HOST + playerData.profile_picture;
+        profileImage.src = HOST + playerData.user.avatar;
 
         const hexagon = this.shadowRoot.querySelector(".c-hexagon-profile c-hexagon");
         hexagon.bcolor = getLeagueColor(playerData.stats.league);
