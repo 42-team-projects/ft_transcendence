@@ -1,0 +1,103 @@
+
+:host{
+    position: relative;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width : 60%;
+    grid-area: content;
+    aspect-ratio: 1.7;
+    background-color: #e6ffff14;
+    box-shadow: 0px 0px 15px 1px #0000001c;
+    border-radius: 15px 15px 15px 15px;
+}
+.lines{
+    position : absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+
+}
+.lines::before{
+    content: '';
+    position: absolute;
+    background-image: url(../../images/GreenCart/smalLine.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 1.5%;
+    aspect-ratio: 0.7;
+    top: 27%;
+    left: 53.8%;
+}
+.lines::after{
+    position: absolute;
+    content: '';
+    background-image: url(../../images/GreenCart/line1.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 4.4%;
+    aspect-ratio: 0.7;
+    top: 61.5%;
+    left: 44.2%;
+}
+.VS{
+    position : absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+.VS::before{
+    content: '';
+    position: absolute;
+    background-image: url(../../images/GreenCart/V-Lobby.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 12.1%;
+    aspect-ratio: 0.7;
+    left: 42.6%;
+    animation: moveV 1s forwards;
+    transform: translateY(-100%);
+}
+@keyframes moveV {
+
+    100%{
+        transform: translateY(106%);
+    }
+}
+@keyframes pulseShadow {
+    0%, 100% {
+        filter: drop-shadow(0px 0px 5px white);
+    }
+    50% {
+        filter: drop-shadow(0px 0px 10px white);
+    }
+}
+.VS::after{
+    position: absolute;
+    content: '';
+    background-image: url(../../images/GreenCart/s-Lobby.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 12.1%;
+    aspect-ratio: 0.7;
+    top: 44%;
+    left: 47%;
+    animation: moveS 1s forwards;
+    transform: translateY(200%);
+}
+@keyframes moveS {
+    to {
+        transform: translateY(0);
+    }
+}
+.opponent{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-image: url(../../images/GreenCart/lobby-border.svg);
+    background-repeat : no-repeat;
+    background-size: contain;
+    width: 36.4%;
+    aspect-ratio: 1;
+    transform: scaleX(-1) scaleY(-1);
+}
