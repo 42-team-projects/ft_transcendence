@@ -1,7 +1,8 @@
 from django.urls import path
-from accounts import views
+from . import views
 
 urlpatterns = [
     path('players/', views.ListPlayer.as_view()),
-    path('players/<int:pk>/', views.whoami),
+    path('player/', views.RetrievePlayer.as_view()),
+    path('players/<int:pk>/', views.DetailsPlayer.as_view()),
 ]
