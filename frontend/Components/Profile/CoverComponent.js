@@ -5,15 +5,14 @@ export class CoverComponent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host * {margin: 0; padding: 0;}
-                .profile-cover
-                {
+                .profile-cover {
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     align-content: center;
                     width: 100%;
                     height: 35%;
-                    min-height: 300px;
+                    min-height: 400px;
                     max-height: 600px;
                     color: white;
                     background-size: cover;
@@ -22,6 +21,7 @@ export class CoverComponent extends HTMLElement {
                     background-attachment: local;
                     opacity: 0.8;
                     z-index: 1;
+                    border-image: fill 0 linear-gradient(transparent, #02253730, #02253790);
                 }
             </style>
             <div class="profile-cover"></div>
@@ -35,11 +35,11 @@ export class CoverComponent extends HTMLElement {
 
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "src")
-            this.shadowRoot.querySelector(".profile-cover").style.background = "url(" + newValue + ") center top / cover no-repeat";
+            this.shadowRoot.querySelector(".profile-cover").style.background = "url(" + newValue + ") center center / cover no-repeat";
     }
     
     connectedCallback() {
-        this.shadowRoot.querySelector(".profile-cover").style.background = "url(" + this.src + ") center top / cover no-repeat";
+        this.shadowRoot.querySelector(".profile-cover").style.background = "url(" + this.src + ") center center / cover no-repeat";
     }
 }
 

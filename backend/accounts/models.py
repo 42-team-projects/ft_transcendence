@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.translation import gettext as _
 from .managers import UserManager
+from .utils import get_default_avatar
 
 AUTH_PROVIDERS = {'email':'email', 'google':'google', 'github':'github'}
 
@@ -20,6 +21,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     totp_secret_key = models.CharField(max_length=50, null=True, blank=True)
     is_2fa_enabled = models.BooleanField(default=False)
 
+    # new
+    avatar = models.ImageField(upload_to='avatars/', default=get_default_avatar, blank=True, null=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = UserManager()
@@ -30,7 +34,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def tokens(self):
         refresh = RefreshToken.for_user(self)
-        # print(refresh)
         tokens = {
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh),
