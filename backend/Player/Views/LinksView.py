@@ -4,7 +4,8 @@ from ..Models.LinksModel import Links
 from ..Serializers.PlayerSerializer import PlayerSerializer
 from ..Serializers.LinksSerializer import LinksSerializer
 
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 
@@ -15,9 +16,11 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
-def getPlayerLinks(request, playerId):
+@permission_classes([IsAuthenticated])
+def getPlayerLinks(request):
     try:
-        links = Links.objects.filter(player=playerId)
+        player = Player.objects.get(user=request.user)
+        links = player.links
     except Links.DoesNotExist:
         return JsonResponse({"error": "No Links exist"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -30,23 +33,23 @@ def getPlayerLinks(request, playerId):
             linksData = request.data
             links_list = linksData.get("links", [])
             if links_list:
-                createListOfLinksItems(playerId, links_list)
+                createListOfLinksItems(player, links_list)
             else:
-                createLinkItem(playerId, linksData)
+                createLinkItem(player, linksData)
             return JsonResponse({"message": "the Link has been successfully updated."}, safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
 
-def createLinkItem(playerId, linkData):
-    Links.objects.create(title=linkData.get("title"), url=linkData.get("url"), player = Player.objects.get(id=playerId))
+def createLinkItem(player, linkData):
+    Links.objects.create(title=linkData.get("title"), url=linkData.get("url"), player=player)
 
 
-def createListOfLinksItems(playerId, linksList):
+def createListOfLinksItems(player, linksList):
     for link_data in linksList:
         id = link_data.get("id")
         if id:
-            link = Links.objects.get(player=playerId, id=id)
+            link = Links.objects.get(player=player, id=id)
             title = link_data.get("title")
             if title:
                 link.title = title
@@ -55,23 +58,26 @@ def createListOfLinksItems(playerId, linksList):
                 link.url = url
             link.save()
         else:
-            createLinkItem(playerId, link_data)
+            createLinkItem(player, link_data)
 
 
 
 @api_view(['GET'])
-def coutPlayerLinks(request, playerId):
+@permission_classes([IsAuthenticated])
+def coutPlayerLinks(request):
     if request.method == 'GET':
-        count = Links.objects.filter(player=playerId).count()
-        return JsonResponse(count, safe=False, status=status.HTTP_201_CREATED)
+        count = Player.objects.get(user=request.user).links.count()
+        return JsonResponse(count, safe=False, status=status.HTTP_200_OK)
 
 
 
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
-def getPlayerLinkById(request, playerId, linkId):
+@permission_classes([IsAuthenticated])
+def getPlayerLinkById(request, linkId):
     try:
-        links = Links.objects.get(player=playerId, id=linkId)
+
+        links = Player.objects.get(user=request.user).links.get(id=linkId)
     except Links.DoesNotExist:
         return JsonResponse({"error": "No Links exist"}, status=status.HTTP_404_NOT_FOUND)
 

@@ -7,19 +7,19 @@ urlpatterns = [
     # number of Players ("GET")
 
 
-    path('<int:id>/stats/',StatsView.getPlayerStats, name='getPlayerStats'),
+    path('stats/',StatsView.getPlayerStats, name='getPlayerStats'),
 
-    path('<int:id>/stats/graph/',GraphView.getPlayerStatsGraph, name='getPlayerStatsGraph'),
+    path('stats/graph/',GraphView.getPlayerStatsGraph, name='getPlayerStatsGraph'),
 
 
-    path('<int:playerId>/achievements/',AchievementsView.getPlayerAchievements, name='getPlayerAchievements'),
-    path('<int:playerId>/achievements/count/',AchievementsView.coutPlayerAchievements, name='coutPlayerAchievements'),
-    path('<int:playerId>/achievements/<int:achievementId>/',AchievementsView.getPlayerAchievementById, name='getPlayerAchievementById'),
+    path('achievements/',AchievementsView.getPlayerAchievements, name='getPlayerAchievements'),
+    path('achievements/count/',AchievementsView.coutPlayerAchievements, name='coutPlayerAchievements'),
+    path('achievements/<int:achievementId>/',AchievementsView.getPlayerAchievementById, name='getPlayerAchievementById'),
   
 
-    path('<int:playerId>/links/',LinksView.getPlayerLinks, name='getPlayerLinks'),
-    path('<int:playerId>/links/count/',LinksView.coutPlayerLinks, name='coutPlayerLinks'),
-    path('<int:playerId>/links/<int:linkId>/',LinksView.getPlayerLinkById, name='getPlayerLinkById'),
+    path('links/',LinksView.getPlayerLinks, name='getPlayerLinks'),
+    path('links/count/',LinksView.coutPlayerLinks, name='coutPlayerLinks'),
+    path('links/<int:linkId>/',LinksView.getPlayerLinkById, name='getPlayerLinkById'),
   
 
 ]
