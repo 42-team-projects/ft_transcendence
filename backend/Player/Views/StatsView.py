@@ -3,7 +3,8 @@ from ..Models.PlayerModel import Player
 from ..Models.GraphModel import Graph
 from ..Serializers.StatsSerializer import StatsSerializer
 
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -15,10 +16,10 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 @api_view(['GET', 'PUT'])
-def getPlayerStats(request, id):
+@permission_classes([IsAuthenticated])
+def getPlayerStats(request):
     try:
-        player = Player.objects.get(id=id)
-        stats = player.stats
+        stats = Player.objects.get(user=request.user).stats
     except Player.DoesNotExist:
         return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
