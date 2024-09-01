@@ -10,13 +10,13 @@ const sideBar = document.querySelector('side-bar')
 const header = document.querySelector('header-bar')
 const footer = document.querySelector('footer')
 
-const rootContent = ['home-page',
-     'game-selection',
-     'chat-page',
-     'freinds-page',
-     'tournament-page',
-     'settings-page'
-]
+// const rootContent = ['home-page',
+//      'game-selection',
+//      'chat-page',
+//      'freinds-page',
+//      'tournament-page',
+//      'settings-page'
+// ]
 // const rootContent = [   
 //     { '/home': 'home-page' },
 //     { '/game': 'game-selection' },
@@ -33,24 +33,11 @@ class Root extends HTMLElement{
     constructor()
     {
         super();
+        
         this.appendChild(root.content.cloneNode(true))
         this.randred = false;
     }
-    changeStyle(access_token){
-        console.log(access_token)
-        if(access_token && !this.randred){
-            document.body.classList.add('body-default-shrink')
-            header.render()
-            sideBar.render()
-            this.randred = true;
-        }
-        else if(!access_token){
-            document.body.classList.remove('body-default-shrink')
-            header.remove()
-            sideBar.remove()
-            this.randred = false;
-        }
-    }
+
     // set ChangeRootContent(component){
     //     const content = document.createElement(component)
     //     this.innerHTML = ``
