@@ -7,7 +7,6 @@ from .utils import send_confirmation_email, gen_email_token
 from rest_framework.decorators import api_view, permission_classes
 from django_ratelimit.decorators import ratelimit
 from rest_framework.permissions import AllowAny,IsAuthenticated
-
 from django.conf import settings
 import jwt
 
@@ -74,6 +73,7 @@ def confirm_email_view(request, token):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
         user = User.objects.get(id=payload['user_id'])
+
         if user.is_verified:
             return Response(
                 {'status': 'success', 'message': 'Email is already confirmed'}, 
@@ -88,39 +88,24 @@ def confirm_email_view(request, token):
             )
         else:
             return Response({'status': 'error', 'message': 'Email could not be confirmed'}, status=status.HTTP_400_BAD_REQUEST)
-    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):
-        return Response({'status': 'error', 'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-@ratelimit(key='ip', rate='2/d', block=True)
-def resend_confirmation_email(request):
-    token = request.data.get('token')    
-    
-    try:
+    except jwt.ExpiredSignatureError:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'], options={'verify_exp': False})
-        email = payload['email']
-        user = User.objects.get(email=email)
+        user = User.objects.get(id=payload['user_id'])
         if user.is_verified:
-            return Response({'status': 'success', 'message': 'Email is already confirmed'}, status=status.HTTP_200_OK)
-
+            return Response(
+                {'status': 'success', 'message': 'Email is already confirmed'}, 
+                status=status.HTTP_200_OK
+            )
         new_token = gen_email_token(user, days=7)
         send_confirmation_email(user, request, new_token)
-        return Response({'status': 'success', 'message': 'Confirmation email sent'}, status=status.HTTP_200_OK)
-    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):
-        return Response({'status': 'error', 'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# store Access Token in Memory returned by the server
-# stor refresh token in a Cookie
-
-# testing function that return user username if he authenticated we will use access token of jwt
+        return Response({'status': 'error', 'message': 'Link expired. A new confirmation email has been sent.'}, status=status.HTTP_400_BAD_REQUEST)
+    except (jwt.InvalidTokenError, User.DoesNotExist):
+        return Response({'status': 'error', 'message': 'Invalid link'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def whoami(request):
-    return Response({'username': request.user.username})
+    return Response({'username': request.user.username, 'id': request.user.id, })
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -130,5 +115,6 @@ def user_data(request):
         'id': user.id,
         'username': user.username,
         'email': user.email,
+        'avatar': user.avatar,
     }
     return Response(user_data)

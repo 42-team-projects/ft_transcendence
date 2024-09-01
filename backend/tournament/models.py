@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 from django.db import models
-from game.models import Player
+from Player.Models.PlayerModel import Player
 import uuid
 
 # Create your models here.

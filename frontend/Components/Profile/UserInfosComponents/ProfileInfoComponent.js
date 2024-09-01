@@ -81,25 +81,27 @@ export class ProfileInfoComponent extends HTMLElement {
                 ${cssContent}
             
             </style>
-            <div class="profile-image">
-                <c-hexagon class="c-hexagon-profile" width="250px" height="250px" apply="true">
-                    <div slot="content" class="c-hexagon-content"></div>
-                </c-hexagon>
-                <div class="name">
-                    <div class="name-and-online">
-                        <p> </p>
-                        <c-hexagon width="24px" height="24px" apply="true">
-                            <div style="width: 100%; height: 100%;" slot="content"></div>
-                        </c-hexagon>
+            <div class="box">
+                <div class="profile-image">
+                    <c-hexagon class="c-hexagon-profile" width="250px" height="250px" apply="true">
+                        <div slot="content" class="c-hexagon-content"></div>
+                    </c-hexagon>
+                    <div class="name">
+                        <div class="name-and-online">
+                            <p> </p>
+                            <c-hexagon width="24px" height="24px" apply="true">
+                                <div style="width: 100%; height: 100%;" slot="content"></div>
+                            </c-hexagon>
+                        </div>
+                        <div class="joined-date">
+                            <img loading="lazy"   src="./assets/images/profile/Calendar.svg" width="20px"/>
+                            <p class="joined-text">joined:</p>
+                            <p class="joined-date-text"> </p>
+                            <div class="add-friend">
+                                <img loading="lazy" src="./assets/images/profile/add-friends-icon.svg" width="28px"/>
+                            </div>
+                        </div>
                     </div>
-                    <div class="joined-date">
-                        <img loading="lazy"   src="./assets/images/profile/Calendar.svg" width="20px"/>
-                        <p class="joined-text">joined:</p>
-                        <p class="joined-date-text"> </p>
-                    </div>
-                </div>
-                <div class="add-friend">
-                    <img loading="lazy"   src="./assets/images/profile/add-friends-icon.svg" width="32"/>
                 </div>
             </div>
 
@@ -115,35 +117,51 @@ const cssContent = /*css*/`
         padding: 0;
     }
 
-    .c-hexagon-content {
-        width: 250px;
-        height: 247px;
+    :host {
+        width: 130%;
+        position: relative;
     }
+
+
+    .c-hexagon-content {
+        width: 200px;
+        height: 210px;
+    }
+
+    .box {
+        display: flex;
+        position: relative;
+        margin-left: 20%;
+        margin-top: -155px;
+        z-index: 3;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
 
     .profile-image {
         display: flex;
         position: relative;
-        margin-left: 30%;
-        margin-top: -155px;
-        height: 250px;
-        z-index: 3;
     }
+
 
     .add-friend {
         display: flex;
+        flex: 1;
         align-items: center;
-        justify-content: center;
+        justify-content: end;
         margin-left: 20px;
-        height: 80%;
+        height: 24px;
+        opacity: 1;
     }
 
     .add-friend img {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
     }
 
     .profile-image > .name {
-        height: 250px;
+        height: 100%;
         display: flex;
         flex-direction: column;
         margin: 10px;
@@ -165,11 +183,16 @@ const cssContent = /*css*/`
     }
 
     .joined-date {
-        color: #d9d9d9;
+        color: #d9d9d970;
         gap: 10px;
         display: flex;
-        width: max-content;
+        align-items: center;
+        width: 100%;
         margin-top: 10px;
+    }
+
+    .joined-date > img {
         opacity: 0.7;
     }
+
 `;
