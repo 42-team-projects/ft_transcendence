@@ -1,14 +1,12 @@
 from django.db import models
+from accounts.models import User
+class Player(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
+    username = models.CharField(max_length=50, default='player')
+    picture = models.ImageField(upload_to='%y/%m/%d/', blank=True)
 
-# class Player(models.Model):
-#     # username = models.CharField(max_length=50)
-#     # password = models.CharField(max_length=50, default='111')
-#     picture = models.ImageField(upload_to='%y/%m/%d/', blank=True)
-
-    
-#     def __str__(self):
-#         return self.username
-    
+    def __str__(self):
+        return self.username
 
 # class Game(models.Model):
 #     player_1 = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_1', null=True)
