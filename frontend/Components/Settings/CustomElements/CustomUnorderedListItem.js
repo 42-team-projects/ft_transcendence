@@ -1,3 +1,6 @@
+import { deleteApiData } from "../../../Utils/APIManager.js";
+import { PROFILE_API_URL } from "../../../Utils/APIUrls.js";
+
 export class CustomUnorderedListItem extends HTMLElement {
     constructor() {
         super();
@@ -8,7 +11,7 @@ export class CustomUnorderedListItem extends HTMLElement {
             <style> ${cssContent} </style>
             <div class="title">
                 <div class="inputContainer" style="width:150px;">
-                    <input type="text" value="twitter" readonly/>
+                    <input class="link-title" type="text" readonly/>
                 </div>
             </div>
             <div class="linksUrl">
@@ -20,25 +23,28 @@ export class CustomUnorderedListItem extends HTMLElement {
             </div>
         `;
     }
-
+    isActive;
     connectedCallback() {
         this.style.width = this.width;
         this.style.height = this.height;
         this.shadowRoot.querySelector("input").type = this.type;
-        this.shadowRoot.querySelector("input").value = this.value;
+        this.shadowRoot.querySelector(".link-title").value = this.value;
         this.shadowRoot.querySelector(".link").value = this.link;
-    
         const editIcon = this.shadowRoot.querySelector(".edit-icon");
+        this.isActive = false;
         editIcon.addEventListener("click", () => {
             const inputs = this.shadowRoot.querySelectorAll("input");
             inputs.forEach(elem => {
                 elem.removeAttribute("readonly");
                 elem.classList.add("active");
+                this.isActive = true;
             });
         });
 
         const removeIcon = this.shadowRoot.querySelector(".remove-icon");
-        removeIcon.addEventListener("click", () => {
+        removeIcon.addEventListener("click", async () => {
+            console.log("item id is : ", this.id);
+            await deleteApiData(PROFILE_API_URL + "links/" + this.id + "/");
             this.remove();
         });
 
@@ -59,25 +65,43 @@ export class CustomUnorderedListItem extends HTMLElement {
         else if (attrName == "type")
             this.shadowRoot.querySelector("input").type = newValue;
         else if (attrName == "value")
-            this.shadowRoot.querySelector("input").value = newValue;
+            this.shadowRoot.querySelector(".link-title").value = newValue;
         else if (attrName == "link")
             this.shadowRoot.querySelector(".link").value = newValue;
     }
 
-    set value(val) { this.setAttribute("value", val)};
-    get value() { return this.getAttribute("value")};
+    set value(val) { this.setAttribute("value", val)}
+    get value() {
+        const title = this.shadowRoot.querySelector(".link-title").value;
+        const field = this.shadowRoot.querySelector(".title .active");
+        if (field)
+            field.style.border = "1px solid aqua";
+        if (title)
+            return title;
+        if (field)
+            field.style.border = "1px solid red";
+        return null;
+    }
     
-    set link(val) { this.setAttribute("link", val)};
-    get link() { return this.getAttribute("link")};
+    set link(val) { this.setAttribute("link", val)}
+    get link() {
+        const title = this.shadowRoot.querySelector(".link").value;
+        const field = this.shadowRoot.querySelector(".linksUrl .active");
+        if (field)
+            field.style.border = "1px solid aqua";
+        if (title)
+            return title;
+        if (field)
+            field.style.border = "1px solid red";
+        return null;
+    }
+    set type(value) { this.setAttribute("type", value)}
+    get type() { return this.getAttribute("type")}
+    set width(value) { this.setAttribute("width", value)}
+    get width() { return this.getAttribute("width")}
 
-    set type(value) { this.setAttribute("type", value)};
-    get type() { return this.getAttribute("type")};
-
-    set width(value) { this.setAttribute("width", value)};
-    get width() { return this.getAttribute("width")};
-    
-    set height(value) { this.setAttribute("height", value)};
-    get height() { return this.getAttribute("height")};
+    set height(value) { this.setAttribute("height", value)}
+    get height() { return this.getAttribute("height")}
 }
 
 

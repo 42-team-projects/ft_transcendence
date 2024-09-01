@@ -236,14 +236,18 @@ notifications-list {
 }
 
 .notificationsBar-header {
-    width: 100%;
+    width: 90%;
     height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Sansation bold';
-
 }
+
+.notificationsBar-header h3 {
+    flex-grow: 1;
+    text-align: center;
+} 
 
 .notificationsBar-body {
     flex: 1;

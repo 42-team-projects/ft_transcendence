@@ -70,6 +70,7 @@ const cssContent = /*css*/`
     font-family: 'Sansation bold';
     min-width: 150px;
     font-size: 22px;
+
 }
 
 ::slotted(h3) {

@@ -1,3 +1,4 @@
+import { showNotifiactionsList } from "../Header/header-bar.js";
 import { NotificationComponent } from "./NotificationComponent.js";
 
 export class NotificationsList extends HTMLElement {
@@ -5,6 +6,7 @@ export class NotificationsList extends HTMLElement {
         super();
         this.innerHTML = `
             <div class="notificationsBar-header">
+                <img class="close-button" src="../../assets/icons/close-icon.svg" width="24px"/>
                 <h3>NOTIFICATIONS</h3>
             </div>
             <div class="notificationsBar-body">
@@ -21,9 +23,14 @@ export class NotificationsList extends HTMLElement {
         this.style.height = this.height;
         const notificationList = this.querySelector(".notificationsBar-body");
         notificationList.scrollTop = notificationList.scrollHeight;
+        this.querySelector(".close-button").addEventListener("click", () => {
+            showNotifiactionsList();
+        });
         this.querySelector(".clear-all").addEventListener("click", () => {
             this.querySelector(".notification-list").innerHTML = '';
         });
+
+        
     }
 
     disconnectedCallback() {
