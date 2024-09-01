@@ -18,7 +18,7 @@ class UserRegisterView(generics.GenericAPIView):
         serializer=self.serializer_class(data=request.data)
         if (serializer.is_valid(raise_exception=True)):
             user = serializer.save()
-            token = gen_email_token(user, minutes=1)
+            token = gen_email_token(user, days=7)
             send_confirmation_email(user, request, token)
             return Response({
                 'message': f"Thank you for registering, {user.username}. A confirmation email has been sent to your email address.",
@@ -116,5 +116,6 @@ def user_data(request):
         'id': user.id,
         'username': user.username,
         'email': user.email,
+        'avatar': user.avatar,
     }
     return Response(user_data)
