@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from django.core.mail import EmailMessage
 from django.conf import settings
-import jwt
+import random, jwt, os
 
 def gen_email_token(user, days = 0, minutes = 0):
     payload = {
@@ -43,3 +43,7 @@ def send_reset_email(user, request, reset_token):
     )
     email.content_subtype = 'html'
     email.send(fail_silently=False)
+
+def get_default_avatar():
+    avatar_folder = 'media/defaults'
+    return 'defaults/' + random.choice(os.listdir(avatar_folder))
