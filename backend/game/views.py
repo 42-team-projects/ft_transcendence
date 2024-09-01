@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .models import Player
-from .serializers import PlayerSerializer 
+# from .models import Player
+# from .serializers import PlayerSerializer 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # Create your views here.
@@ -13,24 +13,24 @@ from rest_framework.permissions import IsAuthenticated
 # i want to list just the player that authenticated wih the incoming token
 
 
-class ListPlayer(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Player.objects.all()
-    serializer_class = PlayerSerializer
+# class ListPlayer(generics.ListAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Player.objects.all()
+#     serializer_class = PlayerSerializer
     
-class RetrievePlayer(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = PlayerSerializer
+# class RetrievePlayer(generics.RetrieveAPIView):
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = PlayerSerializer
 
-    def get_object(self):
-        return Player.objects.get(user=self.request.user)
+#     def get_object(self):
+#         return Player.objects.get(user=self.request.user)
 
-#i want details player to be check by id
+# #i want details player to be check by id
 
-class DetailsPlayer(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Player.objects.all()
-    serializer_class = PlayerSerializer
+# class DetailsPlayer(generics.RetrieveAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Player.objects.all()
+#     serializer_class = PlayerSerializer
     
 # @api_view(['POST'])
 # def login(request):

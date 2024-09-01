@@ -1,41 +1,80 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
 
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from .models import Message
-from .serializers import MessageSerializer
+from rest_framework.decorators import api_view
+from .models import *
+from .serializers import *
+from django.db.models import Q
+import json
+from django.core.serializers import serialize
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
 
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 
-# Create your views here.
+def chat_conversation(request):
+    return render(request, 'chat/chat_conversation.html')
 
-def index(request):
-    return HttpResponse("Chat")
+def group_conversation(request):
+    return render(request, 'chat/group_conversation.html')
 
-@api_view(['GET', 'POST'])
-def message_list_view(request, room_name):
-    if request.method == 'GET':
-        messages = Message.objects.filter(room_name=room_name)
-        serializer = MessageSerializer(messages, many=True)
-        return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def get_chat_conversation(request):
+    conversation_name = request.GET.get('cn')
+    conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
+    messages = Message.objects.filter(conversation=conversation)
+    message_serializer = MessageSerializer(messages, many=True)
+    return Response(message_serializer.data)
+
+@api_view(['GET'])
+def group_conversations(request):
+    user = get_object_or_404(User, id=request.user.id) 
+    conversations = Conversation.objects.filter(status='G', users=user)
+    if conversations.exists():
+        conversation_serializer = ConversationSerializer(conversations, many=True)
+        return Response(conversation_serializer.data)
+    else:
+        return Response({'error' : 'no conversation found'})
+        
+
+
+@api_view(['GET'])
+def chat_conversations(request):
+    user = get_object_or_404(User, id=request.user.id) 
+    conversations = Conversation.objects.filter(status='C', users=user)
+    if conversations.exists():
+        conversation_serializer = ConversationSerializer(conversations, many=True)
+        return Response(conversation_serializer.data)
+    else:
+        return Response({'error' : 'no conversation found'})
+
+
+
+
+# @api_view(['GET'])
+# def get_all_conversations(request):
+#     conversations = Conversation.objects.all() 
+#     if conversations.exists():
+#         # Serialize the queryset
+#         conversations_serializer = ConversationSerializer(conversations, many=True)
+#         return Response(conversations_serializer.data)
+#     else:
+#         return Response({'Error': 'No conversations found'}, status=404)
+
+@api_view(['GET'])
+def last_message(request):
+    conversation_name = request.GET.get('cn')
+    conversation = get_object_or_404(Conversation, conversation_name=conversation_name)
+    message = Message.objects.filter(conversation=conversation.id).last()
+    if message:
+        message_serializer = MessageSerializer(message)
+        return Response(message_serializer.data)
+    else:
+        return Response({'Error': 'No message found'}, status=404)
     
-    elif request.method == 'POST':
-        serializer = MessageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(room_name=room_name)
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
 
-def start_tournament(tournament_id):
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        f'tournament_{tournament_id}',
-        {
-            'type': 'tournament_message',
-            'message': f'Tournament {tournament_id} is starting!',
-        }
-    )
+
+
+
+    

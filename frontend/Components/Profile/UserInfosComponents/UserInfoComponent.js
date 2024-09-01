@@ -34,6 +34,7 @@ p {
     display: flex;
     flex-direction: column;
     width: auto;
+    font-family: 'Sansation';
 }
 
 .content-value {

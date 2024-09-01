@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .models import Tournament
 from .serializers import TournamentSerializer
 from django.views.decorators.csrf import csrf_exempt
-from game.models import Player
+from Player.Models.PlayerModel import Player
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 from asgiref.sync import async_to_sync

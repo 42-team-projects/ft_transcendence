@@ -1,4 +1,4 @@
-const fetchWithToken = async (url, options) => {
+export const fetchWithToken = async (url, options) => {
     const response = await fetch(url, options);
 
     if (response.status === 401) {
@@ -22,35 +22,6 @@ const fetchWithToken = async (url, options) => {
     }
     return response;
 };
-async function fetchWhoAmI(accessToken) {
-
-    try {
-        const response = await fetchWithToken(
-            "http://127.0.0.1:8000/game/player/",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        );
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-            console.log(document.cookie);
-            localStorage.setItem('user_data', JSON.stringify(data));
-        }
-    } catch (error) {
-        console.log('====>', error);
-        if (error.message === "Unable to refresh token") {
-            window.location.href = '../html/login.html';
-        } else {
-            console.error("Error:", error);
-        }
-    }
-}
 
 
 
@@ -72,46 +43,67 @@ export class Router {
             { path: '/Friends', view: 'freinds-page' },
             { path: '/Tournament', view: 'tournament-page' },
             { path: '/Settings', view: 'settings-page' },
-            { path: '*', view: 'home-page' }
-        ]
+            { path: '/Profile', view: 'profile-component' },
+            { path: '*', view: 'home-page' },
+        ];
         this.randred = false;
         this.rootContent = document.querySelector("root-content");
         this.header = document.querySelector("header-bar");
         this.sideBar = document.querySelector("side-bar");
         this.handleRoute(window.location.pathname);
     }
-    randring(access_token){
+    randring(access_token, matchedRoute){
         document.body.classList.add('body-default-shrink')
         this.header.render()
         this.sideBar.render()
         this.randred = true;
-        fetchWhoAmI(access_token);
-        this.this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
-            let a = button.shadowRoot.querySelector('a');
-            let url = new URL(a.href);
-            if(url.pathname === matchedRoute.path){
-                this.this.sideBar.clickEvent = index;
-            }
-        });
-    }
 
+    }
+    profileRandring(){
+        const profile = header.querySelector('c-profile')
+        const userRunk = header.querySelector('user-rank');
+        profile.addEventListener('click', () => {
+            if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
+                this.ChangeRootContent = 'profile-component'
+            if(sideBar.activeButton.classList.length)
+            {
+                userRunk.classList.toggle('drop-100', false);
+                userRunk.classList.toggle('transform-1s', true);
+                userRunk.classList.toggle('down-60', false);
+                userRunk.classList.toggle('rise-0', true);
+                sideBar.activeButton.classList.toggle('on')
+                sideBar.activeButton.shadowRoot.querySelector('sb-icon').classList.toggle('on')
+                sideBar.activeButton.shadowRoot.querySelector('.c-sb-text').classList.toggle('on')
+                sideBar.activeButton.querySelector('h1').classList.toggle('on')
+                sideBar.activeButton.querySelector('img').classList.toggle('on')
+            }
+        })
+    }
     removeRandring(){
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()
         this.randred = false;
+        console.log("remove")
     }
-
     changeStyle(access_token, path){
-        console.log(access_token)
+        console.log("hiii", access_token)
         let matchedRoute = this.accessed_routes.find((route) => route.path === path);
         if(access_token){
             if(!matchedRoute)
                 matchedRoute = this.accessed_routes.find((route) => route.path === "/Home");
+            console.log(this.randred)
             if(this.randred === false)
-                this.randring(access_token);
+                this.randring(access_token, matchedRoute);
             this.rootContent.innerHTML = "";
             this.rootContent.appendChild(document.createElement(matchedRoute.view));
+            this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
+                let a = button.shadowRoot.querySelector('a');
+                let url = new URL(a.href);
+                if(url.pathname === matchedRoute.path){
+                    this.sideBar.clickEvent = index;
+                }
+            });
         }
         matchedRoute = this.not_accessed_routes.find((route) => route.path === path);
         if(!access_token){
@@ -121,7 +113,6 @@ export class Router {
             this.rootContent.innerHTML = "";
             this.rootContent.appendChild(document.createElement(matchedRoute.view));
         }
-
     }
     handleRoute(path) {
         const accessToken = localStorage.getItem('accessToken');
