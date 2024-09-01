@@ -24,7 +24,7 @@ class GameLoop :
             self.controler.y = data['y']
         else:
             self.opponent.y = data['y']
-        print('racquet', self.controler.y, self.opponent.y)
+        # print('racquet', self.controler.y, self.opponent.y)
         message = {
             'status': 'move',
             'player_1': {

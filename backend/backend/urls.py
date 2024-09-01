@@ -21,12 +21,14 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('game/', include('game.urls')),
+    # path('game/', include('game.urls')),
     path('tournament/', include('tournament.urls')),
-    path('Profile/', include('Profile.urls')),
-    path('chat/', include("chat.urls")),
+    path('api/v1/player/', include('Player.urls')),
+    path('chat/', include("chat.urls"), name="chat"),
+    path('notification/', include("notification.urls"), name="notification"),
     path('api/v1/auth/', include('accounts.urls')),
 ]
+
 
 if settings.DEBUG: 
     urlpatterns += static(settings.MEDIA_URL,

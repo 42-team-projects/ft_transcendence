@@ -1,7 +1,7 @@
 import { NotificationComponent } from "../Notification/NotificationComponent.js";
-
-
-
+import { displayNotification } from "../Notification/NotificationUtils.js";
+import { SearchBarComponent } from "../Search/SearchBarComponent.js";
+import { NewFriendNotification } from "../Notification/templates/NewFriendNotification.js";
 
 export class HeaderBar extends HTMLElement{
     constructor(){
@@ -11,35 +11,38 @@ export class HeaderBar extends HTMLElement{
     render(){
         // this.shadowRoot.appendChild(HeaderTemplate.content.cloneNode(true));
         this.appendChild(HeaderTemplate.content.cloneNode(true));
+        const notificationIcon = this.querySelector(".notification-icon");
+        notificationIcon.addEventListener("click", () => {
+            displayNotification("<new-friend-notification></new-friend-notification>");
+            showNotifiactionsList();
+        });
     }
 
     connectedCallback() {
-        const notificationIcon = this.querySelector(".notification-icon");
-        let checker = true;
-        // notificationIcon.addEventListener("click", () => {
-        //     const notificationsBar = window.document.querySelector("notifications-list");
-        //     const headerBar = window.document.querySelector("header-bar");
-        //     const rootContent = window.document.querySelector("root-content");
-        //     if (checker)
-        //     {
-        //         headerBar.style.marginRight = "15%";
-        //         rootContent.style.marginRight = "15%";
-        //         notificationsBar.style.display = "flex";
-        //     }
-        //     else {
-        //         headerBar.style.marginRight = "0";
-        //         rootContent.style.marginRight = "0";
-        //         notificationsBar.style.display = "none";
-        //     }
-        //     checker = !checker;
-        // });
     }
     remove(){
-        console.log('remove');
+        // console.log('remove');
         this.innerHTML = '';
     }
 }
 
+
+export function showNotifiactionsList() {
+    const notificationsBar = window.document.querySelector("notifications-list");
+    const headerBar = window.document.querySelector("header-bar");
+    const rootContent = window.document.querySelector("root-content");
+    if (notificationsBar.style.display == "none")
+    {
+        headerBar.style.marginRight = "15%";
+        rootContent.style.marginRight = "15%";
+        notificationsBar.style.display = "flex";
+    }
+    else {
+        headerBar.style.marginRight = "0";
+        rootContent.style.marginRight = "0";
+        notificationsBar.style.display = "none";
+    }
+}
 
 const HeaderTemplate =  document.createElement('template');
 
@@ -256,7 +259,7 @@ HeaderTemplate.innerHTML = /*html*/`
         </div>
         <div class="notification-search">
             <div class="search-box">
-                <search-bar></search-bar>
+                <search-bar-component></search-bar-component>
                 <div class="notification-icon" >
                     <img loading="lazy" draggable="false" src="./images/svg-header/alarm.svg" alt="notification">
                     <div class="number-of-notifications">99</div>
