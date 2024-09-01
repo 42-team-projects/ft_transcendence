@@ -6,12 +6,17 @@ from rest_framework import status
 from .models import User
 import requests
 from django.conf import settings
+from game.models import Player
 
-def register_social_user(provider, email, username):
+def register_social_user(provider, email, username, data):
 	user = User.objects.filter(email=email).first()
 
 	if not user:
 		user = User.objects.create(email=email, username=username)
+		if 'image' in data and data['image']:
+			Player.objects.create(user=user, username=username, picture=data['image']['link'])
+		else:
+			Player.objects.create(user=user, username=username, picture=None)
 		user.auth_provider = provider
 		user.is_verified = True
 		user.set_unusable_password()
@@ -77,7 +82,7 @@ def oauth_callback(request, provider):
 	response = requests.get(conf['USER_INFO_URL'], headers=headers)
 	user_data = response.json()
 	user_id_field = conf['USER_ID_FIELD']
-	result = register_social_user(provider, user_data['email'], user_data[user_id_field])
+	result = register_social_user(provider, user_data['email'], user_data[user_id_field], user_data)
 	
 	response = HttpResponseRedirect(f'http://127.0.0.1:3000/oauth?access_token={result["access_token"]}')
 	response.set_cookie('refresh_token', result['refresh_token'], httponly=True)

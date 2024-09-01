@@ -7,7 +7,6 @@ from .utils import send_confirmation_email, gen_email_token
 from rest_framework.decorators import api_view, permission_classes
 from django_ratelimit.decorators import ratelimit
 from rest_framework.permissions import AllowAny,IsAuthenticated
-
 from django.conf import settings
 import jwt
 
@@ -120,7 +119,7 @@ def resend_confirmation_email(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def whoami(request):
-    return Response({'username': request.user.username, 'id': request.user.id})
+    return Response({'username': request.user.username, 'id': request.user.id, })
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
