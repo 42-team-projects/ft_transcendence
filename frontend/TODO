@@ -1,0 +1,102 @@
+• JoinTournament.js file
+    joinToPrivateTournament(tournamentData) funtion :
+        - check if the tournament is not null else get the specific tournaments by tournament id.
+        - there is a problem in join private tournament form in the password section.
+• the first player is not always the owner.
+• the rules of tournament most be done.
+• The tournament rounds most be done when the friend api done.
+
+
+
+
+
+
+
+API:
+
+    get_available_tournaments_by_tournament_id      ==> the tournaments most not be contains the main player.
+    get_available_tournaments_by_tournament_name    ==> the tournaments most not be contains the main player.
+    count_available_tournaments                     ==> get the number of tournaments that can the player join to it.
+
+
+
+/********* REDA ********/
+
+TOURNAMENT API:
+
+    * GET:
+        /tournaments                                    ===> get all tournaments.
+        /tournaments/count                              ===> get number of tournaments.
+        /tournaments/45                                 ===> get tournament by id = 45.
+        /tournaments/45/players                         ===> get All Players Of tournament with id = 45.
+        /tournaments/45/players/count                   ===> get number of Players in tournament with id = 45.
+        /tournaments/45/players/1                       ===> get player with id = 1 in list of tournament Players.
+        /tournaments/available                          ===> get all tournaments available to join.
+        /tournaments/available/count                    ===> get number of tournaments available to join.
+        /tournaments/available/1                        ===> get all tournaments available to join for the player with id = 1.
+        /tournaments/available/1/count                  ===> get number of tournaments available to join for the player with id = 1.
+
+    * POST:
+        /tournaments                                    ===> create new tournament.
+        /tournaments/45/players                         ===> create or add new player to the tournament.
+
+    * PUT:
+        /tournaments/1                                  ===> update tournament with id = 1.
+
+    * DELETE:
+        /tournaments/1                                  ===> delete tournament with id = 1.
+        /tournaments/45/players/12                      ===> delete player with id = 12 from the tournament players list.
+
+
+
+
+    -> all those apis can have a queries for filtring the result:
+        /tournaments
+        /tournaments/available
+        /tournaments/available/1
+        /tournaments/45/players
+
+        => EXAMPLES:
+            /tournaments?tournament_name=test                               ===> this api will give me all the tournament contains "test" on the tournament_name.
+            /tournaments?tournament_name=test&number_of_player=16           ===> this api will give me all the tournament contains "test" on the tournament_name and number_of_player equal to 16.
+            and so on ...
+
+
+
+
+
+
+
+
+
+USER PROFILE BACKEND:
+
+    -> APIs
+
+        /** GET **/
+    ->  /players                                            => get all players infos
+    ->  /players/count                                      => get number of players
+    ->  /players/{id}                                       => get player with a specific id
+    ->  /players/{id}/stats                                 => get the player stats
+    ->  /players/{id}/stats/graph                           => get the player stats graph
+    ->  /players/{id}/achievements                          => get the player achievements
+    ->  /players/{id}/achievements/{id}                     => get the player achievement with a specific id
+    ->  /players/{id}/links                                 => get the player links
+    ->  /players/{id}/links/{id}                            => get the player links with a specific id
+
+        /** POST **/
+    ->  /players                                            => create a new player
+    ->  /players/{id}/achievements                          => create a new achievement for the player with a specific id
+    ->  /players/{id}/links                                 => create a new link for the player with a specific id
+
+        /** PUT **/
+    ->  /players/{id}                                       => update the player
+    ->  /players/{id}/stats                                 => update the player stats
+    ->  /players/{id}/stats/graph                           => update the player stats graph
+    ->  /players/{id}/achievements/{id}                     => update the player achievement
+    ->  /players/{id}/links/{id}                            => update the player link
+
+        /** DELETE **/
+    ->  /players/{id}                                       => destroy a player with his stats and graphs
+    ->  /players/{id}/achievements/{id}                     => delete an achievement
+    ->  /players/{id}/links/{id}                            => delete a link
