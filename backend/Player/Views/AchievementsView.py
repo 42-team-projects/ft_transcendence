@@ -4,7 +4,8 @@ from ..Models.AchievementsModel import Achievements
 from ..Serializers.PlayerSerializer import PlayerSerializer
 from ..Serializers.AchievementsSerializer import AchievementsSerializer
 
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 
@@ -15,9 +16,11 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
-def getPlayerAchievements(request, playerId):
+@permission_classes([IsAuthenticated])
+def getPlayerAchievements(request):
     try:
-        achievements = Achievements.objects.filter(player=playerId)
+        player = Player.objects.get(user=request.user)
+        achievements = player.achievements
     except Player.DoesNotExist:
         return JsonResponse({"error": "No achievements exist"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -28,7 +31,7 @@ def getPlayerAchievements(request, playerId):
     if request.method == 'POST':
         try:
             achievementsData = request.data
-            Achievements.objects.create(name=achievementsData.get("name"), img=achievementsData.get("img"), player = Player.objects.get(id=playerId))
+            Achievements.objects.create(name=achievementsData.get("name"), img=achievementsData.get("img"), player = player)
             return JsonResponse({"message": "the achievement has been successfully updated."}, safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -36,18 +39,20 @@ def getPlayerAchievements(request, playerId):
         
 
 @api_view(['GET'])
-def coutPlayerAchievements(request, playerId):
+@permission_classes([IsAuthenticated])
+def coutPlayerAchievements(request):
     if request.method == 'GET':
-        count = Achievements.objects.filter(player=playerId).count()
-        return JsonResponse(count, safe=False, status=status.HTTP_201_CREATED)
+        achievements = Player.objects.get(user=request.user).achievements
+        return JsonResponse(achievements.count(), safe=False, status=status.HTTP_201_CREATED)
 
 
 
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
-def getPlayerAchievementById(request, playerId, achievementId):
+@permission_classes([IsAuthenticated])
+def getPlayerAchievementById(request, achievementId):
     try:
-        achievements = Achievements.objects.get(player=playerId, id=achievementId)
+        achievements = Player.objects.get(user=request.user).achievements.get(id=achievementId)
     except Achievements.DoesNotExist:
         return JsonResponse({"error": "No achievements exist"}, status=status.HTTP_404_NOT_FOUND)
 

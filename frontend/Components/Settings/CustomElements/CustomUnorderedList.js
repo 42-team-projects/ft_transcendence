@@ -69,7 +69,33 @@ export class CustomUnorderedList extends HTMLElement {
     set height(value) { this.setAttribute("height", value)};
     get height() { return this.getAttribute("height")};
 
+    get list() {
 
+        const listItems = [];
+        const items = this.shadowRoot.querySelectorAll("custom-unordered-list-item");
+        Array.from(items).forEach(elem => {
+            if (elem.isActive) {
+                const item = {id: elem.id, title: elem.value, url: elem.link};
+                if (elem.value && elem.link)
+                    listItems.push(item);
+            }
+        });
+        return listItems;
+    }
+
+    set list(data) {
+        Array.from(data).forEach(elem => {
+            if (this.shadowRoot.querySelectorAll("custom-unordered-list-item").length < 4) {
+                const newItem = document.createElement("custom-unordered-list-item");
+                newItem.id = elem.id;
+                newItem.value = elem.title;
+                newItem.link = elem.url;
+                this.shadowRoot.querySelector(".box").appendChild(newItem);
+            }
+            else
+                return;
+        });
+    }
 }
 
 const cssContent = /*css*/`

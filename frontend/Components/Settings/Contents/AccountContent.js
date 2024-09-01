@@ -13,7 +13,7 @@ export class AccountContent extends HTMLElement {
             <style> ${cssContent} </style>
             <div class="container">
                 <custom-input-field class="username-field" label="USERNAME" description="Username must be unique." placeholder="esalim" type="text" readonly="true"></custom-input-field>
-                <custom-input-field class="email-field" label="EMAIL" description="the email will not be modified until you verified it" placeholder="elmehdi.salim@gmail.com" type="email" readonly="true"></custom-input-field>
+                <custom-input-field editable class="email-field" label="EMAIL" description="You can not change your email." placeholder="elmehdi.salim@gmail.com" type="email" readonly="true"></custom-input-field>
                 <custom-input-field class="password-field" label="PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="elmehdi.salim@gmail.com" type="password" readonly="true"></custom-input-field>
                 <custom-toggle-switch></custom-toggle-switch>
                 <custom-select label="LANGUAGE" description="Select your favorite language."></custom-select>

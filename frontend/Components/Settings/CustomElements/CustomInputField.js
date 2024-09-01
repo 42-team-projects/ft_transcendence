@@ -26,9 +26,10 @@ export class CustomInputField extends HTMLElement {
         this.shadowRoot.querySelector(".box").style.height = this.height;
         this.shadowRoot.querySelector("h2").textContent = this.label;
         this.shadowRoot.querySelector("p").textContent = this.description;
+        const inputContainer = this.shadowRoot.querySelector(".inputContainer");
         if (this.type == "file")
         {
-            this.shadowRoot.querySelector(".inputContainer").innerHTML = `
+            inputContainer.innerHTML = `
                 <div class="uploadcontainer">
                     <img loading="lazy" src="../../assets/icons/upload-icon.svg"></img>
                     <h4>Upload Image</h4>
@@ -39,6 +40,7 @@ export class CustomInputField extends HTMLElement {
             if (editIcon)
                 editIcon.remove();
         }
+
         this.shadowRoot.querySelector("input").type = this.type;
         this.shadowRoot.querySelector("input").placeholder = this.placeholder;
 
@@ -48,31 +50,50 @@ export class CustomInputField extends HTMLElement {
         {
             input.addEventListener( 'change', (e) => {
                 var fileName = '';
-                if( this.files && this.files.length > 1 )
-                    fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-                else
-                    fileName = e.target.value.split( '\'' ).pop();
+                console.log("files : ", input.files, " files length : ", input.files.length);
+                if( input.files && input.files.length > 1 )
+                    fileName = ( input.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', input.files.length );
+                else {
+                    fileName = input.files[0].name;
+                    console.log("input.files[0] : ", input.files[0]);
+                }
 
                 if( fileName )
-                    this.shadowRoot.querySelector(".uploadcontainer").innerHTML = `<span>${fileName}</span>`;
+                    this.shadowRoot.querySelector(".uploadcontainer").innerHTML = `<span style="text-align: center;">${fileName}</span>`;
             });
         }
 
         const editIcon = this.shadowRoot.querySelector(".edit-icon");
         if (!editIcon)
             return ;
+        const inputField = inputContainer.querySelector("input");
+        let oldValue = inputField.value;
         editIcon.addEventListener("click", () => {
-            const inputs = this.shadowRoot.querySelector(".inputContainer");
-            inputs.querySelector("input").removeAttribute("readonly");
-            inputs.classList.add("active");
+            if (!editIcon.classList.contains("close")) {
+                inputField.removeAttribute("readonly");
+                inputContainer.classList.add("active");
+                editIcon.src = "../assets/icons/close-icon.svg";
+                editIcon.classList.add("close");
+            }
+            else {
+                inputField.value = oldValue;
+                inputField.setAttribute("readonly", true);
+                inputContainer.classList.remove("active");
+                editIcon.src = "../assets/icons/pencil-icon.svg";
+                editIcon.classList.remove("close");
+            }
         });
         this.shadowRoot.querySelector("img").hidden = true;
         if (this.readonly)
         {
-            const inputContainer = this.shadowRoot.querySelector(".inputContainer");
             inputContainer.classList.toggle("active");
-            inputContainer.querySelector("input").setAttribute("readonly", true);
+            inputField.setAttribute("readonly", true);
             this.shadowRoot.querySelector("img").hidden = false;
+        }
+        if (this.hasAttribute("editable")) {
+            const editIcon = this.shadowRoot.querySelector(".edit-icon")
+            if (editIcon)
+                editIcon.remove();
         }
     }
 
@@ -154,6 +175,18 @@ export class CustomInputField extends HTMLElement {
             return value;
         if (field)
             field.style.border = "1px solid red";
+        return null;
+    };
+
+    set value(val) {
+        const input = this.shadowRoot.querySelector(".inputContainer input");
+        input.value = val;
+    }
+    
+    get file() {
+        const files = this.shadowRoot.querySelector(".inputContainer input[type='file']").files;
+        if (files.length)
+            return files;
         return null;
     };
 
