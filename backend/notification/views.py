@@ -17,6 +17,9 @@ def send(request):
 
 @api_view(['GET'])
 def list_user_notifications(request):
-    notifications = Notification.objects.filter(user=request.user)
-    notification_serializer = NotificationSerializer(notifications, many=True)
-    return Response(notification_serializer.data)
+    if request.user.is_authenticated:
+        notifications = Notification.objects.filter(user=request.user)
+        notification_serializer = NotificationSerializer(notifications, many=True)
+        return Response(notification_serializer.data)
+    else:
+        return Response({'error' : 'User not authenticated'}, status=404) 

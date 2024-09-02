@@ -19,13 +19,14 @@ class ConversationSerializer(serializers.ModelSerializer):
         messages = Message.objects.filter(conversation=conversation.id)
         messages_serializer = MessageSerializer(messages, many=True)
         return (messages_serializer.data[-1])
+    
     def get_reciever_user(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             current_user = request.user
             for user in obj.participants.all():
                 if user.id != current_user.id:
-                    return user
+                    return user.username
         return None
 
         
