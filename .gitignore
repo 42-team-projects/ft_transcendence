@@ -21,3 +21,9 @@ ignore
 
 # Ignore node_modules directory
 node_modules
+
+*.py[cod]
+*.log
+*.pot
+*.pyc
+__pycache__/
