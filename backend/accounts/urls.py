@@ -8,6 +8,7 @@ from .views import user_data
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
     path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
     
     path('confirm-email/<str:token>/', views.confirm_email_view, name='confirm-email'),
 
@@ -19,6 +20,7 @@ urlpatterns = [
 
     path('whoami/', views.whoami, name='whoami'),
     path('refresh/', views.refresh, name='refresh_token'),
+    path('verify/', views.verify_token, name='verify'),
 
     path('<str:provider>/redirect/', oauth.redirect_to_provider, name='redirect_to_provider'),
     path('<str:provider>/oauth_callback/', oauth.oauth_callback, name='oauth_callback'),

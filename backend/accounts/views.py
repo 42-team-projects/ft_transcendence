@@ -5,8 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .utils import send_confirmation_email, gen_email_token
 from rest_framework.decorators import api_view, permission_classes
-from django_ratelimit.decorators import ratelimit
 from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.conf import settings
 import jwt
 
@@ -38,7 +40,7 @@ def login(request):
         'username': data['username'],
         'access_token': data['access_token'],
     })
-    response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True)
+    response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True, samesite='None', secure=True)
     return response
 
 @api_view(['POST'])
@@ -59,7 +61,7 @@ def refresh(request):
             'username': user.username,
             'access_token': tokens['access_token'],
         })
-        response.set_cookie(key='refresh_token', value=tokens['refresh_token'], httponly=True)
+        response.set_cookie(key='refresh_token', value=tokens['refresh_token'], httponly=True, samesite='None', secure=True)
         return response
     except jwt.ExpiredSignatureError:
         return Response({'error': 'Refresh token expired'}, status=status.HTTP_403_FORBIDDEN)
@@ -118,3 +120,28 @@ def user_data(request):
         'avatar': user.avatar,
     }
     return Response(user_data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout(request):
+    try:
+        refresh_token = request.COOKIES.get('refresh_token')
+        if refresh_token is None:
+            raise KeyError
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+    except (InvalidToken, TokenError, KeyError):
+        return Response({'status': 'error', 'message': 'Invalid or missing refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    response = Response(status=status.HTTP_205_RESET_CONTENT)
+    response.delete_cookie('refresh_token')
+    return response
+
+@api_view(['POST'])
+def verify_token(request):
+    try:
+        token = request.headers.get('Authorization').split()[1]
+        JWTAuthentication().get_validated_token(token)
+        return Response({'status': 'success', 'message': 'Token is valid.'}, status=status.HTTP_200_OK)
+    except (InvalidToken, TokenError):
+        return Response({'status': 'error', 'message': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)

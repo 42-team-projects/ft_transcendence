@@ -2,7 +2,7 @@ import { createApiData, getApiData, updateApiData } from "../../../Utils/APIMana
 import { PROFILE_API_URL } from "../../../Utils/APIUrls.js";
 import { HOST } from "../../../Utils/GlobalVariables.js";
 import { getLeagueColor } from "../../../Utils/LeaguesData.js";
-import { fetchWithToken } from "../../../root/Router.js";
+import { fetchWithToken } from "../../../root/fetchWithToken.js";
 import { CustomInputField } from "../CustomElements/CustomInputField.js";
 import { CustomToggleSwitch } from "../CustomElements/CustomToggleSwitch.js";
 import { CustomUnorderedList } from "../CustomElements/CustomUnorderedList.js";

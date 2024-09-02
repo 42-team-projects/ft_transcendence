@@ -6,7 +6,7 @@ import config from '../../Utils/GlobalVariables.js';
 export default class SignupPage extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-            <link rel="stylesheet" href="./style.css">
+            <link rel="stylesheet" href="Components/User/style.css">
             <header-cpn></header-cpn>
             <shape-cpn 
                 title="Sign Up" 

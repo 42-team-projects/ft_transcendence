@@ -100,5 +100,5 @@ def oauth_callback(request, provider):
 
 	result = register_social_user(provider, user_data['email'], user_data[user_id_field], avatar_url)
 	response = HttpResponseRedirect(f'{settings.FRONTEND_BASE_URL}/oauth?access_token={result["access_token"]}')
-	response.set_cookie('refresh_token', result['refresh_token'], httponly=True)
+	response.set_cookie('refresh_token', result['refresh_token'], httponly=True, samesite='None', secure=True)
 	return response
