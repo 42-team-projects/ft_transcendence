@@ -25,7 +25,7 @@ export default class EmailConf extends HTMLElement {
         else
         {
             this.innerHTML = /*html*/`
-                <link rel="stylesheet" href="./style.css" type="text/css">
+                <link rel="stylesheet" href="Components/User/style.css" type="text/css">
                 
                 <header-cpn></header-cpn>
 
