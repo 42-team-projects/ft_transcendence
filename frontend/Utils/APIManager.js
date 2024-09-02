@@ -1,5 +1,5 @@
 // Player == Profile Page
-import { fetchWithToken } from "../root/Router.js"
+import { fetchWithToken } from "../root/fetchWithToken.js"
 import { PROFILE_API_URL } from "./APIUrls.js";
 
 export async function getApiData(APIUrl) {
