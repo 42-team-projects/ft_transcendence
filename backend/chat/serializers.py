@@ -4,7 +4,7 @@ from .models import *
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['id', 'sender', 'content', 'conversation', 'sent_at']
+        fields = ['id', 'user', 'content', 'conversation', 'sent_at']
 
 class ConversationSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField('get_last_message')
@@ -15,7 +15,7 @@ class ConversationSerializer(serializers.ModelSerializer):
         fields = ['id', 'reciever','last_message', 'created_at']
     
     def get_last_message(self, obj):
-        conversation = Conversation.objects.filter(conversation_name=obj.conversation_name).first()
+        conversation = Conversation.objects.filter(title=obj.title).first()
         messages = Message.objects.filter(conversation=conversation.id)
         messages_serializer = MessageSerializer(messages, many=True)
         return (messages_serializer.data[-1])
@@ -25,7 +25,7 @@ class ConversationSerializer(serializers.ModelSerializer):
             current_user = request.user
             for user in obj.participants.all():
                 if user.id != current_user.id:
-                    return user.username
+                    return user
         return None
 
         
