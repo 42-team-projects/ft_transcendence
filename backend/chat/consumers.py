@@ -40,6 +40,9 @@ class ChatConversationConsumer(WebsocketConsumer):
                 print(data)
                 
                 self.receiver = self.get_user(data['receiver'])
+                print(self.receiver.id)
+                print(self.receiver.username)
+                
                 if (self.current_user.id == self.receiver.id):
                     self.send_error('sender and receiver is same user!')
                 else:
@@ -55,11 +58,11 @@ class ChatConversationConsumer(WebsocketConsumer):
             self.send_error('User not authenticated!')
 
     def save_and_broadcast_message(self, content):
-        self.get_or_create_conversation()
+        conversation = self.get_or_create_conversation()
         message_data = {
-            'sender': self.current_user.id,
+            'user': self.current_user.id,
             'content': content,
-            'conversation': self.conversation.id,
+            'conversation': conversation.id,
         }
         
         message_serializer = MessageSerializer(data=message_data)
@@ -69,20 +72,18 @@ class ChatConversationConsumer(WebsocketConsumer):
         else:
             self.send_error(message_serializer.errors)
     def get_or_create_conversation(self):
-        chat_conversation = Conversation.objects.filter(participants=self.current_user).filter(
-            participants=self.receiver,
-            conversation_name=self.group_name)
-        if chat_conversation.exists():
-            self.conversation = chat_conversation.first()
-        else:
-            self.conversation = Conversation.objects.create(
-                status='C',
-                conversation_name=self.group_name)
-            self.conversation.participants.add(
-                self.current_user.id,
-                self.receiver.id)            
+        conversation, created = Conversation.objects.get_or_create(title=self.group_name)
+        if created:
+            conversation.add_participant(self.current_user)
+            conversation.add_participant(self.receiver)
+            # if self.receiver:
+            #     conversation.add_participant(self.receiver)
+            # else:
+            #     # Handle the case where receiver is not found
+            #     pass
+        return conversation         
     def get_user(self, user_id):
-        return User.objects.get(id=user_id) 
+        return User.objects.get(id=user_id)
     def broadcast_message(self, message_data):
         async_to_sync(self.channel_layer.group_send)(
             self.group_name,
