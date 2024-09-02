@@ -9,6 +9,8 @@ from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 from django.conf import settings
 import jwt
 
@@ -52,13 +54,14 @@ def refresh(request):
 
     try:
         payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
-        user = User.objects.get(id=payload['user_id'])
-        if not user:
+        if not User.objects.filter(id=payload['user_id']).exists():
             return Response({'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.get(id=payload['user_id'])
+        
         tokens = user.tokens
         response = Response({
-            'email': user.email,
-            'username': user.username,
+            # 'email': user.email,
+            # 'username': user.username,
             'access_token': tokens['access_token'],
         })
         response.set_cookie(key='refresh_token', value=tokens['refresh_token'], httponly=True, samesite='None', secure=True)
@@ -141,13 +144,16 @@ def logout(request):
 def verify_token(request):
     try:
         token = request.headers.get('Authorization').split()[1]
-        JWTAuthentication().get_validated_token(token)
+        validated_token = JWTAuthentication().get_validated_token(token)
+        user_id = validated_token['user_id']
+
+        # print('--->', User.objects.get(id=user_id))
+        if not User.objects.filter(id=user_id).exists():
+            return Response({'status': 'error', 'message': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
         return Response({'status': 'success', 'message': 'Token is valid.'}, status=status.HTTP_200_OK)
     except (InvalidToken, TokenError):
         return Response({'status': 'error', 'message': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)
-
-from django.db import IntegrityError
-from django.core.exceptions import ValidationError
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
