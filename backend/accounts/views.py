@@ -145,3 +145,30 @@ def verify_token(request):
         return Response({'status': 'success', 'message': 'Token is valid.'}, status=status.HTTP_200_OK)
     except (InvalidToken, TokenError):
         return Response({'status': 'error', 'message': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user(request):
+    user = request.user
+    data = request.data
+
+    try:
+        user.username = data.get('username', user.username)
+        user.avatar = data.get('avatar', user.avatar)
+        
+        password = data.get('password')
+        if password:
+            user.set_password(password)
+
+        user.full_clean()
+        user.save()
+
+        return Response({'status': 'success', 'message': 'User updated.'}, status=status.HTTP_200_OK)
+
+    except IntegrityError:
+        return Response({'status': 'error', 'message': 'Username already taken.'}, status=status.HTTP_400_BAD_REQUEST)
+    except ValidationError as e:
+        return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
