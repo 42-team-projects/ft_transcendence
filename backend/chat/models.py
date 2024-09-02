@@ -34,11 +34,11 @@ class Conversation(models.Model):
     def __str__(self):
         return self.title
     
-    @property
-    def group_name(self):
-        """ generate name for chat conversation
-        """
-        return f'chat_{self.title}'
+    # @property
+    # def group_name(self):
+    #     """ generate name for chat conversation
+    #     """
+    #     return f'chat_{self.title}'
     
     def add_participant(self, user):
         if not user in self.participants.all():
@@ -54,19 +54,19 @@ class Conversation(models.Model):
         return self.messages
 
 
-class MessageManager(models.Manager):
-    def by_title(self, title):
-        """
-        Retrieves all conversations with the specified title.
+# class MessageManager(models.Manager):
+#     def by_title(self, title):
+#         """
+#         Retrieves all conversations with the specified title.
 
-        Args:
-            title (str): The title of the conversation to filter by.
+#         Args:
+#             title (str): The title of the conversation to filter by.
 
-        Returns:
-            QuerySet: A QuerySet containing all conversations that match the given title.
-        """
-        qs = Conversation.objects.filter(title=title)
-        return qs
+#         Returns:
+#             QuerySet: A QuerySet containing all conversations that match the given title.
+#         """
+#         qs = Conversation.objects.filter(title=title)
+#         return qs
     
 class Message(models.Model):
     """
@@ -86,7 +86,7 @@ class Message(models.Model):
     content         = models.TextField(unique=False, blank=False)
     sent_at         = models.DateTimeField(auto_now_add=True)
     
-    objects = MessageManager()
+    # objects = MessageManager()
         
     def __str__(self):
         return f'{self.user.username} sent a message to conversation {self.conversation.title}'

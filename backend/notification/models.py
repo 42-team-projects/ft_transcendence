@@ -12,7 +12,4 @@ class Notification(models.Model):
     def __str__(self):
         return f'Notification for {self.user.username}: {self.content}'
 
-    # def get_all(self):
-    #     self.objects.
-    class Meta:
-        ordering = ['-create_at']
+
