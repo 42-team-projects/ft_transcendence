@@ -119,7 +119,7 @@ const cssContent = /*css*/`
     flex-direction: row;
     align-items: center;
     margin: 10px;
-    z-index: 1000;
+    z-index: 50;
 }
 
 .mainContainer {

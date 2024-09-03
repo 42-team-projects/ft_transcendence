@@ -2,11 +2,14 @@ import { createApiData, getApiData, updateApiData } from "../../../Utils/APIMana
 import { PROFILE_API_URL } from "../../../Utils/APIUrls.js";
 import { HOST } from "../../../Utils/GlobalVariables.js";
 import { getLeagueColor } from "../../../Utils/LeaguesData.js";
-import { fetchWithToken } from "../../../root/Router.js";
-import { CustomInputField } from "../CustomElements/CustomInputField.js";
-import { CustomToggleSwitch } from "../CustomElements/CustomToggleSwitch.js";
-import { CustomUnorderedList } from "../CustomElements/CustomUnorderedList.js";
-import { CustomUnorderedListItem } from "../CustomElements/CustomUnorderedListItem.js";
+import { fetchWithToken } from "../../../root/fetchWithToken.js";
+import { CustomInputField } from "../../CustomElements/CustomInputField.js";
+import { CustomToggleSwitch } from "../../CustomElements/CustomToggleSwitch.js";
+import { CustomUnorderedList } from "../../CustomElements/CustomUnorderedList.js";
+import { CustomUnorderedListItem } from "../../CustomElements/CustomUnorderedListItem.js";
+import { CustomSelect } from "../../CustomElements/CustomSelect.js";
+import { CustomSpinner } from "../../CustomElements/CustomSpinner.js";
+
 
 export class ProfileContent extends HTMLElement {
     constructor() {
@@ -23,46 +26,35 @@ export class ProfileContent extends HTMLElement {
                     </c-hexagon>
                     <input class="profile-image" type="file" accept="image/png, image/jpeg" readonly/>
                 </div>
-                <custom-input-field class="full-name-field" label="FULL NAME" placeholder="esalim" type="text"></custom-input-field>
+                <custom-input-field class="full-name-field" label="FULL NAME" type="text"></custom-input-field>
                 <custom-input-field class="cover-field" label="COVER" description="Supported extenstions: JPEG JPG PNG SVG." type="file"></custom-input-field>
+                <custom-select label="LANGUAGE" description="Select your favorite language."></custom-select>
                 <custom-unordered-list label="LINKS" description="Max links you can add is 4."></custom-unordered-list>
             </div>
             <div class="actions">
-                <settings-item id="save-button" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
+                <settings-item class="save-button disable" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
             </div>
+            <custom-spinner time="10" ></custom-spinner>
         `;
     }
-
+    interval;
     async connectedCallback() {
 
         const playerData = await getApiData(PROFILE_API_URL);
 
         const profileImage = this.shadowRoot.querySelector(".c-hexagon-content");
 
-        profileImage.src = HOST + playerData.user.avatar;
+        profileImage.src = HOST + playerData.profile_picture;            
 
         const hexagon = this.shadowRoot.querySelector(".c-hexagon-profile c-hexagon");
         hexagon.bcolor = getLeagueColor(playerData.stats.league);
         const input = this.shadowRoot.querySelector(".profile-image");
+        let profileImageFile;
         input.addEventListener( 'change', (e) => {
-            var fileName = '';
-            if( input.files && input.files.length > 1 )
-                fileName = ( input.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', input.files.length );
-            else
-                fileName = input.files[0].name;
-            
             if (input.files && input.files.length > 0) {
                 const file = input.files[0];
-        
-                // Assuming you want to set the background of an element with class 'profile-image'
-                // var img = document.createElement('img');
                 profileImage.src = URL.createObjectURL(file);
-                // img.style.height = '100%';
-                // img.style.display = 'block'; // Ensure the image is displayed in a block to put it on a new line
-                // img.style.marginBottom = '10px';
-                // profileImage.appendChild(img);
-                // Optional: Clean up the object URL after the image has loaded
-                // If you want to release the URL after use, you can do so
+                profileImageFile = file;
             }
         });
 
@@ -71,40 +63,65 @@ export class ProfileContent extends HTMLElement {
 
         const coverField = this.shadowRoot.querySelector(".cover-field");
 
+        let playerCover;
+        if (playerData.cover)
+            playerCover = playerData.cover.split("/").pop();
+        if(playerCover)
+            coverField.file = playerCover;
         const links = this.shadowRoot.querySelector("custom-unordered-list");
         links.list = playerData.links;
+        let linksList = links.list.length;
 
+        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
 
-        const saveButton = this.shadowRoot.querySelector("#save-button");
+        const saveButton = this.shadowRoot.querySelector(".save-button");
+        this.interval = setInterval(() => {
+            if (fullNameField.value != playerData.fullName || (coverField.file && coverField.file[0].name != playerCover) || profileImageFile || (links.list.length != linksList))
+                saveButton.classList.remove("disable");
+            else
+                saveButton.classList.add("disable");
+        }, 700);
 
         saveButton.addEventListener("click", async () => {
+            if (saveButton.classList.contains("disable"))
+                return ;
             const list = links.list;
             const formData = new FormData();
-
-            if (!fullNameField.value)
-                return ;
-            if (fullNameField.value != playerData.fullName)
+            if (profileImageFile)
+            {
+                formData.append("profile_picture", profileImageFile);
+                profileImageFile = null;
+            }
+            if (fullNameField.value && fullNameField.value != playerData.fullName)
+            {
                 formData.append("fullName", fullNameField.value);
+                playerData.fullName = fullNameField.value;
+            }
             if (coverField.file)
+            {
                 formData.append("cover", coverField.file[0]);
+                playerCover = coverField.file[0].name;
+            }
 
             if (list.length) {
                 const linksData = {"links": list};
+                linksList = list.length;
                 await createApiData(PROFILE_API_URL + "links/", JSON.stringify(linksData));
             }
-            // if (formData.keys().length)
-            await updateApiData(PROFILE_API_URL, formData);
+            
+            console.log("hello world !!!");
+            const res = await updateApiData(PROFILE_API_URL, formData);
+            console.log("res: ", res);
+            refreshBox.display();
+            saveButton.classList.add("disable");
 
-
-
-            // you can now update the account infos by fetching API.
 
         });
 
     }
 
     disconnectedCallback() {
-
+        clearInterval(this.interval);
     }
 }
 
@@ -121,14 +138,15 @@ const cssContent = /*css*/`
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
+        position: relative;
     }
 
     .container {
-        width: 100%;
+        width: 99%;
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         gap: 50px;
     }
 
@@ -177,6 +195,72 @@ const cssContent = /*css*/`
     .c-hexagon-content {
         height: 100%;
     }
+
+    .disable {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .refresh-container {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 105%;
+        background: #01253e80;
+        z-index: 45;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        font-family: 'Sansation Bold';
+        font-size: 20px;
+    }
+      
+
+    #html-spinner{
+        width: 64px;
+        height: 64px;
+        border:8px solid #fff;
+        border-top:8px solid aqua;
+        border-radius:50%;
+      }
+      
+      #html-spinner {
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transition-duration: 1.2s;
+        -webkit-animation-name: rotate;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        
+        -moz-transition-property: -moz-transform;
+        -moz-animation-name: rotate; 
+        -moz-animation-duration: 1.2s; 
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
+        
+        transition-property: transform;
+        animation-name: rotate; 
+        animation-duration: 1.2s; 
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+      
+      @-webkit-keyframes rotate {
+          from {-webkit-transform: rotate(0deg);}
+          to {-webkit-transform: rotate(360deg);}
+      }
+      
+      @-moz-keyframes rotate {
+          from {-moz-transform: rotate(0deg);}
+          to {-moz-transform: rotate(360deg);}
+      }
+      
+      @keyframes rotate {
+          from {transform: rotate(0deg);}
+          to {transform: rotate(360deg);}
+      }
+      
 
 `;
 
