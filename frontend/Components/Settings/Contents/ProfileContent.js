@@ -102,22 +102,22 @@ export class ProfileContent extends HTMLElement {
                 await createApiData(PROFILE_API_URL + "links/", JSON.stringify(linksData));
             }
             
-            if (fullNameField.value && fullNameField.value != playerData.fullName)
+            if ((fullNameField.value && fullNameField.value != playerData.fullName) || coverField.file)
             {
-                formData.append("fullName", fullNameField.value);
-                playerData.fullName = fullNameField.value;
-            }
-            if (coverField.file)
-            {
-                formData.append("cover", coverField.file[0]);
-                playerCover = coverField.file[0].name;
-            }
-            if (formData.entries().length) {
+                if (fullNameField.value && fullNameField.value != playerData.fullName) {
+                    formData.append("fullName", fullNameField.value);
+                    playerData.fullName = fullNameField.value;
+                }
+                if (coverField.file)
+                {
+                    formData.append("cover", coverField.file[0]);
+                    playerCover = coverField.file[0].name;
+                }
                 const res = await updateApiData(PROFILE_API_URL, formData);
                 console.log("res: ", res);
-                refreshBox.display();
-                saveButton.classList.add("disable");
             }
+            refreshBox.display();
+            saveButton.classList.add("disable");
 
 
         });
