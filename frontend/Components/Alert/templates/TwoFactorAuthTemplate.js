@@ -6,17 +6,41 @@ export class TwoFactorAuthTemplate extends HTMLElement {
             <style> ${cssContent} </style>
             <div class="container">
                 <div class="qr-code-section">
-                    <img src="../../../assets/images/alert/qr-code-example.svg"></img>
+                    <img class="qrcode-displayer" src="../../../assets/images/alert/qr-code-example.svg"></img>
                 </div>
                 <div class="code-field">
                     <h2>Enter generated code by your chosen authonticator app</h2>
                     <div class="inputContainer">
                         <img src="../../../assets/icons/lock-icon.svg" width="24px"></img>
-                        <input type="number" accept="image/png, image/jpeg"/>
+                        <input class="entered-code" type="number"/>
                     </div>
                 </div>
             </div>
         `;
+    }
+
+    connectedCallback() {
+        
+    }
+    
+    disconnectedCallback() {
+
+    }
+
+    static observedAttributes = ["base-code"];
+
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        if (attrName == "base-code") {
+            const qrcodeDisplayer = this.shadowRoot.querySelector(".qrcode-displayer");
+            qrcodeDisplayer.src = "data:image/png;base64," + newValue;
+        }
+    }
+
+    set baseCode(val) { this.setAttribute("base-code", val); }
+    get baseCode() { return this.getAttribute("base-code"); }
+
+    get code() {
+        return this.shadowRoot.querySelector(".entered-code").value;
     }
 }
 

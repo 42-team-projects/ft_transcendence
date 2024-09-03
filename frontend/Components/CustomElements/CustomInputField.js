@@ -42,7 +42,7 @@ export class CustomInputField extends HTMLElement {
         }
 
         this.shadowRoot.querySelector("input").type = this.type;
-        this.shadowRoot.querySelector("input").placeholder = this.placeholder || "Full Name";
+        this.shadowRoot.querySelector("input").placeholder = this.placeholder || "";
 
 
         const input = this.shadowRoot.querySelector('input[type="file"]');
@@ -67,7 +67,9 @@ export class CustomInputField extends HTMLElement {
         const inputField = inputContainer.querySelector("input");
         let oldValue = inputField.value;
         editIcon.addEventListener("click", () => {
-            if (!editIcon.classList.contains("close")) {
+            if (editIcon.classList.contains("lock"))
+                return ;
+            else if (!editIcon.classList.contains("close")) {
                 inputField.removeAttribute("readonly");
                 inputContainer.classList.add("active");
                 editIcon.src = "../assets/icons/close-icon.svg";
@@ -88,21 +90,24 @@ export class CustomInputField extends HTMLElement {
             inputField.setAttribute("readonly", true);
             this.shadowRoot.querySelector("img").hidden = false;
         }
-        if (this.hasAttribute("editable")) {
-            const editIcon = this.shadowRoot.querySelector(".edit-icon")
-            if (editIcon)
-                editIcon.remove();
-        }
+        
     }
 
     disconnectedCallback() {
         // Clean up if necessary
     }
 
-    static observedAttributes = ["width", "height", "type", "label", "description", "placeholder"];
+    static observedAttributes = ["width", "height", "type", "label", "description", "placeholder", "editable"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
-        if (attrName == "width")
+        if (attrName == "editable") {
+            const editIcon = this.shadowRoot.querySelector(".edit-icon")
+            if (editIcon) {
+                editIcon.src = "../../assets/icons/lock-icon.svg";
+                editIcon.classList.add("lock");
+            }
+        }
+        else if (attrName == "width")
             this.shadowRoot.querySelector(".box").style.width = newValue;
         else if (attrName == "height")
             this.shadowRoot.querySelector(".box").style.height = newValue;
@@ -144,6 +149,9 @@ export class CustomInputField extends HTMLElement {
 
     set placeholder(value) { this.setAttribute("placeholder", value)}
     get placeholder() { return this.getAttribute("placeholder")}
+
+    set editable(value) { this.setAttribute("editable", value)}
+    get editable() { return this.getAttribute("editable")}
 
     set readonly(value) { this.setAttribute("readonly", value)}
     get readonly() { return this.getAttribute("readonly")}

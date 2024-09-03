@@ -1,5 +1,5 @@
 import { createApiData, getApiData, updateApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../../Utils/APIUrls.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL } from "../../../Utils/APIUrls.js";
 import { HOST } from "../../../Utils/GlobalVariables.js";
 import { getLeagueColor } from "../../../Utils/LeaguesData.js";
 import { fetchWithToken } from "../../../root/fetchWithToken.js";
@@ -44,7 +44,7 @@ export class ProfileContent extends HTMLElement {
 
         const profileImage = this.shadowRoot.querySelector(".c-hexagon-content");
 
-        profileImage.src = HOST + playerData.profile_picture;            
+        profileImage.src = HOST + playerData.user.avatar;            
 
         const hexagon = this.shadowRoot.querySelector(".c-hexagon-profile c-hexagon");
         hexagon.bcolor = getLeagueColor(playerData.stats.league);
@@ -89,9 +89,19 @@ export class ProfileContent extends HTMLElement {
             const formData = new FormData();
             if (profileImageFile)
             {
-                formData.append("profile_picture", profileImageFile);
+                const avatarForm = new FormData();
+                avatarForm.append("avatar", profileImageFile);
+                const apiResponse = await updateApiData(UPDATE_USER_API_URL, avatarForm);
+                console.log("apiResponse: ", apiResponse);
                 profileImageFile = null;
             }
+     
+            if (list.length) {
+                const linksData = {"links": list};
+                linksList = list.length;
+                await createApiData(PROFILE_API_URL + "links/", JSON.stringify(linksData));
+            }
+            
             if (fullNameField.value && fullNameField.value != playerData.fullName)
             {
                 formData.append("fullName", fullNameField.value);
@@ -102,18 +112,12 @@ export class ProfileContent extends HTMLElement {
                 formData.append("cover", coverField.file[0]);
                 playerCover = coverField.file[0].name;
             }
-
-            if (list.length) {
-                const linksData = {"links": list};
-                linksList = list.length;
-                await createApiData(PROFILE_API_URL + "links/", JSON.stringify(linksData));
+            if (formData.entries().length) {
+                const res = await updateApiData(PROFILE_API_URL, formData);
+                console.log("res: ", res);
+                refreshBox.display();
+                saveButton.classList.add("disable");
             }
-            
-            console.log("hello world !!!");
-            const res = await updateApiData(PROFILE_API_URL, formData);
-            console.log("res: ", res);
-            refreshBox.display();
-            saveButton.classList.add("disable");
 
 
         });
