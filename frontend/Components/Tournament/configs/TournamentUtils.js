@@ -28,7 +28,6 @@ export function createTournamentTable(parentNode, mainContainer, data) {
     const tbody = mainContainer.querySelector("tbody");
     for (let index = data.length - 1; index >= 0; index--)
         tbody.appendChild(createRow(parentNode, data[index]));
-
 }
 
 export function createRow(parentNode, data) {
