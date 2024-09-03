@@ -1,6 +1,9 @@
 from django.http import JsonResponse
 from ..Models.PlayerModel import Player
+from ..Models.StatsModel import Stats
+from ..Models.GraphModel import Graph
 from ..Serializers.PlayerSerializer import PlayerSerializer, CustomPlayer
+from ..Serializers.StatsSerializer import StatsSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
@@ -17,7 +20,7 @@ logger = logging.getLogger(__name__)
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def getPlayer(request):
-
+    logger.warning(request.data)
     try:
         player = Player.objects.get(user=request.user)
     except Player.DoesNotExist:
@@ -28,7 +31,7 @@ def getPlayer(request):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     
     if request.method == 'PUT':
-        serializer = PlayerSerializer(player, data=request.data, partial=True)
+        serializer = PlayerSerializer(player, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)

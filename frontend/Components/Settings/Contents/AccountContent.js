@@ -1,7 +1,9 @@
-import { CustomSelect } from "../CustomElements/CustomSelect.js";
-import { CustomInputField } from "../CustomElements/CustomInputField.js";
-import { CustomToggleSwitch } from "../CustomElements/CustomToggleSwitch.js";
-import { CustomAlert } from "../../Tournament/CustomAlert.js";
+import { CustomInputField } from "../../CustomElements/CustomInputField.js";
+import { CustomToggleSwitch } from "../../CustomElements/CustomToggleSwitch.js";
+import { CustomAlert } from "../../Alert/CustomAlert.js";
+import { PROFILE_API_URL } from "../../../Utils/APIUrls.js";
+import { getApiData } from "../../../Utils/APIManager.js";
+import {  } from "../../CustomElements/CustomSpinner.js";
 
 export class AccountContent extends HTMLElement {
     constructor() {
@@ -14,32 +16,73 @@ export class AccountContent extends HTMLElement {
             <div class="container">
                 <custom-input-field class="username-field" label="USERNAME" description="Username must be unique." placeholder="esalim" type="text" readonly="true"></custom-input-field>
                 <custom-input-field editable class="email-field" label="EMAIL" description="You can not change your email." placeholder="elmehdi.salim@gmail.com" type="email" readonly="true"></custom-input-field>
-                <custom-input-field class="password-field" label="PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="elmehdi.salim@gmail.com" type="password" readonly="true"></custom-input-field>
+                <custom-input-field class="password-field" label="CURRENT PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="elmehdi.salim@gmail.com" type="password" readonly="true"></custom-input-field>
                 <custom-toggle-switch></custom-toggle-switch>
-                <custom-select label="LANGUAGE" description="Select your favorite language."></custom-select>
             </div>
             <div class="actions">
                 <settings-item id="delete-account-button" background-color="#c8000080" color="#c8000090" border-size="2px" width="200px" height="40px"><h3>DELETE ACCOUNT</h3></settings-item>
-                <settings-item id="save-button" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
+                <settings-item id="save-button" class="disable" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
             </div>
+            <custom-spinner time="10" ></custom-spinner>
         `;
     }
+    interval;
 
-    connectedCallback() {
+    async connectedCallback() {
+        const playerData = await getApiData(PROFILE_API_URL);
         const usernameField = this.shadowRoot.querySelector(".username-field");
+        if (usernameField)
+            usernameField.value = playerData.user.username;
         const emailField = this.shadowRoot.querySelector(".email-field");
+        if (emailField)
+            emailField.value = playerData.user.email;
         const passwordField = this.shadowRoot.querySelector(".password-field");
 
 
+        const twoFactorAuth = this.shadowRoot.querySelector("custom-toggle-switch");
+        playerData.user.is_2fa_enabled = playerData.user.is_2fa_enabled ? "true" : "false";
+        if (twoFactorAuth)
+            twoFactorAuth.active = playerData.user.is_2fa_enabled;
+
+        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
+
+        this.interval = setInterval(() => {
+            if (usernameField.value != playerData.user.username || twoFactorAuth.active != playerData.user.is_2fa_enabled)
+                saveButton.classList.remove("disable");
+            else
+                saveButton.classList.add("disable");
+
+        }, 700);
+
+
         const saveButton = this.shadowRoot.querySelector("#save-button");
-        saveButton.addEventListener("click", () => {
+        saveButton.addEventListener("click", async () => {
             const accountData = {username: null, email: null, password: null};
             if (usernameField.value)
                 accountData.username = usernameField.value;
-            if (emailField.value)
-                accountData.email = emailField.value;
             if (passwordField.value)
                 accountData.password = passwordField.value;
+            if (saveButton.classList.contains("disable"))
+                return ;
+
+            const formData = new FormData();
+
+            if (usernameField.value && usernameField.value != playerData.fullName)
+            {
+                formData.append("fullName", usernameField.value);
+                playerData.fullName = usernameField.value;
+            }
+            if (twoFactorAuth.active != playerData.user.is_2fa_enabled) {
+                formData.append("active", twoFactorAuth.active);
+                playerData.user.is_2fa_enabled = twoFactorAuth.active;
+            }
+            // const res = await updateApiData(PROFILE_API_URL, formData);
+            // console.log("res: ", res);
+            // refreshBox.style.display = "flex";
+            refreshBox.display();
+            saveButton.classList.add("disable");
+
+
 
             // you can now update the account infos by fetching API.
 
@@ -72,11 +115,11 @@ export class AccountContent extends HTMLElement {
     }
 
     disconnectedCallback() {
-
+        clearInterval(this.interval);
     }
 }
 
-const cssContent = /*css*/`
+const cssContent = /*css*/ `
     * {
         margin: 0;
         padding: 0;
@@ -89,6 +132,7 @@ const cssContent = /*css*/`
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
+        position: relative;
     }
 
     .container {
@@ -113,6 +157,12 @@ const cssContent = /*css*/`
     h3 {
         color: white;
     }
+    
+    .disable {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
 `;
 
 customElements.define("account-content", AccountContent);

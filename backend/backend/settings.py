@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'tournament', #new
     'game', #new
     'Player', #new
-    'accounts', #new ogorfti
+    'accounts',
+    'rest_framework_simplejwt.token_blacklist', # ogorfti
 
 
     'chat',          #dokoko
