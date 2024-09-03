@@ -1,5 +1,5 @@
-import { CustomSliders } from "../CustomElements/CustomSliders.js"
-import { CustomField } from "../CustomElements/CustomField.js"
+import { CustomSliders } from "../../CustomElements/CustomSliders.js"
+import { CustomField } from "../../CustomElements/CustomField.js"
 
 
 export class GameContent extends HTMLElement {

@@ -149,7 +149,7 @@ export class ProfileComponent extends HTMLElement {
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
         profileInfoComponent.league = this.APIData.stats.league;
         profileInfoComponent.username = this.APIData.user.username;
-        profileInfoComponent.src = (HOST + this.APIData.user.avatar);
+        profileInfoComponent.src = (HOST + this.APIData.profile_picture);
         profileInfoComponent.joindate = this.APIData.joinDate;
         profileInfoComponent.active = this.APIData.active;
         // profileInfoComponent.friend = this.APIData.friend;

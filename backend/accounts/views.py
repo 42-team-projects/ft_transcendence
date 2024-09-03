@@ -5,8 +5,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from .utils import send_confirmation_email, gen_email_token
 from rest_framework.decorators import api_view, permission_classes
-from django_ratelimit.decorators import ratelimit
 from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 from django.conf import settings
 import jwt
 
@@ -38,7 +42,7 @@ def login(request):
         'username': data['username'],
         'access_token': data['access_token'],
     })
-    response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True)
+    response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True, samesite='None', secure=True)
     return response
 
 @api_view(['POST'])
@@ -50,16 +54,17 @@ def refresh(request):
 
     try:
         payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
-        user = User.objects.get(id=payload['user_id'])
-        if not user:
+        if not User.objects.filter(id=payload['user_id']).exists():
             return Response({'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.get(id=payload['user_id'])
+        
         tokens = user.tokens
         response = Response({
-            'email': user.email,
-            'username': user.username,
+            # 'email': user.email,
+            # 'username': user.username,
             'access_token': tokens['access_token'],
         })
-        response.set_cookie(key='refresh_token', value=tokens['refresh_token'], httponly=True)
+        response.set_cookie(key='refresh_token', value=tokens['refresh_token'], httponly=True, samesite='None', secure=True)
         return response
     except jwt.ExpiredSignatureError:
         return Response({'error': 'Refresh token expired'}, status=status.HTTP_403_FORBIDDEN)
@@ -118,3 +123,58 @@ def user_data(request):
         'avatar': user.avatar,
     }
     return Response(user_data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout(request):
+    try:
+        refresh_token = request.COOKIES.get('refresh_token')
+        if refresh_token is None:
+            raise KeyError
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+    except (InvalidToken, TokenError, KeyError):
+        return Response({'status': 'error', 'message': 'Invalid or missing refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    response = Response(status=status.HTTP_205_RESET_CONTENT)
+    response.delete_cookie('refresh_token')
+    return response
+
+@api_view(['POST'])
+def verify_token(request):
+    try:
+        token = request.headers.get('Authorization').split()[1]
+        validated_token = JWTAuthentication().get_validated_token(token)
+        user_id = validated_token['user_id']
+
+        # print('--->', User.objects.get(id=user_id))
+        if not User.objects.filter(id=user_id).exists():
+            return Response({'status': 'error', 'message': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'status': 'success', 'message': 'Token is valid.'}, status=status.HTTP_200_OK)
+    except (InvalidToken, TokenError):
+        return Response({'status': 'error', 'message': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user(request):
+    user = request.user
+    data = request.data
+
+    try:
+        user.username = data.get('username', user.username)
+        user.avatar = data.get('avatar', user.avatar)
+        
+        password = data.get('password')
+        if password:
+            user.set_password(password)
+
+        user.full_clean()
+        user.save()
+
+        return Response({'status': 'success', 'message': 'User updated.'}, status=status.HTTP_200_OK)
+
+    except IntegrityError:
+        return Response({'status': 'error', 'message': 'Username already taken.'}, status=status.HTTP_400_BAD_REQUEST)
+    except ValidationError as e:
+        return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
