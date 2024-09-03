@@ -16,8 +16,18 @@ ignore
 # Ignore all Python bytecode files
 *.pyc
 
-# Ignore __pycache__ directories
+# Ignore all __pycache__ directories
 **/__pycache__/
+
+# Ignore all .py files in migrations directories, except __init__.py
+**/migrations/*.py
+!**/migrations/__init__.py
 
 # Ignore node_modules directory
 node_modules
+
+*.py[cod]
+*.log
+*.pot
+*.pyc
+__pycache__/
