@@ -52,11 +52,14 @@ customElements.define('c-button', Buttons)
 customElements.define('game-selection', GameSelection)
 
 createWebSocketsForTournaments();
+
 import SignupPage from "./Components/User/SignupPage.js";
 import LoginPage from "./Components/User/LoginPage.js";
 import EmailConf from "./Components/User/EmailConf.js";
 import OAuth from "./Components/User/Oauth.js";
 import { router } from './root/Router.js';
+import { getApiData } from "./Utils/APIManager.js"
+import { PROFILE_API_URL } from "./Utils/APIUrls.js"
 
 
 customElements.define("signup-page", SignupPage);

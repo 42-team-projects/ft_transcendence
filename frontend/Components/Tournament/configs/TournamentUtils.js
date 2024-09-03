@@ -102,7 +102,6 @@ export function createRow(parentNode, data) {
 
         const actionsContainer = document.createElement("div");
         actionsContainer.className = "actions";
-
         if (data.owner.id != playerId)
             actionsContainer.appendChild(exitButton);
 

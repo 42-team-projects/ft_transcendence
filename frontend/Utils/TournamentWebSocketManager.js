@@ -84,7 +84,7 @@ async function displayAlert(e, data) {
             const timeLeft = totalCountdownTime - timespent;
             closeWebSocket(data.tournament_id);
             //
-            // const playerIds = data.players;
+            // const playerIds = Array.from(data.players).map(player => player.id);
             // const totalPlayers = playerIds.length;
             // const pId = playerId;
             // const opponentId = findOpponentId(pId, playerIds, totalPlayers);
@@ -206,7 +206,7 @@ async function get_start_date(tournamentId) {
 
 function findOpponentId(pId, playerIds, totalPlayers) {
     const pairing_sum = totalPlayers - 1;
-    const index = playerIds.indexOf(pId);
+    const index = playerIds.indexOf(12);
     if (index === -1) return null; // Player ID not found in the list
     // Calculate the index for the opponent
     const opponentIndex = pairing_sum - index; // Subtract 1 for zero-based index
