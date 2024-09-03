@@ -18,8 +18,16 @@ export class SettingsMenu extends HTMLElement {
     }
     connectedCallback() {
         const settingsItems = this.shadowRoot.querySelectorAll("settings-item");
+        const firstElement = settingsItems[0];
+        this.selectItem = firstElement.id;
+        firstElement.color = "aqua";
+        firstElement.borderSize = "2px";
+        const settingsContent = this.parentNode.querySelector("settings-content");
+        settingsContent.innerHTML = `<${firstElement.id}-content></${firstElement.id}-content>`;
         settingsItems.forEach(elem => {
             elem.addEventListener("click", (e) => {
+                if (this.selectItem == elem.id)
+                    return ;
                 const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
                 if (selectItemcomponent)
                 {
@@ -29,7 +37,6 @@ export class SettingsMenu extends HTMLElement {
                 this.selectItem = elem.id;
                 elem.color = "aqua";
                 elem.borderSize = "2px";
-                const settingsContent = this.parentNode.querySelector("settings-content");
                 settingsContent.innerHTML = `<${elem.id}-content></${elem.id}-content>`;
             })
         });
