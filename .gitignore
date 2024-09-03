@@ -1,3 +1,7 @@
+.vscode
+.DS_Store
+env
+frontend
 ignore
 
 #Ignore all vscode settings
