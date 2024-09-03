@@ -38,8 +38,8 @@ def login(request):
 
     data = serializer.validated_data
     response = Response({
-        'email': data['email'],
-        'username': data['username'],
+        # 'email': data['email'],
+        # 'username': data['username'],
         'access_token': data['access_token'],
     })
     response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True, samesite='None', secure=True)
