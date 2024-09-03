@@ -82,6 +82,7 @@ async function displayAlert(e, data) {
             console.log("timespent:    ", timespent);
             const totalCountdownTime = 120; // 2 minutes in seconds
             const timeLeft = totalCountdownTime - timespent;
+            closeWebSocket(data.tournament_id);
             //
             // const playerIds = data.players;
             // const totalPlayers = playerIds.length;

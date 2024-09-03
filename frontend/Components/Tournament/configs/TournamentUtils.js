@@ -43,7 +43,7 @@ export function createRow(parentNode, data) {
     {
         const td = document.createElement("td");
         td.textContent = "unknown";
-        td.textContent = data.owner.username;
+        td.textContent = data.owner.user.username;
         tr.appendChild(td);
     }
     {
