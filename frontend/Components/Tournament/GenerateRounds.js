@@ -1,3 +1,5 @@
+import { HOST } from "../../Utils/GlobalVariables.js";
+import { getLeagueColor } from "../../Utils/LeaguesData.js";
 import { AddPlayerComponent } from "./AddPlayerComponent.js";
 import { CustomButton } from "./CustomButton.js";
 import { TournamentRound } from "./TournamentRound.js";
@@ -37,21 +39,21 @@ export class GenerateRounds extends HTMLElement {
         return _final;
     }
 
-    getPlayerInfo(PlayerName, slot, nextRounds) {
-        const player = document.createElement("div");
-        player.slot = slot;
+    getPlayerInfo(player, slot, nextRounds) {
+        const playerContainer = document.createElement("div");
+        playerContainer.slot = slot;
         if (nextRounds)
-            return player;
-        if (PlayerName)
-            player.innerHTML = `
-                    <c-hexagon class="${slot}" width="32px" height="32px" apply="true" bcolor="aqua">
-                        <div slot="content" class="c-hexagon-content" style="background: url(../assets/images/profile/tanjuro.jpg) center / cover no-repeat;"></div>
+            return playerContainer;
+        if (player)
+            playerContainer.innerHTML = `
+                    <c-hexagon class="${slot}" width="32px" height="32px" apply="true" bcolor="${getLeagueColor(player.stats.league)}">
+                        <div slot="content" class="c-hexagon-content" style="background: url(${HOST + player.user.avatar}) center / cover no-repeat;"></div>
                     </c-hexagon>
-                    <h4>${PlayerName}</h4>
+                    <h4>${player.user.username}</h4>
                 `;
         else
-            player.innerHTML = `<img loading="lazy" class="addPlayer" src="../assets/images/profile/add-friends-icon.svg" width="24px"/>`;
-        return player;
+            playerContainer.innerHTML = `<img loading="lazy" class="addPlayer" src="../assets/images/profile/add-friends-icon.svg" width="24px"/>`;
+        return playerContainer;
     }
 
     getTournamentRound(firstPlayer, secondPlayer, nextRounds, reverse) {
@@ -97,9 +99,9 @@ export class GenerateRounds extends HTMLElement {
         for (let index = 0; index < players.length; index += 2) {
             let element = {firstPlayer: null, secondPlayer: null};
             if (players[index])
-                element.firstPlayer = players[index].username;
+                element.firstPlayer = players[index];
             if (players[index + 1])
-                element.secondPlayer =  players[index + 1].username;
+                element.secondPlayer =  players[index + 1];
             rounds.push(element);
         }
         return rounds;
@@ -110,7 +112,7 @@ export class GenerateRounds extends HTMLElement {
         container.innerHTML = '';
         const left = this.numberOfPlayers / 2;
         const right = this.numberOfPlayers / 2;
-        console.log("rightRounds.length : ", rightRounds.length);
+
         if (left > 4)
             container.appendChild(this.generateRounds(8, leftRounds, null, null));
         if (left > 2)
@@ -155,6 +157,7 @@ export class GenerateRounds extends HTMLElement {
     get numberOfPlayers() { return this.getAttribute("number-of-players");}
 
     set players(val) {
+        console.log("val: ", val);
         this.generateRoundsGraph(this.convertPlayersDataIntoRounds(val));
         this.addPlayerEventListener();
     };
