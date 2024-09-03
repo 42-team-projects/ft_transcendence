@@ -1,6 +1,7 @@
 from django.db import models
 # from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from accounts.models import User
     
     
 class Conversation(models.Model):
@@ -24,8 +25,7 @@ class Conversation(models.Model):
     # status = models.CharField(
     #     max_length=1,
     #     choices=STATUS_CHOICES
-    # ) 
-    
+    # )     
     participants    = models.ManyToManyField(User, related_name='conversations', blank=False)
     title           = models.CharField(max_length=255, blank=True, unique=True)
     # name            = models.CharField(max_length=255, blank=False, unique=False)

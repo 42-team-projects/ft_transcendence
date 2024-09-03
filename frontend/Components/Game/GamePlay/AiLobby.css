@@ -1,0 +1,26 @@
+.Player{
+    position: absolute;
+    height: 99%;
+    width: 99%;
+    z-index: 0;
+    border-radius: 2%;
+}
+.Opponent{
+    color: white;
+    font-size: 10rem;
+}
+.Name{
+    z-index: 0;
+    position: absolute;
+    font-size: 2rem;
+    color: white;
+    top:100%;
+    margin: 0;
+    animation: moveName 1s forwards;
+    transform: translateY(-200%);
+}
+@keyframes moveName {
+    to{
+        transform: translateY(0%);
+    }
+}
