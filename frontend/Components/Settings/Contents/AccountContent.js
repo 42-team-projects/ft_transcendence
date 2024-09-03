@@ -1,8 +1,8 @@
 import { CustomInputField } from "../../CustomElements/CustomInputField.js";
 import { CustomToggleSwitch } from "../../CustomElements/CustomToggleSwitch.js";
 import { CustomAlert } from "../../Alert/CustomAlert.js";
-import { PROFILE_API_URL } from "../../../Utils/APIUrls.js";
-import { getApiData } from "../../../Utils/APIManager.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL } from "../../../Utils/APIUrls.js";
+import { getApiData, updateApiData } from "../../../Utils/APIManager.js";
 import {  } from "../../CustomElements/CustomSpinner.js";
 
 export class AccountContent extends HTMLElement {
@@ -15,8 +15,8 @@ export class AccountContent extends HTMLElement {
             <style> ${cssContent} </style>
             <div class="container">
                 <custom-input-field class="username-field" label="USERNAME" description="Username must be unique." placeholder="esalim" type="text" readonly="true"></custom-input-field>
-                <custom-input-field editable class="email-field" label="EMAIL" description="You can not change your email." placeholder="elmehdi.salim@gmail.com" type="email" readonly="true"></custom-input-field>
-                <custom-input-field class="password-field" label="CURRENT PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="elmehdi.salim@gmail.com" type="password" readonly="true"></custom-input-field>
+                <custom-input-field editable="true" class="email-field" label="EMAIL" description="You can not change your email." placeholder="elmehdi.salim@gmail.com" type="email" readonly="true"></custom-input-field>
+                <custom-input-field class="password-field" label="PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="" type="password" readonly="true"></custom-input-field>
                 <custom-toggle-switch></custom-toggle-switch>
             </div>
             <div class="actions">
@@ -36,18 +36,22 @@ export class AccountContent extends HTMLElement {
         const emailField = this.shadowRoot.querySelector(".email-field");
         if (emailField)
             emailField.value = playerData.user.email;
-        const passwordField = this.shadowRoot.querySelector(".password-field");
 
+        const passwordField = this.shadowRoot.querySelector(".password-field");
+        if (playerData.user.auth_provider != "email")
+        {
+            passwordField.editable = true;
+            passwordField.description = "You can't set a password to this account because you are logged using oauth.";
+        }
 
         const twoFactorAuth = this.shadowRoot.querySelector("custom-toggle-switch");
-        playerData.user.is_2fa_enabled = playerData.user.is_2fa_enabled ? "true" : "false";
         if (twoFactorAuth)
             twoFactorAuth.active = playerData.user.is_2fa_enabled;
 
         const refreshBox = this.shadowRoot.querySelector("custom-spinner");
 
         this.interval = setInterval(() => {
-            if (usernameField.value != playerData.user.username || twoFactorAuth.active != playerData.user.is_2fa_enabled)
+            if (usernameField.value != playerData.user.username || passwordField.value)
                 saveButton.classList.remove("disable");
             else
                 saveButton.classList.add("disable");
@@ -57,30 +61,26 @@ export class AccountContent extends HTMLElement {
 
         const saveButton = this.shadowRoot.querySelector("#save-button");
         saveButton.addEventListener("click", async () => {
-            const accountData = {username: null, email: null, password: null};
-            if (usernameField.value)
-                accountData.username = usernameField.value;
-            if (passwordField.value)
-                accountData.password = passwordField.value;
             if (saveButton.classList.contains("disable"))
                 return ;
 
-            const formData = new FormData();
+            const accountDataForm = new FormData();
+            if (usernameField.value)
+                accountDataForm.append("username", usernameField.value)
+            if (passwordField.value)
+                accountDataForm.append("password", passwordField.value)
+            const res = await updateApiData(UPDATE_USER_API_URL, accountDataForm);
+            console.log("res: ", res);
 
-            if (usernameField.value && usernameField.value != playerData.fullName)
+            if (usernameField.value)
             {
-                formData.append("fullName", usernameField.value);
-                playerData.fullName = usernameField.value;
+                playerData.user.username = usernameField.value;
             }
-            if (twoFactorAuth.active != playerData.user.is_2fa_enabled) {
-                formData.append("active", twoFactorAuth.active);
-                playerData.user.is_2fa_enabled = twoFactorAuth.active;
-            }
-            // const res = await updateApiData(PROFILE_API_URL, formData);
-            // console.log("res: ", res);
-            // refreshBox.style.display = "flex";
+
             refreshBox.display();
             saveButton.classList.add("disable");
+
+            
 
 
 

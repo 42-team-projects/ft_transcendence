@@ -1,5 +1,7 @@
 import { TwoFactorAuthTemplate } from "../Alert/templates/TwoFactorAuthTemplate.js";
 import { CustomAlert } from "../Alert/CustomAlert.js";
+import { getApiData } from "../../Utils/APIManager.js";
+import { DISABLE_2FA_API_URL, ENABLE_2FA_API_URL, VIREFY_2FA_API_URL } from "../../Utils/APIUrls.js";
 
 export class CustomToggleSwitch extends HTMLElement {
     
@@ -21,27 +23,34 @@ export class CustomToggleSwitch extends HTMLElement {
         `;  
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         const toggle = this.shadowRoot.querySelector(".toggle");
-        toggle.addEventListener("click", () => {
+        toggle.addEventListener("click", async () => {
             const isEnable = toggle.classList.contains("enable");
             if (isEnable)
             {
                 toggle.classList.remove("enable");
                 toggle.querySelector("div").style.background = "#d9d9d9";
                 this.active = false;
+                const disable = await getApiData(DISABLE_2FA_API_URL);
+                console.log(disable);
             }
             else {
+                const response = await getApiData(ENABLE_2FA_API_URL);
+                if (!response)
+                    return ;
+                console.log("Response: ", response);
+
                 const alertsConrtainer = window.document.querySelector("body .alerts");
                 alertsConrtainer.style.display = "flex";
                 const customAlert = new CustomAlert();
                 customAlert.innerHTML = `
                     <h2 slot="header"> ENABLE 2FA ALERT</h2>
                     <div slot="body" class="alert-footer">
-                        <two-factor-auth-template></two-factor-auth-template>
+                        <two-factor-auth-template base-code="${response.qr_code}"></two-factor-auth-template>
                     </div>
                     <div slot="footer" class="alert-footer buttons">
-                        <custom-button id="playBtn" width="220px" height="48px" reverse>
+                        <custom-button class="disable" id="playBtn" width="220px" height="48px" reverse>
                             <div class="enable-2fa-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24px" height="24px">
                                     <path fill="#fff" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.7 82.8c22 9.3 38.4 31 38.3 57.2c-.5 99.2-41.3 280.7-213.6 363.2c-16.7 8-36.1 8-52.8 0C57.3 420.7 16.5 239.2 16 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.8 1 251.4 0 256 0z"/>
@@ -54,16 +63,32 @@ export class CustomToggleSwitch extends HTMLElement {
     
                 alertsConrtainer.appendChild(customAlert);
 
-                customAlert.querySelector("custom-button").addEventListener("click", () => {
-                    alertsConrtainer.style.display = "none";
-                    alertsConrtainer.innerHTML = '';
-                    toggle.classList.add("enable");
-                    toggle.querySelector("div").style.background = "aqua";
-                    this.active = true;  
+
+                const customButton = customAlert.querySelector("custom-button");
+                const twoFA = alertsConrtainer.querySelector("two-factor-auth-template");
+
+                customButton.addEventListener("click", async () => {
+                    const code = twoFA.code;
+                    if (code && code.length == 6)
+                    {
+                        const isVerify = await getApiData(VIREFY_2FA_API_URL + "?otp=" + code);
+                        if (isVerify.error) {
+                            console.log("Error: ", isVerify.error);
+                            return ;
+                        }
+                        console.log(isVerify);
+                        alertsConrtainer.style.display = "none";
+                        alertsConrtainer.innerHTML = '';
+                        toggle.classList.add("enable");
+                        toggle.querySelector("div").style.background = "aqua";
+                        this.active = true;  
+                    }
                 });
             }
         });
     }
+
+    interval;
 
     set active(val) {
         this.setAttribute("active", val);
@@ -74,7 +99,7 @@ export class CustomToggleSwitch extends HTMLElement {
     }
 
     disconnectedCallback() {
-
+        clearInterval(this.interval);
     }
 
     static observedAttributes = ["active"];
@@ -97,6 +122,11 @@ export class CustomToggleSwitch extends HTMLElement {
 
     }
 }
+
+
+customElements.define("custom-toggle-switch", CustomToggleSwitch);
+
+
 
 const cssContent = /*css*/`
     * {
@@ -155,8 +185,8 @@ const cssContent = /*css*/`
         background-color: #00fffc50;
     }
 
-
+    .disable {
+        opacity: 0.6;
+    }
 `;
 
-
-customElements.define("custom-toggle-switch", CustomToggleSwitch);
