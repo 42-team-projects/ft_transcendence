@@ -1,0 +1,267 @@
+:host{
+    grid-area : single;
+    top: 0%;
+    position: relative;
+    aspect-ratio: 0.56;
+}
+
+:host:hover{
+    transform: scale(1.03);
+}
+.GreenCartImg{
+    position: absolute;
+    width: 100%;
+    clip-path: polygon(20% 0px, 99.8% 0px, 99.8% 74%, 83.6% 99.6%, 21% 99.6%, 3.5% 73.5% ,3.5% 63%, 0% 58.5%, 0% 29.4%);
+    z-index: 0;
+}
+
+.GreenCart{
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    /* box-shadow: 0px 0px 5px 5px #47AF56; */
+}
+
+:host::before{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/GreenCart/shape1.svg);
+    width: 3%;
+    height: 22.5%;
+    background-size: contain;
+    top: 23%;
+    background-repeat: no-repeat;
+    /* border: 1px solid red; */
+
+}
+:host::after{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/GreenCart/shape2.svg);
+    width: 3%;
+    height: 22.5%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    right: 0;
+    bottom: 26.5%;
+}
+.multiPlayer{
+    transform: translateY(-20px);
+    grid-area : multiple;
+}
+.online{
+    grid-area : online;
+    display: flex;
+    align-items: center;
+}
+
+.multiPlayer img {
+    margin-top: 7rem;
+    width: 100%;
+}
+
+.online img{
+    width: 100%;
+}
+
+
+.style-0{
+    /* border: 1px solid red; */
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.style-0::before{
+    position: absolute;
+    content: "";
+    background: #47AF56;
+    width: 0.7%;
+    height: 6%;
+    background-size: contain;
+    bottom: 11.5%;
+    left: 101%;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+}
+.style-0::after{
+    position: absolute;
+    content: "";
+    background: #47AF56;
+    width: 0.7%;
+    height: 4.5%;
+    background-size: contain;
+    bottom: 18%;
+    left: 101%;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+}
+
+.style-1{
+    position: relative;
+    /* border: 1px solid rgb(0, 255, 251); */
+    width: 100%;
+    height: 100%;
+}
+
+.style-1::before{
+    position: absolute;
+    content: "";
+    background: #47AF56;
+    width: 10% ;
+    height: 0.5%;
+    background-size: contain;
+    left: 1.5%;
+    top: 101%;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+}
+.style-1::after{
+    position: absolute;
+    content: "";
+    background: #47AF56;
+    width: 25%;
+    height: 0.5%;
+    background-size: contain;
+    left: 14%;
+    top: 101%;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+}
+.style-2{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* border: 1px solid rgb(0,  255, 251); */
+}
+
+.style-2::before{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/GreenCart/shape3.svg);
+    width: 17%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.style-2::after{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/GreenCart/shape4.svg);
+    width: 9%;
+    height: 5%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    right: 0;
+    bottom: 0;
+}
+
+
+.style-3{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* border: 1px solid rgb(0, 255, 251); */
+}
+
+
+.style-3 img{
+
+}
+.box-container{
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid #47AF56;
+    right: 0;
+}
+.top-box{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.middle-box{
+    background-color: #47AF56;
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.style-2_1{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    position: absolute;
+    /* border: 1px solid blue; */
+    width: 100%;
+    height: 50%;
+}
+
+.style-2_1::before{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/GreenCart/shape5.svg);
+    width: 96.9%;
+    height: 20.6%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    right: 0;
+    top: 56%;
+}
+
+.style-2_1::after{
+    position: absolute;
+    content: "";
+    background: url(../../../../images/GreenCart/shape6.svg);
+    width: 100%;
+    height: 7%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    right: 0;
+    top: 96%;
+}
+
+
+h1{
+    color: white;
+    font-size: 2.3rem;
+}
+.buttonC {
+    position: relative;
+    width: 100%;
+    height: 47%;
+    top: 50%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+p{
+    width: 80%;
+    font-size: 1.5rem;
+    text-align: center;
+    color: wheat;
+    margin: 0;
+}
+@media (max-width: 1600px){
+    p{
+        font-size: 1.2rem;
+    }
+}
+
+/* h1{
+    font-size: 2.8rem;
+    text-align: center;
+    text-wrap:wrap ;
+    color: wheat;
+} */
+
+
+
