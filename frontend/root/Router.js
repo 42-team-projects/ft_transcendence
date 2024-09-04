@@ -1,6 +1,5 @@
 import { fetchWithToken, isTokenValid} from './fetchWithToken.js'
 import config from '../../Utils/GlobalVariables.js';
-import { playerId } from '../Utils/GlobalVariables.js';
 
 export class Router {
 

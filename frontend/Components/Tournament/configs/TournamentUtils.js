@@ -1,6 +1,5 @@
 import { convertTimeStampIntoDate } from "../../../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../../../Utils/DateUtils.js";
-import { apiUrl, playerId, wsUrl } from "../../../Utils/GlobalVariables.js";
 import { closeWebSocket } from "../../../Utils/TournamentWebSocketManager.js";
 import { get_tournament_by_id, player_leave_tournament } from "./TournamentAPIConfigs.js";
 
@@ -101,7 +100,7 @@ export function createRow(parentNode, data) {
 
         const actionsContainer = document.createElement("div");
         actionsContainer.className = "actions";
-        if (data.owner.id != playerId)
+        if (data.owner.id != 3)
             actionsContainer.appendChild(exitButton);
 
         actionsContainer.appendChild(displayButton);

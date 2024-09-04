@@ -19,14 +19,10 @@ async def add_to_room(opponent, controler):
 def add_to_queue(client, queue):
 	queue.append(client)
 
-async def remove_from_queue(players):
-    await players[0].channel_layer.group_discard(
-        players[0].room_group_name,
-        players[0].channel_name
-    )
-    await players[1].channel_layer.group_discard(
-        players[1].room_group_name,
-        players[1].channel_name
+async def remove_from_queue(player):
+    await player.channel_layer.group_discard(
+        player.room_group_name,
+        player.channel_name
     )
 
 
@@ -34,9 +30,6 @@ async def timer(client, seconds):
     for i in range(seconds):
         message = { 'time' : seconds - (i + 1) }
         await client.send_message(message, 'timer_message')
-
-#always the second client will be the controler
-#always the first client will be the opponent
 
 class GameConsumer(AsyncWebsocketConsumer):
     rooms = {}
@@ -64,10 +57,16 @@ class GameConsumer(AsyncWebsocketConsumer):
             await GameConsumer.rooms[self.room_group_name].assign_racquet(text_data_json, self)
     
     async def disconnect(self, close_code):
+        print(self.room_group_name)
         await remove_from_queue(
-            GameConsumer.rooms[self.room_group_name].get_players()
+            self
         )
-        GameConsumer.rooms.pop(self.room_group_name)
+        if(self.room_group_name in GameConsumer.rooms):
+            GameConsumer.rooms[self.room_group_name].closed += 1
+            if(GameConsumer.rooms[self.room_group_name].closed == 2):
+                del GameConsumer.rooms[self.room_group_name]
+            else:
+                await GameConsumer.rooms[self.room_group_name].close_socket(self)
         
     
     async def send_message(self, message, function='game_message'):
