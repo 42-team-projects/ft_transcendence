@@ -8,6 +8,7 @@ let countdownInterval;
 
 let webSocketIdQueue = [];
 let webSocketQueue = [];
+let timeLeft = 0;
 
 export async function createWebSocketsForTournaments() {
     const tournamentsAPIData = await get_tournaments_by_player_id();
@@ -46,6 +47,8 @@ export async function closeWebSocket(socketId) {
     }
 }
 
+const totalCountdownTime = 60; // 2 minutes in seconds
+
 export async function countDownTimer(start_date) {
     const currentDate = new Date();
             
@@ -56,11 +59,10 @@ export async function countDownTimer(start_date) {
     console.log("parsedStartDate date:", parsedStartDate);
     // Convert the difference from milliseconds to seconds
     let timespent = Math.floor(timeDifference / 1000);
-    console.log("timespent:    ", timespent);
-    const totalCountdownTime = 5; // 2 minutes in seconds
-    const timeLeft = totalCountdownTime - timespent;
-    startCountdown(null, timeLeft);
-    return  timeLeft;
+    console.log("\ntimespent:    ", timespent);
+    timeLeft = totalCountdownTime - timespent;
+    console.log("\ntimeLeft ===>    ", timeLeft);
+    startCountdown();
 }
 
 async function displayAlert(e, data) {
@@ -86,8 +88,10 @@ async function displayAlert(e, data) {
         const start_date = await get_start_date(data.id);
         console.log("data: ", data);
         console.log("start_date: ", start_date);
-        let timeLeft = await countDownTimer(start_date);
+        countDownTimer(start_date);
+        // let timeLeft = await countDownTimer(start_date);
         customAlert.querySelector("#playBtn").addEventListener("click", async () => {
+            console.log("\ntimeLeft in playBtn ===>    ", timeLeft);
             // this.remove();
             // console.log(tournamentId);
 
@@ -235,29 +239,21 @@ function findOpponentId(pId, playerIds, totalPlayers) {
 }
 
 
-function startCountdown(alert1, timeLeft) {
-    console.log("timeLeft: ", timeLeft);
-    // const countDown = alert.querySelector(".countDown");
+function startCountdown() {
     countdownInterval = setInterval(function() {
-        console.log("timeLeft: ", timeLeft);
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-
+        console.log("timeLeft in startCountdown function: ", timeLeft);
+        // const minutes = Math.floor(timeLeft / 60);
+        // const seconds = timeLeft % 60;
         // countDown.innerHTML = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`;
-
         if (timeLeft <= 0) {
             clearInterval(countdownInterval);
             const alertsConrtainer = window.document.querySelector("body .alerts");
             alertsConrtainer.style.display = "none";
             alertsConrtainer.innerHTML = '';
-            console.log("countdownInterval -----  : ", countdownInterval);
-            // closeWebSocket(data.tournament_id);
-            // player_leave_tournament(data.id);
 
             // Add logic to start the tournament here
         }
         timeLeft--;
-        console.log("countdownInterval : ", countdownInterval);
         
     }, 1000);
 }
