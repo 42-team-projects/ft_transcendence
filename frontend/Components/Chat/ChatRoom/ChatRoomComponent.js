@@ -3,9 +3,11 @@ import { ChatHeaderComponent } from "./ChatHeaderComponent.js";
 import { ChatFooterComponent } from "./ChatFooterComponent.js";
 import { SenderComponent } from "./SenderComponent.js";
 import { ReceiverComponent } from "./ReceiverComponent.js";
+import { HOST } from "../../../Utils/GlobalVariables.js";
+import { getApiData } from "../../../Utils/APIManager.js";
 
-// let APIUrl = "http://localhost:8080/api/v1/conversations/sender=2&receiver="
-let APIUrl = "http://127.0.0.1:9000/chat/";
+// let APIUrl = "http://localhost:8080/api/v1/Messages/sender=2&receiver="
+let APIUrl = "http://127.0.0.1:8000/chat/";
 
 let league;
 let profileImage;
@@ -36,12 +38,13 @@ export class ChatRoomComponent extends HTMLElement {
         if (attrName === "target-id")
         {
             
-            this.setUpWebSocket(6, 5);
+            this.setUpWebSocket(1, 2);
             this.shadowRoot.querySelector("chat-header").innerHTML = "";
             await this.renderHeader(newValue);
-            const conversations = await this.getConversations(APIUrl + newValue);
+            const Messages = await this.getMessages("chat_12");
+            console.log("messages: ", Messages[0]);
             this.shadowRoot.querySelector(".body").innerHTML = "";
-            await this.renderConversation(conversations);
+            await this.renderConversation(Messages);
             this.shadowRoot.querySelector("chat-footer").webSocket = this.webSocket;
             const body = this.shadowRoot.querySelector(".body");
             body.scrollTop = body.scrollHeight;
@@ -77,31 +80,21 @@ export class ChatRoomComponent extends HTMLElement {
         return true;
     }
 
-    async getConversations(apiurl) {
-        try {
-            const response = await fetch(apiurl);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return await response.json();
-        } catch (error) {
-            return null;
-        }
+    async getMessages(cn) {
+        const response = await getApiData(HOST + "/chat/messages?cn=" + cn);
+        return response;
     }
 
     async setUpWebSocket(sender_id, receiver_id) {
-        let sender = sender_id
-        let receiver = receiver_id
         let room_name;
-        if (sender < receiver)
-            room_name = sender + '_' + receiver
-        else
-            room_name = receiver + '_' + sender
+        if (sender_id < receiver_id)
+                room_name = sender_id.toString() + receiver_id.toString()
+            else
+                room_name = receiver_id.toString() + sender_id.toString()
         
         if (!this.webSocket)
         {
-            let url = `ws://${window.location.hostname}:9000/ws/chat/${this.targetId}/`;
+            let url = `ws://${window.location.hostname}:8000/ws/chat/chat/${room_name}/`;
             console.log("url : ", url);
             this.webSocket = new WebSocket(url)
         }
@@ -121,13 +114,13 @@ export class ChatRoomComponent extends HTMLElement {
         }
     }
     checker;
-    async renderConversation(conversations) {
+    async renderConversation(Messages) {
         const chatBody = this.shadowRoot.querySelector(".body");
         let receiverComponent = document.createElement("receiver-component");
         let senderComponent = document.createElement("sender-component");
-        for (let index = 0; index < conversations.length; index++) {
-            const element = conversations[index];
-            if (element.sender === 6)
+        for (let index = 0; index < Messages.length; index++) {
+            const element = Messages[index];
+            if (element.user == 3)
             {
                 const receiverMessageContainer = document.createElement("receiver-message-container");
                 receiverMessageContainer.textContent = element.content;
@@ -155,7 +148,7 @@ export class ChatRoomComponent extends HTMLElement {
                 senderComponent.appendChild(senderMessageContainer);
                 chatBody.appendChild(senderComponent);
             }
-            this.checker = conversations[index].sender;
+            this.checker = Messages[index].sender;
         }
 
     }
@@ -163,10 +156,12 @@ export class ChatRoomComponent extends HTMLElement {
     async connectedCallback() {
         if (!this.targetId)
             return ;
-        this.setUpWebSocket(6, 5);
+        console.log("this.targetId: ", this.targetId);
+        this.setUpWebSocket(1, 2);
+
         await this.renderHeader(this.targetId);
-        const conversations = await this.getConversations(APIUrl + this.targetId);
-        await this.renderConversation(conversations);
+        const Messages = await this.getMessages("chat_12");
+        this.renderConversation(Messages);
         this.shadowRoot.querySelector("chat-footer").webSocket = this.webSocket;
         const body = this.shadowRoot.querySelector(".body");
         body.scrollTop = body.scrollHeight;
