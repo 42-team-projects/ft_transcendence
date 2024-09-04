@@ -1,5 +1,6 @@
-import { apiUrl, playerId } from "../../../Utils/GlobalVariables.js";
+import { apiUrl } from "../../../Utils/GlobalVariables.js";
 import { hashPassword } from "../../../Utils/Hasher.js";
+import { playerId } from "../../../root/Router.js";
 
 
 export async function get_tournaments_by_player_id() {

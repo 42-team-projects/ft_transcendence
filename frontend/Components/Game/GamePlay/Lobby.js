@@ -1,7 +1,7 @@
 import { PlayerBorder } from "./PlayerBorder.js";
 import { GameHeader } from "./GameHeader.js"
 import { GameTable } from "./GameTable.js"
-import { ip , playerId, HOST } from "../../../Utils/GlobalVariables.js";
+import { ip , HOST } from "../../../Utils/GlobalVariables.js";
 import { getApiData } from "../../../Utils/APIManager.js";
 import { PROFILE_API_URL } from "../../../Utils/APIUrls.js";
 
@@ -94,8 +94,9 @@ lobby.innerHTML =  /* html */ `
 
 export class Lobby extends HTMLElement{
 
-	constructor(opponentId){
+	constructor(opponentId, time){
 		super();
+		this.socket = null;
 		this.time = 0;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
@@ -104,8 +105,11 @@ export class Lobby extends HTMLElement{
 		setTimeout(() => {
 			document.body.classList.toggle('body-game-shrink', true);   
 		}, 1000);
-		if(opponentId)
+		if(opponentId && time)
+		{
+			this.time = time;
 			this.OnlineGame(opponentId);
+		}
 		else{
 			this.headerAnimation();
 			this.sidebarAnimation();
@@ -222,13 +226,22 @@ export class Lobby extends HTMLElement{
 		p_img.src = userInfo.picture;
 		p_h1.textContent = userInfo.username;
 		if(!opponentId)
-		await this.setSearchImages();
+			await this.setSearchImages();
 		this.appendChild(OnlineGameTemplate.content.cloneNode(true));
 		if (!opponentId)
 			await this.openSocket(userInfo.id);
 		else {
 			await this.setPlayer(opponentId);
-			this.gameMode();
+			let room_group_name;
+			if(opponentId > userInfo.id)
+				room_group_name = 'game_' + userInfo.id + '_' + opponentId;
+			else
+				room_group_name = 'game_' + opponentId + '_' + userInfo.id;
+			setInterval(() => {
+				this.time -= 1;
+				this.updateTimer();
+			}, 1000);
+			this.gameMode(room_group_name);
 		}
 		root.innerHTML = ``;
 		root.appendChild(this);
@@ -273,6 +286,13 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
+	playeGame(room_group_name){
+		const header = new GameHeader();
+		const game = new GameTable(room_group_name);
+		document.body.innerHTML = ``;
+		document.body.appendChild(header);
+		document.body.appendChild(game);
+	}
 	gameMode(room_group_name){
 		// if (this.socket)
 		// 	this.socket.send(JSON.stringify({'message': 'start'}));
@@ -285,16 +305,16 @@ export class Lobby extends HTMLElement{
 				this.createTimer();
 				const countdown = setInterval(()=>{
 					if(this.time <= 0){
-						this.socket.close();
-						this.socket.onclose = (e) => {
-							console.log('socket close');
-							const header = new GameHeader();
-							const game = new GameTable(room_group_name);
-							document.body.innerHTML = ``;
-							document.body.appendChild(header);
-							document.body.appendChild(game);
-							clearInterval(countdown)
-						};
+						if(this.socket){
+							this.socket.close();
+							this.socket.onclose = (e) => {
+								console.log('socket close');
+								this.playeGame(room_group_name);
+							};
+						}
+						else
+							this.playeGame(room_group_name);
+						clearInterval(countdown)
 					}
 				},1000)
 			}
@@ -311,7 +331,7 @@ export class Lobby extends HTMLElement{
 	}
 	updateTimer(){
 		const h1 = this.shadowRoot.querySelector('.descounter h1');
-		// h1.textContent = this.time;
+		h1.textContent = this.time;
 	}
 }
 
