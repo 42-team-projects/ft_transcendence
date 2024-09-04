@@ -1,13 +1,15 @@
 from rest_framework import serializers
 from .models import *
 from accounts.models import User
+import json 
+
 # from Player.Serializers.PlayerSerializer import UserSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username']
+        fields = ['id', 'avatar', 'username', 'is_active']
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,13 +23,17 @@ class ConversationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Conversation
-        fields = ['id', 'reciever', 'last_message', 'created_at']
+        fields = ['id', 'title', 'reciever', 'last_message', 'created_at']
     
     def get_last_message(self, obj):
         conversation = Conversation.objects.filter(title=obj.title).first()
         messages = Message.objects.filter(conversation=conversation.id)
         messages_serializer = MessageSerializer(messages, many=True)
-        return (messages_serializer.data[-1])
+        message = ""
+        if messages_serializer.data:
+            message = messages_serializer.data[-1]
+        return (message)
+        
     
     # def get_receiver(self, obj):
     #     # Fetch all users associated with the conversation
@@ -47,13 +53,13 @@ class ConversationSerializer(serializers.ModelSerializer):
     #     return None  # If no receiver is found
     
     
-    def get_reciever(self, obj):
+    def get_receiver(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             current_user = request.user
             for user in obj.participants.all():
                 if user.id != current_user.id:
-                    return user.username
+                    return UserSerializer(user).data
         return None
 
         

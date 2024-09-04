@@ -1,6 +1,8 @@
 import { fetchData } from "../../../Utils/Fetcher.js";
 import { ChatItemComponent } from "./ChatItemComponent.js";
 import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
+import { getApiData } from "../../../Utils/APIManager.js";
+import { HOST } from "../../../Utils/GlobalVariables.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
@@ -26,30 +28,22 @@ export class ChatListComponent extends HTMLElement {
         const chatItem = document.createElement("chat-item");
         chatItem.id = item.conversation_name;
     
-        try {
-            // const userInfo = await fetchData("http://localhost:8080/api/v1/users/" + item.id);
-            // if (userInfo)
-            // {
-                chatItem.userName = item.conversation_name;
-                chatItem.profileImage = "../assets/images/profile/tanjuro.jpg";
-                chatItem.active = true;
-                // if (userInfo.stats)
-                    chatItem.league = "gold";
-            // }
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-        }
+        chatItem.userName = item.reciever.username;
+        chatItem.profileImage = HOST + item.reciever.avatar;
+        chatItem.active = item.reciever.is_active;
+        // if (userInfo.stats)
+            chatItem.league = "gold";
+        // }
+        
     
         chatItem.backgroundColor = "transparent";
         chatItem.opacity = 0.6;
-        const data = await fetchData("http://127.0.0.1:9000/chat/last_message/" + item.conversation_name);
-        if (data)
-        {
-            if (data.content.length > 100)
-                chatItem.lastMessage = data.content.slice(0, 99) + "...";
+        if (item.last_message) {
+            if (item.last_message.content.length > 100)
+                chatItem.lastMessage = item.last_message.content.slice(0, 99) + "...";
             else
-                chatItem.lastMessage = data.content;
-            chatItem.time = data.sent_at.split("-")[0];
+                chatItem.lastMessage = item.last_message.content;
+            chatItem.time = item.last_message.sent_at.split("-")[0];
         }
         chatItem.numberOfMessage = "2";
         return chatItem;
@@ -59,7 +53,7 @@ export class ChatListComponent extends HTMLElement {
         const list = this.shadowRoot.querySelector(".list-item");
     
         try {
-            const data = await fetchData("http://127.0.0.1:9000/chat/conversations/");
+            const data = await getApiData("http://127.0.0.1:8000/chat/conversation_list/");
             if (data) {
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item);
@@ -118,7 +112,6 @@ const cssContent = /*css*/`
         flex-direction: column;
         height: calc(100% - 100px);
         overflow-y: scroll;
-
     }
 
     .list-item::-webkit-scrollbar {
