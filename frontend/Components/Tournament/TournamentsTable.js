@@ -1,5 +1,6 @@
 import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { apiUrl, playerId } from "../../Utils/GlobalVariables.js";
+import { apiUrl } from "../../Utils/GlobalVariables.js";
+import { playerId } from "../../root/Router.js";
 import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "./configs/TournamentAPIConfigs.js";
 import { CustomButton } from "./CustomButton.js";
 import { JoinTournament } from "./JoinTournament.js";
@@ -33,6 +34,7 @@ export class TournamentsTable extends HTMLElement {
 
     async connectedCallback() {
         const tournamentsAPIData = await get_tournaments_by_player_id();
+        // const tournamentsAPIData =  null;
         if (!tournamentsAPIData)
             return;
         const mainContainer = this.querySelector(".mainContainer");
@@ -63,7 +65,7 @@ export class TournamentsTable extends HTMLElement {
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
-                        initWebSocket(tournamentResponse);
+                        await initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
