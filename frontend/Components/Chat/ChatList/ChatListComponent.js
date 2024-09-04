@@ -3,12 +3,13 @@ import { ChatItemComponent } from "./ChatItemComponent.js";
 import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
 import { getApiData } from "../../../Utils/APIManager.js";
 import { HOST } from "../../../Utils/APIUrls.js";
+import { renderChatBody, renderChatFooter, renderChatHeader, setUpWebSocket } from "../configs/ChatConfigs.js";
+import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
         super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = `
+        this.innerHTML = `
             <style>
                 ${cssContent}
             </style>
@@ -16,7 +17,6 @@ export class ChatListComponent extends HTMLElement {
                 <div class="top-box"></div>
                 <div class="list-item"></div>
             </div>
-            <chat-room></chat-room>
         `;
     }
 
@@ -26,8 +26,7 @@ export class ChatListComponent extends HTMLElement {
     
     async createChatItem(item) {
         const chatItem = document.createElement("chat-item");
-        chatItem.id = item.conversation_name;
-    
+        chatItem.id = "_" + item.reciever.id;
         chatItem.userName = item.reciever.username;
         chatItem.profileImage = HOST + item.reciever.avatar;
         chatItem.active = item.reciever.is_active;
@@ -35,7 +34,6 @@ export class ChatListComponent extends HTMLElement {
             chatItem.league = "gold";
         // }
         
-    
         chatItem.backgroundColor = "transparent";
         chatItem.opacity = 0.6;
         if (item.last_message) {
@@ -46,11 +44,32 @@ export class ChatListComponent extends HTMLElement {
             chatItem.time = item.last_message.sent_at.split("-")[0];
         }
         chatItem.numberOfMessage = "2";
+        chatItem.addEventListener("click", async (e) => {
+            const selectItemcomponent = this.querySelector("#_" + this.selectItem);
+            if (selectItemcomponent)
+            {
+                selectItemcomponent.backgroundColor = "transparent";
+                selectItemcomponent.opacity = 0.6;
+            }
+            chatItem.backgroundColor = "#051d31";
+            chatItem.opacity = 1;
+            this.selectItem = chatItem.id;
+            const chatRoom = this.parentElement.querySelector("chat-room .container");
+            chatRoom.innerHTML = `
+                <slot class="header" name="header"></slot>
+                <div class="body"></div>
+                <slot class="footer" name="footer"></slot>
+            `;
+            const currentUserId = await getCurrentUserId();
+            const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), item.reciever.id, currentUserId);
+            await renderChatHeader(chatRoom, item);
+            await renderChatBody(chatRoom, "chat_12");
+            await renderChatFooter(chatRoom, webSocket);
+        });
         return chatItem;
     }
-    
     async connectedCallback() {
-        const list = this.shadowRoot.querySelector(".list-item");
+        const list = this.querySelector(".list-item");
     
         try {
             const data = await getApiData("http://127.0.0.1:8000/chat/conversation_list/");
@@ -59,28 +78,10 @@ export class ChatListComponent extends HTMLElement {
                     const chatItem = await this.createChatItem(item);
                     list.appendChild(chatItem);
                 }
-                this.eventListener();
             }
         } catch (error) {
             console.error('Error fetching chat data:', error);
         }
-    }
-    eventListener() {
-        const chatItems = this.shadowRoot.querySelectorAll("chat-item");
-        chatItems.forEach(item => {
-            item.addEventListener("click", (e) => {
-                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
-                if (selectItemcomponent)
-                {
-                    selectItemcomponent.backgroundColor = "transparent";
-                    selectItemcomponent.opacity = 0.6;
-                }
-                item.backgroundColor = "#051d31";
-                item.opacity = 1;
-                this.selectItem = item.id;
-                this.shadowRoot.querySelector("chat-room").targetId = item.id;
-            });
-        });
     }
 }
 
@@ -88,11 +89,11 @@ customElements.define("chat-list", ChatListComponent);
 
 const cssContent = /*css*/`
 
-    :host {
+    chat-list {
         font-family: 'Sansation bold';
         width: 100%;
         height: 100%;
-        flex: 10;
+        flex: 1.6;
         display: flex;
     }
     
