@@ -1,6 +1,7 @@
 import { displayNotification } from "../Notification/NotificationUtils.js";
 import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { apiUrl, playerId, wsUrl } from "../../Utils/GlobalVariables.js";
+import { apiUrl, wsUrl } from "../../Utils/GlobalVariables.js";
+import { playerId } from "../../root/Router.js";
 import { hashPassword } from "../../Utils/Hasher.js";
 import { closeWebSocket, initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
@@ -51,10 +52,10 @@ export class JoinTournament extends HTMLElement {
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
             displayNotification("<message-notification></message-notification>");
-            // if (joinButton.className == "lock-button") 
-            //     this.joinToPrivateTournament(tournamentData);
-            // else
-            //     await this.addPlayerToTournament(tournamentData);
+            if (joinButton.className == "lock-button") 
+                this.joinToPrivateTournament(tournamentData);
+            else
+                await this.addPlayerToTournament(tournamentData);
         });
         return tournamentItem;
     }

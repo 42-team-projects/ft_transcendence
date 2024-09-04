@@ -1,3 +1,7 @@
+import { getApiData } from "../../Utils/APIManager.js";
+import { PROFILE_API_URL } from "../../Utils/APIUrls.js";
+import { createWebSocketsForTournaments } from "../Utils/TournamentWebSocketManager.js";
+export let playerId;
 export const fetchWithToken = async (url, options) => {
     const response = await fetch(url, options);
 
@@ -86,7 +90,7 @@ export class Router {
         this.randred = false;
         console.log("remove")
     }
-    changeStyle(access_token, path){
+    async changeStyle(access_token, path){
         console.log("hiii", access_token)
         let matchedRoute = this.accessed_routes.find((route) => route.path === path);
         if(access_token){
@@ -95,6 +99,12 @@ export class Router {
             console.log(this.randred)
             if(this.randred === false)
                 this.randring(access_token, matchedRoute);
+            if (!playerId)
+            {
+                const data = await getApiData(PROFILE_API_URL);
+                playerId = data.id;
+            }
+            const res = await createWebSocketsForTournaments();
             this.rootContent.innerHTML = "";
             this.rootContent.appendChild(document.createElement(matchedRoute.view));
             this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{

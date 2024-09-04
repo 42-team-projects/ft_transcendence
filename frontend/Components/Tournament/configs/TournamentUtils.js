@@ -1,6 +1,7 @@
 import { convertTimeStampIntoDate } from "../../../Utils/Convertor.js";
 import { calculateTimeDifferents } from "../../../Utils/DateUtils.js";
-import { apiUrl, playerId, wsUrl } from "../../../Utils/GlobalVariables.js";
+import { apiUrl, wsUrl } from "../../../Utils/GlobalVariables.js";
+import { playerId } from "../../../root/Router.js";
 import { closeWebSocket } from "../../../Utils/TournamentWebSocketManager.js";
 import { get_tournament_by_id, player_leave_tournament } from "./TournamentAPIConfigs.js";
 
