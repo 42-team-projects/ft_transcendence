@@ -8,6 +8,8 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 
 # Create your views here.
@@ -48,10 +50,12 @@ def get_tournament_by_id(request, tournamentId):
 
 
 @csrf_exempt
-def player_join_tournament(request, tournamentId, playerId):
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def player_join_tournament(request, tournamentId):
     if request.method == 'POST':
         try:
-            player = Player.objects.get(id=playerId)
+            player = Player.objects.get(user=request.user)
             tournament = Tournament.objects.get(id=tournamentId)
             if not tournament.can_join:
                 return JsonResponse({'statusText': 'Tournament is not open for new players'}, status=400)
@@ -104,10 +108,11 @@ def SetStartDate(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
-
-def get_tournaments_by_player_id(request, player_id):
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def get_tournaments_by_player_id(request):
     try:
-        player = Player.objects.get(id=player_id)
+        player = Player.objects.get(user=request.user)
     except Player.DoesNotExist:
         return JsonResponse({'error': 'Player not found'})
     
@@ -135,8 +140,11 @@ def get_available_tournaments(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
+# @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 @csrf_exempt
-def create_tournament(request, player_id):
+def create_tournament(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         print(data)
@@ -162,7 +170,7 @@ def create_tournament(request, player_id):
         if serializer.is_valid():
             tournament = serializer.save()
             print("\nheeere\n")
-            player = Player.objects.get(id=player_id)
+            player = Player.objects.get(user=request.user)
             tournament.players.add(player)
             tournament.owner = player
             tournament.save()
@@ -192,10 +200,12 @@ def create_tournament(request, player_id):
 
 
 @csrf_exempt
-def player_leave_tournament(request, tournamentId, playerId):
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def player_leave_tournament(request, tournamentId):
     if request.method == 'POST':
         try:
-            player = Player.objects.get(id=playerId)
+            player = Player.objects.get(user=request.user)
             tournament = Tournament.objects.get(id=tournamentId)
             # if not tournament.can_join:
             #     return JsonResponse({'statusText': 'Tournament is not open for new players'}, status=400)
@@ -218,12 +228,12 @@ def player_leave_tournament(request, tournamentId, playerId):
             return JsonResponse({'statusText': 'Tournament not found'}, status=404)
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
 
-def get_tournament_by_id(request, id):
-    try:
-        tournament = Tournament.objects.get(id=id)
-    except Tournament.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
-    if request.method == 'GET':
-        serializer = TournamentSerializer(tournament)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+# def get_tournament_by_id(request, id):
+#     try:
+#         tournament = Tournament.objects.get(id=id)
+#     except Tournament.DoesNotExist:
+#         return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
+#     if request.method == 'GET':
+#         serializer = TournamentSerializer(tournament)
+#         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+#     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

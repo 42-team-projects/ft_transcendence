@@ -1,4 +1,6 @@
+import { getCurrentPlayerData } from "../../Utils/GlobalVariables.js";
 import { ChatListComponent } from "./ChatList/ChatListComponent.js";
+import { ChatRoomComponent } from "./ChatRoom/ChatRoomComponent.js";
 import { FriendsListComponent } from "./Friends/FriendsListComponent.js";
 
 export class ChatComponent extends HTMLElement {
@@ -16,12 +18,14 @@ export class ChatComponent extends HTMLElement {
                     </div>
                 </page-name>
                 <chat-list></chat-list>
+                <chat-room></chat-room>
                 <friends-list></friends-list>
             </div>
         `;
     }
 
-    connectedCallback() {
+    async connectedCallback() {
+        await getCurrentPlayerData();
     }
 }
 
