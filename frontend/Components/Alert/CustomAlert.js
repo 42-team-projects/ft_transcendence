@@ -1,4 +1,3 @@
-import { playerId } from "../../Utils/GlobalVariables.js";
 
 export class CustomAlert extends HTMLElement {
     constructor() {

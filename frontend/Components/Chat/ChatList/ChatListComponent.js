@@ -2,7 +2,7 @@ import { fetchData } from "../../../Utils/Fetcher.js";
 import { ChatItemComponent } from "./ChatItemComponent.js";
 import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
 import { getApiData } from "../../../Utils/APIManager.js";
-import { HOST } from "../../../Utils/GlobalVariables.js";
+import { HOST } from "../../../Utils/APIUrls.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
