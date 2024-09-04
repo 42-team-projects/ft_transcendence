@@ -1,6 +1,5 @@
 import { createApiData, getApiData, updateApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL } from "../../../Utils/APIUrls.js";
-import { HOST } from "../../../Utils/GlobalVariables.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL, HOST } from "../../../Utils/APIUrls.js";
 import { getLeagueColor } from "../../../Utils/LeaguesData.js";
 import { fetchWithToken } from "../../../root/fetchWithToken.js";
 import { CustomInputField } from "../../CustomElements/CustomInputField.js";

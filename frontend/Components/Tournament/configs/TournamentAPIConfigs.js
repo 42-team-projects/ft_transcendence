@@ -1,5 +1,5 @@
 import { createApiData, getApiData } from "../../../Utils/APIManager.js";
-import { apiUrl, playerId } from "../../../Utils/GlobalVariables.js";
+import { apiUrl } from "../../../Utils/GlobalVariables.js";
 import { hashPassword } from "../../../Utils/Hasher.js";
 import { fetchWithToken } from "../../../root/fetchWithToken.js";
 

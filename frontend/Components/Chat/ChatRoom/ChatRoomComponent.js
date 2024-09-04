@@ -3,7 +3,7 @@ import { ChatHeaderComponent } from "./ChatHeaderComponent.js";
 import { ChatFooterComponent } from "./ChatFooterComponent.js";
 import { SenderComponent } from "./SenderComponent.js";
 import { ReceiverComponent } from "./ReceiverComponent.js";
-import { HOST } from "../../../Utils/GlobalVariables.js";
+import { HOST } from "../../../Utils/APIUrls.js";
 import { getApiData } from "../../../Utils/APIManager.js";
 
 // let APIUrl = "http://localhost:8080/api/v1/Messages/sender=2&receiver="
