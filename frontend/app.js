@@ -58,15 +58,12 @@ import EmailConf from "./Components/User/EmailConf.js";
 import OAuth from "./Components/User/Oauth.js";
 import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js"
 
-createWebSocketsForTournaments();
-
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);
 customElements.define("oauth-callback", OAuth);
 
 document.addEventListener('DOMContentLoaded', async (event) => {
-    await getCurrentPlayerData();
     window.addEventListener("popstate", () =>
         router.handleRoute(window.location.pathname)
     );

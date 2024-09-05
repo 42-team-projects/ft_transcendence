@@ -1,7 +1,7 @@
 import { PlayerBorder } from "./PlayerBorder.js";
 import { GameHeader } from "./GameHeader.js"
 import { GameTable } from "./GameTable.js"
-import { ip } from "../../../Utils/GlobalVariables.js";
+import { getCurrentPlayerData, ip } from "../../../Utils/GlobalVariables.js";
 import { getApiData } from "../../../Utils/APIManager.js";
 import { PROFILE_API_URL, HOST } from "../../../Utils/APIUrls.js";
 
@@ -108,6 +108,7 @@ export class Lobby extends HTMLElement{
 		if(opponentId && time)
 		{
 			this.time = time;
+			console.log("im here")
 			this.OnlineGame(opponentId);
 		}
 		else{
@@ -215,7 +216,7 @@ export class Lobby extends HTMLElement{
 	{
 		//get user id from local storage
 		// const user_data = JSON.parse(localStorage.getItem('user_data'));
-		const user_data = await getApiData(PROFILE_API_URL);
+		const user_data = await getCurrentPlayerData();
 		userInfo.id = user_data.id;
 		userInfo.picture = HOST + user_data.user.avatar;
 		console.log('user_data:', userInfo.picture);
