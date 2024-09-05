@@ -1,3 +1,4 @@
+import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
 
 let ws;
 
@@ -17,14 +18,15 @@ export class ChatFooterComponent extends HTMLElement {
         `;
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         const sendButton = this.shadowRoot.querySelector("img");
         const inputArea = this.shadowRoot.querySelector("input");
+        const currentUserId = await getCurrentUserId();
         sendButton.addEventListener("click", () => {
             const message = inputArea.value.trim();
             if (message.length)
             {
-                this.chat(1, 2, message);
+                this.chat(currentUserId, this.targetId, message);
                 console.log("the message has been successfully send !!");
             }
             inputArea.value = '';
@@ -32,12 +34,12 @@ export class ChatFooterComponent extends HTMLElement {
     }
 
     disconnectedCallback() {
-        // if (ws)
-        //     ws.close();
+        if (ws)
+            ws.close();
     }
 
     set targetId(val) {this.setAttribute("target-id", val); }
-    get targetId() { return this,this.getAttribute("val"); }
+    get targetId() { return this.getAttribute("target-id"); }
 
     // webSocket;
     set webSocket(val) { ws = val;}
@@ -45,9 +47,6 @@ export class ChatFooterComponent extends HTMLElement {
 
 
     async chat(sender_id, receiver_id, message) {
-        console.log("webSocket webSocket : ", ws);
-        console.log("message : ", message);
-
         if(ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({
                 'message' : message,

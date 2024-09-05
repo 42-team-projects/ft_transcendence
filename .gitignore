@@ -36,6 +36,7 @@ node_modules
 __pycache__/
 
 *backend/media/avatars/
+*backend/media/cover/
 
 # find . -type d -name "__pycache__" -exec rm -r {} \+
 # find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
