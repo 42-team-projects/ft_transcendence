@@ -26,7 +26,7 @@ export class ChatListComponent extends HTMLElement {
     
     async createChatItem(item) {
         const chatItem = document.createElement("chat-item");
-        chatItem.id = "_" + item.reciever.id;
+        chatItem.id = "item_" + item.reciever.id;
         chatItem.userName = item.reciever.username;
         chatItem.profileImage = HOST + item.reciever.avatar;
         chatItem.active = item.reciever.is_active;
@@ -45,29 +45,33 @@ export class ChatListComponent extends HTMLElement {
         }
         chatItem.numberOfMessage = "2";
         chatItem.addEventListener("click", async (e) => {
-            const selectItemcomponent = this.querySelector("#_" + this.selectItem);
-            if (selectItemcomponent)
-            {
-                selectItemcomponent.backgroundColor = "transparent";
-                selectItemcomponent.opacity = 0.6;
-            }
+            const selectItemcomponent = this.querySelectorAll(".list-item #" + this.selectItem);
+            Array.from(selectItemcomponent).forEach(elem => {
+                elem.backgroundColor = "transparent";
+                elem.opacity = 0.6;
+            })
             chatItem.backgroundColor = "#051d31";
             chatItem.opacity = 1;
             this.selectItem = chatItem.id;
-            const chatRoom = this.parentElement.querySelector("chat-room .container");
-            chatRoom.innerHTML = `
-                <slot class="header" name="header"></slot>
-                <div class="body"></div>
-                <slot class="footer" name="footer"></slot>
-            `;
-            const currentUserId = await getCurrentUserId();
-            const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), item.reciever.id, currentUserId);
-            await renderChatHeader(chatRoom, item);
-            await renderChatBody(chatRoom, "chat_12");
-            await renderChatFooter(chatRoom, webSocket);
+            this.renderChatRoom(item);
         });
         return chatItem;
     }
+
+    async renderChatRoom(item) {
+        const chatRoom = this.parentElement.querySelector("chat-room .container");
+        chatRoom.innerHTML = `
+            <slot class="header" name="header"></slot>
+            <div class="body"></div>
+            <slot class="footer" name="footer"></slot>
+        `;
+        const currentUserId = await getCurrentUserId();
+        const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), item.reciever.id, currentUserId);
+        renderChatHeader(chatRoom, item);
+        await renderChatBody(chatRoom, "chat_12");
+        renderChatFooter(chatRoom, webSocket);
+    }
+
     async connectedCallback() {
         const list = this.querySelector(".list-item");
     
