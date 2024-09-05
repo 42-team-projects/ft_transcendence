@@ -8,7 +8,7 @@ ignore
 **/.DS_Store
 
 #Ignore all docker environments
-**/.env
+# **/.env
 
 #Ignore all virtual environment
 **/.venv
@@ -27,3 +27,9 @@ node_modules
 *.pot
 *.pyc
 __pycache__/
+
+*backend/media/avatars/
+
+# find . -type d -name "__pycache__" -exec rm -r {} \+
+# find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+# find . -path "*/migrations/*.pyc"  -delete
