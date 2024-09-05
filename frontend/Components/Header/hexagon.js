@@ -20,6 +20,10 @@ HexagonTemplate.innerHTML = /*html*/`
             background : linear-gradient(48deg, #09213af2 25%, #093967de 59%,#09213af2 92%);
             clip-path: polygon(13% 30%, 50% 6%, 87% 30%, 87% 70%, 50% 94%, 13% 70%);
         }
+        ::slotted(*) {
+            width: 100%;
+            height: 100%;
+        }
     </style>
     <div class="child">
         <slot name="content"></slot>

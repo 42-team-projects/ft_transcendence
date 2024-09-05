@@ -167,7 +167,7 @@ export function useWebsocket(data) {
         if(data.number_of_players == data.players.length || !data.can_join)
         {
             await update_start_date(data);
-            tournamentSocket.send(JSON.stringify({'type': 'play_cancel','message': 'Tournament is starting in 2 minutes'}));
+            tournamentSocket.send(JSON.stringify({'type': 'play_cancel', 'message': 'Tournament is starting in 2 minutes'}));
         }
     };
 
