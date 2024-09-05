@@ -1,4 +1,4 @@
-import { playerId } from "../../Utils/GlobalVariables.js";
+import { playerId } from "../../root/Router.js";
 
 export class CustomAlert extends HTMLElement {
     constructor() {
