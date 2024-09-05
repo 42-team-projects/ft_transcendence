@@ -9,8 +9,7 @@ import { CustomTable } from "./TableComponents/CustomTable.js";
 import { StatsContainer } from "./StatsComponents/StatsContainer.js";
 import { CustomGraph } from "./GraphComponent/CustomGraph.js";
 import { getApiData } from "../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../Utils/APIUrls.js";
-import { HOST } from "../../Utils/GlobalVariables.js";
+import { PROFILE_API_URL, HOST } from "../../Utils/APIUrls.js";
 
 export class ProfileComponent extends HTMLElement {
     APIData;

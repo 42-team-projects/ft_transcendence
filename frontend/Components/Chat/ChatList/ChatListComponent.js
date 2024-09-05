@@ -1,12 +1,16 @@
 import { fetchData } from "../../../Utils/Fetcher.js";
 import { ChatItemComponent } from "./ChatItemComponent.js";
 import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
+import { getApiData } from "../../../Utils/APIManager.js";
+import { HOST } from "../../../Utils/APIUrls.js";
+import { renderChatBody, renderChatFooter, renderChatHeader } from "../configs/ChatConfigs.js";
+import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
+import { setUpWebSocket } from "../configs/ChatWebSocketManager.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
         super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = `
+        this.innerHTML = `
             <style>
                 ${cssContent}
             </style>
@@ -14,7 +18,6 @@ export class ChatListComponent extends HTMLElement {
                 <div class="top-box"></div>
                 <div class="list-item"></div>
             </div>
-            <chat-room></chat-room>
         `;
     }
 
@@ -24,69 +27,66 @@ export class ChatListComponent extends HTMLElement {
     
     async createChatItem(item) {
         const chatItem = document.createElement("chat-item");
-        chatItem.id = item.conversation_name;
-    
-        try {
-            // const userInfo = await fetchData("http://localhost:8080/api/v1/users/" + item.id);
-            // if (userInfo)
-            // {
-                chatItem.userName = item.conversation_name;
-                chatItem.profileImage = "../assets/images/profile/tanjuro.jpg";
-                chatItem.active = true;
-                // if (userInfo.stats)
-                    chatItem.league = "gold";
-            // }
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-        }
-    
+        chatItem.id = "item_" + item.reciever.id;
+        chatItem.userName = item.reciever.username;
+        chatItem.profileImage = HOST + item.reciever.avatar;
+        chatItem.active = item.reciever.is_active;
+        // if (userInfo.stats)
+            chatItem.league = "gold";
+        // }
+        
         chatItem.backgroundColor = "transparent";
         chatItem.opacity = 0.6;
-        const data = await fetchData("http://127.0.0.1:9000/chat/last_message/" + item.conversation_name);
-        if (data)
-        {
-            if (data.content.length > 100)
-                chatItem.lastMessage = data.content.slice(0, 99) + "...";
+        if (item.last_message) {
+            if (item.last_message.content.length > 100)
+                chatItem.lastMessage = item.last_message.content.slice(0, 99) + "...";
             else
-                chatItem.lastMessage = data.content;
-            chatItem.time = data.sent_at.split("-")[0];
+                chatItem.lastMessage = item.last_message.content;
+            chatItem.time = item.last_message.sent_at.split("-")[0];
         }
         chatItem.numberOfMessage = "2";
+        chatItem.addEventListener("click", async (e) => {
+            const selectItemcomponent = this.querySelectorAll(".list-item #" + this.selectItem);
+            Array.from(selectItemcomponent).forEach(elem => {
+                elem.backgroundColor = "transparent";
+                elem.opacity = 0.6;
+            })
+            chatItem.backgroundColor = "#051d31";
+            chatItem.opacity = 1;
+            this.selectItem = chatItem.id;
+            this.renderChatRoom(item);
+        });
         return chatItem;
     }
-    
+
+    async renderChatRoom(item) {
+        const chatRoom = this.parentElement.querySelector("chat-room .container");
+        chatRoom.innerHTML = `
+            <slot class="header" name="header"></slot>
+            <div class="body"></div>
+            <slot class="footer" name="footer"></slot>
+        `;
+        const currentUserId = await getCurrentUserId();
+        const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), item.reciever.id, currentUserId);
+        // renderChatHeader(chatRoom, item);
+        // await renderChatBody(chatRoom, "chat_12");
+        // renderChatFooter(chatRoom, webSocket);
+    }
+
     async connectedCallback() {
-        const list = this.shadowRoot.querySelector(".list-item");
+        const list = this.querySelector(".list-item");
     
         try {
-            const data = await fetchData("http://127.0.0.1:9000/chat/conversations/");
+            const data = await getApiData("http://127.0.0.1:8000/chat/conversation_list/");
             if (data) {
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item);
                     list.appendChild(chatItem);
                 }
-                this.eventListener();
             }
         } catch (error) {
             console.error('Error fetching chat data:', error);
         }
-    }
-    eventListener() {
-        const chatItems = this.shadowRoot.querySelectorAll("chat-item");
-        chatItems.forEach(item => {
-            item.addEventListener("click", (e) => {
-                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
-                if (selectItemcomponent)
-                {
-                    selectItemcomponent.backgroundColor = "transparent";
-                    selectItemcomponent.opacity = 0.6;
-                }
-                item.backgroundColor = "#051d31";
-                item.opacity = 1;
-                this.selectItem = item.id;
-                this.shadowRoot.querySelector("chat-room").targetId = item.id;
-            });
-        });
     }
 }
 
@@ -94,11 +94,11 @@ customElements.define("chat-list", ChatListComponent);
 
 const cssContent = /*css*/`
 
-    :host {
+    chat-list {
         font-family: 'Sansation bold';
         width: 100%;
         height: 100%;
-        flex: 10;
+        flex: 1.6;
         display: flex;
     }
     
@@ -118,7 +118,6 @@ const cssContent = /*css*/`
         flex-direction: column;
         height: calc(100% - 100px);
         overflow-y: scroll;
-
     }
 
     .list-item::-webkit-scrollbar {
