@@ -37,9 +37,6 @@ export class ChatRoomComponent extends HTMLElement {
         if (!this.targetUser)
             return ;
         console.log("this.dataset.userData: ", this.dataset.userData);
-        // this.setUpWebSocket(1, 2);
-
-
     }
 
     disconnectedCallback() {
