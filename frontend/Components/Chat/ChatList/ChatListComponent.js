@@ -38,8 +38,8 @@ export class ChatListComponent extends HTMLElement {
         chatItem.backgroundColor = "transparent";
         chatItem.opacity = 0.6;
         if (item.last_message) {
-            if (item.last_message.content.length > 100)
-                chatItem.lastMessage = item.last_message.content.slice(0, 99) + "...";
+            if (item.last_message.content.length > 60)
+                chatItem.lastMessage = item.last_message.content.slice(0, 60) + "...";
             else
                 chatItem.lastMessage = item.last_message.content;
             chatItem.time = item.last_message.sent_at.split("-")[0];
@@ -67,10 +67,20 @@ export class ChatListComponent extends HTMLElement {
             <slot class="footer" name="footer"></slot>
         `;
         const currentUserId = await getCurrentUserId();
-        const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), item.reciever.id, currentUserId);
-        // renderChatHeader(chatRoom, item);
-        // await renderChatBody(chatRoom, "chat_12");
-        // renderChatFooter(chatRoom, webSocket);
+        const room_name = this.generateRoomName(currentUserId, item.reciever.id);
+        const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), room_name);
+        renderChatHeader(chatRoom, item);
+        await renderChatBody(chatRoom, ("chat_" + room_name));
+        renderChatFooter(chatRoom, webSocket, item.reciever.id);
+    }
+
+    generateRoomName(currentUserId, receiver_id) {
+        let room_name;
+        if (currentUserId < receiver_id)
+            room_name = currentUserId.toString() + receiver_id.toString();
+        else
+            room_name = receiver_id.toString() + currentUserId.toString();
+        return room_name;
     }
 
     async connectedCallback() {

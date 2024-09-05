@@ -1,5 +1,6 @@
 import { getApiData } from "../../../Utils/APIManager.js";
 import { HOST } from "../../../Utils/APIUrls.js";
+import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
 import { ChatFooterComponent } from "../ChatRoom/ChatFooterComponent.js";
 import { ChatHeaderComponent } from "../ChatRoom/ChatHeaderComponent.js";
 
@@ -18,61 +19,63 @@ export function renderChatHeader(chatContainer, conversationData) {
 }
 
 
-let checker;
 
 export async function renderChatBody(chatContainer, conversationName) {
     const messagesContainer = chatContainer.querySelector(".body");
-    // messagesContainer.scrollTop = messagesContainer.scrollHeight;
     const messages = await getApiData(HOST + "/chat/messages?cn=" + conversationName);
-
     renderConversation(messagesContainer, messages);
     chatContainer.appendChild(messagesContainer);
 }
 
-export function renderConversation(chatBody, messages) {
-    let receiverComponent = document.createElement("receiver-component");
-    let senderComponent = document.createElement("sender-component");
-    for (let index = 0; index < messages.length; index++) {
-        const element = messages[index];
-        console.log("element: ", element);
-        if (element.user == 3)
-        {
-            const receiverMessageContainer = document.createElement("receiver-message-container");
-            receiverMessageContainer.textContent = element.content;
-            if (checker != element.user)
-            {
-                receiverMessageContainer.setAttribute("corner", "");
-                receiverComponent = document.createElement("receiver-component")
-            }
-            receiverMessageContainer.time = element.sent_at.split("-")[0];
-            receiverComponent.league = "gold";
-            receiverComponent.profileImage = "../../assets/images/profile/tanjuro.jpg";
-            receiverComponent.appendChild(receiverMessageContainer);
-            chatBody.appendChild(receiverComponent);
-        }
-        else
-        {
-            const senderMessageContainer = document.createElement("sender-message-container");
-            senderMessageContainer.textContent = element.content;
-            if (checker != element.user)
-            {
-                senderMessageContainer.setAttribute("corner", "");
-                senderComponent = document.createElement("sender-component");
-            }
-            senderMessageContainer.time = element.sent_at.split("-")[0];
-            senderComponent.appendChild(senderMessageContainer);
-            chatBody.appendChild(senderComponent);
-        }
-        checker = messages[index].user;
-    }
+let checker;
 
+
+function renderMessageComponent(chatBody, messageContainer, component, message, checker) {
+    messageContainer.textContent = message.content;
+    if (checker != message.user)
+    {
+        messageContainer.setAttribute("corner", "");
+        component = component.cloneNode();
+    }
+    messageContainer.time = message.sent_at.split("T")[0];
+    component.league = "gold";
+    component.profileImage = "../../assets/images/profile/tanjuro.jpg";
+    component.appendChild(messageContainer);
+    return component;
 }
 
 
-export function renderChatFooter(chatContainer, webSocket) {
+let receiverComponent = document.createElement("receiver-component");
+let senderComponent = document.createElement("sender-component");
+
+export async function renderConversation(chatBody, messages) {
+
+    const currentUserId = await getCurrentUserId();
+    for (let index = 0; index < messages.length; index++) {
+        const message = messages[index];
+        let messageContainer;
+        if (message.user != currentUserId) {
+            messageContainer = document.createElement("receiver-message-container");
+            receiverComponent = renderMessageComponent(chatBody, messageContainer, receiverComponent, message, checker);
+            chatBody.appendChild(receiverComponent);
+
+        }
+        else {
+            messageContainer = document.createElement("sender-message-container");
+            senderComponent = renderMessageComponent(chatBody, messageContainer, senderComponent, message, checker);
+            chatBody.appendChild(senderComponent);
+        }
+        checker = message.user;
+    }
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+
+export function renderChatFooter(chatContainer, webSocket, targetId) {
     const footer = new ChatFooterComponent();
     footer.slot = "footer";
     footer.webSocket = webSocket;
+    footer.targetId = targetId;
     chatContainer.appendChild(footer);
 }
 
