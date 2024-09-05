@@ -1,5 +1,5 @@
 import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { apiUrl, playerId } from "../../Utils/GlobalVariables.js";
+import { apiUrl } from "../../Utils/GlobalVariables.js";
 import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "./configs/TournamentAPIConfigs.js";
 import { CustomButton } from "./CustomButton.js";
 import { JoinTournament } from "./JoinTournament.js";
@@ -30,16 +30,24 @@ export class TournamentsTable extends HTMLElement {
             </div>
         `;
     }
-
+    interval;
     async connectedCallback() {
         const tournamentsAPIData = await get_tournaments_by_player_id();
+        // const tournamentsAPIData =  null;
         if (!tournamentsAPIData)
             return;
         const mainContainer = this.querySelector(".mainContainer");
         createTournamentTable(this, mainContainer, tournamentsAPIData);
+        const tournamentDeadLine = mainContainer.querySelectorAll(".deadLineTime");
+        console.log("tournamentDeadLine: ", tournamentDeadLine);
+        this.interval = setInterval(() => {
+            Array.from(tournamentDeadLine).forEach(tourn => {
+                if (tourn.textContent != "finished")
+                    tourn.textContent = calculateTimeDifferents(tourn.dataset.createdAt);
+            });
+        }, 1000);
 
         const firstButton = this.querySelector("#firstButton");
-        const secondButton = this.querySelector("#secondButton");
         firstButton.addEventListener("click", () => {
             const buttonValue = firstButton.querySelector("h3");
             if (buttonValue.textContent == "CANCEL") {
@@ -52,7 +60,8 @@ export class TournamentsTable extends HTMLElement {
                 this.appendChild(joinTournament);
             }
         });
-        
+
+        const secondButton = this.querySelector("#secondButton");
         secondButton.addEventListener("click", async () => {
             const buttonValue = secondButton.querySelector("h3");
             if (buttonValue.textContent == "GENERATE") {
@@ -60,14 +69,20 @@ export class TournamentsTable extends HTMLElement {
                 if (data) {
                     try {
                         const response = await createTournament(data);
+                        console.log("reponse: ", response);
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
-                        initWebSocket(tournamentResponse);
+                        await initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
+                        console.log("tournamentResponse.players: ", tournamentResponse.players);
+                        
                         rounds.players = tournamentResponse.players;
+
+                        console.log("rounds.players: ", rounds.players);
+
                         this.appendChild(rounds);
                     } catch (error) {
                         console.log(error);
@@ -85,6 +100,7 @@ export class TournamentsTable extends HTMLElement {
 
 
     disconnectedCallback() {
+        clearInterval(this.interval);
     }
 
 }
