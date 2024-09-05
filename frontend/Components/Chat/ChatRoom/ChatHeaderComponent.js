@@ -23,9 +23,9 @@ export class ChatHeaderComponent extends HTMLElement {
                 </div>
             </div>
         </div>
-        <img loading="lazy"   src="./images/Game.svg">
-        <img loading="lazy"   src="./assets/images/profile/account-icon.svg">
-        <img loading="lazy"   src="./assets/images/profile/block-icon.svg">
+        <img loading="lazy" src="./images/Game.svg">
+        <img loading="lazy" src="./assets/images/profile/account-icon.svg">
+        <img loading="lazy" src="./assets/images/profile/block-icon.svg">
     `;
     }
 
@@ -113,11 +113,10 @@ const cssContent = /*css*/ `
     :host {
         font-family: 'Sansation bold';
         display: flex;
-        flex: 1;
         justify-content: space-between;
         align-items: center;
         justify-content: center;
-        padding: 10px 0;
+        padding: 15px 0;
     }
 
     .c-hexagon-content {
