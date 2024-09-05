@@ -1,4 +1,4 @@
-import { HOST } from "./GlobalVariables.js";
+export const HOST = "http://127.0.0.1:8000";
 
 export const PROFILE_API_URL = HOST + "/api/v1/player/";
 

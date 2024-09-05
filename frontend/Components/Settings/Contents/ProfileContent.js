@@ -1,6 +1,5 @@
 import { createApiData, getApiData, updateApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL } from "../../../Utils/APIUrls.js";
-import { HOST } from "../../../Utils/GlobalVariables.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL, HOST } from "../../../Utils/APIUrls.js";
 import { getLeagueColor } from "../../../Utils/LeaguesData.js";
 import { fetchWithToken } from "../../../root/fetchWithToken.js";
 import { CustomInputField } from "../../CustomElements/CustomInputField.js";
@@ -102,22 +101,22 @@ export class ProfileContent extends HTMLElement {
                 await createApiData(PROFILE_API_URL + "links/", JSON.stringify(linksData));
             }
             
-            if (fullNameField.value && fullNameField.value != playerData.fullName)
+            if ((fullNameField.value && fullNameField.value != playerData.fullName) || coverField.file)
             {
-                formData.append("fullName", fullNameField.value);
-                playerData.fullName = fullNameField.value;
-            }
-            if (coverField.file)
-            {
-                formData.append("cover", coverField.file[0]);
-                playerCover = coverField.file[0].name;
-            }
-            if (formData.entries().length) {
+                if (fullNameField.value && fullNameField.value != playerData.fullName) {
+                    formData.append("fullName", fullNameField.value);
+                    playerData.fullName = fullNameField.value;
+                }
+                if (coverField.file)
+                {
+                    formData.append("cover", coverField.file[0]);
+                    playerCover = coverField.file[0].name;
+                }
                 const res = await updateApiData(PROFILE_API_URL, formData);
                 console.log("res: ", res);
-                refreshBox.display();
-                saveButton.classList.add("disable");
             }
+            refreshBox.display();
+            saveButton.classList.add("disable");
 
 
         });

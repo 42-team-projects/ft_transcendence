@@ -1,3 +1,6 @@
+
+
+
 // Game
 import { Lobby } from "./Components/Game/GamePlay/Lobby.js"
 import { Buttons } from "./Components/Game/GamePlay/buttons.js"
@@ -22,11 +25,9 @@ import { SideBarButtonIcons } from './Components/side-bar/sb-icon.js'
 import { SideBarButtonText } from './Components/side-bar/sb-text.js'
 import { SideBarButton } from './Components/side-bar/sb-button.js'
 import { CustomButton } from "./Components/Tournament/CustomButton.js";
-import { TournamentComponent } from "./Components/Tournament/TournamentComponent.js";
 
 import { SettingsComponent } from "./Components/Settings/SettingsComponent.js"
-
-import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js";
+import { } from "./Utils/GlobalVariables.js";
 
 
 
@@ -51,20 +52,22 @@ customElements.define("online-game", OnlineGame)
 customElements.define('c-button', Buttons)
 customElements.define('game-selection', GameSelection)
 
-createWebSocketsForTournaments();
 import SignupPage from "./Components/User/SignupPage.js";
 import LoginPage from "./Components/User/LoginPage.js";
 import EmailConf from "./Components/User/EmailConf.js";
 import OAuth from "./Components/User/Oauth.js";
-import { router } from './root/Router.js';
+import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js"
 
+
+
+createWebSocketsForTournaments();
 
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);
 customElements.define("oauth-callback", OAuth);
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', async (event) => {
     window.addEventListener("popstate", () =>
         router.handleRoute(window.location.pathname)
     );
