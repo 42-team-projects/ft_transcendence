@@ -23,7 +23,17 @@ const cssContent = /*css*/`
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Sansation Bold';
 }
+
+:host ::slotted(div) {
+    font-family: 'Sansation Bold';
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+}
+
 `;
 
 export class CustomButton extends HTMLElement {
