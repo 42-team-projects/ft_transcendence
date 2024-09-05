@@ -3,8 +3,9 @@ import { ChatItemComponent } from "./ChatItemComponent.js";
 import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
 import { getApiData } from "../../../Utils/APIManager.js";
 import { HOST } from "../../../Utils/APIUrls.js";
-import { renderChatBody, renderChatFooter, renderChatHeader, setUpWebSocket } from "../configs/ChatConfigs.js";
+import { renderChatBody, renderChatFooter, renderChatHeader } from "../configs/ChatConfigs.js";
 import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
+import { setUpWebSocket } from "../configs/ChatWebSocketManager.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
@@ -67,9 +68,9 @@ export class ChatListComponent extends HTMLElement {
         `;
         const currentUserId = await getCurrentUserId();
         const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), item.reciever.id, currentUserId);
-        renderChatHeader(chatRoom, item);
-        await renderChatBody(chatRoom, "chat_12");
-        renderChatFooter(chatRoom, webSocket);
+        // renderChatHeader(chatRoom, item);
+        // await renderChatBody(chatRoom, "chat_12");
+        // renderChatFooter(chatRoom, webSocket);
     }
 
     async connectedCallback() {
