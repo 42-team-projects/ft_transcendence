@@ -18,6 +18,7 @@ class GameLoop :
             'width': 10
         }
         self.ready = 0
+        self.closed = 0
 
     async def assign_racquet(self, data, ws):
         if ws == self.controler:
@@ -206,6 +207,15 @@ class GameLoop :
     #     self.racquet = racquet_size
     def get_players(self):
         return self.controler, self.opponent
+    async def close_socket(self, ws):
+        print('closing')
+        try:
+            if ws == self.controler:
+                await self.opponent.close()
+            else:
+                await self.controler.close()
+        except Exception as e:
+            print(e)
     async def reset_players(self):
         self.controler.y = self.canvas_height / 2
         self.opponent.y = self.canvas_height / 2

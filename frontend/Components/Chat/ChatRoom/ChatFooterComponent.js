@@ -24,11 +24,16 @@ export class ChatFooterComponent extends HTMLElement {
             const message = inputArea.value.trim();
             if (message.length)
             {
-                this.chat(5, 6, message);
+                this.chat(1, 2, message);
                 console.log("the message has been successfully send !!");
             }
             inputArea.value = '';
         });
+    }
+
+    disconnectedCallback() {
+        // if (ws)
+        //     ws.close();
     }
 
     set targetId(val) {this.setAttribute("target-id", val); }
@@ -39,14 +44,19 @@ export class ChatFooterComponent extends HTMLElement {
     get webSocket() {return ws;}
 
 
-    chat(sender_id, receiver_id, message) {
-        console.log("webSocket webSocket : ", this.webSocket);
+    async chat(sender_id, receiver_id, message) {
+        console.log("webSocket webSocket : ", ws);
         console.log("message : ", message);
-        this.webSocket.send(JSON.stringify({
-            'message' : message,
-            'sender' : sender_id,
-            'receiver' : receiver_id
-        }))
+
+        if(ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+                'message' : message,
+                'sender' : sender_id,
+                'receiver' : receiver_id
+            }));
+        } else {
+            console.log('WebSocket connection is not open');
+        }
     }
 }
 
@@ -55,7 +65,6 @@ customElements.define("chat-footer", ChatFooterComponent);
 const cssContent = /*css*/ `
     :host {
         display: flex;
-        flex: 0.7;
         justify-content: space-between;
         font-family: 'Sansation bold';
         width: 100%;
@@ -86,6 +95,7 @@ const cssContent = /*css*/ `
         border: none;
         background-color: transparent;
         flex: 8;
+        min-height: 32px;
         font-family: 'Sansation';
         font-size: 16px;
         color: #ffffff;
