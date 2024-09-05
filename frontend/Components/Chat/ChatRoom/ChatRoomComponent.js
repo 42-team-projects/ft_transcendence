@@ -6,10 +6,6 @@ import { ReceiverComponent } from "./ReceiverComponent.js";
 import { HOST } from "../../../Utils/APIUrls.js";
 import { getApiData } from "../../../Utils/APIManager.js";
 
-
-let league;
-let profileImage;
-
 export class ChatRoomComponent extends HTMLElement {
     constructor () {
         super();
