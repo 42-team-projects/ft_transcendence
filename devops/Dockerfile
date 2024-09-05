@@ -7,7 +7,7 @@ COPY requirements.txt /app
 RUN apt-get update && apt-get install -y gcc
 
 RUN pip install --upgrade pip && \
-    pip3 install -r /app/requirements.txt
+    pip3 install -r requirements.txt
 
 COPY start.sh /
 RUN chmod +x /start.sh

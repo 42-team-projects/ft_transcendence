@@ -155,6 +155,7 @@ def verify_token(request):
     except (InvalidToken, TokenError):
         return Response({'status': 'error', 'message': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_user(request):
@@ -162,13 +163,18 @@ def update_user(request):
     data = request.data
 
     try:
-        user.username = data.get('username', user.username)
-        user.avatar = data.get('avatar', user.avatar)
+        username = data.get('username')
+        if username:
+            user.username = username
+            
+        avatar = data.get('avatar')
+        if avatar:
+            user.avatar = avatar
         
         password = data.get('password')
         if password:
             user.set_password(password)
-
+    
         user.full_clean()
         user.save()
 

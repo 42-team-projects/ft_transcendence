@@ -42,6 +42,10 @@ export async function createApiData(APIUrl, body) {
 export async function updateApiData(APIUrl, body) {
     
     const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+        console.error("Access token is missing.");
+        return null;
+    }
     const response = await fetchWithToken(APIUrl,
     {
         method: "PUT",

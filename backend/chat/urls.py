@@ -9,15 +9,21 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 
 urlpatterns = [
-    path('conversation/', chat_views.get_chat_conversation, name='get_chat_conversation'),
-    path('chat_conversations/', chat_views.chat_conversations, name='chat_conversations'),
-    path('group_conversations/', chat_views.group_conversations, name='group_conversations'),
+    path('messages/', chat_views.messages, name='conversation-messages'),
+    path('conversation_list/', chat_views.conversation_list, name='conversation-list'),
+    # path('mark_as_read/<str:conversation_name>/', chat_views.mark_messages_as_read, name='mark_messages_as_read'),
     
+
     
+    # path('block/', chat_views.block_user, name='block-user'),
+    # path('unblock/', chat_views.unblock_user, name='unblock-user'),
     
+    # path('group_conversation_list/', chat_views.group_conversation_list, name='group_conversation_list'),
     
+
     
+    path('user1/', chat_views.user1, name='user1'),
+    path('user2/', chat_views.user2, name='user2'),
     
-    path('chat_conversation/', chat_views.chat_conversation, name='chat-conversation'),
-    path('group_conversation/', chat_views.group_conversation, name='group-conversation'),
+    # path('group_conversation/', chat_views.group_conversation, name='group-conversation'),
 ]

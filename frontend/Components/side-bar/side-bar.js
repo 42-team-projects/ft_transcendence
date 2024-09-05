@@ -24,7 +24,7 @@ const Sidebar_button_contetn = [
         text : "Game",
     },
     {
-        src : './images/Chat.svg',
+        src : './assets/icons/message-icon.svg',
         text : "Chat",
     },
     {
@@ -32,11 +32,11 @@ const Sidebar_button_contetn = [
         text : "Friends",
     },
     {
-        src : './images/Settings.svg',
+        src : './assets/icons/champion-cup-icon.svg',
         text : "Tournament",
     },
     {
-        src : './images/Settings.svg',
+        src : './assets/icons/settings-icon.svg',
         text : "Settings",
     }
 ]

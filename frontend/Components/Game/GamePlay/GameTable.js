@@ -83,7 +83,9 @@ export class GameTable extends HTMLElement{
             const player_1 = message.player_1;
             const player_2 = message.player_2;
             const status = message.status;
+            console.log(data.message);
             if (status === 'game_start') {
+                console.log(data);
                 const message = {
                     'message': 'firstdata',
                     'canvas_width': CANVAS_WIDTH,
