@@ -27,7 +27,7 @@ import { SideBarButton } from './Components/side-bar/sb-button.js'
 import { CustomButton } from "./Components/Tournament/CustomButton.js";
 
 import { SettingsComponent } from "./Components/Settings/SettingsComponent.js"
-import { } from "./Utils/GlobalVariables.js";
+import { getCurrentPlayerData } from "./Utils/GlobalVariables.js";
 
 
 
@@ -57,10 +57,6 @@ import LoginPage from "./Components/User/LoginPage.js";
 import EmailConf from "./Components/User/EmailConf.js";
 import OAuth from "./Components/User/Oauth.js";
 import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js"
-
-
-
-createWebSocketsForTournaments();
 
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);

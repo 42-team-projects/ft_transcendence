@@ -69,8 +69,8 @@ const cssContent = /*css*/`
             display: flex;
             flex-direction: column;
             width: 100%;
+            overflow: hidden;
             overflow-y: scroll;
-            overflow-x: hidden;
         }
 
         .body::-webkit-scrollbar {
