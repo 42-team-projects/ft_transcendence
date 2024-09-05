@@ -34,6 +34,7 @@ def getPlayerStats(request):
             win = statsData.get("win")
             loss = statsData.get("loss")
             rank = statsData.get("rank")
+            progress_bar = statsData.get("progress_bar")
             league = statsData.get("league")
             if win:
                 stats.win = win
@@ -41,6 +42,8 @@ def getPlayerStats(request):
                 stats.loss = loss
             if rank:
                 stats.rank = rank
+            if progress_bar:
+                stats.progress_bar = progress_bar
             if league:
                 stats.league = league
             stats.save()
