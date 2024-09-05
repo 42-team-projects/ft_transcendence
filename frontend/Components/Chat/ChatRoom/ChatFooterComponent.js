@@ -31,6 +31,11 @@ export class ChatFooterComponent extends HTMLElement {
         });
     }
 
+    disconnectedCallback() {
+        // if (ws)
+        //     ws.close();
+    }
+
     set targetId(val) {this.setAttribute("target-id", val); }
     get targetId() { return this,this.getAttribute("val"); }
 
