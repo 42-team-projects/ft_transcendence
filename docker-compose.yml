@@ -1,25 +1,56 @@
 services:
   back-end:
-    build: .
+    build: ./devops
+    image: backend:13.37
     container_name: back-end
     volumes:
       - ./backend/:/app
     ports:
       - "8000:8000"
     networks:
-      - ft_transcendence
+      - libft_network
+    depends_on:
+      - database
+    env_file:
+      - .env
 
   front-end:
     container_name: front-end
     image: nginx:latest
     ports:
-      - 8080:80
+      - 443:443
     volumes:
       - ./frontend/:/usr/share/nginx/html
+      - ./devops/nginx:/etc/nginx/conf.d
+      - ./devops/certs:/etc/ssl/certs
     networks:
-      - ft_transcendence
+      - libft_network
     depends_on:
       - back-end
 
+  database:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    container_name: postgres
+    env_file:
+      - .env 
+    networks:
+      - libft_network
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    ports:
+      - 5050:80
+    container_name: pgadmin4
+    env_file:
+      - .env
+    networks:
+      - libft_network
+
 networks:
-  ft_transcendence:
+  libft_network:
+    driver: bridge
+
+# docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
+# (remove network) docker network rm $(docker network ls -q)
