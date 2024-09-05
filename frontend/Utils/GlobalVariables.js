@@ -27,7 +27,6 @@ export async function getCurrentPlayerData() {
     if (currentPlayer)
         return currentPlayer;
     currentPlayer = await getApiData(PROFILE_API_URL);
-    console.log("current Player: ", currentPlayer);
     return currentPlayer;
 }
 
@@ -36,17 +35,15 @@ export async function getCurrentPlayerId() {
     if (currentPlayer)
         return currentPlayer.id;
     currentPlayer = await getApiData(PROFILE_API_URL);
-    console.log("current Player: ", currentPlayer);
-    return currentPlayer;
+    return currentPlayer.id;
 }
 
 export async function getCurrentUserData() {
 
     if (currentPlayer)
-        return currentPlayer.user.id;
+        return currentPlayer.user;
     currentPlayer = await getApiData(PROFILE_API_URL);
-    console.log("current Player: ", currentPlayer);
-    return currentPlayer;
+    return currentPlayer.user;
 }
 
 export async function getCurrentUserId() {
@@ -54,6 +51,5 @@ export async function getCurrentUserId() {
     if (currentPlayer)
         return currentPlayer.user.id;
     currentPlayer = await getApiData(PROFILE_API_URL);
-    console.log("current Player: ", currentPlayer);
-    return currentPlayer;
+    return currentPlayer.user.id;
 }

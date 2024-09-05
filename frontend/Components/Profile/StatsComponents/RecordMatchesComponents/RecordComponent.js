@@ -41,7 +41,7 @@ export class RecordComponent extends HTMLElement {
     static observedAttributes = ["win", "loss"];
 
     calculeWinRateValue(win, loss) {
-        return (Math.round((100 * Number(win)) / (Number(win) + Number(loss)) * 10) / 10);
+        return (Math.round((100 * Number(win)) / (Number(win) + Number(loss)) * 10 || 0.0001) / 10);
     }
 
     attributeChangedCallback(attrName, oldValue, newValue) {

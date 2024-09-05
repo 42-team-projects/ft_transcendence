@@ -11,18 +11,18 @@ from django.core.exceptions import ObjectDoesNotExist
 class ChatConversationConsumer(WebsocketConsumer):
     def connect(self):
         self.current_user = self.scope['user']
-        if self.current_user.is_authenticated:
-            self.room_name = self.scope['url_route']['kwargs']['room_name']
-            self.group_name = f"chat_{self.room_name}"
-            
-            # Join room group
-            async_to_sync(self.channel_layer.group_add)(
-                self.group_name,
-                self.channel_name
-            )
-            self.accept()
-        else:
-            self.close()
+        # if self.current_user.is_authenticated:
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.group_name = f"chat_{self.room_name}"
+        
+        # Join room group
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+        self.accept()
+        # else:
+        #     self.close()
     def disconnect(self, close_code):
         if self.current_user.is_authenticated:
             # Leave room group
@@ -31,22 +31,23 @@ class ChatConversationConsumer(WebsocketConsumer):
                 self.channel_name
             )
     def receive(self, text_data):
-        if self.current_user.is_authenticated:
-            try:
-                data = json.loads(text_data)
-                self.receiver = self.get_user(data['receiver'])
-                if (self.current_user.id == self.receiver.id):
-                    self.send_error('sender and receiver is same user!')
-                else:
-                    self.save_and_broadcast_message(data['message'])
-            except ObjectDoesNotExist:
-                self.send_error('User does not exist.')
-            except json.JSONDecodeError:
-                self.send_error('Invalid JSON format.')
-            except KeyError as e:
-                self.send_error(f'Missing key: {e}')
-        else:
-            self.send_error('User not authenticated!')
+        # if self.current_user.is_authenticated:
+        try:
+            data = json.loads(text_data)
+            self.receiver = self.get_user(data['receiver'])
+            self.current_user = self.get_user(data['sender'])
+            if (self.current_user.id == self.receiver.id):
+                self.send_error('sender and receiver is same user!')
+            else:
+                self.save_and_broadcast_message(data['message'])
+        except ObjectDoesNotExist:
+            self.send_error('User does not exist.')
+        except json.JSONDecodeError:
+            self.send_error('Invalid JSON format.')
+        except KeyError as e:
+            self.send_error(f'Missing key: {e}')
+        # else:
+        #     self.send_error('User not authenticated!')
 
     def save_and_broadcast_message(self, content):
         conversation = self.get_or_create_conversation()
