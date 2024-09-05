@@ -210,7 +210,7 @@ export class ProfileComponent extends HTMLElement {
 
         leagueBar.appendChild(leagueInfo);
         const progressBar = document.createElement("custom-progress-bar");
-        progressBar.value = this.APIData.stats.progressBar;
+        progressBar.value = this.APIData.stats.progress_bar;
         progressBar.color = getLeagueColor(this.APIData.stats.league);
         leagueBar.appendChild(progressBar);
 
