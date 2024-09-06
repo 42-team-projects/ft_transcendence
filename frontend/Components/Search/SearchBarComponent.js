@@ -3,7 +3,13 @@ import { TournamentsSearchSection } from "./SearchSections/TournamentsSearchSect
 import { ChannelsSearchSection } from "./SearchSections/ChannelsSearchSection.js";
 import { OthersSearchSection } from "./SearchSections/OthersSearchSection.js";
 import { get_Available_Tournaments } from "../Tournament/configs/TournamentAPIConfigs.js";
+import { getApiData } from "../../Utils/APIManager.js";
+import { PROFILE_API_URL } from "../../Utils/APIUrls.js";
 
+
+const menu = ["Home", "Game", "Chat", "Friends", "Tournament", "Settings", "Profile"];
+
+let oldInputValue;
 export class SearchBarComponent extends HTMLElement {
     constructor() {
         super();
@@ -19,13 +25,13 @@ export class SearchBarComponent extends HTMLElement {
                 </div>
                 <div class="search-body">
                     <div class="filter-section">
+                        <div class="filter-1 select">ALL</div>
                         <div class="filter-1">USERS</div>
                         <div class="filter-1">TOURNAMENTS</div>
                         <div class="filter-1">CHANNELS</div>
                         <div class="filter-1">OTHERS</div>
                     </div>
                     <div class="search-result">
-
                         <users-search-section></users-search-section>
 
                         <tournaments-search-section></tournaments-search-section>
@@ -33,22 +39,22 @@ export class SearchBarComponent extends HTMLElement {
                         <channels-search-section></channels-search-section>
 
                         <others-search-section></others-search-section>
-
                     </div>
                 </div>
             </div>
         `;
     }
     interval;
+    selectedItem;
     connectedCallback() {
         const searchInput = this.shadowRoot.querySelector(".search-input");
         const searchIcon = this.shadowRoot.querySelector(".search-icon");
         const searchBody = this.shadowRoot.querySelector(".search-body");
-        const filterButton = this.shadowRoot.querySelector(".filter-button");
-        const filterSection = this.shadowRoot.querySelector(".filter-section");
-        // const Users = this.shadowRoot.querySelector("users-search-section");
-        const tournaments = this.shadowRoot.querySelector("tournaments-search-section");
+        const searchContainer = this.shadowRoot.querySelector(".search-result");
 
+        // const Users = this.shadowRoot.querySelector("users-search-section");
+
+        this.selectedItem = this.shadowRoot.querySelector(".select");
         let searchInputChecker = false;
         searchInput.addEventListener("click", () => {
             if (searchInputChecker)
@@ -57,20 +63,38 @@ export class SearchBarComponent extends HTMLElement {
             searchBody.style.display = "flex";
             searchIcon.src = "../../assets/icons/close-icon.svg";
             searchIcon.id = "close";
-            let oldInputValue;
             let checker = false;
             this.interval = setInterval(async () => {
                 if (searchInput.value && searchInput.value != oldInputValue) {
-                    tournaments.clearTournaments();
-                    oldInputValue = searchInput.value;
-                    const tournamentsData = await get_Available_Tournaments("tournament_name=" + searchInput.value);
-                    tournaments.appendTournament(tournamentsData);
+
+                    const players = this.shadowRoot.querySelector("users-search-section");
+                    if (players){
+                        players.clearPlayers();
+                        oldInputValue = searchInput.value;
+                        const playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+                        players.appendPlayers(playersData);
+                    }
+                    
+                    const tournaments = this.shadowRoot.querySelector("tournaments-search-section");
+                    if (tournaments){
+                        tournaments.clearTournaments();
+                        oldInputValue = searchInput.value;
+                        const tournamentsData = await get_Available_Tournaments("tournament_name=" + searchInput.value);
+                        tournaments.appendTournament(tournamentsData);
+                    }
+                    
+                    const othersSearch = this.shadowRoot.querySelector("others-search-section");
+                    if (othersSearch){
+                        othersSearch.clearItems();
+                        oldInputValue = searchInput.value;
+                        const data = menu.filter(elem => elem.includes(searchInput.value));
+                        othersSearch.appendItem(data);
+                    }
+
                     checker = true;
                 }
-                else if (!searchInput.value && checker) {
-                    tournaments.clearTournaments();
+                else if (!searchInput.value && checker)
                     checker = false;
-                }
                 console.log("interval: ", this.interval);
             }, 500);
         });
@@ -88,12 +112,70 @@ export class SearchBarComponent extends HTMLElement {
                 searchInputChecker = false;
             }
         });
+
+        this.renderFilterOption(searchContainer, searchInput);
+
+    }
+    renderFilterOption(container, searchInput) {
+        const filterButton = this.shadowRoot.querySelector(".filter-button");
+        const filterSection = this.shadowRoot.querySelector(".filter-section");
         let filterSectionchecker;
         filterButton.addEventListener("click", () => {
             filterSection.style.display = filterSectionchecker ? "none" : "flex";
             filterSectionchecker = !filterSectionchecker;
+            this.renderAll(container, searchInput);
         });
+        
+        const filters = filterSection.querySelectorAll(".filter-1");
+        filters.forEach(filter => {
+            filter.addEventListener("click", async () => {
+                container.innerHTML = '';
+                if (this.selectedItem)
+                    this.selectedItem.classList.remove("select");
+                filter.classList.add("select");
+                this.selectedItem = filter;
+                if (filter.textContent == "ALL")
+                    await this.renderAll(container, searchInput);
+                else if (filter.textContent == "USERS")
+                    await this.renderUsersSection(container, searchInput);
+                else if (filter.textContent == "TOURNAMENTS")
+                    await this.renderTournamentsSection(container, searchInput);
+                else if (filter.textContent == "OTHERS")
+                    this.renderOthersSection(container, searchInput);
 
+            });
+        });
+    }
+
+    async renderAll(container, searchInput) {
+        container.innerHTML = '';
+        await this.renderUsersSection(container, searchInput);
+        await this.renderTournamentsSection(container, searchInput);
+        this.renderOthersSection(container, searchInput);
+    }
+
+    async renderUsersSection(container, searchInput) {
+        const usersSection = new UsersSearchSection();
+        oldInputValue = searchInput.value;
+        const playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+        usersSection.appendPlayers(playersData);
+        container.appendChild(usersSection);
+    }
+
+    async renderTournamentsSection(container, searchInput) {
+        const tournamentsSection = new TournamentsSearchSection();
+        oldInputValue = searchInput.value;
+        const tournamentsData = await get_Available_Tournaments("tournament_name=" + searchInput.value);
+        tournamentsSection.appendTournament(tournamentsData);
+        container.appendChild(tournamentsSection);
+    }
+ 
+    renderOthersSection(container, searchInput) {
+        const othersSection = new OthersSearchSection();
+        oldInputValue = searchInput.value;
+        const data = menu.filter(elem => elem.toLowerCase().includes(searchInput.value.toLowerCase()));
+        othersSection.appendItem(data);
+        container.appendChild(othersSection);
     }
 }
 
@@ -186,6 +268,7 @@ const cssContent = /*css*/`
     border: 1px solid aqua;
     border-radius: 10px;
     position: absolute;
+    top: 10;
     display: none;
     flex-direction: column;
     gap: 10px;
@@ -207,11 +290,12 @@ const cssContent = /*css*/`
 .filter-1 {
     padding: 6px 10px;
     border-radius: 6px;
-    background: #00FFFC50;
+    background: #d9d9d930;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
+    opacity: 0.9;
 }
 
 .search-result {
@@ -252,5 +336,11 @@ const cssContent = /*css*/`
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+
+.select {
+    background: #00fffc50;
+    opacity: 1;
 }
 `;

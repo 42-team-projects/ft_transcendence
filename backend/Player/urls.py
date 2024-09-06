@@ -2,10 +2,11 @@ from django.urls import path
 from .Views import PlayerView, StatsView, GraphView, AchievementsView, LinksView
 
 urlpatterns = [
-    # recieve, create user ("GET", "POST")
+    # recieve and create user ("GET", "POST")
     path('',PlayerView.getPlayer, name='getPlayer'),
+    path('search/', PlayerView.searchForPlayers, name='searchForPlayers'),
     path('<int:playerId>/',PlayerView.getPlayerById, name='getPlayerById'),
-    # number of Players ("GET")
+    path('<str:username>/', PlayerView.findPlayerByUserName, name='findPlayersByUserName'),
 
 
     path('stats/',StatsView.getPlayerStats, name='getPlayerStats'),
