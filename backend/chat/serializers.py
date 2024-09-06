@@ -47,7 +47,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     #     return None  # If no receiver is found
     
     
-    def get_reciever(self, obj):
+    def get_receiver(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             current_user = request.user
