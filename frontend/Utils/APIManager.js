@@ -16,6 +16,8 @@ export async function getApiData(APIUrl) {
             Authorization: `Bearer ${accessToken}`,
         },
     });
+    if (!response.ok)
+        return null;
     const apiData = await response.json();
     console.log("getApiData => apiData: ", apiData);
     return apiData;

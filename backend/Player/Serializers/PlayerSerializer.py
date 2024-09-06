@@ -17,7 +17,7 @@ class PlayerSerializer(serializers.ModelSerializer):
     achievements = AchievementsSerializer(many=True, required=False)
     class Meta:
         model = Player
-        fields = ['id', 'user', 'fullName', 'profile_picture', 'cover', 'joinDate', 'active', 'stats', 'achievements', 'links']
+        fields = ['id', 'user', 'fullName', 'cover', 'joinDate', 'active', 'stats', 'achievements', 'links']
 
 
 class CustomPlayer(serializers.ModelSerializer):
