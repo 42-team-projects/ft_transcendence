@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self) -> str:
-        return self.email
+        return self.username
 
     @property
     def tokens(self):

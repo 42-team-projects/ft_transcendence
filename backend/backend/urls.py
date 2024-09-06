@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/v1/player/', include('Player.urls')),
     path('chat/', include("chat.urls"), name="chat"),
     path('notification/', include("notification.urls"), name="notification"),
+    path('friend/', include("friends.urls"), name="friend"),
     path('api/v1/auth/', include('accounts.urls')),
 ]
 
