@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from ..Models.PlayerModel import Player
-from ..Models.StatsModel import Stats
-from ..Models.GraphModel import Graph
+from accounts.models import User
 from ..Serializers.PlayerSerializer import PlayerSerializer, CustomPlayer
 from ..Serializers.StatsSerializer import StatsSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -16,47 +15,79 @@ logger = logging.getLogger(__name__)
 
 # def createDefaultStats():
 
+
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def getPlayer(request):
-    logger.warning(request.data)
-    try:
-        player = Player.objects.get(user=request.user)
-    except Player.DoesNotExist:
-        return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
-    
     if request.method == 'GET':
-        serializer = PlayerSerializer(player)
+        players = Player.objects.get(user=request.user)
+        serializer = PlayerSerializer(players)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     
-    if request.method == 'PUT':
-        serializer = PlayerSerializer(player, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
-        else:
-            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-    
-    if request.method == 'DELETE':
-        player.stats.graph.delete()
-        player.stats.delete()
-        player.delete();
-        return JsonResponse({"message": "Profile deleted successfully"}, status=status.HTTP_200_OK)
+    elif request.method == 'PUT':
+        try:
+            player = Player.objects.get(user=request.user)
+            serializer = PlayerSerializer(player, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Player.DoesNotExist:
+            return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
+    
+    elif request.method == 'DELETE':
+        try:
+            player = Player.objects.get(user=request.user)    
+            serializer = PlayerSerializer(player, data=request.data)
+            player.stats.graph.delete()
+            player.stats.delete()
+            player.delete();
+            return JsonResponse({"message": "Profile deleted successfully"}, status=status.HTTP_200_OK)
+        except Player.DoesNotExist:
+                    return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getPlayerById(request, playerId):
-
-    try:
-        player = Player.objects.get(id=playerId)
-    except Player.DoesNotExist:
-        return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
-    
     if request.method == 'GET':
-        serializer = CustomPlayer(player)
-        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        try:
+            player = Player.objects.get(id=playerId)
+            serializer = CustomPlayer(player)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except Player.DoesNotExist:
+            return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
 
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def findPlayerByUserName(request, username):
+    if request.method == 'GET':
+        try:
+            players = Player.objects.get(user__username=username)
+            serializer = PlayerSerializer(players)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except Player.DoesNotExist:
+            return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def searchForPlayers(request):
+    if request.method == 'GET':
+        try:
+            username = request.GET.get("username")
+            if username:
+                players = Player.objects.filter(user__username__icontains=username)
+            else:
+                players = Player.objects.all()
+            serializer = PlayerSerializer(players, many=True)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except Player.DoesNotExist:
+            return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
