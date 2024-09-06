@@ -11,6 +11,37 @@ import { CustomGraph } from "./GraphComponent/CustomGraph.js";
 import { getApiData } from "../../Utils/APIManager.js";
 import { PROFILE_API_URL, HOST } from "../../Utils/APIUrls.js";
 
+
+const htmlContent = `
+<div class="profile-rank-2"></div>
+<cover-component ></cover-component>
+<div class="profile-data">
+    <div class="profile-info-component-container">
+        <profile-info-component></profile-info-component>
+
+        <div class="profile-data-infos-container">
+            <user-info-container id="userInfo" label="Account Information" icon="assets/images/profile/account-icon.svg"></user-info-container>
+            <user-info-container id="links" label="Links" icon="assets/images/profile/chain-for-links.svg"></user-info-container>
+            <user-info-container id="achievements" label="Achievements" icon="assets/images/profile/trophy.svg"> </user-info-container>
+        </div>
+
+    </div>
+
+    <div class="profile-data-stats">
+        <div class="statsClass">
+            <stats-container>
+                <div class="league-bar" slot="league-bar"></div>
+                <div class="match-record" slot="match-record"></div>
+            </stats-container>
+            <div class="graphClass">
+                <custom-graph id="graph"></custom-graph>
+            </div>
+        </div>
+        <custom-table></custom-table>
+    </div>
+</div>
+`;
+
 export class ProfileComponent extends HTMLElement {
     APIData;
     constructor() {
@@ -27,40 +58,7 @@ export class ProfileComponent extends HTMLElement {
                     </div>
                 </page-name>
                 <div class="main-profile-container">
-                    <div class="profile-rank-2">
-                        <user-rank id="user-rank" bcolor="bronze" height="140px">
-                            <div class="rank-label">
-                                <h5> RANK </h5>
-                                <h1> </h1>
-                            </div>
-                        </user-rank>
-                    </div>
-                    <cover-component ></cover-component>
-                    <div class="profile-data">
-                        <div class="profile-info-component-container">
-                            <profile-info-component></profile-info-component>
-
-                            <div class="profile-data-infos-container">
-                                <user-info-container id="userInfo" label="Account Information" icon="assets/images/profile/account-icon.svg"></user-info-container>
-                                <user-info-container id="links" label="Links" icon="assets/images/profile/chain-for-links.svg"></user-info-container>
-                                <user-info-container id="achievements" label="Achievements" icon="assets/images/profile/trophy.svg"> </user-info-container>
-                            </div>
-
-                        </div>
-
-                        <div class="profile-data-stats">
-                            <div class="statsClass">
-                                <stats-container>
-                                    <div class="league-bar" slot="league-bar"></div>
-                                    <div class="match-record" slot="match-record"></div>
-                                </stats-container>
-                                <div class="graphClass">
-                                    <custom-graph id="graph"></custom-graph>
-                                </div>
-                            </div>
-                            <custom-table></custom-table>
-                        </div>
-                    </div>
+                    ${htmlContent}
                 </div>
             `;
     }
@@ -125,9 +123,14 @@ export class ProfileComponent extends HTMLElement {
     }
 
     async connectedCallback() {
+        if (this.username)
+            this.renderProfilePage(this.username + "/");
+        else
+            this.renderProfilePage("");
+    }
 
-        this.APIData = await getApiData(PROFILE_API_URL);
-
+    async renderProfilePage(username) {
+        this.APIData = await getApiData(PROFILE_API_URL + username);
         this.setUpProfileInfo();
 
         this.setUpUserInfo();
@@ -151,7 +154,6 @@ export class ProfileComponent extends HTMLElement {
         profileInfoComponent.src = (HOST + this.APIData.user.avatar);
         profileInfoComponent.joindate = this.APIData.joinDate;
         profileInfoComponent.active = this.APIData.active;
-        // profileInfoComponent.friend = this.APIData.friend;
     }
 
     setUpStats() {
@@ -163,11 +165,21 @@ export class ProfileComponent extends HTMLElement {
             return ;
         }
 
-        const userRank = this.shadowRoot.querySelector("user-rank");
-        const leagueBar = this.shadowRoot.querySelector(".league-bar");
+        const user_rank = this.shadowRoot.querySelector(".profile-rank-2");
+        const userRank = document.createElement("user-rank");
         userRank.bcolor = getLeagueColor(this.APIData.stats.league);
-        const rank = userRank.querySelector("h1");
-        rank.textContent = this.APIData.stats.rank;
+        userRank.id = "user-rank";
+        userRank.style.height = "140px";
+        userRank.innerHTML = `
+            <div class="rank-label">
+                <h5> RANK </h5>
+                <h1>${this.APIData.stats.rank}</h1>
+            </div>
+        `;
+        user_rank.append(userRank);
+
+        const leagueBar = this.shadowRoot.querySelector(".league-bar");
+        leagueBar.innerHTML = '';
 
 
         const leagueInfo = document.createElement("league-info");
@@ -217,11 +229,27 @@ export class ProfileComponent extends HTMLElement {
         const recordComponent = document.createElement("record-component");
         recordComponent.loss = this.APIData.stats.loss;
         recordComponent.win = this.APIData.stats.win;
-        this.shadowRoot.querySelector(".match-record").appendChild(recordComponent);
+        const matchRecord = this.shadowRoot.querySelector(".match-record");
+        matchRecord.innerHTML = '';
+        matchRecord.appendChild(recordComponent);
 
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
+    set username(val) {
+        this.setAttribute("username", val)
+    }
+
+    get username() {
+        return this.getAttribute("username");
+    }
+
+    static observedAttributes = ["username"];
+
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        if (attrName == "username") {
+            this.shadowRoot.querySelector(".main-profile-container").innerHTML = htmlContent;
+            this.renderProfilePage(newValue);
+        }
     }
 }
 
