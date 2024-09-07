@@ -1,4 +1,4 @@
-import { router } from "../../../root/Router.js";
+import { router } from "/root/Router.js";
 
 
 
@@ -62,7 +62,7 @@ export class OthersSearchSection extends HTMLElement {
                 </div>
                 <div class="search-actions">
                     <a href="${data}">
-                        <img src="../../assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
+                        <img src="/assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
                     </a>
                 </div>
             </div> 

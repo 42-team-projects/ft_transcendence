@@ -1,9 +1,9 @@
-import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { getCurrentPlayerId, wsUrl } from "../../Utils/GlobalVariables.js";
-import { hashPassword } from "../../Utils/Hasher.js";
-import { initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
-import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
-import { createRow } from "./configs/TournamentUtils.js";
+import { calculateTimeDifferents } from "/Utils/DateUtils.js";
+import { getCurrentPlayerId, wsUrl } from "/Utils/GlobalVariables.js";
+import { hashPassword } from "/Utils/Hasher.js";
+import { initWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { get_Available_Tournaments, player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { createRow } from "/Components/Tournament/configs/TournamentUtils.js";
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -224,11 +224,11 @@ export class JoinTournament extends HTMLElement {
             const filterContainer = this.shadowRoot.querySelector(".filterContainer");
             if (filterContainer.style.display == "none") {
                 filterContainer.style.display = "flex";
-                filterButton.src = "../assets/icons/close-x-icon.svg";
+                filterButton.src = "/assets/icons/close-x-icon.svg";
             }
             else {
                 filterContainer.style.display = "none";
-                filterButton.src = "../assets/icons/filter-icon.svg";
+                filterButton.src = "/assets/icons/filter-icon.svg";
             }
 
 
@@ -296,7 +296,7 @@ export class JoinTournament extends HTMLElement {
 
 const forms = `
 <div class="mainHeader">
-<img src="../assets/icons/back-icon.svg" id="back"/>
+<img src="/assets/icons/back-icon.svg" id="back"/>
 <div class="tournament-search" style="border: none;">
     <h2>Private Tournament</h2>
 </div>
@@ -367,19 +367,19 @@ const filterContent = `
 
 const list = `
         <div class="mainHeader">
-            <img id="close-button" src="../assets/icons/close-x-icon.svg"/>
+            <img id="close-button" src="/assets/icons/close-x-icon.svg"/>
             <div class="searchAndFilterContainer">
                 <div class="tournament-search">
                     <input type="text" placeholder="Tournament Name"/>
-                    <img src="../images/svg-header/search.svg">
+                    <img src="/images/svg-header/search.svg">
                 </div>
-                <img id="filter-tournaments" src="../assets/icons/filter-icon.svg">
+                <img id="filter-tournaments" src="/assets/icons/filter-icon.svg">
             </div>
-            <img id="private-tournament" src="../assets/icons/lock-icon.svg">
+            <img id="private-tournament" src="/assets/icons/lock-icon.svg">
         </div>
         ${filterContent}
         <div class="line">
-            <img class="separator" src="../assets/images/tournament/separator.svg"/>
+            <img class="separator" src="/assets/images/tournament/separator.svg"/>
         </div>
         <div class="tournaments-list">
             <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>
@@ -586,7 +586,7 @@ const cssContent = /*css*/`
     .join-button {
         width: 24px;
         height: 24px;
-        background: url("../assets/icons/join-icon.svg");
+        background: url("/assets/icons/join-icon.svg");
         background-repeat: no-repeat;
         background-size: cover;
         border: none;
@@ -595,7 +595,7 @@ const cssContent = /*css*/`
     .lock-button {
         width: 24px;
         height: 27px;
-        background: url("../assets/icons/lock-icon.svg");
+        background: url("/assets/icons/lock-icon.svg");
         background-repeat: no-repeat;
         background-size: cover;
         outline: none;
@@ -752,7 +752,7 @@ const cssContent = /*css*/`
         border-radius: 5px;
         align-items: center;
         justify-content: center;
-        background: url("../assets/icons/checked-icon.svg");
+        background: url("/assets/icons/checked-icon.svg");
         background-repeat: no-repeat;
         background-size: cover;
     }

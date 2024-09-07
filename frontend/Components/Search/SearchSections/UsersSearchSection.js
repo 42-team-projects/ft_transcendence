@@ -1,6 +1,6 @@
-import { HOST } from "../../../Utils/APIUrls.js";
-import { getLeagueColor } from "../../../Utils/LeaguesData.js";
-import { ProfileComponent } from "../../Profile/ProfileComponent.js";
+import { HOST } from "/Utils/APIUrls.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { ProfileComponent } from "/Components/Profile/ProfileComponent.js";
 
 export class UsersSearchSection extends HTMLElement {
     constructor() {
@@ -51,9 +51,9 @@ export class UsersSearchSection extends HTMLElement {
                 <h4>${playerData.user.username}</h4>
             </div>
             <div class="search-actions">
-                <img id="chat" src="../../assets/icons/chat-icon.svg" class="read-message" width="24px" height="24px"></img>
-                <img id="play-game" src="../../assets/icons/manette-icon.svg" class="read-message" width="24px" height="24px"></img>
-                <img id="show-profile" src="../../assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
+                <img id="chat" src="/assets/icons/chat-icon.svg" class="read-message" width="24px" height="24px"></img>
+                <img id="play-game" src="/assets/icons/manette-icon.svg" class="read-message" width="24px" height="24px"></img>
+                <img id="show-profile" src="/assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
             </div>
         `;
 

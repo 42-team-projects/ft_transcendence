@@ -1,4 +1,4 @@
-import { FriendItemComponent } from "./FriendItemComponent.js";
+import { FriendItemComponent } from "/Components/Chat/Friends/FriendItemComponent.js";
 
 const APIUrl = "http://localhost:8080/api/v1/users/all";
 let fakeData = [];

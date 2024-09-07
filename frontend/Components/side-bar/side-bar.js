@@ -16,27 +16,27 @@ SideBarTemplate.innerHTML = /*html*/`
     `
 const Sidebar_button_contetn = [
     {
-        src : './images/Home.svg',
+        src : '/images/Home.svg',
         text : "Home",
     },
     {
-        src : './images/Game.svg',
+        src : '/images/Game.svg',
         text : "Game",
     },
     {
-        src : './assets/icons/message-icon.svg',
+        src : '/assets/icons/message-icon.svg',
         text : "Chat",
     },
     {
-        src : './images/Friends.svg',
+        src : '/images/Friends.svg',
         text : "Friends",
     },
     {
-        src : './assets/icons/champion-cup-icon.svg',
+        src : '/assets/icons/champion-cup-icon.svg',
         text : "Tournament",
     },
     {
-        src : './assets/icons/settings-icon.svg',
+        src : '/assets/icons/settings-icon.svg',
         text : "Settings",
     }
 ]

@@ -1,10 +1,10 @@
-import { fetchData } from "../../../Utils/Fetcher.js";
-import { ChatHeaderComponent } from "./ChatHeaderComponent.js";
-import { ChatFooterComponent } from "./ChatFooterComponent.js";
-import { SenderComponent } from "./SenderComponent.js";
-import { ReceiverComponent } from "./ReceiverComponent.js";
-import { HOST } from "../../../Utils/APIUrls.js";
-import { getApiData } from "../../../Utils/APIManager.js";
+import { fetchData } from "/Utils/Fetcher.js";
+import { ChatHeaderComponent } from "/Components/Chat/ChatRoom/ChatHeaderComponent.js";
+import { ChatFooterComponent } from "/Components/Chat/ChatRoom/ChatFooterComponent.js";
+import { SenderComponent } from "/Components/Chat/ChatRoom/SenderComponent.js";
+import { ReceiverComponent } from "/Components/Chat/ChatRoom/ReceiverComponent.js";
+import { HOST } from "/Utils/APIUrls.js";
+import { getApiData } from "/Utils/APIManager.js";
 
 export class ChatRoomComponent extends HTMLElement {
     constructor () {

@@ -1,15 +1,15 @@
-import { getLeagueColor, getLeagueImage, getNextLeague } from "../../Utils/LeaguesData.js";
-import { CoverComponent } from "./CoverComponent.js";
-import { ProfileInfoComponent } from "./UserInfosComponents/ProfileInfoComponent.js";
-import { UserInfoContainerComponent } from "./UserInfosComponents/UserInfoContainerComponent.js";
-import { UserInfoComponent } from "./UserInfosComponents/UserInfoComponent.js";
-import { LinkComponent } from "./UserInfosComponents/LinkComponent.js";
-import { AchievementComponent } from "./UserInfosComponents/AchievementComponent.js";
-import { CustomTable } from "./TableComponents/CustomTable.js";
-import { StatsContainer } from "./StatsComponents/StatsContainer.js";
-import { CustomGraph } from "./GraphComponent/CustomGraph.js";
-import { getApiData } from "../../Utils/APIManager.js";
-import { PROFILE_API_URL, HOST } from "../../Utils/APIUrls.js";
+import { getLeagueColor, getLeagueImage, getNextLeague } from "/Utils/LeaguesData.js";
+import { CoverComponent } from "/Components/Profile/CoverComponent.js";
+import { ProfileInfoComponent } from "/Components/Profile/UserInfosComponents/ProfileInfoComponent.js";
+import { UserInfoContainerComponent } from "/Components/Profile/UserInfosComponents/UserInfoContainerComponent.js";
+import { UserInfoComponent } from "/Components/Profile/UserInfosComponents/UserInfoComponent.js";
+import { LinkComponent } from "/Components/Profile/UserInfosComponents/LinkComponent.js";
+import { AchievementComponent } from "/Components/Profile/UserInfosComponents/AchievementComponent.js";
+import { CustomTable } from "/Components/Profile/TableComponents/CustomTable.js";
+import { StatsContainer } from "/Components/Profile/StatsComponents/StatsContainer.js";
+import { CustomGraph } from "/Components/Profile/GraphComponent/CustomGraph.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL, HOST } from "/Utils/APIUrls.js";
 
 
 const htmlContent = `
@@ -123,14 +123,14 @@ export class ProfileComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-        if (this.username)
-            this.renderProfilePage(this.username + "/");
-        else
-            this.renderProfilePage("");
+        console.log("pathname: ", window.location.pathname);
+        const playerName = window.location.pathname.substring(9);
+        console.log("playerName: ", playerName);
+        this.renderProfilePage("me");
     }
 
     async renderProfilePage(username) {
-        this.APIData = await getApiData(PROFILE_API_URL + username);
+        this.APIData = await getApiData(PROFILE_API_URL + username + "/");
         this.setUpProfileInfo();
 
         this.setUpUserInfo();
@@ -146,7 +146,7 @@ export class ProfileComponent extends HTMLElement {
 
     setUpProfileInfo() {
         const coverComponent = this.shadowRoot.querySelector("cover-component");
-        coverComponent.src = (HOST + this.APIData.cover) || "./images/xxxxxx.png";
+        coverComponent.src = (HOST + this.APIData.cover) || "/images/xxxxxx.png";
 
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
         profileInfoComponent.league = this.APIData.stats.league;
