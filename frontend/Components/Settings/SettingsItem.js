@@ -60,13 +60,11 @@ export class SettingsItem extends HTMLElement {
 const cssContent = /*css*/`
 
 :host {
-    height: 48px;
-    width: 80%;
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #d9d9d9;
-    color: #d9d9d9;
     font-family: 'Sansation bold';
     min-width: 150px;
     font-size: 22px;

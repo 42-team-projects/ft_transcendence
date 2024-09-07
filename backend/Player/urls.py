@@ -2,9 +2,12 @@ from django.urls import path
 from .Views import PlayerView, StatsView, GraphView, AchievementsView, LinksView
 
 urlpatterns = [
+    path('search/', PlayerView.searchForPlayers, name='searchForPlayers'),
+
     # Players - retrieve, create, update, delete
     path('', PlayerView.getAllPlayers, name='getAllPlayers'),  # GET all players
-    path('me/', PlayerView.getMyInfo, name='getAllPlayers'),  # GET all players
+
+    path('me/', PlayerView.getMyInfo, name='getMyInfo'),  # GET all players
     path('count/', PlayerView.getPlayerCount, name='getPlayerCount'),  # GET player count
     path('<str:username>/', PlayerView.getPlayerByUsername, name='getPlayerByUsername'),  # GET player by username
  
@@ -24,5 +27,6 @@ urlpatterns = [
     path('<str:username>/links/', LinksView.getPlayerLinks, name='getPlayerLinks'),  # GET all links of a player
     path('<str:username>/links/count/', LinksView.countPlayerLinks, name='countPlayerLinks'),  # GET count of player links
     path('<str:username>/links/<int:linkId>/', LinksView.getPlayerLinkById, name='getPlayerLinkById'),  # GET specific link by ID
+
 
 ]
