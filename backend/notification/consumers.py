@@ -6,23 +6,23 @@ from .serializers import NotificationSerializer
 
 class UserNotificationConsumer(WebsocketConsumer):
     def connect(self):
-        self.current_user = self.scope['user']
-        if self.current_user.is_authenticated:
-            self.group_name = f'notification_{self.current_user.id}'
+        user_id = self.scope['url_route']['kwargs']['user_id']
+        # if self.current_user.is_authenticated:
+        self.group_name = f'notification_{user_id}'
 
-            async_to_sync(self.channel_layer.group_add)(
-                self.group_name,
-                self.channel_name
-            )
-            self.accept()
-        else:
-            self.close()  
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+        self.accept()
+        # else:
+        #     self.close()  
     def disconnect(self, close_code):
-        if self.current_user.is_authenticated:
-            async_to_sync(self.channel_layer.group_discard)(
-                self.group_name,
-                self.channel_name
-            )
+        # if self.current_user.is_authenticated:
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name,
+            self.channel_name
+        )
     def receive(self, text_data):
         data = json.loads(text_data)
         try:
