@@ -1,5 +1,6 @@
 import { SettingsItem } from "/Components/Settings/SettingsItem.js";
 import { ReportContent } from "/Components/Settings/Contents/ReportContent.js";
+import { router } from "/root/Router.js";
 
 export class SettingsMenu extends HTMLElement {
     constructor() {
@@ -9,35 +10,46 @@ export class SettingsMenu extends HTMLElement {
         });
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
-            <settings-item id="account"> ACCOUNT </settings-item>
-            <settings-item id="profile"> PROFILE </settings-item>
-            <settings-item id="game"> GAME </settings-item>
-            <settings-item id="sound"> SOUND </settings-item>
-            <settings-item id="report"> FEEDBACK </settings-item>
+            <a id="account" href="/Settings/account">
+                <settings-item> ACCOUNT </settings-item>
+            </a>
+            <a id="profile" href="/Settings/profile">
+                <settings-item> PROFILE </settings-item>
+            </a>
+            <a id="game" href="/Settings/game">
+                <settings-item> GAME </settings-item>
+            </a>
+            <a id="sound" href="/sound/account"">
+                <settings-item> SOUND </settings-item>
+            </a>
+            <a id="report" href="/Settings/report">
+                <settings-item> REPORT </settings-item>
+            </a>
         `;
     }
     connectedCallback() {
-        const settingsItems = this.shadowRoot.querySelectorAll("settings-item");
-        const firstElement = settingsItems[0];
-        this.selectItem = firstElement.id;
-        firstElement.color = "aqua";
-        firstElement.borderSize = "2px";
+        const settingsItems = this.shadowRoot.querySelectorAll("a");
+        let settingsSection = window.location.pathname.substring(10);
         const settingsContent = this.parentNode.querySelector("settings-content");
-        settingsContent.innerHTML = `<${firstElement.id}-content></${firstElement.id}-content>`;
+        if (!settingsSection || settingsSection == "")
+            settingsSection = "account";
+        settingsContent.innerHTML = `<${settingsSection}-content></${settingsSection}-content>`;
+        const selectItemcomponent = this.shadowRoot.getElementById(settingsSection);
+        selectItemcomponent.classList.add("active");
         settingsItems.forEach(elem => {
             elem.addEventListener("click", (e) => {
-                if (this.selectItem == elem.id)
+                e.preventDefault();
+                if (settingsSection == elem.id)
                     return ;
-                const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
-                if (selectItemcomponent)
-                {
-                    selectItemcomponent.color = "#d9d9d9";
-                    selectItemcomponent.borderSize = "1px";
-                }
+                // const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
+                // if (selectItemcomponent)
+                //     selectItemcomponent.classList.remove("active");
+                // elem.classList.add("active");
+                // this.selectItem = elem.id;
+                // settingsContent.innerHTML = `<${elem.id}-content></${elem.id}-content>`;
                 this.selectItem = elem.id;
-                elem.color = "aqua";
-                elem.borderSize = "2px";
-                settingsContent.innerHTML = `<${elem.id}-content></${elem.id}-content>`;
+                const url = new URL(elem.href);
+                router.handleRoute(url.pathname);
             })
         });
     }
@@ -64,6 +76,27 @@ const cssContent = /*css*/`
         align-items: center;
         justify-content: center;
         gap: 50px;
+    }
+
+    a {
+        height: 48px;
+        width: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Sansation bold';
+        border: 1px solid #d9d9d9;
+        color: #d9d9d9;
+        min-width: 150px;
+        font-size: 22px;
+        outline: none;
+        text-decoration: none;
+    }
+
+    .active {
+        border: 2px solid aqua;
+        color: aqua;
+        
     }
 `;
 

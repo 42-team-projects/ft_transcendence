@@ -1,6 +1,7 @@
 import { HOST } from "/Utils/APIUrls.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { ProfileComponent } from "/Components/Profile/ProfileComponent.js";
+import { router } from "/root/Router.js";
 
 export class UsersSearchSection extends HTMLElement {
     constructor() {
@@ -53,7 +54,9 @@ export class UsersSearchSection extends HTMLElement {
             <div class="search-actions">
                 <img id="chat" src="/assets/icons/chat-icon.svg" class="read-message" width="24px" height="24px"></img>
                 <img id="play-game" src="/assets/icons/manette-icon.svg" class="read-message" width="24px" height="24px"></img>
-                <img id="show-profile" src="/assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
+                <a id="show-profile" href="/Profile/${playerData.user.username}">
+                    <img src="/assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
+                </a>
             </div>
         `;
 
@@ -61,13 +64,10 @@ export class UsersSearchSection extends HTMLElement {
         const playGame = item.querySelector("#play-game");
         const showProfile = item.querySelector("#show-profile");
         showProfile.addEventListener("click", e => {
-            const rootContent = document.querySelector("root-content");
-            if (!rootContent)
-                return;
-            rootContent.innerHTML = ``;
-            const profile = document.createElement("profile-component");
-            profile.username = playerData.user.username;
-            rootContent.appendChild(profile);
+            e.preventDefault()
+            const url = new URL(showProfile.href)
+            console.log(url.pathname)
+            router.handleRoute(url.pathname)
         });
 
         playGame.addEventListener("click", () => {

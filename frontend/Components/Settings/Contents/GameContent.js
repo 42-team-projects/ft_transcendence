@@ -23,7 +23,7 @@ export class GameContent extends HTMLElement {
                 </custom-field>
             </div>
             <div class="actions">
-                <settings-item color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
+                <settings-item class="active" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
             </div>
         `;
     }
@@ -89,6 +89,12 @@ const cssContent = /*css*/`
         width: 90%;
         align-items: center;
         justify-content: space-around;
+    }
+
+    .active {
+        border: 2px solid aqua;
+        color: aqua;
+        
     }
 
 `;
