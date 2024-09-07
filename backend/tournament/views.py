@@ -101,6 +101,8 @@ def SetStartDate(request):
             tournamentId = data.get('tournamentId')
             start_date = data.get('start_date')
             tournament = Tournament.objects.get(id=tournamentId)
+            if tournament.start_date:
+                return JsonResponse({'warning': 'start date already updated !'}, safe=False, status=200)
             tournament.start_date = start_date
             tournament.save()
             return JsonResponse('start date is updated !', safe=False, status=200)
