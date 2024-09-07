@@ -50,7 +50,7 @@ customElements.define("friends-list", FriendsListComponent);
 const cssContent = /*css*/`
 
     :host {
-        flex: 1.5;
+        flex: 1;
         height: 100%;
         color: white;
         background-color: #d9d9d920;

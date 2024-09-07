@@ -8,12 +8,20 @@ export class SenderMessageContainerComponent extends HTMLElement {
                     margin: 4px;
                     display: flex;
                     font-family: 'Sansation bold';
+                    animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
                 }
                 
                 * {
                     margin: 0;
                 }
-            
+                @keyframes slide-right {
+                    0% {
+                      transform: translateX(100%);
+                    }
+                    100% {
+                      transform: translateX(0);
+                    }
+                }
                 .mainContainer {
                     display: flex;
                     flex-direction: column;

@@ -1,4 +1,3 @@
-import { playerId } from "../../root/Router.js";
 
 const fakeData = [
     {

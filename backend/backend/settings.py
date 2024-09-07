@@ -10,8 +10,7 @@ env = environ.Env(
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(BASE_DIR / '.env')
-
+environ.Env.read_env(BASE_DIR.parent / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -49,7 +48,8 @@ INSTALLED_APPS = [
     'tournament', #new
     'game', #new
     'Player', #new
-    'accounts', #new ogorfti
+    'accounts',
+    'rest_framework_simplejwt.token_blacklist', # ogorfti
 
 
     'chat',          #dokoko
@@ -119,10 +119,21 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': 'database',
+        'PORT': '5432',
     }
 }
 
@@ -212,14 +223,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-FRONTEND_BASE_URL='http://127.0.0.1:3000'
+FRONTEND_BASE_URL = env('FRONTEND_BASE_URL')
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = 'ebd6543637783d'
-EMAIL_HOST_PASSWORD = 'd36fe271a0aefd'
-EMAIL_PORT = '2525'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 OAUTH_PROVIDERS = {
     'INTRA': {

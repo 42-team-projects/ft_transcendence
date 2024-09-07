@@ -24,9 +24,10 @@ export function getLeagueImage(league) {
 
 export function getNextLeague(currentleague) {
     const leagues = ["bronze", "silver", "gold", "platinum", "legendary"];
+    if (currentleague == "legendary")
+        return "legendary";
     for (let index = 0; index < leagues.length; index++) {
         if (leagues[index] == currentleague.toLowerCase() && index + 1 < leagues.length)
             return leagues[index + 1];
     }
-    return leagues[0];
 }
