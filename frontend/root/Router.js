@@ -1,54 +1,21 @@
-import { getApiData } from "../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../Utils/APIUrls.js";
-import { createWebSocketsForTournaments } from "../Utils/TournamentWebSocketManager.js";
-export let playerId;
-export const fetchWithToken = async (url, options) => {
-    const response = await fetch(url, options);
-
-    if (response.status === 401) {
-        const refreshResponse = await fetch(
-            "http://127.0.0.1:8000/api/v1/auth/refresh/",
-            {
-                method: "POST",
-                credentials: "include",
-            }
-        );
-
-        if (refreshResponse.ok) {
-            const data = await refreshResponse.json();
-            const accessToken = data.access_token;
-            localStorage.setItem("accessToken", accessToken);
-            options.headers.Authorization = `Bearer ${accessToken}`;
-            return fetch(url, options);
-        }
-
-        throw new Error("Unable to refresh token");
-    }
-    return response;
-};
-
-
+import { fetchWithToken, isTokenValid} from './fetchWithToken.js'
+import config from '../../Utils/GlobalVariables.js';
 
 export class Router {
 
     constructor() {
-        this.not_accessed_routes = [
-            { path: "/signup", view: "signup-page" },
-            { path: "/confirm-email", view: "email-page" },
-            { path: "/oauth", view: "oauth-callback" },
-            { path: "*", view: "login-page" },
-            
-        ]
-        
-        this.accessed_routes = [
-            { path: '/Home', view: 'home-page' },
-            { path: '/Game', view: 'game-selection' },
-            { path: '/Chat', view: 'chat-page' },
-            { path: '/Friends', view: 'freinds-page' },
-            { path: '/Tournament', view: 'tournament-page' },
-            { path: '/Settings', view: 'settings-page' },
-            { path: '/Profile', view: 'profile-component' },
-            { path: '*', view: 'home-page' },
+        this.routes = [
+            { path: "/signup", view: "signup-page", isAccessed: false },
+            { path: "/confirm-email", view: "email-page", isAccessed: false },
+            { path: "/oauth", view: "oauth-callback", isAccessed: false },
+            { path: "/login", view: "login-page", isAccessed: false },
+            { path: '/Home', view: 'home-page', isAccessed: true },
+            { path: '/Game', view: 'game-selection', isAccessed: true },
+            { path: '/Chat', view: 'chat-page', isAccessed: true },
+            { path: '/Friends', view: 'freinds-page', isAccessed: true },
+            { path: '/Tournament', view: 'tournament-page', isAccessed: true },
+            { path: '/Settings', view: 'settings-page', isAccessed: true },
+            { path: '/Profile', view: 'profile-component', isAccessed: true },
         ];
         this.randred = false;
         this.rootContent = document.querySelector("root-content");
@@ -84,52 +51,82 @@ export class Router {
         })
     }
     removeRandring(){
+        console.log("removing...")
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()
         this.randred = false;
-        console.log("remove")
     }
+    
     async changeStyle(access_token, path){
-        console.log("hiii", access_token)
-        let matchedRoute = this.accessed_routes.find((route) => route.path === path);
-        if(access_token){
-            if(!matchedRoute)
-                matchedRoute = this.accessed_routes.find((route) => route.path === "/Home");
-            console.log(this.randred)
-            if(this.randred === false)
-                this.randring(access_token, matchedRoute);
-            if (!playerId)
-            {
-                const data = await getApiData(PROFILE_API_URL);
-                playerId = data.id;
-            }
-            const res = await createWebSocketsForTournaments();
-            this.rootContent.innerHTML = "";
-            this.rootContent.appendChild(document.createElement(matchedRoute.view));
-            this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
-                let a = button.shadowRoot.querySelector('a');
-                let url = new URL(a.href);
-                if(url.pathname === matchedRoute.path){
-                    this.sideBar.clickEvent = index;
-                }
-            });
+        let matchedRoute = this.routes.find((route) => route.path === path);
+        if (!matchedRoute)
+        {
+            matchedRoute = this.routes.find((route) => route.view === "home-page");
+            window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
         }
-        matchedRoute = this.not_accessed_routes.find((route) => route.path === path);
-        if(!access_token){
-            if(!matchedRoute)
-                matchedRoute = this.not_accessed_routes.find((route) => route.path === "*");
+    
+        if (matchedRoute.isAccessed) {
+            const isValid = await isTokenValid(access_token);
+            if (isValid) {
+                if(this.randred === false)
+                    this.randring(access_token, matchedRoute);
+                this.rootContent.innerHTML = "";
+                this.rootContent.appendChild(document.createElement(matchedRoute.view));
+                this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{
+                    let a = button.shadowRoot.querySelector('a');
+                    let url = new URL(a.href);
+                    if(url.pathname === matchedRoute.path){
+                        this.sideBar.clickEvent = index;
+                    }
+                });
+            } else {
+                // setTimeout(() => {
+                    matchedRoute = this.routes.find((route) => route.view === "login-page");
+                    window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
+                    this.removeRandring();
+                    this.rootContent.innerHTML = "";
+                    this.rootContent.appendChild(document.createElement(matchedRoute.view));
+                // }, 2000);    
+            }
+        } else {
             this.removeRandring();
             this.rootContent.innerHTML = "";
             this.rootContent.appendChild(document.createElement(matchedRoute.view));
         }
     }
+    
     handleRoute(path) {
         const accessToken = localStorage.getItem('accessToken');
         if (window.location.pathname !== path)
             window.history.pushState({}, "", path);
         this.changeStyle(accessToken, path);
         this.addLinkEventListeners();
+
+        // tmp place should be in function and called somewhere
+        let logout = document.querySelector('.logout')
+        logout.addEventListener('click', () => {
+            fetchWithToken(`http://${config.serverIP}:8000/api/v1/auth/logout/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.ok) {
+                    localStorage.removeItem('accessToken');
+                    this.handleRoute('/login')
+                } else {
+                    response.json().then(errorData => {
+                        console.error('Logout failed:', errorData);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('catch ->', error);
+            });
+        });
     }
 
     addLinkEventListeners() {
