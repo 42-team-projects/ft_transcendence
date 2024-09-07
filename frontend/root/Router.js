@@ -21,6 +21,7 @@ export class Router {
         this.rootContent = document.querySelector("root-content");
         this.header = document.querySelector("header-bar");
         this.sideBar = document.querySelector("side-bar");
+        console.log("window.location.pathname: ", window.location.pathname);
         this.handleRoute(window.location.pathname);
     }
     randring(access_token, matchedRoute){
