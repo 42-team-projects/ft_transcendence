@@ -50,7 +50,7 @@ playerSlot.innerHTML = /*html*/ `
 `
 
 AiGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/AiLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/AiLobby.css">
 	<img id='Player' class="Player" slot="PlayerImg" alt="Player" />
 	<h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 	<h1 id='Opponent' class="Opponent" slot="searshing"></h1>
@@ -58,7 +58,7 @@ AiGameTemplate.innerHTML = /*html*/ `
 `
 
 OnlineGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/OnlineGameLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/OnlineGameLobby.css">
 	<div class="searshingImgs" slot="searshing">
 		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
 		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
@@ -78,7 +78,7 @@ opponentSlot.innerHTML = /*html*/ `
 	`
 
 lobby.innerHTML =  /* html */ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/Lobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/Lobby.css">
 	<page-name width="35%">
 		<div slot="text" class="pageNameText">
 			<h1>MATCH MAKING</h1>
@@ -323,7 +323,7 @@ export class Lobby extends HTMLElement{
 	}
 	createTimer(){
 		timer.innerHTML = /*html*/ `
-			<link rel="stylesheet", href="Components/Game/GamePlay/Timer.css">
+			<link rel="stylesheet", href="/Components/Game/GamePlay/Timer.css">
 			<div class="descounter">
 				<h1>${this.time}</h1>
 			</div>
