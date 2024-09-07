@@ -14,6 +14,11 @@ export async function get_tournaments_by_player_id() {
     }
 }
 
+/**
+ * 
+ * @author rida
+ */
+
 export async function createTournament(data) {
 
     try {
@@ -49,7 +54,6 @@ export async function player_leave_tournament(tournamentId) {
     try {
         const response = await createApiData(`${apiUrl}tournament/${tournamentId}/player/leave/`, "");
         console.log("response: ", response);
-        // const data = await response.json();
         // handle response message
     } catch (error) {
         console.error('Error of player leave tournament: ', error);
@@ -84,6 +88,10 @@ export async function get_Available_Tournaments(queries) {
     }
 }
 
+/**
+ * 
+ * @author rida
+ */
 export async function player_join_tournament(tournamentId)
 {
     try {
