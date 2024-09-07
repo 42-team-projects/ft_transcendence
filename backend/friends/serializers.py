@@ -7,4 +7,4 @@ from accounts.models import User
 class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequest
-        fields = ['sender', 'receiver', 'is_active']
+        fields = ['id','sender', 'receiver', 'is_active']

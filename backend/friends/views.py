@@ -1,16 +1,14 @@
-from django.shortcuts import render
-from accounts.models import User
-from friends.models import FriendRequest
+from accounts.models            import User
+from friends.models             import FriendRequest, Friendship
 from rest_framework.response    import Response
-from django.http                import JsonResponse
 from rest_framework.decorators  import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from django.core.exceptions     import ObjectDoesNotExist, ValidationError
+from django.core.exceptions     import ObjectDoesNotExist,ValidationError
+# from django.db                  import transaction
+from django.shortcuts           import get_object_or_404
 
-from .serializers               import FriendRequestSerializer
 
-
-
+from .serializers               import FriendRequestSerializer 
 
 
 @api_view(['GET'])
@@ -21,57 +19,33 @@ def friend_requests(request):
     return Response({'friend_requests': friend_serializer.data})
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def accept_friend_request(request):
-    receiver_id = request.GET.get('receiver_id', None)
-
-    # Validate receiver_id input
-    if not receiver_id or not receiver_id.isdigit():
-        return Response({'requests': 'Invalid receiver ID.'}, status=400)
-
-    try:
-        receiver = User.objects.get(id=receiver_id)
-        friend_request = FriendRequest.objects.get(sender=request.user, receiver=receiver, is_active=True)
-        friend_request.accept()
-        return Response({'requests': 'Friend request accepted.'})
-
-    except User.DoesNotExist:
-        return Response({'requests': 'User does not exist.'}, status=404)
-    except FriendRequest.DoesNotExist:
-        return Response({'requests': 'Friend request not found.'}, status=404)
-    except ObjectDoesNotExist:
-        return Response({'requests': 'Invalid request or object not found.'}, status=404)
-
-
-
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_friend_request(request):
-    sender = request.user
-    response = {}
 
     # Validate and extract receiver_id from the request data
-
+    receiver_id = request.data.get('receiver_id', None)
+    if not receiver_id:
+        return Response({'response': 'receiver_id is required.'}, status=400)
     try:
-        receiver_id = int(request.data.get('receiver_id'))
-        # receiver_id = int(request.data.get('receiver_id'))
-        print('receiver ID: ',receiver_id)
-    except (TypeError, ValueError):
-        return Response({'response': 'Invalid receiver_id. It should be an integer.'}, status=400)
+        receiver_id = int(receiver_id)
+    except ValueError:
+        return Response({'response': 'Invalid receiver ID. It should be an integer.'}, status=400)
 
-    if receiver_id == sender.id:
+    current_user = request.user
+    receiver_user = get_object_or_404(User, id=receiver_id)
+    
+    if receiver_id == current_user.id:
         return Response({'response': 'You cannot send a friend request to yourself.'}, status=400)
-
-    # Fetch receiver user and handle exceptions
-    try:
-        receiver = User.objects.get(id=receiver_id)
-    except User.DoesNotExist:
-        return Response({'response': 'Receiver user does not exist.'}, status=404)
+    
 
     try:
-        friend_request, created = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
+        if Friendship.objects.filter(user=current_user, friends=receiver_user).exists() and \
+            Friendship.objects.filter(user=receiver_user, friends=current_user).exists():
+            return Response({'response': 'You are already friends with this user.'}, status=400)
+
+
+        friend_request, created = FriendRequest.objects.get_or_create(sender=current_user, receiver=receiver_user)
         if not created:
             if friend_request.is_active:
                 return Response({'response': 'You have already sent a friend request to this user.'}, status=400)
@@ -82,46 +56,62 @@ def send_friend_request(request):
                 return Response({'response': 'Friend request reactivated.'}, status=200)
         else:
             return Response({'response': 'Friend request sent.'}, status=201)
+        
+
     except ValidationError as e:
         return Response({'response': str(e)}, status=400)
 
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def send_friend_request(request):
-#     response = {}
-#     sender = request.user
-#     if request.method == 'POST' and sender.is_authenticated:
-#         try:
-#             receiver_id =  (int)(request.POST.get('receiver_id'))
-#             if receiver_id and receiver_id != sender.id:
-#                 try:
-#                     receiver = User.objects.get(id=receiver_id)
-#                     try:
-#                         friend_request = FriendRequest.objects.get(sender=sender, receiver=receiver)
-#                         if friend_request.is_active:
-#                             response['response'] = 'you alredy sent them friend request.'
-#                         else:
-#                             friend_request = FriendRequest(sender=sender, receiver=receiver)
-#                             friend_request.save()
-#                             response['response'] = 'friend request send.'
-#                     except FriendRequest.DoesNotExist:
-#                         friend_request = FriendRequest(sender=sender, receiver=receiver)
-#                         friend_request.save()
-#                         response['response'] = 'friend request send.'
-#                 except User.DoesNotExist:
-#                     response['response'] = 'receiver user not exist in database.'
-#             else:
-#                 response['response'] = 'you can\'t send friend request to you.'
-#         except ValueError:
-#             response['response'] = 'value of receiver_id should be int.' 
-#     else:
-#         response['response'] = 'unable to send friend request.'
-#     return Response(response)    
-    
-    
-    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def accept_friend_request(request):
 
-    
+    # Validate request_id input
 
+    request_id = request.GET.get('request_id', None)
+    if not request_id:
+        return Response({'response': 'request_id is required.'}, status=400)
+    try:
+        request_id = int(request_id)
+    except ValueError:
+        return Response({'response': 'Invalid request ID. It should be an integer.'}, status=400)
+
+    try:
+        friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
+        friend_request.accept()
+        return Response({'requests': 'Friend request accepted.'})
+    except FriendRequest.DoesNotExist:
+        return Response({'requests': 'Friend request not found.'}, status=404)
+    except ObjectDoesNotExist:
+        return Response({'requests': 'Invalid request or object not found.'}, status=404)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def remove_friend(request):
+    removed_id = request.data.get('removed_id', None)
+    if not removed_id:
+        return Response({'response': 'removed_id is required.'}, status=400)
+    try:
+        removed_id = int(removed_id)
+    except ValueError:
+        return Response({'response': 'Invalid removed ID. It should be an integer.'}, status=400)
+
+    current_user = request.user
+    removed_user = get_object_or_404(User, id=removed_id)
+
+    user_friends = get_object_or_404(Friendship, user=current_user)
+    removed_friends = get_object_or_404(Friendship, user=removed_user)
+
+    if not (user_friends.is_my_friend(removed_user) and removed_friends.is_my_friend(current_user)):
+        return Response({'response': 'Friendship not found.'}, status=400)
+
+    # Perform removal
+    try:
+        user_friends.remove_user(removed_user)
+        removed_friends.remove_user(current_user)
+        return Response({'response': 'User removed successfully.'})
+    except Exception as e:
+        # Log the exception
+        return Response({'response': f'Error occurred while removing friend, {str(e)}'}, status=500)
 
