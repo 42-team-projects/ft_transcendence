@@ -13,7 +13,7 @@ from .serializers               import FriendRequestSerializer
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def friend_requests(request):
+def get_friend_requests(request):
     friend_requests = FriendRequest.objects.filter(receiver=request.user, is_active=True)
     friend_serializer = FriendRequestSerializer(friend_requests, many=True, read_only=True)
     return Response({'friend_requests': friend_serializer.data})
@@ -88,28 +88,28 @@ def accept_friend_request(request):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def remove_friend(request):
-    removed_id = request.data.get('removed_id', None)
-    if not removed_id:
-        return Response({'response': 'removed_id is required.'}, status=400)
+def unfriend_user(request):
+    target_user_id = request.data.get('friend_id', None)
+    if not target_user_id:
+        return Response({'response': 'target_user_id is required.'}, status=400)
     try:
-        removed_id = int(removed_id)
+        target_user_id = int(target_user_id)
     except ValueError:
         return Response({'response': 'Invalid removed ID. It should be an integer.'}, status=400)
 
     current_user = request.user
-    removed_user = get_object_or_404(User, id=removed_id)
+    target_user = get_object_or_404(User, id=target_user_id)
 
-    user_friends = get_object_or_404(Friendship, user=current_user)
-    removed_friends = get_object_or_404(Friendship, user=removed_user)
+    current_user_friends = get_object_or_404(Friendship, user=current_user)
+    target_user_friends = get_object_or_404(Friendship, user=target_user)
 
-    if not (user_friends.is_my_friend(removed_user) and removed_friends.is_my_friend(current_user)):
+    if not (current_user_friends.is_my_friend(target_user) and target_user_friends.is_my_friend(current_user)):
         return Response({'response': 'Friendship not found.'}, status=400)
 
     # Perform removal
     try:
-        user_friends.remove_user(removed_user)
-        removed_friends.remove_user(current_user)
+        current_user_friends.remove_user(target_user)
+        target_user_friends.remove_user(current_user)
         return Response({'response': 'User removed successfully.'})
     except Exception as e:
         # Log the exception
