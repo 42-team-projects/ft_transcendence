@@ -3,7 +3,7 @@ from accounts.models import User
 
 # Create your models here.
 
-class Friend(models.Model):
+class Friendship(models.Model):
     user = models.OneToOneField(User, related_name='user', on_delete=models.CASCADE)
     friends = models.ManyToManyField(User, blank=True, related_name='friends')
     create_at = models.TimeField(auto_now_add=True)
@@ -79,15 +79,14 @@ class FriendRequest(models.Model):
             - The method assumes that `self.receiver` and `self.sender` are valid user instances and that `Friend` is a model managing user friendships.
         """
         try:
-            friends = Friend.objects.get(user=self.receiver)
+            friends, _ = Friendship.objects.get_or_create(user=self.receiver)
             friends.add_user(self.sender)
             
-            friends = Friend.objects.get(user=self.sender)
+            friends, _ = Friendship.objects.get_or_create(user=self.sender)
             friends.add_user(self.receiver)
-            
             self.is_active = False
             self.save()
-        except Friend.DoesNotExist as e:
+        except Friendship.DoesNotExist as e:
             print(str(e))
     
     def decline(self):
