@@ -10,7 +10,7 @@ SideBarButtonTemplate.innerHTML = /*html*/`
     </sb-button>
 `
 SideBarTemplate.innerHTML = /*html*/`
-    <link rel="stylesheet" href="Components/side-bar/side-bar.css"/>
+    <link rel="stylesheet" href="/Components/side-bar/side-bar.css"/>
     <nav class="buttons">
     </nav>
     `
