@@ -26,7 +26,7 @@ export class ReportContent extends HTMLElement {
                 </div>
             </div>
             <div class="actions">
-                <settings-item color="aqua" border-size="2px" width="64px" height="40px"><h4>SEND</h4></settings-item>
+                <settings-item class="active" color="aqua" border-size="2px" width="64px" height="40px"><h4>SEND</h4></settings-item>
             </div>
         `;
     }
@@ -124,6 +124,11 @@ const cssContent = /*css*/`
         color: #d9d9d9;
         margin: 5px 0;
         opacity: 0.5;
+    }
+
+    .active {
+        border: 2px solid aqua;
+        color: aqua;
     }
 
 `;
