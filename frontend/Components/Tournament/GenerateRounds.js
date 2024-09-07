@@ -1,8 +1,8 @@
-import { HOST } from "../../Utils/APIUrls.js";
-import { getLeagueColor } from "../../Utils/LeaguesData.js";
-import { AddPlayerComponent } from "./AddPlayerComponent.js";
-import { CustomButton } from "./CustomButton.js";
-import { TournamentRound } from "./TournamentRound.js";
+import { HOST } from "/Utils/APIUrls.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { AddPlayerComponent } from "/Components/Tournament/AddPlayerComponent.js";
+import { CustomButton } from "/Components/Tournament/CustomButton.js";
+import { TournamentRound } from "/Components/Tournament/TournamentRound.js";
 
 export class GenerateRounds extends HTMLElement {
     constructor () {
@@ -52,7 +52,7 @@ export class GenerateRounds extends HTMLElement {
                     <h4>${player.user.username}</h4>
                 `;
         else
-            playerContainer.innerHTML = `<img loading="lazy" class="addPlayer" src="../assets/images/profile/add-friends-icon.svg" width="24px"/>`;
+            playerContainer.innerHTML = `<img loading="lazy" class="addPlayer" src="/assets/images/profile/add-friends-icon.svg" width="24px"/>`;
         return playerContainer;
     }
 
@@ -173,10 +173,10 @@ export class GenerateRounds extends HTMLElement {
                 addPlayerContainer.innerHTML = `
                 <div class="box">
                     <div class="friendsList">
-                        <img loading="lazy" class="closeButton" src="../assets/icons/close-x-icon.svg"/>
+                        <img loading="lazy" class="closeButton" src="/assets/icons/close-x-icon.svg"/>
                         <h2>YOUR FRIENDS</h2>
                         <div class="line">
-                            <img loading="lazy" class="separator" src="../assets/images/tournament/separator.svg"/>
+                            <img loading="lazy" class="separator" src="/assets/images/tournament/separator.svg"/>
                         </div>
                         <add-player-component></add-player-component>
                     </div>

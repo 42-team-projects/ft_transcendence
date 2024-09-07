@@ -6,12 +6,12 @@ export class TwoFactorAuthTemplate extends HTMLElement {
             <style> ${cssContent} </style>
             <div class="container">
                 <div class="qr-code-section">
-                    <img class="qrcode-displayer" src="../../../assets/images/alert/qr-code-example.svg"></img>
+                    <img class="qrcode-displayer" src="/assets/images/alert/qr-code-example.svg"></img>
                 </div>
                 <div class="code-field">
                     <h2>Enter generated code by your chosen authonticator app</h2>
                     <div class="inputContainer">
-                        <img src="../../../assets/icons/lock-icon.svg" width="24px"></img>
+                        <img src="/assets/icons/lock-icon.svg" width="24px"></img>
                         <input class="entered-code" type="number"/>
                     </div>
                 </div>

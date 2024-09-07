@@ -1,15 +1,15 @@
-import { getCurrentUserId } from "../../Utils/GlobalVariables.js";
-import { showNotifiactionsList } from "../Header/header-bar.js";
-import { NotificationComponent } from "./NotificationComponent.js";
-import { displayNotification } from "./NotificationUtils.js";
-import { MessageNotification } from "./templates/MessageNotification.js";
+import { getCurrentUserId } from "/Utils/GlobalVariables.js";
+import { showNotifiactionsList } from "/Components/Header/header-bar.js";
+import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
+import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
 
 export class NotificationsList extends HTMLElement {
     constructor() {
         super();
         this.innerHTML = `
             <div class="notificationsBar-header">
-                <img class="close-button" src="../../assets/icons/close-icon.svg" width="24px"/>
+                <img class="close-button" src="/assets/icons/close-icon.svg" width="24px"/>
                 <h3>NOTIFICATIONS</h3>
             </div>
             <div class="notificationsBar-body">

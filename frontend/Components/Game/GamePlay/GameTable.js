@@ -1,7 +1,7 @@
-import { GameOver } from "./GameOver.js";
-import { LaunchingGame } from "./launchingGame.js";
-import { userInfo, opponentInfo } from "./Lobby.js";
-import { ip } from "../../../Utils/GlobalVariables.js";
+import { GameOver } from "/Components/Game/GamePlay/GameOver.js";
+import { LaunchingGame } from "/Components/Game/GamePlay/launchingGame.js";
+import { userInfo, opponentInfo } from "/Components/Game/GamePlay/Lobby.js";
+import { ip } from "/Utils/GlobalVariables.js";
 const game_page = document.createElement('template');
 
 let score = {
@@ -11,7 +11,7 @@ let score = {
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
+<link rel="stylesheet" href="/Game/GamePlay/GameTable.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>

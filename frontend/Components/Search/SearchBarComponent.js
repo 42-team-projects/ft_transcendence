@@ -1,10 +1,10 @@
-import { UsersSearchSection } from "./SearchSections/UsersSearchSection.js";
-import { TournamentsSearchSection } from "./SearchSections/TournamentsSearchSection.js";
-import { ChannelsSearchSection } from "./SearchSections/ChannelsSearchSection.js";
-import { OthersSearchSection } from "./SearchSections/OthersSearchSection.js";
-import { get_Available_Tournaments } from "../Tournament/configs/TournamentAPIConfigs.js";
-import { getApiData } from "../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../Utils/APIUrls.js";
+import { UsersSearchSection } from "/Components/Search/SearchSections/UsersSearchSection.js";
+import { TournamentsSearchSection } from "/Components/Search/SearchSections/TournamentsSearchSection.js";
+import { ChannelsSearchSection } from "/Components/Search/SearchSections/ChannelsSearchSection.js";
+import { OthersSearchSection } from "/Components/Search/SearchSections/OthersSearchSection.js";
+import { get_Available_Tournaments } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL } from "/Utils/APIUrls.js";
 
 
 const menu = ["Home", "Game", "Chat", "Friends", "Tournament", "Settings", "Profile"];
@@ -18,10 +18,10 @@ export class SearchBarComponent extends HTMLElement {
             <style> ${cssContent} </style>
             <div class="mainContainer">
                 <div class="search-bar">
-                    <img loading="lazy" id="search" draggable="false" class="search-icon" src="./images/svg-header/search.svg" alt="searchIcon">
+                    <img loading="lazy" id="search" draggable="false" class="search-icon" src="/images/svg-header/search.svg" alt="searchIcon">
                     <div class="vertical-line"></div>
                     <input type="text" class="search-input" placeholder="SEARCH">
-                    <img src="../../assets/icons/filter-icon.svg" class="filter-button"></img>
+                    <img src="/assets/icons/filter-icon.svg" class="filter-button"></img>
                 </div>
                 <div class="search-body">
                     <div class="filter-section">
@@ -61,7 +61,7 @@ export class SearchBarComponent extends HTMLElement {
                 return;
                 searchInputChecker = true;
             searchBody.style.display = "flex";
-            searchIcon.src = "../../assets/icons/close-icon.svg";
+            searchIcon.src = "/assets/icons/close-icon.svg";
             searchIcon.id = "close";
             let checker = false;
             this.interval = setInterval(async () => {
@@ -101,12 +101,12 @@ export class SearchBarComponent extends HTMLElement {
         searchIcon.addEventListener("click", () => {
             if (searchIcon.id == "search") {
                 searchBody.style.display = "flex";
-                searchIcon.src = "../../assets/icons/close-icon.svg";
+                searchIcon.src = "/assets/icons/close-icon.svg";
                 searchIcon.id = "close";
             }
             else {
                 searchBody.style.display = "none";
-                searchIcon.src = "../../assets/icons/search-icon.svg";
+                searchIcon.src = "/assets/icons/search-icon.svg";
                 searchIcon.id = "search";
                 clearInterval(this.interval);
                 searchInputChecker = false;

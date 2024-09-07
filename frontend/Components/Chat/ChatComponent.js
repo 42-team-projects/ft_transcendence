@@ -1,7 +1,7 @@
-import { getCurrentPlayerData } from "../../Utils/GlobalVariables.js";
-import { ChatListComponent } from "./ChatList/ChatListComponent.js";
-import { ChatRoomComponent } from "./ChatRoom/ChatRoomComponent.js";
-import { FriendsListComponent } from "./Friends/FriendsListComponent.js";
+import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
+import { ChatListComponent } from "/Components/Chat/ChatList/ChatListComponent.js";
+import { ChatRoomComponent } from "/Components/Chat/ChatRoom/ChatRoomComponent.js";
+import { FriendsListComponent } from "/Components/Chat/Friends/FriendsListComponent.js";
 
 export class ChatComponent extends HTMLElement {
     constructor () {

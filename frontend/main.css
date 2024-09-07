@@ -309,7 +309,7 @@ notifications-list {
 .profile-icon {
     width: 100%;
     height: 100%;
-    background: url("../../../assets/images/profile/tanjuro.jpg");
+    background: url("/assets/images/profile/tanjuro.jpg");
     background-position: center;
     background-size: cover;
 }

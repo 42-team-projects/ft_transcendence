@@ -1,4 +1,4 @@
-import config from '../../Utils/GlobalVariables.js';
+import config from '/Utils/GlobalVariables.js';
 
 export const fetchWithToken = async (url, options) => {
     const response = await fetch(url, options);

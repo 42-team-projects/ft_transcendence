@@ -2,32 +2,32 @@
 
 
 // Game
-import { Lobby } from "./Components/Game/GamePlay/Lobby.js"
-import { Buttons } from "./Components/Game/GamePlay/buttons.js"
-import { SinglePlayer } from './Components/Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
-import { MultiPlayer } from './Components/Game/GamePlay/MultiPlayer/MultiPlayerCart.js'
-import { OnlineGame } from './Components/Game/GamePlay/GameOnline/OnlineGameCart.js'
-import { PageName } from "./Components/Game/GamePlay/PageName.js";
-import { PlayerBorder } from "./Components/Game/GamePlay/PlayerBorder.js";
-import { LaunchingGame } from './Components/Game/GamePlay/launchingGame.js'
-import { GameTable } from './Components/Game/GamePlay/GameTable.js'
-import { GameHeader } from './Components/Game/GamePlay/GameHeader.js'
-import { GameOver } from './Components/Game/GamePlay/GameOver.js';
-import { GameSelection } from './Components/Game/GameSelection.js'
+import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
+import { Buttons } from "/Components/Game/GamePlay/buttons.js"
+import { SinglePlayer } from '/Components/Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
+import { MultiPlayer } from '/Components/Game/GamePlay/MultiPlayer/MultiPlayerCart.js'
+import { OnlineGame } from '/Components/Game/GamePlay/GameOnline/OnlineGameCart.js'
+import { PageName } from "/Components/Game/GamePlay/PageName.js";
+import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
+import { LaunchingGame } from '/Components/Game/GamePlay/launchingGame.js'
+import { GameTable } from '/Components/Game/GamePlay/GameTable.js'
+import { GameHeader } from '/Components/Game/GamePlay/GameHeader.js'
+import { GameOver } from '/Components/Game/GamePlay/GameOver.js';
+import { GameSelection } from '/Components/Game/GameSelection.js'
 
-import { HeaderBar } from './Components/Header/header-bar.js'
-import { SearchBar } from './Components/Header/Search-bar.js'
-import { UserRank } from './Components/Header/UserRank.js'
-import { Hexagon } from './Components/Header/hexagon.js'
-import { Profile } from './Components/Header/profile.js'
+import { HeaderBar } from '/Components/Header/header-bar.js'
+import { SearchBar } from '/Components/Header/Search-bar.js'
+import { UserRank } from '/Components/Header/UserRank.js'
+import { Hexagon } from '/Components/Header/hexagon.js'
+import { Profile } from '/Components/Header/profile.js'
 
-import { SideBarButtonIcons } from './Components/side-bar/sb-icon.js'
-import { SideBarButtonText } from './Components/side-bar/sb-text.js'
-import { SideBarButton } from './Components/side-bar/sb-button.js'
-import { CustomButton } from "./Components/Tournament/CustomButton.js";
+import { SideBarButtonIcons } from '/Components/side-bar/sb-icon.js'
+import { SideBarButtonText } from '/Components/side-bar/sb-text.js'
+import { SideBarButton } from '/Components/side-bar/sb-button.js'
+import { CustomButton } from "/Components/Tournament/CustomButton.js";
 
-import { SettingsComponent } from "./Components/Settings/SettingsComponent.js"
-import { getCurrentPlayerData } from "./Utils/GlobalVariables.js";
+import { SettingsComponent } from "/Components/Settings/SettingsComponent.js"
+import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
 
 
 
@@ -52,11 +52,11 @@ customElements.define("online-game", OnlineGame)
 customElements.define('c-button', Buttons)
 customElements.define('game-selection', GameSelection)
 
-import SignupPage from "./Components/User/SignupPage.js";
-import LoginPage from "./Components/User/LoginPage.js";
-import EmailConf from "./Components/User/EmailConf.js";
-import OAuth from "./Components/User/Oauth.js";
-import { createWebSocketsForTournaments } from "./Utils/TournamentWebSocketManager.js"
+import SignupPage from "/Components/User/SignupPage.js";
+import LoginPage from "/Components/User/LoginPage.js";
+import EmailConf from "/Components/User/EmailConf.js";
+import OAuth from "/Components/User/Oauth.js";
+import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js"
 
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);

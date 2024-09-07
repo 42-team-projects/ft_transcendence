@@ -1,6 +1,6 @@
-import { HOST } from "../../../Utils/APIUrls.js";
-import { getCurrentPlayerData } from "../../../Utils/GlobalVariables.js";
-import { getLeagueColor } from "../../../Utils/LeaguesData.js";
+import { HOST } from "/Utils/APIUrls.js";
+import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
 
 export class MessageNotification extends HTMLElement {
     constructor() {
@@ -9,7 +9,7 @@ export class MessageNotification extends HTMLElement {
             <div class="mainContainer">
                 <div class="message"></div>
                 <div class="notification-actions">
-                    <img src="../../../assets/icons/arrow-forward-icon.svg" class="read-message"></img>
+                    <img src="/assets/icons/arrow-forward-icon.svg" class="read-message"></img>
                 </div>
             </div>
         `;

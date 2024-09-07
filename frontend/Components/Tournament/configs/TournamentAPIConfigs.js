@@ -1,7 +1,7 @@
-import { createApiData, getApiData } from "../../../Utils/APIManager.js";
-import { apiUrl } from "../../../Utils/GlobalVariables.js";
-import { hashPassword } from "../../../Utils/Hasher.js";
-import { fetchWithToken } from "../../../root/fetchWithToken.js";
+import { createApiData, getApiData } from "/Utils/APIManager.js";
+import { apiUrl } from "/Utils/GlobalVariables.js";
+import { hashPassword } from "/Utils/Hasher.js";
+import { fetchWithToken } from "/root/fetchWithToken.js";
 
 
 export async function get_tournaments_by_player_id() {
