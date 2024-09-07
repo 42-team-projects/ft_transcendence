@@ -1,5 +1,5 @@
-import { NotificationComponent } from "./NotificationComponent.js";
-import { NewFriendNotification } from "./templates/NewFriendNotification.js";
+import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
+import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 
 export function displayNotification(notificationContent) {
     const notificationContainer = window.document.querySelector(".notification-search .notification-container");

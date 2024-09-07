@@ -42,7 +42,7 @@ shape-cpn, #test {
 }
 
 #background  {
-    background-image: url('../../assets/auth-svg/box.svg');
+    background-image: url('/assets/auth-svg/box.svg');
     /* border: 1px solid red; */
     background-repeat: no-repeat;
     background-size: cover;
@@ -92,11 +92,11 @@ shape-cpn, #test {
 }
 
 #inner-header::before {
-    background: url('../../assets/auth-svg/leftHeader.svg') no-repeat;
+    background: url('/assets/auth-svg/leftHeader.svg') no-repeat;
 }
 
 #inner-header::after {
-    background: url('../../assets/auth-svg/rightHeader.svg') no-repeat;
+    background: url('/assets/auth-svg/rightHeader.svg') no-repeat;
     margin-left: 25px;
 }
 
@@ -107,7 +107,7 @@ input-field {
 }
 
 .input-container {
-    background: url('../../assets/auth-svg/borderField.svg') no-repeat;
+    background: url('/assets/auth-svg/borderField.svg') no-repeat;
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -258,7 +258,7 @@ submit-button button:hover {
 
 #error-message::before {
     content: "";
-    background: url('../../assets/auth-svg/error.svg') no-repeat;
+    background: url('/assets/auth-svg/error.svg') no-repeat;
     width: 1.5rem;
     height: 1.2rem;
 }
@@ -273,7 +273,7 @@ submit-button button:hover {
 
 #error-message.success::before {
     content: "";
-    background: url('./svg/success.svg') no-repeat;
+    background: url('/svg/success.svg') no-repeat;
     width: 1.5rem;
     height: 1.2rem;
 }

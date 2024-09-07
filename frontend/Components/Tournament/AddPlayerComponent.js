@@ -1,22 +1,22 @@
 
 const fakeData = [
     {
-        profileImage: "../assets/images/profile/mudoria.jpg",
+        profileImage: "/assets/images/profile/mudoria.jpg",
         username: "esalim",
         active: true
     },
     {
-        profileImage: "../assets/images/profile/mudoria.jpg",
+        profileImage: "/assets/images/profile/mudoria.jpg",
         username: "oussama",
         active: false
     },
     {
-        profileImage: "../assets/images/profile/mudoria.jpg",
+        profileImage: "/assets/images/profile/mudoria.jpg",
         username: "zeroual",
         active: false
     },
     {
-        profileImage: "../assets/images/profile/mudoria.jpg",
+        profileImage: "/assets/images/profile/mudoria.jpg",
         username: "nourdine",
         active: true
     }
@@ -42,7 +42,7 @@ export class AddPlayerComponent extends HTMLElement {
             <h1>${userName}</h1>
             <h6>${isActive == true ? "online" : "offline"}</h6>
         </div>
-        <img loading="lazy" class="sendRequest" src="../assets/images/profile/add-friends-icon.svg"/>
+        <img loading="lazy" class="sendRequest" src="/assets/images/profile/add-friends-icon.svg"/>
     `;
     container.querySelector(".c-hexagon-content").style.background = "url(" + profileImage + ") center / cover no-repeat";
     return container;
@@ -58,7 +58,7 @@ export class AddPlayerComponent extends HTMLElement {
     sendRequest.forEach(elem => {
         elem.addEventListener("click", () => {
             // put here the logic of sending Request to the backend service.
-            elem.src = "../assets/icons/success-circle.svg";
+            elem.src = "/assets/icons/success-circle.svg";
         });
     });
   }

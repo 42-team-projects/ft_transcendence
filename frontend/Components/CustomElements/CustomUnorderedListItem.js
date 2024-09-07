@@ -1,5 +1,5 @@
-import { deleteApiData } from "../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../Utils/APIUrls.js";
+import { deleteApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL } from "/Utils/APIUrls.js";
 
 export class CustomUnorderedListItem extends HTMLElement {
     constructor() {
@@ -18,8 +18,8 @@ export class CustomUnorderedListItem extends HTMLElement {
                 <div class="inputContainer">
                     <input class="link" type="text" readonly/>
                 </div>
-                <img loading="lazy" class="edit-icon" src="../assets/icons/pencil-icon.svg"></img>
-                <img loading="lazy" class="remove-icon" src="../assets/icons/close-x-icon.svg"></img>
+                <img loading="lazy" class="edit-icon" src="/assets/icons/pencil-icon.svg"></img>
+                <img loading="lazy" class="remove-icon" src="/assets/icons/close-x-icon.svg"></img>
             </div>
         `;
     }

@@ -1,8 +1,8 @@
-import { getApiData } from "../../../Utils/APIManager.js";
-import { HOST } from "../../../Utils/APIUrls.js";
-import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
-import { ChatFooterComponent } from "../ChatRoom/ChatFooterComponent.js";
-import { ChatHeaderComponent } from "../ChatRoom/ChatHeaderComponent.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { HOST } from "/Utils/APIUrls.js";
+import { getCurrentUserId } from "/Utils/GlobalVariables.js";
+import { ChatFooterComponent } from "/Components/Chat/ChatRoom/ChatFooterComponent.js";
+import { ChatHeaderComponent } from "/Components/Chat/ChatRoom/ChatHeaderComponent.js";
 
 export function renderChatHeader(chatContainer, conversationData) {
     const header = new ChatHeaderComponent();
@@ -39,7 +39,7 @@ function renderMessageComponent(chatBody, messageContainer, component, message, 
     }
     messageContainer.time = message.sent_at.split("T")[0];
     component.league = "gold";
-    component.profileImage = "../../assets/images/profile/tanjuro.jpg";
+    component.profileImage = "/assets/images/profile/tanjuro.jpg";
     component.appendChild(messageContainer);
     return component;
 }

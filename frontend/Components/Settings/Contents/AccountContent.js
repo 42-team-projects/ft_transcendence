@@ -1,9 +1,9 @@
-import { CustomInputField } from "../../CustomElements/CustomInputField.js";
-import { CustomToggleSwitch } from "../../CustomElements/CustomToggleSwitch.js";
-import { CustomAlert } from "../../Alert/CustomAlert.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL } from "../../../Utils/APIUrls.js";
-import { getApiData, updateApiData } from "../../../Utils/APIManager.js";
-import {  } from "../../CustomElements/CustomSpinner.js";
+import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
+import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
+import { CustomAlert } from "/Components/Alert/CustomAlert.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL } from "/Utils/APIUrls.js";
+import { getApiData, updateApiData } from "/Utils/APIManager.js";
+import {  } from "/Components/CustomElements/CustomSpinner.js";
 
 export class AccountContent extends HTMLElement {
     constructor() {

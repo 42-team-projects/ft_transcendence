@@ -1,4 +1,4 @@
-import { renderConversation } from "./ChatConfigs.js";
+import { renderConversation } from "/Components/Chat/configs/ChatConfigs.js";
 
 export function setUpWebSocket(chatContainer, room_name) {
     let wsUrl = `ws://${window.location.hostname}:8000/ws/chat/chat/${room_name}/`;
