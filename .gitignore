@@ -1,3 +1,6 @@
+.vscode
+.DS_Store
+env
 ignore
 
 #Ignore all vscode settings
@@ -8,7 +11,7 @@ ignore
 **/.DS_Store
 
 #Ignore all docker environments
-**/.env
+# **/.env
 
 #Ignore all virtual environment
 **/.venv
@@ -16,8 +19,25 @@ ignore
 # Ignore all Python bytecode files
 *.pyc
 
-# Ignore __pycache__ directories
+# Ignore all __pycache__ directories
 **/__pycache__/
+
+# Ignore all .py files in migrations directories, except __init__.py
+**/migrations/*.py
+!**/migrations/__init__.py
 
 # Ignore node_modules directory
 node_modules
+
+*.py[cod]
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+*backend/media/avatars/
+*backend/media/cover/
+
+# find . -type d -name "__pycache__" -exec rm -r {} \+
+# find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+# find . -path "*/migrations/*.pyc"  -delete

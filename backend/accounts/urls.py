@@ -1,13 +1,11 @@
 from django.urls import path
-from . import password_reset
-from . import views
-from . import oauth
+from . import password_reset, views, oauth
 from .twofa import enable_2fa, verify_2fa, disable_2fa
-from .views import user_data
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
     path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
     
     path('confirm-email/<str:token>/', views.confirm_email_view, name='confirm-email'),
 
@@ -19,6 +17,7 @@ urlpatterns = [
 
     path('whoami/', views.whoami, name='whoami'),
     path('refresh/', views.refresh, name='refresh_token'),
+    path('verify/', views.verify_token, name='verify'),
 
     path('<str:provider>/redirect/', oauth.redirect_to_provider, name='redirect_to_provider'),
     path('<str:provider>/oauth_callback/', oauth.oauth_callback, name='oauth_callback'),
@@ -29,4 +28,5 @@ urlpatterns = [
     path('2fa/disable/', disable_2fa, name='disable_2fa'),
 
     path('user-data/', views.user_data, name='user_data'),
+    path('update-user/', views.update_user, name='update_user'),
 ]

@@ -124,8 +124,8 @@ const cssContent = /*css*/`
 
 
     .c-hexagon-content {
-        width: 200px;
-        height: 210px;
+        width: 250px;
+        height: 247px;
     }
 
     .box {

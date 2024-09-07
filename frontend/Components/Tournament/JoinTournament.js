@@ -1,9 +1,8 @@
 import { displayNotification } from "../Notification/NotificationUtils.js";
 import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { apiUrl, wsUrl } from "../../Utils/GlobalVariables.js";
-import { playerId } from "../../root/Router.js";
+import { getCurrentPlayerId, wsUrl } from "../../Utils/GlobalVariables.js";
 import { hashPassword } from "../../Utils/Hasher.js";
-import { closeWebSocket, initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
+import { initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
 import { createRow } from "./configs/TournamentUtils.js";
 
@@ -32,7 +31,7 @@ export class JoinTournament extends HTMLElement {
                 <div class="tournament-info">
                     <div>
                         <p>OWNER: </p>
-                        <p class="tournament-owner">${tournamentData.players[0].username}</p>
+                        <p class="tournament-owner">${tournamentData.owner.user.username}</p>
                     </div>
                     <p class="number-of-players">${tournamentData.players.length + " / " + tournamentData.number_of_players}</p>
                 </div>
@@ -133,9 +132,11 @@ export class JoinTournament extends HTMLElement {
         const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
         tournamentsList.innerHTML = '';
         const tournaments = await get_Available_Tournaments();
+        console.log("available tournaments: ", tournaments);
         for (let index = tournaments.length - 1; index >= 0; index--) {
             const element = tournaments[index];
-            if (element.players.length && !Array.from(element.players).find( p => p.id == playerId))
+            const player_id = await getCurrentPlayerId();
+            if (element.players.length && !Array.from(element.players).find( p => p.id == player_id))
                 tournamentsList.appendChild(this.createTournamentItem(element));
             
         }
@@ -191,7 +192,8 @@ export class JoinTournament extends HTMLElement {
                     const tournaments = await get_Available_Tournaments("tournament_name=" + input.value);
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
-                        if (element.owner.id != playerId)
+                        const player_id = await getCurrentPlayerId();
+                        if (element.owner.id != player_id)
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
 
@@ -207,7 +209,8 @@ export class JoinTournament extends HTMLElement {
                     const tournaments = await get_Available_Tournaments();
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
-                        if (element.owner.id != playerId)
+                        const player_id = await getCurrentPlayerId();
+                        if (element.owner.id != player_id)
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
                     checker = false;
@@ -241,10 +244,11 @@ export class JoinTournament extends HTMLElement {
         this.tournamentSocket.onopen = function () {
             console.log('WebSocket connection of Tournament is opened !!!!!!!!!!!!!!!!!!!!');
         };
-        this.tournamentSocket.onmessage = (e) => {
+        this.tournamentSocket.onmessage = async (e) => {
             const newData = JSON.parse(e.data);
             const newTournament = newData.dataTest;
-            if (newTournament.players.length && !Array.from(newTournament.players).find(p => p.id == playerId))
+            const player_id = await getCurrentPlayerId();
+            if (newTournament.players.length && !Array.from(newTournament.players).find(p => p.id == player_id))
                 tournamentsList.prepend(this.createTournamentItem(newTournament));
             // here get data of tournament for update because A new tournament has been created
         };
