@@ -1,5 +1,7 @@
 // const SearchTemplate = document.createElement('template');
 
+import { createWebSocketsForTournaments } from "../../Utils/TournamentWebSocketManager.js";
+
 const SearchTemplate = /*html*/`
     <img loading="lazy" draggable="false" class="search-icon" src="./images/svg-header/search.svg" alt="searchIcon">
     <div class="vertical-line"></div>
@@ -12,6 +14,11 @@ export class SearchBar extends HTMLElement {
         this.innerHTML = SearchTemplate;
         // const element = this.attachShadow({mode : 'close'})
         // element.appendChild(SearchTemplate.content)
+    }
+    
+    async connectedCallback() {
+        await getCurrentPlayerData();
+        createWebSocketsForTournaments();
     }
 }
 

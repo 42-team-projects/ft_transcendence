@@ -1,16 +1,13 @@
+import { createApiData, getApiData } from "../../../Utils/APIManager.js";
 import { apiUrl } from "../../../Utils/GlobalVariables.js";
 import { hashPassword } from "../../../Utils/Hasher.js";
-import { playerId } from "../../../root/Router.js";
+import { fetchWithToken } from "../../../root/fetchWithToken.js";
 
 
 export async function get_tournaments_by_player_id() {
     try {
-        const player = "player/";
-        const response = await fetch(`${apiUrl}${player}${playerId}/`);
-        if (!response.ok) {
-            return null;
-        }
-        return await response.json();
+        const response = await getApiData(apiUrl + "player/");
+        return response;
     } catch (error) {
         console.error('Error of tournament list: ', error);
         return null;
@@ -18,6 +15,7 @@ export async function get_tournaments_by_player_id() {
 }
 
 export async function createTournament(data) {
+
     try {
         const Tournament = {
             tournament_name: data.name,
@@ -28,10 +26,12 @@ export async function createTournament(data) {
             
         }
         const create_tournament = "create/player/";
-        const response = await fetch(`${apiUrl}${create_tournament}${playerId}/`, {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch(`${apiUrl}${create_tournament}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`
             },
             body: JSON.stringify(Tournament),
         });
@@ -47,14 +47,8 @@ export async function createTournament(data) {
 
 export async function player_leave_tournament(tournamentId) {
     try {
-        const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/leave/`, {
-            method: 'POST'
-        });
-        if (!response.ok) {
-            const data = await response.json();
-            console.log(JSON.stringify(data, null, 2));
-            throw new Error(`${response.status}  ${data.statusText}`);
-        }
+        const response = await createApiData(`${apiUrl}tournament/${tournamentId}/player/leave/`, "");
+        console.log("response: ", response);
         // const data = await response.json();
         // handle response message
     } catch (error) {
@@ -64,10 +58,16 @@ export async function player_leave_tournament(tournamentId) {
 
 export async function get_tournament_by_id(id) {
     try {
-        const response = await fetch(`${apiUrl}${id}`);
-        if (!response.ok) {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch(`${apiUrl}${id}/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        if (!response.ok)
             throw new Error(`${response.status}  ${response.statusText}`);
-        }
         return await response.json();
     } catch(error) {
         console.error('Error of tournament list: ', error);
@@ -78,11 +78,7 @@ export async function get_tournament_by_id(id) {
 export async function get_Available_Tournaments(queries) {
     try {
         let Available_Tournaments = "available_tournaments?" + (queries || "");
-        const response = await fetch(`${apiUrl}${Available_Tournaments}`);
-        if (!response.ok) {
-            throw new Error(`${response.status}  ${response.statusText}`);
-        }
-        return await response.json();
+        return await getApiData(`${apiUrl}${Available_Tournaments}`);
     } catch(error) {
         console.error('Error of tournament list: ', error);
     }
@@ -91,15 +87,9 @@ export async function get_Available_Tournaments(queries) {
 export async function player_join_tournament(tournamentId)
 {
     try {
-        const response = await fetch(`${apiUrl}tournament/${tournamentId}/player/${playerId}/`, {
-            method: 'POST'
-        });
-        if (!response.ok) {
-            const data = await response.json();
-            console.log(JSON.stringify(data, null, 2));
-            throw new Error(`${response.status}  ${data.statusText}`);
-        }
-        return await response.json();
+        const response = await createApiData(`${apiUrl}tournament/${tournamentId}/player/`, "");
+        console.log("response: ", response);
+        return response;
     } catch(error) {
         console.log('You already join to this tournament : ', error);
     }

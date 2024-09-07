@@ -1,3 +1,4 @@
+import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
 
 let ws;
 
@@ -17,36 +18,44 @@ export class ChatFooterComponent extends HTMLElement {
         `;
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         const sendButton = this.shadowRoot.querySelector("img");
         const inputArea = this.shadowRoot.querySelector("input");
+        const currentUserId = await getCurrentUserId();
         sendButton.addEventListener("click", () => {
             const message = inputArea.value.trim();
             if (message.length)
             {
-                this.chat(5, 6, message);
+                this.chat(currentUserId, this.targetId, message);
                 console.log("the message has been successfully send !!");
             }
             inputArea.value = '';
         });
     }
 
+    disconnectedCallback() {
+        if (ws)
+            ws.close();
+    }
+
     set targetId(val) {this.setAttribute("target-id", val); }
-    get targetId() { return this,this.getAttribute("val"); }
+    get targetId() { return this.getAttribute("target-id"); }
 
     // webSocket;
     set webSocket(val) { ws = val;}
     get webSocket() {return ws;}
 
 
-    chat(sender_id, receiver_id, message) {
-        console.log("webSocket webSocket : ", this.webSocket);
-        console.log("message : ", message);
-        this.webSocket.send(JSON.stringify({
-            'message' : message,
-            'sender' : sender_id,
-            'receiver' : receiver_id
-        }))
+    async chat(sender_id, receiver_id, message) {
+        if(ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+                'message' : message,
+                'sender' : sender_id,
+                'receiver' : receiver_id
+            }));
+        } else {
+            console.log('WebSocket connection is not open');
+        }
     }
 }
 
@@ -55,7 +64,6 @@ customElements.define("chat-footer", ChatFooterComponent);
 const cssContent = /*css*/ `
     :host {
         display: flex;
-        flex: 0.7;
         justify-content: space-between;
         font-family: 'Sansation bold';
         width: 100%;
@@ -86,6 +94,7 @@ const cssContent = /*css*/ `
         border: none;
         background-color: transparent;
         flex: 8;
+        min-height: 32px;
         font-family: 'Sansation';
         font-size: 16px;
         color: #ffffff;

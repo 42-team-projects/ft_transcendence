@@ -89,7 +89,7 @@ const cssContent = /*css*/`
         align-items: center;
         justify-content: center;
         gap: 20px;
-        z-index: 99;
+        z-index: 60;
     }
     
     
