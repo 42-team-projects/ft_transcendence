@@ -14,6 +14,19 @@ logger = logging.getLogger(__name__)
 
 
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def searchForPlayers(request):
+    if request.method == 'GET':
+        try:
+            username = request.GET.get("username")
+            if username:
+                players = Player.objects.filter(user__username__icontains=username)
+                serializer = PlayerSerializer(players, many=True)
+                return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except Player.DoesNotExist:
+            return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
@@ -36,15 +49,16 @@ def getAllPlayers(request):
 def getMyInfo(request):
     try:
         player = Player.objects.get(user=request.user)
-        if request.method:
-            serializer = CustomPlayer(player)
+        if request.method == 'GET':
+            serializer = PlayerSerializer(player)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         elif request.method == 'PUT':
             serializer = PlayerSerializer(player, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif request.method == 'DELETE':
             player.stats.graph.delete();
             player.stats.delete();
@@ -59,15 +73,17 @@ def getMyInfo(request):
 def getPlayerByUsername(request, username):
     try:
         player = Player.objects.get(user__username=username)
-        if request.method:
-            serializer = CustomPlayer(player)
+        if request.method == 'GET':
+            serializer = PlayerSerializer(player)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         elif request.method == 'PUT':
             serializer = PlayerSerializer(player, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
         elif request.method == 'DELETE':
             Links.objects.get(player=player).delete()
             player.stats.graph.delete();

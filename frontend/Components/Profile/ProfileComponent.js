@@ -20,9 +20,9 @@ const htmlContent = `
         <profile-info-component></profile-info-component>
 
         <div class="profile-data-infos-container">
-            <user-info-container id="userInfo" label="Account Information" icon="assets/images/profile/account-icon.svg"></user-info-container>
-            <user-info-container id="links" label="Links" icon="assets/images/profile/chain-for-links.svg"></user-info-container>
-            <user-info-container id="achievements" label="Achievements" icon="assets/images/profile/trophy.svg"> </user-info-container>
+            <user-info-container id="userInfo" label="Account Information" icon="/assets/images/profile/account-icon.svg"></user-info-container>
+            <user-info-container id="links" label="Links" icon="/assets/images/profile/chain-for-links.svg"></user-info-container>
+            <user-info-container id="achievements" label="Achievements" icon="/assets/images/profile/trophy.svg"> </user-info-container>
         </div>
 
     </div>
@@ -123,10 +123,8 @@ export class ProfileComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-        console.log("pathname: ", window.location.pathname);
         const playerName = window.location.pathname.substring(9);
-        console.log("playerName: ", playerName);
-        this.renderProfilePage("me");
+        this.renderProfilePage(playerName);
     }
 
     async renderProfilePage(username) {
@@ -146,7 +144,8 @@ export class ProfileComponent extends HTMLElement {
 
     setUpProfileInfo() {
         const coverComponent = this.shadowRoot.querySelector("cover-component");
-        coverComponent.src = (HOST + this.APIData.cover) || "/images/xxxxxx.png";
+        if (this.APIData.cover)
+            coverComponent.src = (HOST + this.APIData.cover) || "/images/xxxxxx.png";
 
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
         profileInfoComponent.league = this.APIData.stats.league;
@@ -235,21 +234,9 @@ export class ProfileComponent extends HTMLElement {
 
     }
 
-    set username(val) {
-        this.setAttribute("username", val)
-    }
-
-    get username() {
-        return this.getAttribute("username");
-    }
-
-    static observedAttributes = ["username"];
+    static observedAttributes = [];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
-        if (attrName == "username") {
-            this.shadowRoot.querySelector(".main-profile-container").innerHTML = htmlContent;
-            this.renderProfilePage(newValue);
-        }
     }
 }
 
