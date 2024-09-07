@@ -1,13 +1,13 @@
-import { createApiData, getApiData, updateApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL, HOST } from "../../../Utils/APIUrls.js";
-import { getLeagueColor } from "../../../Utils/LeaguesData.js";
-import { fetchWithToken } from "../../../root/fetchWithToken.js";
-import { CustomInputField } from "../../CustomElements/CustomInputField.js";
-import { CustomToggleSwitch } from "../../CustomElements/CustomToggleSwitch.js";
-import { CustomUnorderedList } from "../../CustomElements/CustomUnorderedList.js";
-import { CustomUnorderedListItem } from "../../CustomElements/CustomUnorderedListItem.js";
-import { CustomSelect } from "../../CustomElements/CustomSelect.js";
-import { CustomSpinner } from "../../CustomElements/CustomSpinner.js";
+import { createApiData, getApiData, updateApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL, HOST } from "/Utils/APIUrls.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { fetchWithToken } from "/root/fetchWithToken.js";
+import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
+import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
+import { CustomUnorderedList } from "/Components/CustomElements/CustomUnorderedList.js";
+import { CustomUnorderedListItem } from "/Components/CustomElements/CustomUnorderedListItem.js";
+import { CustomSelect } from "/Components/CustomElements/CustomSelect.js";
+import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
 
 
 export class ProfileContent extends HTMLElement {

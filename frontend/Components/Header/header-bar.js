@@ -1,7 +1,7 @@
-import { NotificationComponent } from "../Notification/NotificationComponent.js";
-import { displayNotification } from "../Notification/NotificationUtils.js";
-import { SearchBarComponent } from "../Search/SearchBarComponent.js";
-import { NewFriendNotification } from "../Notification/templates/NewFriendNotification.js";
+import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
+import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { SearchBarComponent } from "/Components/Search/SearchBarComponent.js";
+import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 
 export class HeaderBar extends HTMLElement{
     constructor(){
@@ -250,18 +250,18 @@ const cssContent = /*css*/`
 
 HeaderTemplate.innerHTML = /*html*/`
     <div class="header-bar">
-        <link rel="stylesheet" href="../../Utils/utils.css">
+        <link rel="stylesheet" href="/Utils/utils.css">
         <style>
             ${cssContent}
         </style>
         <div id="pingpong-logo">
-            <img loading="lazy" draggable="false" src="./images/svg-header/pingpong-icon.svg" alt="pingpong">
+            <img loading="lazy" draggable="false" src="/images/svg-header/pingpong-icon.svg" alt="pingpong">
         </div>
         <div class="notification-search">
             <div class="search-box">
                 <search-bar-component></search-bar-component>
                 <div class="notification-icon" >
-                    <img loading="lazy" draggable="false" src="./images/svg-header/alarm.svg" alt="notification">
+                    <img loading="lazy" draggable="false" src="/images/svg-header/alarm.svg" alt="notification">
                     <div class="number-of-notifications">99</div>
                 </div>
             </div>

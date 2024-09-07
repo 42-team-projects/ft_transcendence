@@ -1,5 +1,5 @@
-import { fetchWithToken, isTokenValid} from './fetchWithToken.js'
-import config from '../../Utils/GlobalVariables.js';
+import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
+import config from '/Utils/GlobalVariables.js';
 
 export class Router {
 
@@ -21,7 +21,6 @@ export class Router {
         this.rootContent = document.querySelector("root-content");
         this.header = document.querySelector("header-bar");
         this.sideBar = document.querySelector("side-bar");
-        console.log("window.location.pathname: ", window.location.pathname);
         this.handleRoute(window.location.pathname);
     }
     randring(access_token, matchedRoute){
@@ -60,10 +59,12 @@ export class Router {
     }
     
     async changeStyle(access_token, path){
-        let matchedRoute = this.routes.find((route) => route.path === path);
+        let matchedRoute = this.routes.find((route) => path.startsWith(route.path));
+        // let matchedRoute = this.routes.find((route) => route.path === path);
         if (!matchedRoute)
         {
             matchedRoute = this.routes.find((route) => route.view === "home-page");
+            console.log("matchedRoute: ", matchedRoute);
             window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
         }
     

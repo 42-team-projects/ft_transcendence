@@ -1,10 +1,10 @@
 
 const HeaderTemplate = document.createElement('template');
-import { userInfo, opponentInfo } from "./Lobby.js";
+import { userInfo, opponentInfo } from "/Components/Game/GamePlay/Lobby.js";
 HeaderTemplate.innerHTML = /*html*/ `
-<link rel="stylesheet" href="Components/Game/GamePlay/GameTable.css">
+<link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
 <div class="leftPlayer">
-<img loading="lazy"   class="GamePlayer" src="./images/svg-header/profile.jpeg" alt="playerImg" />
+<img loading="lazy"   class="GamePlayer" src="/images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo">
     <div class="playerusername">
         <p></p>
@@ -22,7 +22,7 @@ HeaderTemplate.innerHTML = /*html*/ `
 </div>
 
 <div class="rightPlayer">
-<img loading="lazy"   class="GamePlayer1" src="./images/svg-header/profile.jpeg" alt="playerImg" />
+<img loading="lazy"   class="GamePlayer1" src="/images/svg-header/profile.jpeg" alt="playerImg" />
 <div class="playerinfo1">
     <div class="playerusername">
         <p></p>

@@ -1,6 +1,6 @@
 // Player == Profile Page
-import { fetchWithToken } from "../root/fetchWithToken.js"
-import { PROFILE_API_URL } from "./APIUrls.js";
+import { fetchWithToken } from "/root/fetchWithToken.js"
+import { PROFILE_API_URL } from "/Utils/APIUrls.js";
 
 export async function getApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');

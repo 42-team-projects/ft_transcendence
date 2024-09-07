@@ -1,5 +1,5 @@
-import { SettingsItem } from "./SettingsItem.js";
-import { ReportContent } from "./Contents/ReportContent.js";
+import { SettingsItem } from "/Components/Settings/SettingsItem.js";
+import { ReportContent } from "/Components/Settings/Contents/ReportContent.js";
 
 export class SettingsMenu extends HTMLElement {
     constructor() {

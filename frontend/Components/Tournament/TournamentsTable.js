@@ -1,12 +1,12 @@
-import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { apiUrl } from "../../Utils/GlobalVariables.js";
-import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "./configs/TournamentAPIConfigs.js";
-import { CustomButton } from "./CustomButton.js";
-import { JoinTournament } from "./JoinTournament.js";
-import { CreateTournament } from "./CreateTournament.js";
-import { GenerateRounds } from "./GenerateRounds.js";
-import { closeWebSocket, initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
-import { createTournamentTable } from "./configs/TournamentUtils.js";
+import { calculateTimeDifferents } from "/Utils/DateUtils.js";
+import { apiUrl } from "/Utils/GlobalVariables.js";
+import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { CustomButton } from "/Components/Tournament/CustomButton.js";
+import { JoinTournament } from "/Components/Tournament/JoinTournament.js";
+import { CreateTournament } from "/Components/Tournament/CreateTournament.js";
+import { GenerateRounds } from "/Components/Tournament/GenerateRounds.js";
+import { closeWebSocket, initWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { createTournamentTable } from "/Components/Tournament/configs/TournamentUtils.js";
 
 
 export class TournamentsTable extends HTMLElement {

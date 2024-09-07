@@ -1,7 +1,7 @@
-import { convertTimeStampIntoDate } from "../../../Utils/Convertor.js";
-import { calculateTimeDifferents } from "../../../Utils/DateUtils.js";
-import { closeWebSocket } from "../../../Utils/TournamentWebSocketManager.js";
-import { get_tournament_by_id, player_leave_tournament } from "./TournamentAPIConfigs.js";
+import { convertTimeStampIntoDate } from "/Utils/Convertor.js";
+import { calculateTimeDifferents } from "/Utils/DateUtils.js";
+import { closeWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { get_tournament_by_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 
 
 const TABLEHEADER = `
@@ -72,7 +72,7 @@ export function createRow(parentNode, data) {
         const exitButton = document.createElement("img");
         exitButton.id = data.id;
         exitButton.className = "exitAction";
-        exitButton.src = "./images/logout.svg";
+        exitButton.src = "/images/logout.svg";
         exitButton.width = 24;
         exitButton.addEventListener("click", async () => {
             player_leave_tournament(data.id);
@@ -83,7 +83,7 @@ export function createRow(parentNode, data) {
         const displayButton = document.createElement("img");
         displayButton.id = data.id;
         displayButton.className = "displayAction";
-        displayButton.src = "./assets/images/profile/play-button.svg";
+        displayButton.src = "/assets/images/profile/play-button.svg";
         displayButton.width = 24;
         displayButton.addEventListener("click", async () => {
             parentNode.innerHTML = '';

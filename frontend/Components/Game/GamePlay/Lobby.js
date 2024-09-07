@@ -1,9 +1,9 @@
-import { PlayerBorder } from "./PlayerBorder.js";
-import { GameHeader } from "./GameHeader.js"
-import { GameTable } from "./GameTable.js"
-import { getCurrentPlayerData, ip } from "../../../Utils/GlobalVariables.js";
-import { getApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL, HOST } from "../../../Utils/APIUrls.js";
+import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
+import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
+import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
+import { getCurrentPlayerData, ip } from "/Utils/GlobalVariables.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL, HOST } from "/Utils/APIUrls.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
