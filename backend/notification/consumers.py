@@ -6,9 +6,9 @@ from .serializers import NotificationSerializer
 
 class UserNotificationConsumer(WebsocketConsumer):
     def connect(self):
-        user_id = self.scope['url_route']['kwargs']['user_id']
+        self.user_id = self.scope['url_route']['kwargs']['user_id']
         # if self.current_user.is_authenticated:
-        self.group_name = f'notification_{user_id}'
+        self.group_name = f'notification_{self.user_id}'
 
         async_to_sync(self.channel_layer.group_add)(
             self.group_name,
@@ -41,6 +41,7 @@ class UserNotificationConsumer(WebsocketConsumer):
             self.send_error('Receiver user not exists!')
 
     def broadcast_notification(self, data):
+        data['sender'] = self.get_user(self.user_id).username
         async_to_sync(self.channel_layer.group_send)(
             f'notification_{data["user"]}',
             {
