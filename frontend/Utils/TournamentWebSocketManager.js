@@ -50,7 +50,7 @@ export async function closeWebSocket(socketId) {
  // 2 minutes in seconds
 
  
-let totalCountdownTime = 60;
+let totalCountdownTime = 30;
 
  export async function countDownTimer(start_date, cDownContainer) {
     const currentDate = new Date();
@@ -130,7 +130,7 @@ async function displayAlert(e, data) {
 
         /* -------   start call nordine code here -------- */
         if (opponentId) {
-            closeWebSocket(data.tournament_id); // new
+            // closeWebSocket(data.tournament_id); // new
             clearInterval(countdownInterval);
             console.log("\n============\n");
             console.log("\nplayerID:     ", pId, "opponentId:    ", opponentId);
@@ -138,8 +138,11 @@ async function displayAlert(e, data) {
 
             console.log("time ===> ", timeLeft);
             const lobby = new Lobby(opponentId, timeLeft);
+            lobby.id = "tournament_lobby";
+            lobby.tournament_id = data.tournament_id;
             document.body.querySelector('root-content').innerHTML = '';
             document.body.querySelector('root-content').appendChild(lobby);
+
             alertsConrtainer.innerHTML = '';
             alertsConrtainer.style.display = "none";
         } else {
@@ -178,23 +181,32 @@ async function closeAndRemovePlayerFromTournament(data) {
  * @author rida
  */
 
+export async function CheckTournamentStages(data, tournamentSocket)
+{
+    if(data.number_of_players == data.players.length || !data.can_join)
+    {
+        let nextStage = false;
+        // if (data.number_of_players % data.players.length == 0)
+        //     nextStage = true;
+        await update_start_date(data, nextStage);
+        tournamentSocket.send(JSON.stringify({'type': 'play_cancel', 'message': 'Tournament is starting in 2 minutes'}));
+    }
+}
+
 export function useWebsocket(data) {
     // TODO: Tournament Alert
     const tournament_id = data.tournament_id;
     const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
     tournamentSocket.onopen = async () => {
         console.log('WebSocket connection of Tournament is opened');
-        if(data.number_of_players == data.players.length || !data.can_join)
-        {
-            // if(totalCountdownTime == 60)
-            // {
-                await update_start_date(data);
-                tournamentSocket.send(JSON.stringify({'type': 'play_cancel', 'message': 'Tournament is starting in 2 minutes'}));
-            // }
-        }
+        await CheckTournamentStages(data, tournamentSocket);
     };
 
-    tournamentSocket.onmessage = (e) => { displayAlert(e, data); };
+    tournamentSocket.onmessage = (e) => { 
+        const lobby = document.querySelector("root-content #tournament_lobby");
+        if (!lobby)
+            displayAlert(e, data);
+    };
 
     tournamentSocket.onclose = () => { console.log('WebSocket connection of tournament closed'); };
 
@@ -203,20 +215,17 @@ export function useWebsocket(data) {
     return tournamentSocket;
 }
 
- export async function update_start_date(data) {
+ export async function update_start_date(data, nextStage) {
     try {
         const tournamentId = data.id;
         const now = new Date();
-        console.log("before now: ", now);
-        console.log("\n===\n");
-        // now.setSeconds(now.getSeconds() + 60); // add 60 second 
-        console.log("after now: ", now);
 
         const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
         console.log("start_date: ", start_date);
         const Tournament = {
             tournamentId: tournamentId,
             start_date: start_date,
+            next_stage: nextStage
         }
         const response = await fetch(`${apiUrl}SetStartDate/`, {
             method: 'PUT',
@@ -230,8 +239,8 @@ export function useWebsocket(data) {
             console.log(JSON.stringify(responseData, null, 2));
             throw new Error(`${response.status}  ${responseData.statusText}`);
         }
-        const responseData = await response.json();
-        console.log("responseData: ", responseData);
+        // const responseData = await response.json();
+        // console.log("responseData: ", responseData);
     } catch(error) {
         console.error('Error of update start date: ', error);
     }

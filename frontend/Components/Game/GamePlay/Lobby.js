@@ -93,6 +93,9 @@ lobby.innerHTML =  /* html */ `
 
 
 export class Lobby extends HTMLElement{
+	tournament_id;
+	set tournament_id(val) {this.tournament_id = val;}
+	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){
 		super();
@@ -103,7 +106,8 @@ export class Lobby extends HTMLElement{
 		this.setSlots(playerSlot.content, 'false')
 		this.setSlots(opponentSlot.content, 'true')
 		setTimeout(() => {
-			document.body.classList.toggle('body-game-shrink', true);   
+			document.body.classList.toggle('body-game-shrink', true);
+			console.log("Hello from Lobby constructor !!!");
 		}, 1000);
 		if(opponentId && time)
 		{
@@ -111,7 +115,7 @@ export class Lobby extends HTMLElement{
 			console.log("im here")
 			this.OnlineGame(opponentId);
 		}
-		else{
+		else {
 			this.headerAnimation();
 			this.sidebarAnimation();
 		}
@@ -238,9 +242,10 @@ export class Lobby extends HTMLElement{
 				room_group_name = 'game_' + userInfo.id + '_' + opponentId;
 			else
 				room_group_name = 'game_' + opponentId + '_' + userInfo.id;
-			setInterval(() => {
+			const inter = setInterval(() => {
 				this.time -= 1;
 				this.updateTimer();
+				console.log("hello from OnlineGame !!!");
 			}, 1000);
 			this.gameMode(room_group_name);
 		}
@@ -290,6 +295,7 @@ export class Lobby extends HTMLElement{
 	playeGame(room_group_name){
 		const header = new GameHeader();
 		const game = new GameTable(room_group_name);
+		game.id = this.tournament_id;
 		document.body.innerHTML = ``;
 		document.body.appendChild(header);
 		document.body.appendChild(game);
