@@ -55,6 +55,9 @@ export async function getCurrentUserId() {
 }
 
 
+import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
+
 let notificationWebSocket;
 
 
@@ -73,7 +76,19 @@ export async function createNotificationWebSocket() {
     notificationWebSocket.onclose = (event) => {
         console.log('WebSocket connection closed: ', event);
     };
-    console.log("hello world ???");
+    notificationWebSocket.onmessage = async (event) => {
+        let data = await JSON.parse(event.data)
+        console.log("data: ", data);
+        if (data.Error) {
+            console.log(data.Error)
+        }
+        else {
+            // const messageNotification = new MessageNotification();
+            const messageNotification = createNotification(data.sender, data.content, "message");
+            console.log("messageNotification: ", messageNotification);
+            displayNotification(messageNotification);
+        }
+    }
     return (notificationWebSocket);
 }
 
