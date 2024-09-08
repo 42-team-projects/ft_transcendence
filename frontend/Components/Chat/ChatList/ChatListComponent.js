@@ -77,7 +77,7 @@ export class ChatListComponent extends HTMLElement {
         const list = this.querySelector(".list-item");
     
         try {
-            const data = await getApiData("http://127.0.0.1:8000/chat/conversation_list/");
+            const data = await getApiData("https://127.0.0.1:8000/chat/conversation_list/");
             if (data) {
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item);
