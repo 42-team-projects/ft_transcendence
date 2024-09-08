@@ -32,48 +32,14 @@ export class NotificationsList extends HTMLElement {
         this.querySelector(".clear-all").addEventListener("click", () => {
             this.querySelector(".notification-list").innerHTML = '';
         });
-        // const currentUserId = await getCurrentUserId();
-        // this.notifiactionWebSocket = this.createWebSocket(currentUserId);
     }
-    notifiactionWebSocket;
     disconnectedCallback() {
-        if (this.notifiactionWebSocket)
-            this.notifiactionWebSocket.close();
-    }
-
-
-
-    createWebSocket(userId) {
-        let wsUrl = `ws://${window.location.hostname}:8000/ws/notification/${userId}/`;
-        console.log("wsUrl: ", wsUrl);
-        const webSocket = new WebSocket(wsUrl)
-        webSocket.onopen = () => {
-            console.log('WebSocket connection of chat is opened');
-        };
-        webSocket.onerror = (error) => {
-            console.log('WebSocket encountered an error: ', error);
-        };
-        webSocket.onclose = (event) => {
-            console.log('WebSocket connection closed: ', event);
-        };
-        webSocket.onmessage = async (e) => {
-            let data = await JSON.parse(e.data)
-            if (data.Error) {
-                console.log(data.Error)
-            }
-            else {
-                console.log("data: ", data);
-                const messageNotification = new MessageNotification();
-                displayNotification("<message-notification></message-notification>");
-            }
-        };
-        return (webSocket);
     }
 
     appendNotification(notificationContent) {
         const notification = new NotificationComponent();
         notification.width = "100%";
-        notification.innerHTML = notificationContent;
+        notification.appendChild(notificationContent);
         this.querySelector(".notification-list").prepend(notification);
     }
 
