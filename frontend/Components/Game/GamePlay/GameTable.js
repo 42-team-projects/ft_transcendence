@@ -33,7 +33,7 @@ game_page.innerHTML = /*html*/ `
 
 let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
-
+let now;
 export class GameTable extends HTMLElement{
 
     constructor(room_name)
@@ -76,7 +76,11 @@ export class GameTable extends HTMLElement{
     }
     async connectedCallback(){
         this.runder_call = true;
-        await this.getMessages();
+        if(userInfo.id % 2)
+            await this.GameOver('lose')
+        else
+            await this.GameOver('win')
+        // await this.getMessages();
     }
     async getMessages() {
         this.socket.onmessage = async (event) => {
@@ -85,9 +89,8 @@ export class GameTable extends HTMLElement{
             const player_1 = message.player_1;
             const player_2 = message.player_2;
             const status = message.status;
-            console.log(data.message);
+            console.log('message', message);
             if (status === 'game_start') {
-                console.log(data);
                 const message = {
                     'message': 'firstdata',
                     'canvas_width': CANVAS_WIDTH,
@@ -108,10 +111,12 @@ export class GameTable extends HTMLElement{
                     score.opponent = player_1.score;
                 }
                 await this.RoundOver();
+                console.log('time', new Date() - now);
             } else if (status === 'RoundStart') {
                 this.luanching = true;
                 this.round = message.round;
                 await this.resetGame();
+                now = new Date();
             } else if (status === 'GameOver') {
                 let player_state = '';
                 if (userInfo.id === Number(player_1.id)) {
@@ -248,14 +253,14 @@ export class GameTable extends HTMLElement{
         ctx.closePath();
     }
     async resetGame(){
-        if(this.requestID)
-            cancelAnimationFrame(this.requestID);
-            removeEventListener('keydown', (event) => {
-                this.setMove(event, this.getKeys());
-            })
-            removeEventListener('keyup', (event) => {
-                this.resetMove(event, this.getKeys());
-            })
+        // if(this.requestID)
+        //     cancelAnimationFrame(this.requestID);
+        //     removeEventListener('keydown', (event) => {
+        //         this.setMove(event, this.getKeys());
+        //     })
+        //     removeEventListener('keyup', (event) => {
+        //         this.resetMove(event, this.getKeys());
+        //     })
         this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 0 , 0);
         this.updatePlayerPosition(CANVAS_HEIGHT / 2);
         this.updateOpponentPosition(CANVAS_HEIGHT / 2);
@@ -350,6 +355,7 @@ export class GameTable extends HTMLElement{
         // if(keyArrowDown === true) { this.moveDown(opponent) };
         this.updatePlayerPosition(player.y);
     }
+
     moveDown(player){
         if(player.y + this.racquet.height <= CANVAS_HEIGHT)
             player.y += 10;
@@ -359,6 +365,7 @@ export class GameTable extends HTMLElement{
         }
         this.socket.send(JSON.stringify(message));
     }
+
     moveUp(player){
         if(player.y >= 0)
             player.y -= 10;
