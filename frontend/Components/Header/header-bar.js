@@ -50,11 +50,12 @@ const HeaderTemplate =  document.createElement('template');
 const cssContent = /*css*/`
 
     .header-bar{
-        justify-content: space-between;
         display: flex;
+        justify-content: space-between;
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: center;
+        width: 100%;
     }
     #pingpong-logo
     {
