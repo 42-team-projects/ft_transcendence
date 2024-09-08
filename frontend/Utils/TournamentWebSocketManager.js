@@ -47,6 +47,16 @@ export async function closeWebSocket(socketId) {
     }
 }
 
+
+export function getWebSocketByTournamentId(tournament_id) {
+    if (webSocketIdQueue.includes(tournament_id))
+    {
+        const index = webSocketIdQueue.indexOf(tournament_id);
+        return webSocketQueue[index];
+    }
+    return null;
+}
+
  // 2 minutes in seconds
 
  
@@ -75,7 +85,7 @@ let totalCountdownTime = 30;
 
 async function displayAlert(e, data) {
     const response = await JSON.parse(e.data);
-    data = await getTournamentData(data.id); // use uuid instead of primary id key
+    data = await getTournamentData(data.tournament_id); // use uuid instead of primary id key
     
     // console.log("tournamentSocket.onmessage.data : ", response);
 
@@ -99,7 +109,7 @@ async function displayAlert(e, data) {
     <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
     </div>
     `;
-    const start_date = await get_start_date(data.id);
+    const start_date = await get_start_date(data.tournament_id);
     console.log("data: ", data);
     console.log("start_date: ", start_date);
     const cDownContainer = customAlert.querySelector(".countDown");
@@ -107,8 +117,7 @@ async function displayAlert(e, data) {
     console.log("countdownInterval: ", countdownInterval);
     if (countdownInterval == -1)
     {
-        console.log("if (countDownTimer(start_date, cDownContainer) == -1)");
-        closeAndRemovePlayerFromTournament(data);
+        closeAndRemovePlayerFromTournament(data.tournament_id);
         customAlert.remove();
         alertsConrtainer.style.display = "none";
         alertsConrtainer.innerHTML = '';
@@ -132,6 +141,7 @@ async function displayAlert(e, data) {
         if (opponentId) {
             // closeWebSocket(data.tournament_id); // new
             clearInterval(countdownInterval);
+
             console.log("\n============\n");
             console.log("\nplayerID:     ", pId, "opponentId:    ", opponentId);
             console.log("\n============\n");
@@ -155,10 +165,10 @@ async function displayAlert(e, data) {
     customAlert.querySelector("#cancelBtn").addEventListener("click", async () => {
         if(confirm("You have canceled your participation in the tournament."))
         {
-            closeAndRemovePlayerFromTournament(data);
+            closeAndRemovePlayerFromTournament(data.tournament_id);
             customAlert.remove();
             if (!alertsConrtainer.childElementCount)
-            alertsConrtainer.remove();
+                alertsConrtainer.remove();
         }
     });
     alertsConrtainer.appendChild(customAlert);
@@ -166,11 +176,11 @@ async function displayAlert(e, data) {
 }
 
 
-async function closeAndRemovePlayerFromTournament(data) {
+export async function closeAndRemovePlayerFromTournament(tournament_id) {
     try {
-        await player_leave_tournament(data.id);
+        await player_leave_tournament(tournament_id);
         // Close the WebSocket connection
-        closeWebSocket(data.tournament_id);
+        closeWebSocket(tournament_id);
     } catch (error) {
         console.error('Error of player leave tournament: ', error);
     }
@@ -186,8 +196,8 @@ export async function CheckTournamentStages(data, tournamentSocket)
     if(data.number_of_players == data.players.length || !data.can_join)
     {
         let nextStage = false;
-        // if (data.number_of_players % data.players.length == 0)
-        //     nextStage = true;
+        if (data.number_of_players != data.players.length && data.number_of_players % data.players.length == 0)
+            nextStage = true;
         await update_start_date(data, nextStage);
         tournamentSocket.send(JSON.stringify({'type': 'play_cancel', 'message': 'Tournament is starting in 2 minutes'}));
     }
@@ -277,15 +287,15 @@ async function getTournamentData(tournament_id) {
     }
 }
 
-async function get_players_ids(tournament_id) {
+// async function get_players_ids(tournament_id) {
 
-    const tournamentData = await getTournamentData(); // Function to get tournament data
-    console.log(JSON.stringify(tournamentData, null, 2));
+//     const tournamentData = await getTournamentData(); // Function to get tournament data
+//     console.log(JSON.stringify(tournamentData, null, 2));
 
-    const playerIds = tournamentData.players.map(player => player.id); // Extract sorted player IDs
-    console.log(playerIds);
-    return playerIds;
-}
+//     const playerIds = tournamentData.players.map(player => player.id); // Extract sorted player IDs
+//     console.log(playerIds);
+//     return playerIds;
+// }
 
 function findOpponentId(playerId, playerIds, totalPlayers)
 {
