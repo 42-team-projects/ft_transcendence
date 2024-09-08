@@ -53,3 +53,43 @@ export async function getCurrentUserId() {
     currentPlayer = await getApiData(PROFILE_API_URL + "me/");
     return currentPlayer.user.id;
 }
+
+
+let notificationWebSocket;
+
+
+export async function createNotificationWebSocket() {
+
+    const userId = await getCurrentUserId();
+    let wsUrl = `ws://${window.location.hostname}:8000/ws/notification/${userId}/`;
+    console.log("wsUrl: ", wsUrl);
+    notificationWebSocket = new WebSocket(wsUrl)
+    notificationWebSocket.onopen = () => {
+        console.log('WebSocket connection of chat is opened');
+    };
+    notificationWebSocket.onerror = (error) => {
+        console.log('WebSocket encountered an error: ', error);
+    };
+    notificationWebSocket.onclose = (event) => {
+        console.log('WebSocket connection closed: ', event);
+    };
+    console.log("hello world ???");
+    return (notificationWebSocket);
+}
+
+
+export async function getNotificationWebSocket() {
+    if (notificationWebSocket)
+        return notificationWebSocket;
+    return await createNotificationWebSocket();   
+}
+
+// webSocket.onmessage = async (e) => {
+//     let data = await JSON.parse(e.data)
+//     if (data.Error) {
+//         console.log(data.Error)
+//     }
+//     else {
+//         displayNotification("<message-notification></message-notification>");
+//     }
+// };

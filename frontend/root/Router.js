@@ -69,6 +69,7 @@ export class Router {
         }
     
         if (matchedRoute.isAccessed) {
+            
             const isValid = await isTokenValid(access_token);
             if (isValid) {
                 if(this.randred === false)

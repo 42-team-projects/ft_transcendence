@@ -63,6 +63,7 @@ customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);
 customElements.define("oauth-callback", OAuth);
 
+
 document.addEventListener('DOMContentLoaded', async (event) => {
     window.addEventListener("popstate", () =>
         router.handleRoute(window.location.pathname)
