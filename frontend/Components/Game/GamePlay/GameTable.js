@@ -76,6 +76,10 @@ export class GameTable extends HTMLElement{
     }
     async connectedCallback(){
         this.runder_call = true;
+        // sleep 
+        // if (userInfo.id == 1 || userInfo.id == 4)
+        //     await new Promise(r => setTimeout(r, 20000));
+
         if(userInfo.id % 2)
             await this.GameOver('lose')
         else
