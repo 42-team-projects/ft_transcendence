@@ -58,6 +58,8 @@ class GameConsumer(AsyncWebsocketConsumer):
     
     async def disconnect(self, close_code):
         print(self.room_group_name)
+        if self in game_queue:
+            game_queue.remove(self)
         await remove_from_queue(
             self
         )
@@ -67,7 +69,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 del GameConsumer.rooms[self.room_group_name]
             else:
                 await GameConsumer.rooms[self.room_group_name].close_socket(self)
-        
     
     async def send_message(self, message, function='game_message'):
         await self.channel_layer.group_send(

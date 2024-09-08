@@ -1,5 +1,6 @@
 import json
 import asyncio
+
 class GameLoop :
     def __init__(self, controler, opponent):
         self.controler = controler
@@ -133,6 +134,7 @@ class GameLoop :
             }
         }
         await self.send_message(message)
+
 
     async def game_over(self):
         message = {
