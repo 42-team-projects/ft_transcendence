@@ -26,7 +26,7 @@
         {
             try {
                 const nextStage = true;
-                const tournamentId = 1;
+                const tournamentId = 9559969398;
                 const now = new Date();
                 const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
                 console.log("start_date: ", start_date);
@@ -56,7 +56,7 @@
     
         async function get_tournament_by_id() {
             try {
-                const id = "1/";
+                const id = "9559969398/";
                 const response = await fetch(`${apiUrl}${id}`);
                 if (!response.ok) {
                     throw new Error(`${response.status}  ${response.statusText}`);
