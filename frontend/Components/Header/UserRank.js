@@ -53,10 +53,8 @@ export class UserRank extends HTMLElement{
     static observedAttributes = ["bcolor"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
-        console.log("hello world testtest");
         if (attrName == "bcolor") {
             this.style.background = newValue;
-            console.log("newValue: ", newValue);
         }
     }
 }

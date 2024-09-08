@@ -14,6 +14,7 @@ let score = {
 
 game_page.innerHTML = /*html*/ `
 <link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
+<link rel="stylesheet" href="./Utils/utils.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>
@@ -76,15 +77,11 @@ export class GameTable extends HTMLElement{
     }
     async connectedCallback(){
         this.runder_call = true;
-        // sleep 
-        // if (userInfo.id == 1 || userInfo.id == 4)
-        //     await new Promise(r => setTimeout(r, 20000));
-
-        if(userInfo.id % 2)
-            await this.GameOver('lose')
-        else
-            await this.GameOver('win')
-        // await this.getMessages();
+        // if(userInfo.id % 2)
+        //     await this.GameOver('lose')
+        // else
+        //     await this.GameOver('win')
+        await this.getMessages();
     }
     async getMessages() {
         this.socket.onmessage = async (event) => {
@@ -93,9 +90,9 @@ export class GameTable extends HTMLElement{
             const player_1 = message.player_1;
             const player_2 = message.player_2;
             const status = message.status;
-            console.log('message', message);
             if (status === 'game_start') {
-                const message = {
+                console.log('message', message);
+                const messages = {
                     'message': 'firstdata',
                     'canvas_width': CANVAS_WIDTH,
                     'canvas_height': CANVAS_HEIGHT,
@@ -105,8 +102,9 @@ export class GameTable extends HTMLElement{
                         'width': this.racquet.width,
                     },
                 }
-                this.socket.send(JSON.stringify(message))
+                this.socket.send(JSON.stringify(messages))
             } else if (status === 'RoundOver') {
+                console.log('message', message);
                 if (userInfo.id === Number(player_1.id)) {
                     score.player = player_1.score;
                     score.opponent = player_2.score;
@@ -115,12 +113,13 @@ export class GameTable extends HTMLElement{
                     score.opponent = player_1.score;
                 }
                 await this.RoundOver();
-                console.log('time', new Date() - now);
+                // console.log('time', new Date() - now);
             } else if (status === 'RoundStart') {
+                console.log('message', message);
                 this.luanching = true;
                 this.round = message.round;
                 await this.resetGame();
-                now = new Date();
+                // now = new Date();
             } else if (status === 'GameOver') {
                 let player_state = '';
                 if (userInfo.id === Number(player_1.id)) {
@@ -198,7 +197,7 @@ export class GameTable extends HTMLElement{
     
     async GameOver(playerState){
         this.Loop_state = false;
-        console.log("this.id: ", this.id);
+        // console.log("this.id: ", this.id);
         if (this.id)
             goNextStage(playerState, this.id);
         const gameOver = new GameOver(playerState);
@@ -211,6 +210,7 @@ export class GameTable extends HTMLElement{
         if(this.luanching === false)
             return;
         let RoundTime = 3;
+        // console.log('lunchiiiiiiiiiiiiiiiiiiiiiiiiiing');
         const LunchingGame = new LaunchingGame(RoundTime, this.round);
 		document.body.appendChild(LunchingGame);
 		const Lunching = setInterval(() => {
@@ -223,11 +223,11 @@ export class GameTable extends HTMLElement{
                 addEventListener('keyup', (event) => {
                     this.resetMove(event, this.getKeys());
                 })
-                clearInterval(Lunching);
+                document.body.querySelector('launching-game').remove();
                 document.body.querySelector('game-header').classList.toggle('blur', false);
                 document.body.querySelector('game-table').classList.toggle('blur', false);
-                document.body.querySelector('launching-game').remove();
                 this.gameLoop(ctx);
+                clearInterval(Lunching);
             }
 			else
                 LunchingGame.updateTimer(RoundTime, this.round);
@@ -278,7 +278,7 @@ export class GameTable extends HTMLElement{
         const opponent = this.getOpponentPosition();
         this.requestID = requestAnimationFrame(() => this.gameLoop(ctx));
         await this.movePlayer(this.getKeys(), player);
-        await this.moveBall(player, opponent, ctx);
+        // await this.moveBall(player, opponent, ctx);
         await this.renderBall(ctx);
         await this.RanderRackit(ctx, player);
         await this.RanderRackit(ctx, opponent);
@@ -299,7 +299,7 @@ export class GameTable extends HTMLElement{
         await this.LuncheGame(ctx);
     }
     async RoundOver(ctx){
-        this.Loop_state = false;
+        // this.Loop_state = false;
         document.querySelector('game-header').updateScore(score);
     }
     async moveBall(player, opponent, ctx){
