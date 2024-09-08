@@ -5,6 +5,7 @@ services:
     container_name: back-end
     volumes:
       - ./backend/:/app
+      - ./devops/certs:/app/certs
     ports:
       - "8000:8000"
     networks:
