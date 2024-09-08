@@ -11,7 +11,7 @@ let timeLeft = 0;
 
 export async function createWebSocketsForTournaments() {
     const tournamentsAPIData = await get_tournaments_by_player_id();
-    console.log("tournamentsAPIData: ", tournamentsAPIData);
+    // console.log("tournamentsAPIData: ", tournamentsAPIData);
     if (!tournamentsAPIData)
         return;
     for (let index = tournamentsAPIData.length - 1; index >= 0; index--)
