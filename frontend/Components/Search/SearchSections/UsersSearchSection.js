@@ -2,6 +2,7 @@ import { HOST } from "/Utils/APIUrls.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { ProfileComponent } from "/Components/Profile/ProfileComponent.js";
 import { router } from "/root/Router.js";
+import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 
 export class UsersSearchSection extends HTMLElement {
     constructor() {
@@ -52,7 +53,7 @@ export class UsersSearchSection extends HTMLElement {
                 <h4>${playerData.user.username}</h4>
             </div>
             <div class="search-actions">
-                <img id="chat" src="/assets/icons/chat-icon.svg" class="read-message" width="24px" height="24px"></img>
+                <img id="chat" src="/assets/icons/plus-icon.svg" class="read-message" width="24px" height="24px"></img>
                 <img id="play-game" src="/assets/icons/manette-icon.svg" class="read-message" width="24px" height="24px"></img>
                 <a id="show-profile" href="/Profile/${playerData.user.username}">
                     <img src="/assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
@@ -74,8 +75,9 @@ export class UsersSearchSection extends HTMLElement {
             
         });
 
-        chat.addEventListener("click", () => {
-            
+        chat.addEventListener("click", async () => {
+            const websocket = await getNotificationWebSocket();
+            websocket.send(JSON.stringify({'receiver': '1', 'message': 'Tournament is starting in 2 minutes'}));
         });
         return item;
     }

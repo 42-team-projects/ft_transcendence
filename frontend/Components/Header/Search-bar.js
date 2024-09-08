@@ -1,5 +1,6 @@
 // const SearchTemplate = document.createElement('template');
 
+import { createNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js";
 
 const SearchTemplate = /*html*/`
@@ -17,8 +18,7 @@ export class SearchBar extends HTMLElement {
     }
     
     async connectedCallback() {
-        await getCurrentPlayerData();
-        createWebSocketsForTournaments();
+
     }
 }
 
