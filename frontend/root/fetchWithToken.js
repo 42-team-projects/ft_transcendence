@@ -5,7 +5,7 @@ export const fetchWithToken = async (url, options) => {
 
     if (response.status === 401) {
         const refreshResponse = await fetch(
-            `http://${config.serverIP}:8000/api/v1/auth/refresh/`,
+            `${config.serverURL}/api/v1/auth/refresh/`,
             {
                 method: "POST",
                 credentials: "include",
@@ -26,7 +26,7 @@ export const fetchWithToken = async (url, options) => {
 };
 
 export const isTokenValid = (access_token) => {
-    return fetchWithToken(`http://${config.serverIP}:8000/api/v1/auth/verify/`, {
+    return fetchWithToken(`${config.serverURL}/api/v1/auth/verify/`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${access_token}`

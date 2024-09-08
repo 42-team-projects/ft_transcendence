@@ -1,6 +1,6 @@
 
 // export const apiUrl = 'http://127.0.0.1:8000/tournament/';
-export const apiUrl = 'http://127.0.0.1:8000/tournament/'
+export const apiUrl = 'https://127.0.0.1:8000/tournament/'
 export const wsUrl = 'ws://127.0.0.1:8000/';
 
 import { getApiData } from "./APIManager.js";
@@ -15,6 +15,7 @@ import { PROFILE_API_URL } from "./APIUrls.js";
 export const ip = '127.0.0.1';
 const config = {
     serverIP: ip,
+    serverURL: 'https://127.0.0.1:8000',
 };
 
 export default config;

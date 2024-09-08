@@ -74,7 +74,7 @@ export default class SignupPage extends HTMLElement {
     
     async registerUser(formData) {
         const response = await fetch(
-            `http://${config.serverIP}:8000/api/v1/auth/register/`,
+            `${config.serverURL}/api/v1/auth/register/`,
             {
                 method: "POST",
                 headers: {

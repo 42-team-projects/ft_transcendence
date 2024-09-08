@@ -56,12 +56,12 @@ export default class LoginPage extends HTMLElement {
 		// oauth
 		this.querySelector('.oauth-button.google').addEventListener('click', () => {
 			this.isOAuth = true;
-			window.location.href = `http://${config.serverIP}:8000/api/v1/auth/google/redirect/`;
+			window.location.href = `${config.serverURL}/api/v1/auth/google/redirect/`;
 		});
 		
 		this.querySelector('.oauth-button.intra').addEventListener('click', () => {
 			this.isOAuth = true; 
-			window.location.href = `http://${config.serverIP}:8000/api/v1/auth/intra/redirect/`;
+			window.location.href = `${config.serverURL}/api/v1/auth/intra/redirect/`;
 		});
 	}
 
@@ -98,7 +98,7 @@ export default class LoginPage extends HTMLElement {
 
 	async submitForm(formData) {
 		try {
-			const response = await fetch(`http://${config.serverIP}:8000/api/v1/auth/login/`, {
+			const response = await fetch(`${config.serverURL}/api/v1/auth/login/`, {
 				method: 'POST',
 				credentials: "include",
 				headers: {
