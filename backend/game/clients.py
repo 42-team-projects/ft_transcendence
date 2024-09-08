@@ -70,7 +70,6 @@ class GameLoop :
             # start time
             current_time = datetime.now()
             while True:
-                print('sending', i)
                 await self.send_message(self.ball_data)
                 await asyncio.sleep(0.05)
         except asyncio.CancelledError:
@@ -198,7 +197,7 @@ class GameLoop :
                     'message': message
                 }
             )
-        if self.opponent:
+        elif self.opponent:
             await self.opponent.channel_layer.group_send(
                 self.opponent.room_group_name,
                 {
