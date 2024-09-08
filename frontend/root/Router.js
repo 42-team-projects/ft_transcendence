@@ -106,7 +106,7 @@ export class Router {
         // tmp place should be in function and called somewhere
         let logout = document.querySelector('.logout')
         logout.addEventListener('click', () => {
-            fetchWithToken(`http://${config.serverIP}:8000/api/v1/auth/logout/`, {
+            fetchWithToken(`${config.serverURL}/api/v1/auth/logout/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
