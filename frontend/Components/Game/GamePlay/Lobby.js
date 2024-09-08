@@ -255,13 +255,16 @@ export class Lobby extends HTMLElement{
 		const turnTime = 10;
 		let delay = 0;
 		let delayNumber = (turnTime / 2) / Players.length;
-		opponentInfo = await getApiData(PROFILE_API_URL + `${opponentId}/`);
+		const opponent = await getApiData(PROFILE_API_URL + `${opponentId}/`);
+		opponentInfo.id = opponentId;
+		opponentInfo.picture = HOST + opponent.user.avatar;
+		opponentInfo.username = opponent.user.username;
 		console.log('opponentInfo:', opponentInfo);
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
-		h1.textContent = opponentInfo.user.username;
-		Players[0].src = HOST + opponentInfo.user.avatar
+		h1.textContent = opponentInfo.username;
+		Players[0].src = opponentInfo.picture
 		Players.forEach((element)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
@@ -290,9 +293,17 @@ export class Lobby extends HTMLElement{
 	playeGame(room_group_name){
 		const header = new GameHeader();
 		const game = new GameTable(room_group_name);
-		document.body.innerHTML = ``;
-		document.body.appendChild(header);
-		document.body.appendChild(game);
+		const root = document.body.querySelector('root-content');
+		const headerBar = document.body.querySelector('header-bar');
+
+		headerBar.classList.toggle('up-100', false);
+		
+		root.innerHTML = ``;
+		root.appendChild(game);
+		headerBar.innerHTML = '';
+		headerBar.appendChild(header);
+		// document.body.appendChild(header);
+		// document.body.appendChild(game);
 	}
 	gameMode(room_group_name){
 		// if (this.socket)
