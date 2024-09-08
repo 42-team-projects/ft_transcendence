@@ -137,7 +137,7 @@ side-bar{
 
 header-bar{
     grid-area: head;
-    display: grid;
+    display: flex;
 }
 
 root-content {

@@ -107,17 +107,15 @@ export class Lobby extends HTMLElement{
 		this.setSlots(opponentSlot.content, 'true')
 		setTimeout(() => {
 			document.body.classList.toggle('body-game-shrink', true);
-			console.log("Hello from Lobby constructor !!!");
+			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
+		this.headerAnimation();
+		this.sidebarAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
-			console.log("im here")
+			// console.log("im here")
 			this.OnlineGame(opponentId);
-		}
-		else {
-			this.headerAnimation();
-			this.sidebarAnimation();
 		}
 	}
 
@@ -223,7 +221,7 @@ export class Lobby extends HTMLElement{
 		const user_data = await getCurrentPlayerData();
 		userInfo.id = user_data.id;
 		userInfo.picture = HOST + user_data.user.avatar;
-		console.log('user_data:', userInfo.picture);
+		// console.log('user_data:', userInfo.picture);
 		userInfo.username = user_data.user.username;
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
@@ -245,7 +243,7 @@ export class Lobby extends HTMLElement{
 			const inter = setInterval(() => {
 				this.time -= 1;
 				this.updateTimer();
-				console.log("hello from OnlineGame !!!");
+				// console.log("hello from OnlineGame !!!");
 			}, 1000);
 			this.gameMode(room_group_name);
 		}
@@ -260,13 +258,16 @@ export class Lobby extends HTMLElement{
 		const turnTime = 10;
 		let delay = 0;
 		let delayNumber = (turnTime / 2) / Players.length;
-		opponentInfo = await getApiData(PROFILE_API_URL + `${opponentId}/`);
-		console.log('opponentInfo:', opponentInfo);
+		const opponent = await getApiData(PROFILE_API_URL + `${opponentId}/`);
+		opponentInfo.id = opponentId;
+		opponentInfo.picture = HOST + opponent.user.avatar;
+		opponentInfo.username = opponent.user.username;
+		// console.log('opponentInfo:', opponentInfo);
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
-		h1.textContent = opponentInfo.user.username;
-		Players[0].src = HOST + opponentInfo.user.avatar
+		h1.textContent = opponentInfo.username;
+		Players[0].src = opponentInfo.picture
 		Players.forEach((element)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
@@ -295,10 +296,16 @@ export class Lobby extends HTMLElement{
 	playeGame(room_group_name){
 		const header = new GameHeader();
 		const game = new GameTable(room_group_name);
+		const root = document.body.querySelector('root-content');
+		const headerBar = document.body.querySelector('header-bar');
+
+		headerBar.classList.toggle('up-100', false);
+		
+		root.innerHTML = ``;
+		root.appendChild(game);
+		headerBar.innerHTML = '';
+		headerBar.appendChild(header);
 		game.id = this.tournament_id;
-		document.body.innerHTML = ``;
-		document.body.appendChild(header);
-		document.body.appendChild(game);
 	}
 	gameMode(room_group_name){
 		// if (this.socket)
