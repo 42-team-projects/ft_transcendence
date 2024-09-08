@@ -57,6 +57,7 @@ import LoginPage from "/Components/User/LoginPage.js";
 import EmailConf from "/Components/User/EmailConf.js";
 import OAuth from "/Components/User/Oauth.js";
 import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js"
+import { router } from "/root/Router.js"
 
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);

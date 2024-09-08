@@ -27,7 +27,6 @@ export async function renderChatBody(chatContainer, conversationName) {
     chatContainer.appendChild(messagesContainer);
 }
 
-let checker;
 
 
 function renderMessageComponent(chatBody, messageContainer, component, message, checker) {
@@ -45,11 +44,12 @@ function renderMessageComponent(chatBody, messageContainer, component, message, 
 }
 
 
-let receiverComponent = document.createElement("receiver-component");
-let senderComponent = document.createElement("sender-component");
+let checker;
 
 export async function renderConversation(chatBody, messages) {
-
+    
+    let receiverComponent = document.createElement("receiver-component");
+    let senderComponent = document.createElement("sender-component");
     const currentUserId = await getCurrentUserId();
     for (let index = 0; index < messages.length; index++) {
         const message = messages[index];

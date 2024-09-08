@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'Sansation';
-    src: url('./assets/fonts/sansation/Sansation_Regular.ttf');
+    src: url('/assets/fonts/sansation/Sansation_Regular.ttf');
 }
 
 @font-face {
     font-family: 'Sansation Bold';
-    src: url('./assets/fonts/sansation/Sansation_Bold.ttf');
+    src: url('/assets/fonts/sansation/Sansation_Bold.ttf');
 }
 
 *{
@@ -69,14 +69,15 @@ html, body {
             "sidebar content"
             "foter foter";
     }
-} 
+}
+
 *::-webkit-scrollbar {
     display: none;
 }
 
 body{
     color: #ffffff;
-    background: linear-gradient(73deg, #00142ba8 10%,#003347a8 100%),url(./images/background.jpg);
+    background: linear-gradient(73deg, #00142ba8 10%,#003347a8 100%),url(/images/background.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -87,7 +88,7 @@ body{
 }
 body::before{
     content: "";
-    background: url(./images/top.svg);
+    background: url(/images/top.svg);
     background-size: contain;
     background-position: center 4%;
     background-repeat: no-repeat;
@@ -108,7 +109,7 @@ footer{
 }
 .underbar{
     
-    background: url(./images/bottom.svg);
+    background: url(/images/bottom.svg);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
