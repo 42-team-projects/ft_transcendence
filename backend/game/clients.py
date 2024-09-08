@@ -1,6 +1,6 @@
-from datetime import datetime
 import json
 import asyncio
+
 class GameLoop :
     def __init__(self, controler, opponent):
         self.controler = controler
@@ -68,13 +68,11 @@ class GameLoop :
         # print('sending' , self.active)
         try:
             # start time
-            current_time = datetime.now()
             while True:
                 await self.send_message(self.ball_data)
                 await asyncio.sleep(0.05)
         except asyncio.CancelledError:
             # end time
-            print('time taken', datetime.now() - current_time)
             print('sending cancelled')
             raise
 
@@ -152,14 +150,6 @@ class GameLoop :
             }
             await asyncio.sleep(0.016)
 
-
-
-
-
-
-
-
- 
 
     async def round_start(self, round):
         message = {

@@ -4,7 +4,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from . clients import GameLoop
 from asgiref.sync import sync_to_async
-game_queue = []
+game_queue = {}
 
 async def join_room(client):
     await client.channel_layer.group_add(
@@ -17,7 +17,10 @@ async def add_to_room(opponent, controler):
 	await join_room(controler)
 
 def add_to_queue(client, queue):
-	queue.append(client)
+    if client.room_group_name not in queue:
+        queue[client.room_group_name] = []
+    queue[client.room_group_name].append(client)
+	# add client to queue depending on the room_group_name
 
 async def remove_from_channel_layer(player):
     await player.channel_layer.group_discard(
@@ -41,10 +44,10 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         add_to_queue(self, game_queue)
-        print(len(game_queue))
-        if len(game_queue) >= 2:
-            player_1 = game_queue.pop(0)
-            player_2 = game_queue.pop(0)
+        print(len(game_queue[self.room_group_name]))
+        if len(game_queue[self.room_group_name]) >= 2:
+            player_1 = game_queue[self.room_group_name].pop(0)
+            player_2 = game_queue[self.room_group_name].pop(0)
             GameConsumer.rooms[self.room_group_name] = GameLoop(player_1, player_2)
             await self.send_message({'status': 'game_start'})
 
@@ -58,8 +61,10 @@ class GameConsumer(AsyncWebsocketConsumer):
             await GameConsumer.rooms[self.room_group_name].assign_racquet(text_data_json, self)
     
     async def disconnect(self, close_code):
-        if self in game_queue:
-            game_queue.remove(self)
+        if self in game_queue[self.room_group_name]:
+            game_queue[self.room_group_name].remove(self)
+        if game_queue[self.room_group_name] == []:
+            del game_queue[self.room_group_name]
         if(self.room_group_name in GameConsumer.rooms):
             GameConsumer.rooms[self.room_group_name].closed += 1
             if(GameConsumer.rooms[self.room_group_name].closed == 2):

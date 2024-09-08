@@ -93,6 +93,9 @@ lobby.innerHTML =  /* html */ `
 
 
 export class Lobby extends HTMLElement{
+	tournament_id;
+	set tournament_id(val) {this.tournament_id = val;}
+	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){
 		super();
@@ -103,17 +106,16 @@ export class Lobby extends HTMLElement{
 		this.setSlots(playerSlot.content, 'false')
 		this.setSlots(opponentSlot.content, 'true')
 		setTimeout(() => {
-			document.body.classList.toggle('body-game-shrink', true);   
+			document.body.classList.toggle('body-game-shrink', true);
+			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
+		this.headerAnimation();
+		this.sidebarAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
-			console.log("im here")
+			// console.log("im here")
 			this.OnlineGame(opponentId);
-		}
-		else{
-			this.headerAnimation();
-			this.sidebarAnimation();
 		}
 	}
 
@@ -219,7 +221,7 @@ export class Lobby extends HTMLElement{
 		const user_data = await getCurrentPlayerData();
 		userInfo.id = user_data.id;
 		userInfo.picture = HOST + user_data.user.avatar;
-		console.log('user_data:', userInfo.picture);
+		// console.log('user_data:', userInfo.picture);
 		userInfo.username = user_data.user.username;
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
@@ -238,9 +240,10 @@ export class Lobby extends HTMLElement{
 				room_group_name = 'game_' + userInfo.id + '_' + opponentId;
 			else
 				room_group_name = 'game_' + opponentId + '_' + userInfo.id;
-			setInterval(() => {
+			const inter = setInterval(() => {
 				this.time -= 1;
 				this.updateTimer();
+				// console.log("hello from OnlineGame !!!");
 			}, 1000);
 			this.gameMode(room_group_name);
 		}
@@ -259,7 +262,7 @@ export class Lobby extends HTMLElement{
 		opponentInfo.id = opponentId;
 		opponentInfo.picture = HOST + opponent.user.avatar;
 		opponentInfo.username = opponent.user.username;
-		console.log('opponentInfo:', opponentInfo);
+		// console.log('opponentInfo:', opponentInfo);
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
@@ -302,8 +305,7 @@ export class Lobby extends HTMLElement{
 		root.appendChild(game);
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
-		// document.body.appendChild(header);
-		// document.body.appendChild(game);
+		game.id = this.tournament_id;
 	}
 	gameMode(room_group_name){
 		// if (this.socket)
