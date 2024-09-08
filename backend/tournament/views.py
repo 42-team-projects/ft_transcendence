@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 
+
 # Create your views here.
 
 def index(request):
@@ -101,6 +102,13 @@ def SetStartDate(request):
             tournamentId = data.get('tournamentId')
             start_date = data.get('start_date')
             tournament = Tournament.objects.get(id=tournamentId)
+            print("\nhere\n")
+            next_stage = data.get('next_stage')
+            print("\n")
+            print(next_stage)
+            print("\n")
+            if tournament.start_date and not next_stage:
+                return JsonResponse({'warning': 'start date already updated !'}, safe=False, status=200)
             tournament.start_date = start_date
             tournament.save()
             return JsonResponse('start date is updated !', safe=False, status=200)

@@ -39,7 +39,7 @@ export class TournamentsTable extends HTMLElement {
         const mainContainer = this.querySelector(".mainContainer");
         createTournamentTable(this, mainContainer, tournamentsAPIData);
         const tournamentDeadLine = mainContainer.querySelectorAll(".deadLineTime");
-        console.log("tournamentDeadLine: ", tournamentDeadLine);
+        // console.log("tournamentDeadLine: ", tournamentDeadLine);
         this.interval = setInterval(() => {
             Array.from(tournamentDeadLine).forEach(tourn => {
                 if (tourn.textContent != "finished")
@@ -73,6 +73,10 @@ export class TournamentsTable extends HTMLElement {
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
+                        /**
+                         * 
+                         * @author rida
+                         */
                         await initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");

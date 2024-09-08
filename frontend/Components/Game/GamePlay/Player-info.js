@@ -53,7 +53,10 @@ export class PlayerInfo extends HTMLElement {
 
     connectedCallback(){
         if(this.state == 'reverse'){
-            console.log('reverse');
+            // console.log('reverse');
+            this.querySelector('img').style.transform = 'scaleX(-1)';
+            this.querySelector('.playerinfo').style.transform = 'translateY(0%) scaleX(-1)';
+            this.querySelector('.playerscor').style.transform = 'translateY(0%) scaleX(-1)';
             this.style.transform = 'translateY(0%) scaleX(-1)';
         }
     }
