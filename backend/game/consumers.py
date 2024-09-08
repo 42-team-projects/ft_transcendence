@@ -16,7 +16,7 @@ async def add_to_room(opponent, controler):
 	await join_room(opponent)
 	await join_room(controler)
 
-def add_to_queue(client, queue):
+def add_to_game_queue(client, queue):
     if client.room_group_name not in queue:
         queue[client.room_group_name] = []
     queue[client.room_group_name].append(client)
@@ -43,7 +43,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        add_to_queue(self, game_queue)
+        add_to_game_queue(self, game_queue)
         print(len(game_queue[self.room_group_name]))
         if len(game_queue[self.room_group_name]) >= 2:
             player_1 = game_queue[self.room_group_name].pop(0)
@@ -97,6 +97,9 @@ class GameConsumer(AsyncWebsocketConsumer):
         }))
 
 torunament_queue = []
+def add_to_torunament_queue(client, queue):
+    queue.append(client)
+	# add client to queue depending on the room_group_name
 
 class MatchMaikingConsumer(AsyncWebsocketConsumer):
     rooms = {}
@@ -105,7 +108,7 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 0
         # if(self.id in torunament_queue):
         #     await self.close()
-        add_to_queue(self, torunament_queue)
+        add_to_torunament_queue(self, torunament_queue)
         await self.wait_for_opponent()
         await self.accept()
         # except asyncio.TimeoutError:
