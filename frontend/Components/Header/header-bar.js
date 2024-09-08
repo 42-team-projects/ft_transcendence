@@ -13,7 +13,7 @@ export class HeaderBar extends HTMLElement{
         this.appendChild(HeaderTemplate.content.cloneNode(true));
         const notificationIcon = this.querySelector(".notification-icon");
         notificationIcon.addEventListener("click", () => {
-            displayNotification("<new-friend-notification></new-friend-notification>");
+            // displayNotification("<new-friend-notification></new-friend-notification>");
             showNotifiactionsList();
         });
     }
