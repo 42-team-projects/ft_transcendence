@@ -32,8 +32,8 @@ export class NotificationsList extends HTMLElement {
         this.querySelector(".clear-all").addEventListener("click", () => {
             this.querySelector(".notification-list").innerHTML = '';
         });
-        const currentUserId = await getCurrentUserId();
-        this.notifiactionWebSocket = this.createWebSocket(currentUserId);
+        // const currentUserId = await getCurrentUserId();
+        // this.notifiactionWebSocket = this.createWebSocket(currentUserId);
     }
     notifiactionWebSocket;
     disconnectedCallback() {
@@ -56,17 +56,15 @@ export class NotificationsList extends HTMLElement {
         webSocket.onclose = (event) => {
             console.log('WebSocket connection closed: ', event);
         };
-        webSocket.onmessage = (e) => {
-            let data = JSON.parse(e.data)
+        webSocket.onmessage = async (e) => {
+            let data = await JSON.parse(e.data)
             if (data.Error) {
                 console.log(data.Error)
             }
             else {
                 console.log("data: ", data);
                 const messageNotification = new MessageNotification();
-                
                 displayNotification("<message-notification></message-notification>");
-                // renderConversation(chatContainer, [data]);
             }
         };
         return (webSocket);

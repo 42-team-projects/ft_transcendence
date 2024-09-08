@@ -152,10 +152,10 @@ export class NotificationComponent extends HTMLElement {
     connectedCallback() {
         this.style.width = this.width;
         this.style.height = this.height;
-        const interval = setInterval(() => {
-            clearInterval(interval);
-            this.remove();
-        }, 5000);
+        // const interval = setInterval(() => {
+        //     clearInterval(interval);
+        //     this.remove();
+        // }, 5000);
     }
 
     disconnectedCallback() {
