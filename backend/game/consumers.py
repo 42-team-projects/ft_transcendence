@@ -19,7 +19,7 @@ async def add_to_room(opponent, controler):
 def add_to_queue(client, queue):
 	queue.append(client)
 
-async def remove_from_queue(player):
+async def remove_from_channel_layer(player):
     await player.channel_layer.group_discard(
         player.room_group_name,
         player.channel_name
@@ -41,6 +41,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         add_to_queue(self, game_queue)
+        print(len(game_queue))
         if len(game_queue) >= 2:
             player_1 = game_queue.pop(0)
             player_2 = game_queue.pop(0)
@@ -57,18 +58,23 @@ class GameConsumer(AsyncWebsocketConsumer):
             await GameConsumer.rooms[self.room_group_name].assign_racquet(text_data_json, self)
     
     async def disconnect(self, close_code):
-        print(self.room_group_name)
         if self in game_queue:
             game_queue.remove(self)
-        await remove_from_queue(
-            self
-        )
         if(self.room_group_name in GameConsumer.rooms):
             GameConsumer.rooms[self.room_group_name].closed += 1
             if(GameConsumer.rooms[self.room_group_name].closed == 2):
+                await GameConsumer.rooms[self.room_group_name].game_over()
                 del GameConsumer.rooms[self.room_group_name]
             else:
                 await GameConsumer.rooms[self.room_group_name].close_socket(self)
+
+        await remove_from_channel_layer(
+            self
+        )
+            #     del GameConsumer.rooms[self.room_group_name]
+            # else:
+        print(game_queue)
+        print(GameConsumer.rooms)
     
     async def send_message(self, message, function='game_message'):
         await self.channel_layer.group_send(
@@ -91,12 +97,14 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
     rooms = {}
     async def connect(self):
         self.id = self.scope['url_route']['kwargs']['id']
+        self.room_group_name = 0
+        # if(self.id in torunament_queue):
+        #     await self.close()
         add_to_queue(self, torunament_queue)
+        await self.wait_for_opponent()
         await self.accept()
-        try:
-            await asyncio.wait_for(self.wait_for_opponent(), timeout=30.0)
-        except asyncio.TimeoutError:
-            await self.close()
+        # except asyncio.TimeoutError:
+        #     await self.close()
     
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -107,11 +115,20 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             
 
     async def disconnect(self, close_code):
-        pass
+        if self in torunament_queue:
+            torunament_queue.remove(self)
+        if self.room_group_name and self.room_group_name in MatchMaikingConsumer.rooms:
+            MatchMaikingConsumer.rooms[self.room_group_name] -= 1
+            if MatchMaikingConsumer.rooms[self.room_group_name] == 0:
+                del MatchMaikingConsumer.rooms[self.room_group_name]
+            await remove_from_channel_layer(
+                self
+            )
+        print(torunament_queue)
 
     async def wait_for_opponent(self):
-        while len(torunament_queue) < 2 and self in torunament_queue:
-            await asyncio.sleep(0.1)
+        # while len(torunament_queue) < 2 and self in torunament_queue:
+        #     await asyncio.sleep(0.1)
 
         if len(torunament_queue) >= 2:
             player_1 = torunament_queue.pop(0)
