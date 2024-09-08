@@ -30,7 +30,7 @@ def list_tournaments(request):
 
 def get_tournament_by_id(request, tournamentId):
     try:
-        tournament = Tournament.objects.get(id=tournamentId)
+        tournament = Tournament.objects.get(tournament_id=tournamentId)
     except Tournament.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
@@ -214,7 +214,7 @@ def player_leave_tournament(request, tournamentId):
     if request.method == 'POST':
         try:
             player = Player.objects.get(user=request.user)
-            tournament = Tournament.objects.get(id=tournamentId)
+            tournament = Tournament.objects.get(tournament_id=tournamentId)
             # if not tournament.can_join:
             #     return JsonResponse({'statusText': 'Tournament is not open for new players'}, status=400)
 
