@@ -54,7 +54,6 @@ export class GameHeader extends HTMLElement{
         // player2Name.querySelector('p').textContent = opponentInfo.username
     }
     connectedCallback(){
-        console.log('connected');
         this.querySelector('.Play_Pause').addEventListener('click', () => {
             this.querySelector('.status').textContent = 'PAUSED'
         })
