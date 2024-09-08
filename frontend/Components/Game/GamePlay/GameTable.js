@@ -2,6 +2,8 @@ import { GameOver } from "./GameOver.js";
 import { LaunchingGame } from "./launchingGame.js";
 import { userInfo, opponentInfo } from "./Lobby.js";
 import { ip } from "../../../Utils/GlobalVariables.js";
+import { useWebsocket } from "../../../Utils/TournamentWebSocketManager.js";
+import { goNextStage } from "./configs/ScoreManager.js";
 const game_page = document.createElement('template');
 
 let score = {
@@ -75,6 +77,10 @@ export class GameTable extends HTMLElement{
     }
     async connectedCallback(){
         this.runder_call = true;
+        // if(userInfo.id % 2)
+        //     await this.GameOver('lose')
+        // else
+        //     await this.GameOver('win')
         await this.getMessages();
     }
     async getMessages() {
@@ -85,7 +91,8 @@ export class GameTable extends HTMLElement{
             const player_2 = message.player_2;
             const status = message.status;
             if (status === 'game_start') {
-                const message = {
+                console.log('message', message);
+                const messages = {
                     'message': 'firstdata',
                     'canvas_width': CANVAS_WIDTH,
                     'canvas_height': CANVAS_HEIGHT,
@@ -95,7 +102,7 @@ export class GameTable extends HTMLElement{
                         'width': this.racquet.width,
                     },
                 }
-                this.socket.send(JSON.stringify(message))
+                this.socket.send(JSON.stringify(messages))
             } else if (status === 'RoundOver') {
                 console.log('message', message);
                 if (userInfo.id === Number(player_1.id)) {
@@ -106,13 +113,13 @@ export class GameTable extends HTMLElement{
                     score.opponent = player_1.score;
                 }
                 await this.RoundOver();
-                console.log('time', new Date() - now);
+                // console.log('time', new Date() - now);
             } else if (status === 'RoundStart') {
                 console.log('message', message);
                 this.luanching = true;
                 this.round = message.round;
                 await this.resetGame();
-                now = new Date();
+                // now = new Date();
             } else if (status === 'GameOver') {
                 let player_state = '';
                 if (userInfo.id === Number(player_1.id)) {
@@ -190,6 +197,9 @@ export class GameTable extends HTMLElement{
     
     async GameOver(playerState){
         this.Loop_state = false;
+        // console.log("this.id: ", this.id);
+        if (this.id)
+            goNextStage(playerState, this.id);
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
     }
@@ -200,7 +210,7 @@ export class GameTable extends HTMLElement{
         if(this.luanching === false)
             return;
         let RoundTime = 3;
-        console.log('lunchiiiiiiiiiiiiiiiiiiiiiiiiiing');
+        // console.log('lunchiiiiiiiiiiiiiiiiiiiiiiiiiing');
         const LunchingGame = new LaunchingGame(RoundTime, this.round);
 		document.body.appendChild(LunchingGame);
 		const Lunching = setInterval(() => {
