@@ -109,8 +109,8 @@ export class Lobby extends HTMLElement{
 			document.body.classList.toggle('body-game-shrink', true);
 			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
-		this.headerAnimation();
-		this.sidebarAnimation();
+		// this.headerAnimation();
+		// this.sidebarAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
@@ -122,7 +122,7 @@ export class Lobby extends HTMLElement{
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
 		const profile = headerBar.querySelector('c-profile');
-		const userRunk = profile.querySelector('user-rank');
+		// const userRunk = profile.querySelector('user-rank');
 	
 		userRunk.classList.toggle('drop-100', false);
 		userRunk.classList.toggle('transform-1s', true);

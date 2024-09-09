@@ -2,9 +2,10 @@ import { displayNotification } from "../Notification/NotificationUtils.js";
 import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
 import { getCurrentPlayerId, wsUrl } from "../../Utils/GlobalVariables.js";
 import { hashPassword } from "../../Utils/Hasher.js";
-import { initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
+import { createTournamentWebSocket } from "../../Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
 import { createRow } from "./configs/TournamentUtils.js";
+import { checkIsTournamentFull } from "../../Utils/TournamentManager.js";
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -63,10 +64,10 @@ export class JoinTournament extends HTMLElement {
  * 
  * @author rida
  */
-    async updateTournamentsTable(tournamentData, tbody) {
+    async  updateTournamentsTable(tournamentData, tbody) {
         tbody.prepend(createRow(this, tournamentData));
-        
-        await initWebSocket(tournamentData);
+        const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
+        await checkIsTournamentFull(tournamentData, ws);
     }
 
     async addPlayerToTournament(tournamentData) {
