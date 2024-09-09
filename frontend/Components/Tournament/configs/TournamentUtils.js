@@ -75,7 +75,7 @@ export function createRow(parentNode, data) {
         exitButton.src = "/images/logout.svg";
         exitButton.width = 24;
         exitButton.addEventListener("click", async () => {
-            player_leave_tournament(data.id);
+            await player_leave_tournament(data.tournament_id);
             closeWebSocket(data.tournament_id);
             tr.remove();
         });
@@ -87,7 +87,7 @@ export function createRow(parentNode, data) {
         displayButton.width = 24;
         displayButton.addEventListener("click", async () => {
             parentNode.innerHTML = '';
-            const response = await get_tournament_by_id(data.id);
+            const response = await get_tournament_by_id(data.tournament_id);
             if (!response)
                 throw new Error(`${response.status}  ${response.statusText}`);
             parentNode.innerHTML = '';
