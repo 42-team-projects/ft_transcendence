@@ -1,26 +1,9 @@
+import { HOST, PROFILE_API_URL } from "/Utils/APIUrls.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 
-const fakeData = [
-    {
-        profileImage: "/assets/images/profile/mudoria.jpg",
-        username: "esalim",
-        active: true
-    },
-    {
-        profileImage: "/assets/images/profile/mudoria.jpg",
-        username: "oussama",
-        active: false
-    },
-    {
-        profileImage: "/assets/images/profile/mudoria.jpg",
-        username: "zeroual",
-        active: false
-    },
-    {
-        profileImage: "/assets/images/profile/mudoria.jpg",
-        username: "nourdine",
-        active: true
-    }
-]
+let players;
 
 export class AddPlayerComponent extends HTMLElement {
   constructor() {
@@ -31,11 +14,11 @@ export class AddPlayerComponent extends HTMLElement {
         `;
   }
 
-  createItem(profileImage, userName, isActive) {
+  createItem(userId, profileImage, userName, isActive, leagueColor) {
     const container = document.createElement("div");
     container.className = "friend-item";
     container.innerHTML = `
-        <c-hexagon class="profile" width="78px" height="77px" apply="true" bcolor="aqua">
+        <c-hexagon class="profile" width="78px" height="77px" apply="true" bcolor="${leagueColor}">
             <div slot="content" class="c-hexagon-content"></div>
         </c-hexagon>
         <div class="text-content">
@@ -44,26 +27,40 @@ export class AddPlayerComponent extends HTMLElement {
         </div>
         <img loading="lazy" class="sendRequest" src="/assets/images/profile/add-friends-icon.svg"/>
     `;
+
+
+    const sendRequest = container.querySelector(".sendRequest");
+    sendRequest.addEventListener("click", async () => {
+        // put here the logic of sending Request to the backend service.
+        const websocket = await getNotificationWebSocket();
+        console.log("this.tournamentId : ", this.tournamentId);
+        websocket.send(JSON.stringify({'message': 'ask you to join a tournament', 'receiver': userId, 'type': "tournament", "infos": this.tournamentId}));
+        sendRequest.src = "/assets/icons/success-circle.svg";
+    });
+
+
     container.querySelector(".c-hexagon-content").style.background = "url(" + profileImage + ") center / cover no-repeat";
     return container;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
 
-    fakeData.forEach(data => {
-        this.shadowRoot.appendChild(this.createItem(data.profileImage, data.username, data.active));
-    });
-
-    const sendRequest = this.shadowRoot.querySelectorAll(".sendRequest");
-    sendRequest.forEach(elem => {
-        elem.addEventListener("click", () => {
-            // put here the logic of sending Request to the backend service.
-            elem.src = "/assets/icons/success-circle.svg";
-        });
+    if (!players)
+        players = await getApiData(PROFILE_API_URL);
+    if (!players)
+        return ;
+    Array.from(players).forEach(data => {
+        this.shadowRoot.appendChild(this.createItem(data.user.id, HOST + data.user.avatar, data.user.username, data.active, getLeagueColor(data.stats.league)));
     });
   }
 
+  set tournamentId(val) {
+    this.setAttribute("tournament-id", val);
+  }
 
+  get tournamentId() {
+    return this.getAttribute("tournament-id");
+  }
 
 }
 

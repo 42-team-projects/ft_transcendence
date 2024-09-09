@@ -81,13 +81,10 @@ export async function createNotificationWebSocket() {
         console.log("data: ", data);
         if (data.Error) {
             console.log(data.Error)
+            return ;
         }
-        else {
-            // const messageNotification = new MessageNotification();
-            const messageNotification = createNotification(data.sender, data.content, "message");
-            console.log("messageNotification: ", messageNotification);
-            displayNotification(messageNotification);
-        }
+        const messageNotification = createNotification(data.sender, data.content, data.type, data.infos);
+        displayNotification(messageNotification);
     }
     return (notificationWebSocket);
 }

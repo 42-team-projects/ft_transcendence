@@ -25,6 +25,8 @@ class UserNotificationConsumer(WebsocketConsumer):
         )
     def receive(self, text_data):
         data = json.loads(text_data)
+        self.type = data["type"]
+        self.infos = data["infos"]
         try:
             receiver = self.get_user(data['receiver'])
             notification_data = {
@@ -42,6 +44,8 @@ class UserNotificationConsumer(WebsocketConsumer):
 
     def broadcast_notification(self, data):
         data['sender'] = self.get_user(self.user_id).username
+        data['type'] = self.type
+        data['infos'] = self.infos
         async_to_sync(self.channel_layer.group_send)(
             f'notification_{data["user"]}',
             {
