@@ -2,6 +2,7 @@ import { NotificationComponent } from "/Components/Notification/NotificationComp
 import { displayNotification } from "/Components/Notification/NotificationUtils.js";
 import { SearchBarComponent } from "/Components/Search/SearchBarComponent.js";
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
+import { FriendRequestListComponent } from "/Components/Friends/FriendRequestListComponent.js";
 
 export class HeaderBar extends HTMLElement{
     constructor(){
@@ -245,6 +246,14 @@ const cssContent = /*css*/`
         width: 24px;
     }
 
+    .friends-icon img {
+    }
+
+
+    .friends-icon {
+        height: 100px;
+    }
+
 `
 
 
@@ -260,6 +269,9 @@ HeaderTemplate.innerHTML = /*html*/`
         <div class="notification-search">
             <div class="search-box">
                 <search-bar-component></search-bar-component>
+                <div class="friends-icon" >
+                    <friend-request-list></friend-request-list>
+                </div>
                 <div class="notification-icon" >
                     <img loading="lazy" draggable="false" src="/images/svg-header/alarm.svg" alt="notification">
                     <div class="number-of-notifications">99</div>
