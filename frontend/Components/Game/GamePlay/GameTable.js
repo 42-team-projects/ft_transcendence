@@ -2,7 +2,7 @@ import { GameOver } from "./GameOver.js";
 import { LaunchingGame } from "./launchingGame.js";
 import { userInfo, opponentInfo } from "./Lobby.js";
 import { ip } from "../../../Utils/GlobalVariables.js";
-import { useWebsocket } from "../../../Utils/TournamentWebSocketManager.js";
+// import { useWebsocket } from "../../../Utils/TournamentWebSocketManager.js";
 import { goNextStage } from "./configs/ScoreManager.js";
 const game_page = document.createElement('template');
 
@@ -199,7 +199,7 @@ export class GameTable extends HTMLElement{
         this.Loop_state = false;
         // console.log("this.id: ", this.id);
         if (this.id)
-            goNextStage(playerState, this.id);
+            await goNextStage(playerState, this.id);
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
     }
