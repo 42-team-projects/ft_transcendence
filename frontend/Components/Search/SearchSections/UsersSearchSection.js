@@ -79,7 +79,7 @@ export class UsersSearchSection extends HTMLElement {
 
         chat.addEventListener("click", async () => {
             const websocket = await getNotificationWebSocket();
-            websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': playerData.user.id}));
+            websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': playerData.user.id, "type": "friend", "infos": "hello world"}));
         });
         return item;
     }

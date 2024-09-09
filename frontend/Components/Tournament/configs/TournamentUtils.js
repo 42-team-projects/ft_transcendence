@@ -92,6 +92,7 @@ export function createRow(parentNode, data) {
                 throw new Error(`${response.status}  ${response.statusText}`);
             parentNode.innerHTML = '';
             const rounds = document.createElement("generate-rounds");
+            rounds.tournamentId = response.tournament_id;
             rounds.numberOfPlayers = response.number_of_players;
             console.log("response.players: ", response.players);
             rounds.players = response.players;

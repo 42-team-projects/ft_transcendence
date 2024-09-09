@@ -150,6 +150,12 @@ export class GenerateRounds extends HTMLElement {
 
     }
 
+    set tournamentId(value) {
+        this.setAttribute("tournament-id", value);
+    }
+
+    get tournamentId() { return this.getAttribute("tournament-id");}
+
     set numberOfPlayers(value) {
         this.setAttribute("number-of-players", value);
     }
@@ -178,7 +184,7 @@ export class GenerateRounds extends HTMLElement {
                         <div class="line">
                             <img loading="lazy" class="separator" src="/assets/images/tournament/separator.svg"/>
                         </div>
-                        <add-player-component></add-player-component>
+                        <add-player-component tournament-id="${this.tournamentId}"></add-player-component>
                     </div>
                 </div>
                 `;
@@ -195,7 +201,7 @@ export class GenerateRounds extends HTMLElement {
         return this.getAttribute("players");
     };
 
-    static observedAttributes = ["players"];
+    static observedAttributes = ["players", "tournament-id"];
 
     attributeChangedCallback(attrName, oldVdalue, newValue) {
         if (attrName == "players")
