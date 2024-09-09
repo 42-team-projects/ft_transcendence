@@ -37,7 +37,7 @@ export class TournamentsTable extends HTMLElement {
         if (!tournamentsAPIData)
             return;
         const mainContainer = this.querySelector(".mainContainer");
-        createTournamentTable(this, mainContainer, tournamentsAPIData);
+        await createTournamentTable(this, mainContainer, tournamentsAPIData);
         const tournamentDeadLine = mainContainer.querySelectorAll(".deadLineTime");
         // console.log("tournamentDeadLine: ", tournamentDeadLine);
         this.interval = setInterval(() => {
@@ -48,10 +48,10 @@ export class TournamentsTable extends HTMLElement {
         }, 1000);
 
         const firstButton = this.querySelector("#firstButton");
-        firstButton.addEventListener("click", () => {
+        firstButton.addEventListener("click", async () => {
             const buttonValue = firstButton.querySelector("h3");
             if (buttonValue.textContent == "CANCEL") {
-                createTournamentTable(this, mainContainer, tournamentsAPIData);
+                await createTournamentTable(this, mainContainer, tournamentsAPIData);
                 buttonValue.textContent = "JOIN TOURNAMENT";
                 secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
             } else {
