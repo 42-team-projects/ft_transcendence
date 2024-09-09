@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Tournament</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Welcome to the Tournament</h1>
+            <div>
+                <button type="submit" class="btn btn-primary" onclick="Create_Tournament()">Create Tournament</button>
+                <button type="submit" class="btn btn-primary" onclick="List_Tournament()">List Tournament</button>
+                <button type="submit" class="btn btn-primary" onclick="get_Available_Tournaments()">get Available Tournaments</button>
+                <button type="submit" class="btn btn-primary" onclick="get_tournaments_by_player_id()">get tournament by player id</button>
+                <hr><hr>
+                <button type="submit" class="btn btn-danger" onclick="update_start_date()">Update Start Date</button>
+                <button type="submit" class="btn btn-danger" onclick="get_tournament_by_id()">get tournament by id</button>
+
+            </div>
+    </div>
+    <script>
+        const apiUrl = 'http://127.0.0.1:8000/tournament/';
+        async function update_start_date()
+        {
+            try {
+                const nextStage = true;
+                const tournamentId = 9559969398;
+                const now = new Date();
+                const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
+                console.log("start_date: ", start_date);
+                const Tournament = {
+                    tournamentId: tournamentId,
+                    start_date: start_date,
+                    next_stage: nextStage
+                }
+                const response = await fetch(`${apiUrl}SetStartDate/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Tournament),
+                });
+                if (!response.ok) {
+                    const responseData = await response.json();
+                    console.log(JSON.stringify(responseData, null, 2));
+                    throw new Error(`${response.status}  ${responseData.statusText}`);
+                }
+                const responseData = await response.json();
+                console.log("responseData: ", responseData);
+            } catch(error) {
+                console.error('Error of update start date: ', error);
+            }
+        }
+    
+        async function get_tournament_by_id() {
+            try {
+                const id = "9559969398/";
+                const response = await fetch(`${apiUrl}${id}`);
+                if (!response.ok) {
+                    throw new Error(`${response.status}  ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(JSON.stringify(data, null, 2));
+            } catch(error) {
+                console.error('Error of tournament list: ', error);
+            }
+        }
+    </script>
+</body>
+</html>

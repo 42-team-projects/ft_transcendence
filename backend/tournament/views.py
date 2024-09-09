@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 
+
 # Create your views here.
 
 def index(request):
@@ -29,7 +30,7 @@ def list_tournaments(request):
 
 def get_tournament_by_id(request, tournamentId):
     try:
-        tournament = Tournament.objects.get(id=tournamentId)
+        tournament = Tournament.objects.get(tournament_id=tournamentId)
     except Tournament.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
@@ -101,6 +102,13 @@ def SetStartDate(request):
             tournamentId = data.get('tournamentId')
             start_date = data.get('start_date')
             tournament = Tournament.objects.get(id=tournamentId)
+            print("\nhere\n")
+            next_stage = data.get('next_stage')
+            print("\n")
+            print(next_stage)
+            print("\n")
+            if tournament.start_date and not next_stage:
+                return JsonResponse({'warning': 'start date already updated !'}, safe=False, status=200)
             tournament.start_date = start_date
             tournament.save()
             return JsonResponse('start date is updated !', safe=False, status=200)
@@ -206,7 +214,7 @@ def player_leave_tournament(request, tournamentId):
     if request.method == 'POST':
         try:
             player = Player.objects.get(user=request.user)
-            tournament = Tournament.objects.get(id=tournamentId)
+            tournament = Tournament.objects.get(tournament_id=tournamentId)
             # if not tournament.can_join:
             #     return JsonResponse({'statusText': 'Tournament is not open for new players'}, status=400)
 

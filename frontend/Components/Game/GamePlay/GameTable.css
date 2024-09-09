@@ -3,13 +3,14 @@ game-header{
     display: flex;
     align-items: end;
     justify-content: space-evenly;
+    width: 100%;
 }
-img{
+img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-.leftPlayer{
+.leftPlayer {
     width: 20%;
     aspect-ratio: 4.2;
     border: 2px solid #00b9be;
@@ -18,7 +19,7 @@ img{
     grid-template-areas: "img player_info scor";
     grid-template-columns: 23.5% 35% 1fr;
 }
-.rightPlayer{
+.rightPlayer {
     width: 20%;
     aspect-ratio: 4.2;
     border: 2px solid #00b9be;
@@ -278,13 +279,7 @@ img{
     grid-area: img;
     transform: scaleX(-1);
 }
-.playerinfo{
-    grid-area: player_info;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-}
+
 .playerinfo1{
     grid-area: player_info;
     display:flex;
@@ -297,13 +292,6 @@ img{
 .playerinfo p, .playerinfo1 p{
     font-size: 1.6rem;
     color: white;
-}
-
-.playerscor{
-    grid-area: scor;
-    display:flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .playerscor1{
@@ -319,11 +307,7 @@ img{
     color: white;
 }
 
-.rackita {
-    width: 50%;
-    height: 15%;
-    background-color: white;
-}
+
 .rackita1 {
     width: 50%;
     height: 15%;
