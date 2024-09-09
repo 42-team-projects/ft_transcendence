@@ -6,8 +6,8 @@ from .serializers import NotificationSerializer
 
 class UserNotificationConsumer(WebsocketConsumer):
     def connect(self):
-        id = self.scope['url_route']['kwargs']['id']
-        self.group_name = f'notification_{id}'
+        self.id = self.scope['url_route']['kwargs']['id']
+        self.group_name = f'notification_{self.id}'
         
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -26,8 +26,11 @@ class UserNotificationConsumer(WebsocketConsumer):
         data = json.loads(text_data)
         try:
             receiver = self.get_user(data['receiver'])
+            # sender = self.get_user(self.id)
+
             notification_data = {
-                'user' : receiver.id,
+                'sender' : self.id,
+                'receiver' : receiver.id,
                 'content' : data['message']
             }
             notification_serializer = NotificationSerializer(data=notification_data)
@@ -41,7 +44,7 @@ class UserNotificationConsumer(WebsocketConsumer):
 
     def broadcast_notification(self, message_data):
         async_to_sync(self.channel_layer.group_send)(
-            f'notification_{message_data["user"]}',
+            f'notification_{message_data["receiver"]}',
             {
                 'type': 'send_message',
                 'data': message_data
