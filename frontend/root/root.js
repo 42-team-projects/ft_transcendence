@@ -7,6 +7,7 @@ import { MessageNotification } from "/Components/Notification/templates/MessageN
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 import { getCurrentPlayerData, createNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js";
+
 const root = document.createElement('template')
 
 root.innerHTML = /*html*/ `
