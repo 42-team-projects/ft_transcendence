@@ -9,3 +9,5 @@ export const ENABLE_2FA_API_URL = HOST + "/api/v1/auth/2fa/enable/";
 export const VIREFY_2FA_API_URL = HOST + "/api/v1/auth/2fa/verify/";
 export const DISABLE_2FA_API_URL = HOST + "/api/v1/auth/2fa/disable/";
 
+
+export const NOTIFICATIONS_API_URL = HOST + "/notification/";

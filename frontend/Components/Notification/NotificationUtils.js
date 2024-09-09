@@ -14,7 +14,7 @@ export function displayNotification(notificationContent) {
     notification.appendChild(notificationContent.cloneNode());
 
     // add notification to notification list.
-    window.document.querySelector("notifications-list").appendNotification(notificationContent);
+    window.document.querySelector(".right-sidebar notifications-list").appendNotification(notificationContent);
 
     // display notification on the top corner.
     notificationContainer.appendChild(notification);
