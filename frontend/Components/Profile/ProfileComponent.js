@@ -20,7 +20,7 @@ const htmlContent = `
         <profile-info-component></profile-info-component>
 
         <div class="profile-data-infos-container">
-            <user-info-container id="userInfo" label="Account Information" icon="/assets/images/profile/account-icon.svg"></user-info-container>
+            <user-info-container id="userInfo" label="Account Information" icon="/assets/icons/account-icon.svg"></user-info-container>
             <user-info-container id="links" label="Links" icon="/assets/images/profile/chain-for-links.svg"></user-info-container>
             <user-info-container id="achievements" label="Achievements" icon="/assets/images/profile/trophy.svg"> </user-info-container>
         </div>
