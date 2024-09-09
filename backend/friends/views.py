@@ -1,5 +1,5 @@
 from accounts.models            import User
-from friends.models             import FriendRequest, Friendship
+from friends.models             import FriendRequest, Friendship, BlockUser
 from rest_framework.response    import Response
 from rest_framework.decorators  import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -7,16 +7,21 @@ from django.core.exceptions     import ObjectDoesNotExist,ValidationError
 # from django.db                  import transaction
 from django.shortcuts           import get_object_or_404
 
-
-from .serializers               import FriendRequestSerializer 
-
+from .serializers               import FriendRequestSerializer, FriendshipSerializer
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_friend_requests(request):
     friend_requests = FriendRequest.objects.filter(receiver=request.user, is_active=True)
     friend_serializer = FriendRequestSerializer(friend_requests, many=True, read_only=True)
-    return Response({'friend_requests': friend_serializer.data})
+    return Response({'response': friend_serializer.data})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_friend_list(request):
+    my_friends = get_object_or_404(Friendship, user=request.user)
+    my_friends_serializer = FriendshipSerializer(my_friends, read_only=True)
+    return Response({'response': my_friends_serializer.data})
 
 
 @api_view(['POST'])
@@ -61,13 +66,11 @@ def send_friend_request(request):
     except ValidationError as e:
         return Response({'response': str(e)}, status=400)
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def accept_friend_request(request):
 
     # Validate request_id input
-
     request_id = request.GET.get('request_id', None)
     if not request_id:
         return Response({'response': 'request_id is required.'}, status=400)
@@ -78,13 +81,14 @@ def accept_friend_request(request):
 
     try:
         friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
-        friend_request.accept()
-        return Response({'requests': 'Friend request accepted.'})
+        if friend_request.receiver == request.user:
+            friend_request.accept()
+            return Response({'requests': 'Friend request accepted.'})
+        return Response({'requests': 'That is not your friend request to accepte.'}, status=403)
     except FriendRequest.DoesNotExist:
         return Response({'requests': 'Friend request not found.'}, status=404)
     except ObjectDoesNotExist:
         return Response({'requests': 'Invalid request or object not found.'}, status=404)
-
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -97,21 +101,81 @@ def unfriend_user(request):
     except ValueError:
         return Response({'response': 'Invalid removed ID. It should be an integer.'}, status=400)
 
-    current_user = request.user
     target_user = get_object_or_404(User, id=target_user_id)
+    friend_list = get_object_or_404(Friendship, user=request.user)
+    if friend_list.is_my_friend(target_user):
+        friend_list.unfriend(target_user)
+        return Response({'response': 'You have successfully unfriend this user.'})
+    return Response({'response': 'Cannot unfriend this user, no friendship found.'})
 
-    current_user_friends = get_object_or_404(Friendship, user=current_user)
-    target_user_friends = get_object_or_404(Friendship, user=target_user)
 
-    if not (current_user_friends.is_my_friend(target_user) and target_user_friends.is_my_friend(current_user)):
-        return Response({'response': 'Friendship not found.'}, status=400)
+@api_view(['POST'])
+def block_user(request):
+    """Block a user.
 
-    # Perform removal
+    This endpoint allows an authenticated user to block another user. The request should
+    include the ID of the user to be blocked.
+
+    Request Data:
+    - user_id: The ID of the user to be blocked.
+
+    Response:
+    - 200 OK: If the user was successfully blocked.
+    - 400 Bad Request: If the request data is invalid or missing.
+    - 401 Unauthorized: If the user is not authenticated.
+
+    Example Request:
+    POST /api/block_user/
+    {
+        "user_id": 123
+    }
+
+    Example Response:
+    {
+        "detail": "User blocked successfully."
+    }
+    """
+    user_id = request.data.get('user_id', None)
     try:
-        current_user_friends.remove_user(target_user)
-        target_user_friends.remove_user(current_user)
-        return Response({'response': 'User removed successfully.'})
-    except Exception as e:
-        # Log the exception
-        return Response({'response': f'Error occurred while removing friend, {str(e)}'}, status=500)
+        blocked_user = request.user
+        blocker_user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'response': 'Blocker user not exist.'})
+    
+    user_block = BlockUser.objects.create(blocked=blocked_user, blocker=blocker_user)
+    # print('is friend >', user_block.is_friend())
 
+    if user_block.is_friend():
+        user_block.remove_friendship()
+        return Response({'response': 'User blocked successfuly.'})
+    else:
+        return Response({'response': 'User not blocked.'})
+
+@api_view(['POST'])
+def unblock_user(request):
+    """Unblock a user.
+
+    This endpoint allows an authenticated user to unblock a previously blocked user. The request should
+    include the ID of the user to be unblocked.
+
+    Request Data:
+    - user_id: The ID of the user to be unblocked.
+
+    Response:
+    - 200 OK: If the user was successfully unblocked.
+    - 400 Bad Request: If the request data is invalid or missing.
+    - 401 Unauthorized: If the user is not authenticated.
+
+    Example Request:
+    POST /api/unblock_user/
+    {
+        "user_id": 123
+    }
+
+    Example Response:
+    {
+        "detail": "User unblocked successfully."
+    }
+    """
+    user_id = request.data.get('user_id', None)
+    return Response({'unblock-user': user_id})
