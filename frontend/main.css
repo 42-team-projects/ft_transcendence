@@ -220,7 +220,7 @@ game-over{
     color: white;
 }
 
-notifications-list {
+.right-sidebar {
     display: none;
     flex-direction: column;
     align-items: center;
@@ -231,9 +231,17 @@ notifications-list {
     right: 0;
     background-color: #00334780;
     padding-top: 20px;
-
     animation-duration: 1s;
     animation-name: slidein;
+}
+
+notifications-list,
+friends-request-list {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .notificationsBar-header {
@@ -262,7 +270,7 @@ notifications-list {
     height: 48px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     color: white;
     background-color: #003347;
 
