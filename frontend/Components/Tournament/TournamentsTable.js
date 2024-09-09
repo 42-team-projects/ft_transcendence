@@ -76,6 +76,8 @@ export class TournamentsTable extends HTMLElement {
                         await initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
+                        rounds.tournamentId = tournamentResponse.tournament_id;
+                        console.log("rounds.tournamentId: ", rounds.tournamentId);
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
                         console.log("tournamentResponse.players: ", tournamentResponse.players);
                         
