@@ -26,9 +26,9 @@ export class ChatHeaderComponent extends HTMLElement {
         </div>
         <img loading="lazy" src="/images/Game.svg">
         <a id="profile">
-            <img loading="lazy" src="/assets/images/profile/account-icon.svg">
+            <img loading="lazy" src="/assets/icons/account-icon.svg">
         </a>
-        <img loading="lazy" src="/assets/images/profile/block-icon.svg">
+        <img loading="lazy" src="/assets/icons/block-icon.svg">
     `;
     }
 
