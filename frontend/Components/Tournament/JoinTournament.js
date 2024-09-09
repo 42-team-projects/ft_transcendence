@@ -68,7 +68,7 @@ export class JoinTournament extends HTMLElement {
     }
 
     async addPlayerToTournament(tournamentData) {
-        const data = await player_join_tournament(tournamentData.id);
+        const data = await player_join_tournament(tournamentData.tournament_id);
         if (data)
         {
             const tbody = this.parentElement.querySelector("tbody");

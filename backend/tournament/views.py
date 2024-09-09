@@ -57,7 +57,7 @@ def player_join_tournament(request, tournamentId):
     if request.method == 'POST':
         try:
             player = Player.objects.get(user=request.user)
-            tournament = Tournament.objects.get(id=tournamentId)
+            tournament = Tournament.objects.get(tournament_id=tournamentId)
             if not tournament.can_join:
                 return JsonResponse({'statusText': 'Tournament is not open for new players'}, status=400)
             if player in tournament.players.all():
