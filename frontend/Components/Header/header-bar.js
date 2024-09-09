@@ -3,6 +3,7 @@ import { displayNotification } from "/Components/Notification/NotificationUtils.
 import { SearchBarComponent } from "/Components/Search/SearchBarComponent.js";
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 import { FriendRequestListComponent } from "/Components/Friends/FriendRequestListComponent.js";
+import { NotificationsList } from "/Components/Notification/NotificationsList.js";
 
 export class HeaderBar extends HTMLElement{
     constructor(){
@@ -13,37 +14,83 @@ export class HeaderBar extends HTMLElement{
         // this.shadowRoot.appendChild(HeaderTemplate.content.cloneNode(true));
         this.appendChild(HeaderTemplate.content.cloneNode(true));
         const notificationIcon = this.querySelector(".notification-icon");
+
+        let notificationChecker = window.document.querySelector(".right-sidebar notifications-list");;
+        let friendsChecker = window.document.querySelector(".right-sidebar friends-request-list");;
         notificationIcon.addEventListener("click", () => {
-            // displayNotification("<new-friend-notification></new-friend-notification>");
-            showNotifiactionsList();
+            if (notificationChecker.style.display == "none")
+                showNotificationsList();
+            else
+                hideNotificationsList();
+        });
+        const friendsIcon = this.querySelector(".friends-icon");
+
+        friendsIcon.addEventListener("click", () => {
+            if (friendsChecker.style.display == "none")
+                showFriendsRequestList();
+            else
+                hideFriendsRequestList();
         });
     }
 
     connectedCallback() {
     }
     remove(){
-        // console.log('remove');
         this.innerHTML = '';
     }
 }
 
 
-export function showNotifiactionsList() {
-    const notificationsBar = window.document.querySelector("notifications-list");
+function showRightSideBar() {
+    const notificationsBar = window.document.querySelector(".right-sidebar");
     const headerBar = window.document.querySelector("header-bar");
     const rootContent = window.document.querySelector("root-content");
-    if (notificationsBar.style.display == "none")
-    {
-        headerBar.style.marginRight = "15%";
-        rootContent.style.marginRight = "15%";
-        notificationsBar.style.display = "flex";
-    }
-    else {
-        headerBar.style.marginRight = "0";
-        rootContent.style.marginRight = "0";
-        notificationsBar.style.display = "none";
-    }
+    headerBar.style.marginRight = "15%";
+    rootContent.style.marginRight = "15%";
+    notificationsBar.style.display = "flex";
 }
+
+export function hideRightSideBar() {
+    const notificationsBar = window.document.querySelector(".right-sidebar");
+    const headerBar = window.document.querySelector("header-bar");
+    const rootContent = window.document.querySelector("root-content");
+    headerBar.style.marginRight = "0";
+    rootContent.style.marginRight = "0";
+    notificationsBar.style.display = "none";
+}
+
+export function showNotificationsList() {
+    const notificationList = window.document.querySelector(".right-sidebar notifications-list");
+    notificationList.style.display = "flex";
+    hideFriendsRequestList();
+    showRightSideBar();
+}
+
+export function hideNotificationsList() {
+    const notificationList = window.document.querySelector(".right-sidebar notifications-list");
+    notificationList.style.display = "none";
+    hideRightSideBar();
+}
+
+
+
+
+export function showFriendsRequestList() {
+    const friends = window.document.querySelector(".right-sidebar friends-request-list");
+    friends.style.display = "flex";
+    hideNotificationsList();
+    showRightSideBar();
+
+}
+
+export function hideFriendsRequestList() {
+    const friends = window.document.querySelector(".right-sidebar friends-request-list");
+    friends.style.display = "none";
+    hideRightSideBar();
+}
+
+
+
 
 const HeaderTemplate =  document.createElement('template');
 
@@ -251,7 +298,8 @@ const cssContent = /*css*/`
 
 
     .friends-icon {
-        height: 100px;
+        
+        height: 100%;
     }
 
 `
@@ -270,7 +318,7 @@ HeaderTemplate.innerHTML = /*html*/`
             <div class="search-box">
                 <search-bar-component></search-bar-component>
                 <div class="friends-icon" >
-                    <friend-request-list></friend-request-list>
+                    <img loading="lazy" draggable="false" src="/assets/icons/account-icon.svg" alt="friends">
                 </div>
                 <div class="notification-icon" >
                     <img loading="lazy" draggable="false" src="/images/svg-header/alarm.svg" alt="notification">

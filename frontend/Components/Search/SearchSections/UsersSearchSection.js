@@ -31,6 +31,8 @@ export class UsersSearchSection extends HTMLElement {
 
     appendPlayers(playersData) {
         const resultSectionContent = this.querySelector(".result-section-content");
+        if (!playersData)
+            return ;
         Array.from(playersData).forEach(elem => {
             const item = this.createPlayerItem(elem);
             resultSectionContent.appendChild(item);

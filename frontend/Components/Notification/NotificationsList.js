@@ -1,8 +1,12 @@
 import { getCurrentUserId } from "/Utils/GlobalVariables.js";
-import { showNotifiactionsList } from "/Components/Header/header-bar.js";
 import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
 import { displayNotification } from "/Components/Notification/NotificationUtils.js";
 import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { NOTIFICATIONS_API_URL } from "/Utils/APIUrls.js";
+import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
+import { hideNotificationsList } from "/Components/Header/header-bar.js";
+
 
 export class NotificationsList extends HTMLElement {
     constructor() {
@@ -25,13 +29,21 @@ export class NotificationsList extends HTMLElement {
         this.style.width = this.width;
         this.style.height = this.height;
         const notificationList = this.querySelector(".notificationsBar-body");
-        notificationList.scrollTop = notificationList.scrollHeight;
+
+        const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
+        if (notifications) {
+            Array.from(notifications).forEach( notif => {
+                const notification = createNotification(notif.user.username, notif.content, "message");
+                this.appendNotification(notification);
+            });
+        }
         this.querySelector(".close-button").addEventListener("click", () => {
-            showNotifiactionsList();
+            hideNotificationsList();
         });
         this.querySelector(".clear-all").addEventListener("click", () => {
             this.querySelector(".notification-list").innerHTML = '';
         });
+        notificationList.scrollTop = notificationList.scrollHeight;
     }
     disconnectedCallback() {
     }
