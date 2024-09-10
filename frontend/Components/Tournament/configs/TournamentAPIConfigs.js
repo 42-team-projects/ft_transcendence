@@ -1,18 +1,22 @@
-import { createApiData, getApiData } from "../../../Utils/APIManager.js";
-import { apiUrl } from "../../../Utils/GlobalVariables.js";
-import { hashPassword } from "../../../Utils/Hasher.js";
-import { fetchWithToken } from "../../../root/fetchWithToken.js";
+import { TOURNAMENT_API_URL } from "/Utils/GlobalVariables.js";
+import { createApiData, getApiData } from "/Utils/APIManager.js";
+import { hashPassword } from "/Utils/Hasher.js";
 
 
 export async function get_tournaments_by_player_id() {
     try {
-        const response = await getApiData(apiUrl + "player/");
+        const response = await getApiData(TOURNAMENT_API_URL + "player/");
         return response;
     } catch (error) {
         console.error('Error of tournament list: ', error);
         return null;
     }
 }
+
+/**
+ * 
+ * @author rida
+ */
 
 export async function createTournament(data) {
 
@@ -27,7 +31,7 @@ export async function createTournament(data) {
         }
         const create_tournament = "create/player/";
         const accessToken = localStorage.getItem('accessToken');
-        const response = await fetch(`${apiUrl}${create_tournament}`, {
+        const response = await fetch(`${TOURNAMENT_API_URL}${create_tournament}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,9 +51,8 @@ export async function createTournament(data) {
 
 export async function player_leave_tournament(tournamentId) {
     try {
-        const response = await createApiData(`${apiUrl}tournament/${tournamentId}/player/leave/`, "");
+        const response = await createApiData(`${TOURNAMENT_API_URL}tournament/${tournamentId}/player/leave/`, "");
         console.log("response: ", response);
-        // const data = await response.json();
         // handle response message
     } catch (error) {
         console.error('Error of player leave tournament: ', error);
@@ -59,7 +62,7 @@ export async function player_leave_tournament(tournamentId) {
 export async function get_tournament_by_id(id) {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const response = await fetch(`${apiUrl}${id}/`, {
+        const response = await fetch(`${TOURNAMENT_API_URL}${id}/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,16 +81,20 @@ export async function get_tournament_by_id(id) {
 export async function get_Available_Tournaments(queries) {
     try {
         let Available_Tournaments = "available_tournaments?" + (queries || "");
-        return await getApiData(`${apiUrl}${Available_Tournaments}`);
+        return await getApiData(`${TOURNAMENT_API_URL}${Available_Tournaments}`);
     } catch(error) {
         console.error('Error of tournament list: ', error);
     }
 }
 
+/**
+ * 
+ * @author rida
+ */
 export async function player_join_tournament(tournamentId)
 {
     try {
-        const response = await createApiData(`${apiUrl}tournament/${tournamentId}/player/`, "");
+        const response = await createApiData(`${TOURNAMENT_API_URL}tournament/${tournamentId}/player/`, "");
         console.log("response: ", response);
         return response;
     } catch(error) {

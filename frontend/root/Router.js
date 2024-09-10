@@ -1,5 +1,5 @@
-import { fetchWithToken, isTokenValid} from './fetchWithToken.js'
-import config from '../../Utils/GlobalVariables.js';
+import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
+import { HOST } from '/Utils/GlobalVariables.js';
 
 export class Router {
 
@@ -12,7 +12,7 @@ export class Router {
             { path: '/Home', view: 'home-page', isAccessed: true },
             { path: '/Game', view: 'game-selection', isAccessed: true },
             { path: '/Chat', view: 'chat-page', isAccessed: true },
-            { path: '/Friends', view: 'freinds-page', isAccessed: true },
+            { path: '/Ranking', view: 'ranking-page', isAccessed: true },
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
@@ -59,14 +59,17 @@ export class Router {
     }
     
     async changeStyle(access_token, path){
-        let matchedRoute = this.routes.find((route) => route.path === path);
+        let matchedRoute = this.routes.find((route) => path.startsWith(route.path));
+        // let matchedRoute = this.routes.find((route) => route.path === path);
         if (!matchedRoute)
         {
             matchedRoute = this.routes.find((route) => route.view === "home-page");
+            console.log("matchedRoute: ", matchedRoute);
             window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
         }
     
         if (matchedRoute.isAccessed) {
+            
             const isValid = await isTokenValid(access_token);
             if (isValid) {
                 if(this.randred === false)
@@ -106,7 +109,7 @@ export class Router {
         // tmp place should be in function and called somewhere
         let logout = document.querySelector('.logout')
         logout.addEventListener('click', () => {
-            fetchWithToken(`http://${config.serverIP}:8000/api/v1/auth/logout/`, {
+            fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`

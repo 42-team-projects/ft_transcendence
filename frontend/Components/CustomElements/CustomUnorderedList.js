@@ -1,4 +1,4 @@
-import { CustomUnorderedListItem } from "./CustomUnorderedListItem.js";
+import { CustomUnorderedListItem } from "/Components/CustomElements/CustomUnorderedListItem.js";
 
 export class CustomUnorderedList extends HTMLElement {
     constructor() {
@@ -14,7 +14,7 @@ export class CustomUnorderedList extends HTMLElement {
                         <h2></h2>
                         <p></p>
                     </div>
-                    <img loading="lazy" class="add-icon" src="../assets/icons/plus-icon.svg"></img>
+                    <img loading="lazy" class="add-icon" src="/assets/icons/plus-icon.svg"></img>
                 </div>
                 <div class="box"></div>
             </div>

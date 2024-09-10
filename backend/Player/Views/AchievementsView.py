@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from ..Models.PlayerModel import Player
 from ..Models.AchievementsModel import Achievements
-from ..Serializers.PlayerSerializer import PlayerSerializer
 from ..Serializers.AchievementsSerializer import AchievementsSerializer
 
 from rest_framework.permissions import IsAuthenticated
@@ -13,69 +12,49 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
+### Achievement Views ###
 @csrf_exempt
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
-def getPlayerAchievements(request):
-    try:
-        player = Player.objects.get(user=request.user)
-        achievements = player.achievements
-    except Player.DoesNotExist:
-        return JsonResponse({"error": "No achievements exist"}, status=status.HTTP_404_NOT_FOUND)
-
+def getPlayerAchievements(request, username):
     if request.method == 'GET':
+        achievements = Achievements.objects.filter(player__user__username=username)
         serializer = AchievementsSerializer(achievements, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
-    
-    if request.method == 'POST':
-        try:
-            achievementsData = request.data
-            Achievements.objects.create(name=achievementsData.get("name"), img=achievementsData.get("img"), player = player)
-            return JsonResponse({"message": "the achievement has been successfully updated."}, safe=False, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def coutPlayerAchievements(request):
-    if request.method == 'GET':
-        achievements = Player.objects.get(user=request.user).achievements
-        return JsonResponse(achievements.count(), safe=False, status=status.HTTP_201_CREATED)
-
-
+    elif request.method == 'POST':
+        serializer = AchievementsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(player=Player.objects.get(user__username=username))
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        Achievements.objects.filter(player__user__username=username).delete()
+        return JsonResponse({"message": "The Achievements hs successfully deleted!"}, safe=False, status=status.HTTP_200_OK)
 
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
-def getPlayerAchievementById(request, achievementId):
+def getPlayerAchievementById(request, username, achievementId):
     try:
-        achievements = Player.objects.get(user=request.user).achievements.get(id=achievementId)
+        achievement = Achievements.objects.get(player__user__username=username, id=achievementId)
+        if request.method == 'GET':
+            serializer = AchievementsSerializer(achievement)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            serializer = AchievementsSerializer(achievement, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            achievement.delete()
+            return JsonResponse({"message": "Achievement deleted"}, status=status.HTTP_200_OK)
     except Achievements.DoesNotExist:
-        return JsonResponse({"error": "No achievements exist"}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({"error": "Achievement not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        serializer = AchievementsSerializer(achievements)
-        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
-
-    if request.method == 'PUT':
-        try:
-            achievementsData = request.data
-            name = achievementsData.get("name")
-            img = achievementsData.get("img")
-            if name:
-                achievements.name = name
-            if img:
-                achievements.img = img
-            achievements.save()
-            return JsonResponse({"message": "the achievement has been successfully updated."}, safe=False, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
-    if request.method == 'DELETE':
-        achievements.delete()
-        return JsonResponse({"message": "the achievement has been successfully deleted."}, safe=False, status=status.HTTP_201_CREATED)
-    
-
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def countPlayerAchievements(request, username):
+    achievement_count = Achievements.objects.filter(player__user__username=username).count()
+    return JsonResponse({"count": achievement_count}, status=status.HTTP_200_OK)

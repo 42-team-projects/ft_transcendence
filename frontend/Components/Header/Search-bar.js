@@ -1,9 +1,10 @@
 // const SearchTemplate = document.createElement('template');
 
-import { createWebSocketsForTournaments } from "../../Utils/TournamentWebSocketManager.js";
+import { createNotificationWebSocket } from "/Utils/GlobalVariables.js";
+import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js";
 
 const SearchTemplate = /*html*/`
-    <img loading="lazy" draggable="false" class="search-icon" src="./images/svg-header/search.svg" alt="searchIcon">
+    <img loading="lazy" draggable="false" class="search-icon" src="/images/svg-header/search.svg" alt="searchIcon">
     <div class="vertical-line"></div>
     <input type="text" class="search-input" placeholder="SEARCH">
 `;
@@ -17,8 +18,7 @@ export class SearchBar extends HTMLElement {
     }
     
     async connectedCallback() {
-        await getCurrentPlayerData();
-        createWebSocketsForTournaments();
+
     }
 }
 

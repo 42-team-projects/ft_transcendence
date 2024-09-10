@@ -32,7 +32,7 @@ export class TournamentsSearchSection extends HTMLElement {
         item.innerHTML = `
             <div class="profile-item">${tournamentData.tournament_name}</div>
             <div class="search-actions">
-                <img src="../../assets/icons/join-icon.svg" class="read-message" width="24px" height="24px"></img>
+                <img src="/assets/icons/join-icon.svg" class="read-message" width="24px" height="24px"></img>
             </div>
         `;
         item.addEventListener("click", () => {
