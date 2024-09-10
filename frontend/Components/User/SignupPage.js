@@ -1,12 +1,12 @@
-import Header from './Header.js';
-import Shape from './Shape.js';
-import { router } from '../../root/Router.js';
-import { HOST } from '../../Utils/GlobalVariables.js';
+import Header from '/Components/User/Header.js';
+import Shape from '/Components/User/Shape.js';
+import { router } from '/root/Router.js';
+import { HOST } from '/Utils/GlobalVariables.js';
 
 export default class SignupPage extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-            <link rel="stylesheet" href="Components/User/style.css">
+            <link rel="stylesheet" href="/Components/User/style.css">
             <header-cpn></header-cpn>
             <shape-cpn 
                 title="Sign Up" 

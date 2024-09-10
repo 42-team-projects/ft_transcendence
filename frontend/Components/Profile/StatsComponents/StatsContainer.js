@@ -1,7 +1,7 @@
-import { CustomProgressBar } from "./LeagueComponents/CustomProgressBar.js";
-import { LeagueInfo } from "./LeagueComponents/LeagueInfo.js";
-import { LeagueItem } from "./LeagueComponents/LeagueItem.js";
-import { RecordComponent } from "./RecordMatchesComponents/RecordComponent.js";
+import { CustomProgressBar } from "/Components/Profile/StatsComponents/LeagueComponents/CustomProgressBar.js";
+import { LeagueInfo } from "/Components/Profile/StatsComponents/LeagueComponents/LeagueInfo.js";
+import { LeagueItem } from "/Components/Profile/StatsComponents/LeagueComponents/LeagueItem.js";
+import { RecordComponent } from "/Components/Profile/StatsComponents/RecordMatchesComponents/RecordComponent.js";
 
 
 export class StatsContainer extends HTMLElement {

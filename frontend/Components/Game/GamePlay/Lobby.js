@@ -1,9 +1,8 @@
-import { PlayerBorder } from "./PlayerBorder.js";
-import { GameHeader } from "./GameHeader.js"
-import { GameTable } from "./GameTable.js"
-import { getCurrentPlayerData, HOST, wsUrl } from "../../../Utils/GlobalVariables.js";
-import { getApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../../Utils/GlobalVariables.js";
+import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
+import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
+import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
+import { getCurrentPlayerData, HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { getApiData } from "/Utils/APIManager.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -50,7 +49,7 @@ playerSlot.innerHTML = /*html*/ `
 `
 
 AiGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/AiLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/AiLobby.css">
 	<img id='Player' class="Player" slot="PlayerImg" alt="Player" />
 	<h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 	<h1 id='Opponent' class="Opponent" slot="searshing"></h1>
@@ -58,7 +57,7 @@ AiGameTemplate.innerHTML = /*html*/ `
 `
 
 OnlineGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/OnlineGameLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/OnlineGameLobby.css">
 	<div class="searshingImgs" slot="searshing">
 		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
 		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
@@ -78,7 +77,7 @@ opponentSlot.innerHTML = /*html*/ `
 	`
 
 lobby.innerHTML =  /* html */ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/Lobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/Lobby.css">
 	<page-name width="35%">
 		<div slot="text" class="pageNameText">
 			<h1>MATCH MAKING</h1>
@@ -337,7 +336,7 @@ export class Lobby extends HTMLElement{
 	}
 	createTimer(){
 		timer.innerHTML = /*html*/ `
-			<link rel="stylesheet", href="Components/Game/GamePlay/Timer.css">
+			<link rel="stylesheet", href="/Components/Game/GamePlay/Timer.css">
 			<div class="descounter">
 				<h1>${this.time}</h1>
 			</div>

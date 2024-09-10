@@ -2,7 +2,7 @@ import { HOST } from '../../Utils/GlobalVariables.js';
 
 export default class EmailConf extends HTMLElement {
     async connectedCallback() {
-        const { router } = await import('../../root/Router.js');
+        const { router } = await import('/root/Router.js');
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
 
@@ -26,12 +26,12 @@ export default class EmailConf extends HTMLElement {
         else
         {
             this.innerHTML = /*html*/`
-                <link rel="stylesheet" href="Components/User/style.css" type="text/css">
+                <link rel="stylesheet" href="/Components/User/style.css" type="text/css">
                 
                 <header-cpn></header-cpn>
 
                 <div id="center-container">
-                    <img src="../../assets/auth-svg/confirm.svg" id="confirm" alt="confirm">
+                    <img src="/assets/auth-svg/confirm.svg" id="confirm" alt="confirm">
                     <h1 id="confirm-header">Email Confirmation</h1>
                     <p>We sent you a verification email to your email account<br>
                     please check your email box.</p>
