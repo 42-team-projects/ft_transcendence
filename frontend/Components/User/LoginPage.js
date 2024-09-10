@@ -1,5 +1,5 @@
-import { router } from '../../root/Router.js';
-import { HOST } from '../../Utils/GlobalVariables.js';
+import { router } from '/root/Router.js';
+import { HOST } from '/Utils/GlobalVariables.js';
 
 export default class LoginPage extends HTMLElement {
 	constructor() {
@@ -22,8 +22,8 @@ export default class LoginPage extends HTMLElement {
 					
 					<div id="error-message"></div>
 					
-					<input-field placeholder="Email" icon="../../assets/auth-svg/email.svg"></input-field>
-					<input-field placeholder="Password" icon="../../assets/auth-svg/pwd.svg" eye="../../assets/auth-svg/eyeClosed.svg"></input-field>
+					<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
+					<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
 					
 					<submit-button
 						title="Login"
@@ -31,16 +31,16 @@ export default class LoginPage extends HTMLElement {
 					</submit-button>
 					
 					<div class="oauth-footer">
-						<img src="../../assets/auth-svg/orLine.svg" alt="Or">
+						<img src="/assets/auth-svg/orLine.svg" alt="Or">
 
 						<div class="button-container">
 
 							<button class="oauth-button google">
-								<img src="../../assets/auth-svg/google.svg" alt="Google">
+								<img src="/assets/auth-svg/google.svg" alt="Google">
 							</button>
 							
 							<button class="oauth-button intra">
-								<img src="../../assets/auth-svg/42.svg" alt="Intra">
+								<img src="/assets/auth-svg/42.svg" alt="Intra">
 							</button>
 						</div>
 					</div>

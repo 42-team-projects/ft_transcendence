@@ -1,7 +1,7 @@
-import { TwoFactorAuthTemplate } from "../Alert/templates/TwoFactorAuthTemplate.js";
-import { CustomAlert } from "../Alert/CustomAlert.js";
-import { getApiData } from "../../Utils/APIManager.js";
-import { DISABLE_2FA_API_URL, ENABLE_2FA_API_URL, VIREFY_2FA_API_URL } from "../../Utils/GlobalVariables.js";
+import { TwoFactorAuthTemplate } from "/Components/Alert/templates/TwoFactorAuthTemplate.js";
+import { CustomAlert } from "/Components/Alert/CustomAlert.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { DISABLE_2FA_API_URL, ENABLE_2FA_API_URL, VIREFY_2FA_API_URL } from "/Utils/GlobalVariables.js";
 
 export class CustomToggleSwitch extends HTMLElement {
     

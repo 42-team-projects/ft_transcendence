@@ -1,4 +1,4 @@
-import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
+import { getCurrentUserId } from "/Utils/GlobalVariables.js";
 
 let ws;
 
@@ -12,7 +12,7 @@ export class ChatFooterComponent extends HTMLElement {
             </style>
             <div class="container">
                 <input type="text" placeholder="write your message ..." />
-                <img loading="lazy" src="./assets/images/profile/send-icon.svg"   width="32">
+                <img loading="lazy" src="/assets/images/profile/send-icon.svg"   width="32">
             </div>
             <div class="corner"></div>
         `;

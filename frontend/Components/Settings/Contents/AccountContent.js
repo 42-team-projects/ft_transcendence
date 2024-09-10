@@ -1,9 +1,9 @@
-import { CustomInputField } from "../../CustomElements/CustomInputField.js";
-import { CustomToggleSwitch } from "../../CustomElements/CustomToggleSwitch.js";
-import { CustomAlert } from "../../Alert/CustomAlert.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL } from "../../../Utils/GlobalVariables.js";
-import { getApiData, updateApiData } from "../../../Utils/APIManager.js";
-import {  } from "../../CustomElements/CustomSpinner.js";
+import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
+import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
+import { CustomAlert } from "/Components/Alert/CustomAlert.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL } from "/Utils/GlobalVariables.js";
+import { getApiData, updateApiData } from "/Utils/APIManager.js";
+import {  } from "/Components/CustomElements/CustomSpinner.js";
 
 export class AccountContent extends HTMLElement {
     constructor() {
@@ -21,7 +21,7 @@ export class AccountContent extends HTMLElement {
             </div>
             <div class="actions">
                 <settings-item id="delete-account-button" background-color="#c8000080" color="#c8000090" border-size="2px" width="200px" height="40px"><h3>DELETE ACCOUNT</h3></settings-item>
-                <settings-item id="save-button" class="disable" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
+                <settings-item class="active" id="save-button" class="disable" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
             </div>
             <custom-spinner time="10" ></custom-spinner>
         `;
@@ -29,7 +29,7 @@ export class AccountContent extends HTMLElement {
     interval;
 
     async connectedCallback() {
-        const playerData = await getApiData(PROFILE_API_URL);
+        const playerData = await getApiData(PROFILE_API_URL + "me/");
         const usernameField = this.shadowRoot.querySelector(".username-field");
         if (usernameField)
             usernameField.value = playerData.user.username;
@@ -69,9 +69,7 @@ export class AccountContent extends HTMLElement {
                 accountDataForm.append("username", usernameField.value)
             if (passwordField.value)
                 accountDataForm.append("password", passwordField.value)
-            const res = await updateApiData(UPDATE_USER_API_URL, accountDataForm);
-            console.log("res: ", res);
-
+            const res = await updateApiData(UPDATE_USER_API_URL + "me/", accountDataForm);
             if (usernameField.value)
             {
                 playerData.user.username = usernameField.value;
@@ -161,6 +159,11 @@ const cssContent = /*css*/ `
     .disable {
         opacity: 0.5;
         pointer-events: none;
+    }
+    
+    .active {
+        border: 2px solid aqua;
+        color: aqua;   
     }
 
 `;

@@ -1,4 +1,4 @@
-import { HOST } from '../../Utils/GlobalVariables.js';
+import { HOST } from '/Utils/GlobalVariables.js';
 
 export const fetchWithToken = async (url, options) => {
     const response = await fetch(url, options);
