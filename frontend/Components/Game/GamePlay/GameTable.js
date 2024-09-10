@@ -1,9 +1,9 @@
-import { GameOver } from "./GameOver.js";
-import { LaunchingGame } from "./launchingGame.js";
-import { userInfo, opponentInfo } from "./Lobby.js";
-import { wsUrl } from "../../../Utils/GlobalVariables.js";
-// import { useWebsocket } from "../../../Utils/TournamentWebSocketManager.js";
-import { goNextStage } from "./configs/ScoreManager.js";
+import { GameOver } from "/Components/Game/GamePlay/GameOver.js";
+import { LaunchingGame } from "/Components/Game/GamePlay/launchingGame.js";
+import { userInfo } from "/Components/Game/GamePlay/Lobby.js";
+import { goNextStage } from "/Components/Game/GamePlay/configs/ScoreManager.js";
+import { wsUrl } from "/Utils/GlobalVariables.js";
+
 const game_page = document.createElement('template');
 
 let score = {
@@ -13,8 +13,8 @@ let score = {
 
 
 game_page.innerHTML = /*html*/ `
-<link rel="stylesheet" href="./Game/GamePlay/GameTable.css">
-<link rel="stylesheet" href="./Utils/utils.css">
+<link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
+<link rel="stylesheet" href="/Utils/utils.css">
 <div class="c_game">
     <div class="GameShapes">
 		<div class="shapes_LT_RT"></div>

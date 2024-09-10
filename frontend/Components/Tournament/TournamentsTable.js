@@ -1,11 +1,11 @@
-import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { createTournament, get_tournaments_by_player_id, player_leave_tournament } from "./configs/TournamentAPIConfigs.js";
-import { CustomButton } from "./CustomButton.js";
-import { JoinTournament } from "./JoinTournament.js";
-import { CreateTournament } from "./CreateTournament.js";
-import { GenerateRounds } from "./GenerateRounds.js";
-import { closeWebSocket, initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
-import { createTournamentTable } from "./configs/TournamentUtils.js";
+import { calculateTimeDifferents } from "/Utils/DateUtils.js";
+import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { CustomButton } from "/Components/Tournament/CustomButton.js";
+import { JoinTournament } from "/Components/Tournament/JoinTournament.js";
+import { CreateTournament } from "/Components/Tournament/CreateTournament.js";
+import { GenerateRounds } from "/Components/Tournament/GenerateRounds.js";
+import { closeWebSocket, initWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { createTournamentTable } from "/Components/Tournament/configs/TournamentUtils.js";
 
 
 export class TournamentsTable extends HTMLElement {
@@ -36,7 +36,7 @@ export class TournamentsTable extends HTMLElement {
         if (!tournamentsAPIData)
             return;
         const mainContainer = this.querySelector(".mainContainer");
-        createTournamentTable(this, mainContainer, tournamentsAPIData);
+        await createTournamentTable(this, mainContainer, tournamentsAPIData);
         const tournamentDeadLine = mainContainer.querySelectorAll(".deadLineTime");
         // console.log("tournamentDeadLine: ", tournamentDeadLine);
         this.interval = setInterval(() => {
@@ -47,10 +47,10 @@ export class TournamentsTable extends HTMLElement {
         }, 1000);
 
         const firstButton = this.querySelector("#firstButton");
-        firstButton.addEventListener("click", () => {
+        firstButton.addEventListener("click", async () => {
             const buttonValue = firstButton.querySelector("h3");
             if (buttonValue.textContent == "CANCEL") {
-                createTournamentTable(this, mainContainer, tournamentsAPIData);
+                await createTournamentTable(this, mainContainer, tournamentsAPIData);
                 buttonValue.textContent = "JOIN TOURNAMENT";
                 secondButton.querySelector("h3").textContent = "CREATE TOURNAMENT";
             } else {
@@ -79,6 +79,8 @@ export class TournamentsTable extends HTMLElement {
                         await initWebSocket(tournamentResponse);
                         this.innerHTML = '';
                         const rounds = document.createElement("generate-rounds");
+                        rounds.tournamentId = tournamentResponse.tournament_id;
+                        console.log("rounds.tournamentId: ", rounds.tournamentId);
                         rounds.numberOfPlayers = tournamentResponse.number_of_players;
                         console.log("tournamentResponse.players: ", tournamentResponse.players);
                         

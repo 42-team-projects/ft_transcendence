@@ -1,4 +1,4 @@
-import { FriendItemComponent } from "./FriendItemComponent.js";
+import { FriendItemComponent } from "/Components/Chat/Friends/FriendItemComponent.js";
 
 let fakeData = [];
 export class FriendsListComponent extends HTMLElement {
