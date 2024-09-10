@@ -123,7 +123,9 @@ export class ProfileComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-        const playerName = window.location.pathname.substring(9);
+        let playerName = window.location.pathname.substring(9);
+        if (!playerName || playerName === "")
+            playerName = "me"
         this.renderProfilePage(playerName);
     }
 
