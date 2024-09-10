@@ -39,6 +39,10 @@ class ChatConsumer(WebsocketConsumer):
             #     self.send_error('sender and receiver is same user!')
             # else:
             #     self.save_and_broadcast_message(data['message'])
+            
+            
+            
+            # handle block user here
             self.save_and_broadcast_message(data['message'])
                 
         except ObjectDoesNotExist:

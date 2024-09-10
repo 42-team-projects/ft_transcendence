@@ -1,10 +1,9 @@
 from accounts.models            import User
-from friends.models             import FriendRequest, Friendship, BlockUser
+from friends.models             import FriendRequest, Friendship#, BlockUser
 from rest_framework.response    import Response
 from rest_framework.decorators  import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions     import ObjectDoesNotExist,ValidationError
-# from django.db                  import transaction
 from django.shortcuts           import get_object_or_404
 
 from .serializers               import FriendRequestSerializer, FriendshipSerializer
@@ -18,11 +17,10 @@ def get_friend_requests(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_friend_list(request):
+def get_friends_list(request):
     my_friends = get_object_or_404(Friendship, user=request.user)
     my_friends_serializer = FriendshipSerializer(my_friends, read_only=True)
     return Response({'response': my_friends_serializer.data})
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -45,8 +43,14 @@ def send_friend_request(request):
     
 
     try:
+        # Check for any existing friend request from the receiver to the sender
+        reverse_request = FriendRequest.objects.filter(sender=receiver_user, receiver=current_user, is_active=True).first()
+        if reverse_request:
+            return Response({'response': 'There is already a friend request from this user to you.'}, status=400)
+                
+        # Check if they are already friends
         if Friendship.objects.filter(user=current_user, friends=receiver_user).exists() and \
-            Friendship.objects.filter(user=receiver_user, friends=current_user).exists():
+           Friendship.objects.filter(user=receiver_user, friends=current_user).exists():
             return Response({'response': 'You are already friends with this user.'}, status=400)
 
 
@@ -66,12 +70,12 @@ def send_friend_request(request):
     except ValidationError as e:
         return Response({'response': str(e)}, status=400)
 
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def accept_friend_request(request):
 
     # Validate request_id input
-    request_id = request.GET.get('request_id', None)
+    request_id = request.POST.get('request_id', None)
     if not request_id:
         return Response({'response': 'request_id is required.'}, status=400)
     try:
@@ -95,7 +99,7 @@ def accept_friend_request(request):
 def unfriend_user(request):
     target_user_id = request.data.get('friend_id', None)
     if not target_user_id:
-        return Response({'response': 'target_user_id is required.'}, status=400)
+        return Response({'response': 'friend_id is required.'}, status=400)
     try:
         target_user_id = int(target_user_id)
     except ValueError:
@@ -108,74 +112,121 @@ def unfriend_user(request):
         return Response({'response': 'You have successfully unfriend this user.'})
     return Response({'response': 'Cannot unfriend this user, no friendship found.'})
 
-
 @api_view(['POST'])
-def block_user(request):
-    """Block a user.
-
-    This endpoint allows an authenticated user to block another user. The request should
-    include the ID of the user to be blocked.
-
-    Request Data:
-    - user_id: The ID of the user to be blocked.
-
-    Response:
-    - 200 OK: If the user was successfully blocked.
-    - 400 Bad Request: If the request data is invalid or missing.
-    - 401 Unauthorized: If the user is not authenticated.
-
-    Example Request:
-    POST /api/block_user/
-    {
-        "user_id": 123
-    }
-
-    Example Response:
-    {
-        "detail": "User blocked successfully."
-    }
-    """
-    user_id = request.data.get('user_id', None)
+@permission_classes([IsAuthenticated])
+def decline_friend_request(request):
+    # Validate request_id input
+    request_id = request.POST.get('request_id', None)
+    if not request_id:
+        return Response({'response': 'request_id is required.'}, status=400)
     try:
-        blocked_user = request.user
-        blocker_user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        return Response({'response': 'Blocker user not exist.'})
-    
-    user_block = BlockUser.objects.create(blocked=blocked_user, blocker=blocker_user)
-    # print('is friend >', user_block.is_friend())
+        request_id = int(request_id)
+    except ValueError:
+        return Response({'response': 'Invalid request ID. It should be an integer.'}, status=400)
 
-    if user_block.is_friend():
-        user_block.remove_friendship()
-        return Response({'response': 'User blocked successfuly.'})
-    else:
-        return Response({'response': 'User not blocked.'})
+    try:
+        friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
+        if friend_request.receiver == request.user:
+            friend_request.decline()
+            return Response({'requests': 'Friend request declined.'})
+        return Response({'requests': 'That is not your friend request to decline.'}, status=403)
+    except FriendRequest.DoesNotExist:
+        return Response({'requests': 'Friend request not found.'}, status=404)
+    except ObjectDoesNotExist:
+        return Response({'requests': 'Invalid request or object not found.'}, status=404)
 
 @api_view(['POST'])
-def unblock_user(request):
-    """Unblock a user.
+@permission_classes([IsAuthenticated])
+def cancel_friend_request(request):
+    # Validate request_id input
+    request_id = request.POST.get('request_id', None)
+    if not request_id:
+        return Response({'response': 'request_id is required.'}, status=400)
+    try:
+        request_id = int(request_id)
+    except ValueError:
+        return Response({'response': 'Invalid request ID. It should be an integer.'}, status=400)
 
-    This endpoint allows an authenticated user to unblock a previously blocked user. The request should
-    include the ID of the user to be unblocked.
+    try:
+        friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
+        if friend_request.sender == request.user:
+            friend_request.cancel()
+            return Response({'requests': 'Friend request cancelled.'})
+        return Response({'requests': 'That is not your friend request to cancel.'}, status=403)
+    except FriendRequest.DoesNotExist:
+        return Response({'requests': 'Friend request not found.'}, status=404)
+    except ObjectDoesNotExist:
+        return Response({'requests': 'Invalid request or object not found.'}, status=404)
 
-    Request Data:
-    - user_id: The ID of the user to be unblocked.
 
-    Response:
-    - 200 OK: If the user was successfully unblocked.
-    - 400 Bad Request: If the request data is invalid or missing.
-    - 401 Unauthorized: If the user is not authenticated.
+# @api_view(['POST'])
+# def block_user(request):
+#     """Block a user.
 
-    Example Request:
-    POST /api/unblock_user/
-    {
-        "user_id": 123
-    }
+#     This endpoint allows an authenticated user to block another user. The request should
+#     include the ID of the user to be blocked.
 
-    Example Response:
-    {
-        "detail": "User unblocked successfully."
-    }
-    """
-    user_id = request.data.get('user_id', None)
-    return Response({'unblock-user': user_id})
+#     Request Data:
+#     - user_id: The ID of the user to be blocked.
+
+#     Response:
+#     - 200 OK: If the user was successfully blocked.
+#     - 400 Bad Request: If the request data is invalid or missing.
+#     - 401 Unauthorized: If the user is not authenticated.
+
+#     Example Request:
+#     POST /api/block_user/
+#     {
+#         "user_id": 123
+#     }
+
+#     Example Response:
+#     {
+#         "detail": "User blocked successfully."
+#     }
+#     """
+#     user_id = request.data.get('user_id', None)
+#     try:
+#         blocked_user = request.user
+#         blocker_user = User.objects.get(id=user_id)
+#     except User.DoesNotExist:
+#         return Response({'response': 'Blocker user not exist.'})
+    
+#     # print('is friend >', user_block.is_friend())
+
+#     user_block = BlockUser.objects.create(blocked=blocked_user, blocker=blocker_user)
+    
+#     if user_block.is_friend():
+#         user_block.remove_friendship()
+#         return Response({'response': 'User blocked successfuly.'})
+#     else:
+#         return Response({'response': 'User not blocked.'})
+
+# @api_view(['POST'])
+# def unblock_user(request):
+#     """Unblock a user.
+
+#     This endpoint allows an authenticated user to unblock a previously blocked user. The request should
+#     include the ID of the user to be unblocked.
+
+#     Request Data:
+#     - user_id: The ID of the user to be unblocked.
+
+#     Response:
+#     - 200 OK: If the user was successfully unblocked.
+#     - 400 Bad Request: If the request data is invalid or missing.
+#     - 401 Unauthorized: If the user is not authenticated.
+
+#     Example Request:
+#     POST /api/unblock_user/
+#     {
+#         "user_id": 123
+#     }
+
+#     Example Response:
+#     {
+#         "detail": "User unblocked successfully."
+#     }
+#     """
+#     user_id = request.data.get('user_id', None)
+#     return Response({'unblock-user': user_id})

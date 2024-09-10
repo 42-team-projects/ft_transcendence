@@ -5,4 +5,4 @@ from .models import *
 
 admin.site.register(Friendship)
 admin.site.register(FriendRequest)
-admin.site.register(BlockUser)
+# admin.site.register(BlockUser)
