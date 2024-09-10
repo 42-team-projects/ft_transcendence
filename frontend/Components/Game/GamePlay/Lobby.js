@@ -301,10 +301,10 @@ export class Lobby extends HTMLElement{
 
 		headerBar.classList.toggle('up-100', false);
 		
-		root.innerHTML = ``;
-		root.appendChild(game);
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
+		root.innerHTML = ``;
+		root.appendChild(game);
 		game.id = this.tournament_id;
 	}
 	gameMode(room_group_name){
