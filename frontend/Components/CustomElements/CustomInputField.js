@@ -15,7 +15,7 @@ export class CustomInputField extends HTMLElement {
                     <div class="inputContainer active">
                         <input type="text" accept="image/png, image/jpeg"/>
                     </div>
-                    <img loading="lazy" class="edit-icon" src="../assets/icons/pencil-icon.svg"></img>
+                    <img loading="lazy" class="edit-icon" src="/assets/icons/pencil-icon.svg"></img>
                 </div>
             </div>
         `;
@@ -31,7 +31,7 @@ export class CustomInputField extends HTMLElement {
         {
             inputContainer.innerHTML = `
                 <div class="uploadcontainer">
-                    <img loading="lazy" src="../../assets/icons/upload-icon.svg"></img>
+                    <img loading="lazy" src="/assets/icons/upload-icon.svg"></img>
                     <h4>Upload Image</h4>
                 </div>
                 <input type="text" accept="image/png, image/jpeg" readonly/>
@@ -56,7 +56,7 @@ export class CustomInputField extends HTMLElement {
                 if (fileName)
                     this.shadowRoot.querySelector(".uploadcontainer").innerHTML = `<span style="text-align: center;">${fileName}</span>`;
                 else
-                    this.shadowRoot.querySelector(".uploadcontainer").innerHTML = `<img loading="lazy" src="../../assets/icons/upload-icon.svg"></img><h4>Upload Image</h4>`;
+                    this.shadowRoot.querySelector(".uploadcontainer").innerHTML = `<img loading="lazy" src="/assets/icons/upload-icon.svg"></img><h4>Upload Image</h4>`;
 
             });
         }
@@ -72,14 +72,14 @@ export class CustomInputField extends HTMLElement {
             else if (!editIcon.classList.contains("close")) {
                 inputField.removeAttribute("readonly");
                 inputContainer.classList.add("active");
-                editIcon.src = "../assets/icons/close-icon.svg";
+                editIcon.src = "/assets/icons/close-icon.svg";
                 editIcon.classList.add("close");
             }
             else {
                 inputField.value = oldValue;
                 inputField.setAttribute("readonly", true);
                 inputContainer.classList.remove("active");
-                editIcon.src = "../assets/icons/pencil-icon.svg";
+                editIcon.src = "/assets/icons/pencil-icon.svg";
                 editIcon.classList.remove("close");
             }
         });
@@ -103,7 +103,7 @@ export class CustomInputField extends HTMLElement {
         if (attrName == "editable") {
             const editIcon = this.shadowRoot.querySelector(".edit-icon")
             if (editIcon) {
-                editIcon.src = "../../assets/icons/lock-icon.svg";
+                editIcon.src = "/assets/icons/lock-icon.svg";
                 editIcon.classList.add("lock");
             }
         }
@@ -121,7 +121,7 @@ export class CustomInputField extends HTMLElement {
             {
                 this.shadowRoot.querySelector(".inputContainer").innerHTML = `
                     <div class="uploadcontainer">
-                        <img loading="lazy" src="../../assets/icons/upload-icon.svg"></img>
+                        <img loading="lazy" src="/assets/icons/upload-icon.svg"></img>
                         <h4>Upload Image</h4>
                     </div>
                     <input type="text" accept="image/png, image/jpeg" readonly/>

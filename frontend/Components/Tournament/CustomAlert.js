@@ -1,4 +1,4 @@
-import { playerId } from "../../root/Router.js";
+import { playerId } from "/root/Router.js";
 
 export class CustomAlert extends HTMLElement {
     constructor() {
@@ -7,7 +7,7 @@ export class CustomAlert extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="alertContainer">
-                <img loading="lazy" class="closeButton" src="./assets/icons/close-x-icon.svg"></img>
+                <img loading="lazy" class="closeButton" src="/assets/icons/close-x-icon.svg"></img>
                 <div class="alertHeader">
                     <slot name="header"></slot>
                 </div>
