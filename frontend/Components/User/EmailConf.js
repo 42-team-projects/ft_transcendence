@@ -1,3 +1,4 @@
+import config from '../../Utils/GlobalVariables.js';
 
 export default class EmailConf extends HTMLElement {
     async connectedCallback() {
