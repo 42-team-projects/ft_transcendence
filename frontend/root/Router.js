@@ -12,7 +12,7 @@ export class Router {
             { path: '/Home', view: 'home-page', isAccessed: true },
             { path: '/Game', view: 'game-selection', isAccessed: true },
             { path: '/Chat', view: 'chat-page', isAccessed: true },
-            { path: '/Friends', view: 'freinds-page', isAccessed: true },
+            { path: '/Ranking', view: 'ranking-page', isAccessed: true },
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
