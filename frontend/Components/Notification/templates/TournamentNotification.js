@@ -55,6 +55,7 @@ export class TournamentNotification extends HTMLElement {
             await player_join_tournament(this.tournamentId);
             const url = new URL(joinButton.href);
             router.handleRoute(url.pathname);
+            this.parentElement.remove();
         });
     }
 
