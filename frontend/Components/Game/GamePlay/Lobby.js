@@ -172,7 +172,8 @@ export class Lobby extends HTMLElement{
 	}
 
 	async openSocket(userId){
-		this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		// this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		this.socket = new WebSocket(`wss://${ip}:8000/ws/matchmaking/${userId}/`);
 		this.socket.onopen = (e) => {
 			console.log('socket open');
 		};
