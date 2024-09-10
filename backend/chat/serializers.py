@@ -16,7 +16,6 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class ConversationSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField('get_last_message')
-    # reciever     = UserSerializer(source='participants', many=True, read_only=True)
     reciever = serializers.SerializerMethodField('get_receiver')
     
     class Meta:
@@ -28,23 +27,6 @@ class ConversationSerializer(serializers.ModelSerializer):
         messages = Message.objects.filter(conversation=conversation.id)
         messages_serializer = MessageSerializer(messages, many=True)
         return (messages_serializer.data[-1])
-    
-    # def get_receiver(self, obj):
-    #     # Fetch all users associated with the conversation
-    #     users = obj.participants.all()
-
-    #     if users.exists():
-    #         # Assume the first user is always the sender
-    #         sender = users.first()
-
-    #         # Filter out the sender to get the list of potential receivers
-    #         potential_receivers = users.exclude(id=sender.id)
-
-    #         # Select the first user from the remaining list as the receiver
-    #         if potential_receivers.exists():
-    #             receiver_user = potential_receivers.first()
-    #             return {'username': receiver_user.username}  # Customize the output format if needed
-    #     return None  # If no receiver is found
     
     
     def get_receiver(self, obj):
