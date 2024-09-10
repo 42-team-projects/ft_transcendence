@@ -1,6 +1,6 @@
 import { getCurrentPlayerData } from "../../Utils/GlobalVariables.js";
 import { router } from "../../root/Router.js";
-import { HOST } from "../../Utils/APIUrls.js";
+import { HOST } from "../../Utils/GlobalVariables.js";
 import { getLeagueColor } from "../../Utils/LeaguesData.js";
 
 const ProfileTemplate =  document.createElement('template');

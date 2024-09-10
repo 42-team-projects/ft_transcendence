@@ -1,22 +1,50 @@
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
+
 services:
   back-end:
     build: ./devops
-    image: backend:13.37
+    image: backend
     container_name: back-end
     volumes:
       - ./backend/:/app
+      - ./devops/certs:/app/certs
     ports:
       - "8000:8000"
     networks:
-      - libft_network
+      - app_network
     depends_on:
       - database
     env_file:
       - .env
+  
+  # daphne:
+  #   image: backend
+  #   command: daphne -u /tmp/daphne.sock -v 1 -e ssl:8000:privateKey=/app/certs/server.key:certKey=/app/certs/server.cert backend.asgi:application
+  #   container_name: daphne
+  #   volumes:
+  #     - ./backend/:/app
+  #     - ./devops/certs:/app/certs
+  #   networks:
+  #     - app_network
+  #   ports:
+  #     - "8001:8000"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - DJANGO_SETTINGS_MODULE=backend.settings
+  #   depends_on:
+  #     - back-end
 
   front-end:
     container_name: front-end
-    image: nginx:latest 
+    image: nginx:latest
     ports:
       - 443:443
     volumes:
@@ -24,41 +52,99 @@ services:
       - ./devops/nginx:/etc/nginx/conf.d
       - ./devops/certs:/etc/ssl/certs
     networks:
-      - libft_network
+      - app_network
     depends_on:
       - back-end
 
   database:
     image: postgres:latest
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
     container_name: postgres
     env_file:
       - .env 
     networks:
-      - libft_network
+      - app_network
 
-  pgadmin4:
-    image: dpage/pgadmin4
-    ports:
-      - 5050:443
-    volumes:
-      - ./devops/certs:/certs
-    container_name: pgadmin4
-    env_file:
-      - .env
-    networks:
-      - libft_network
+  # pgadmin4:
+  #   image: dpage/pgadmin4
+  #   ports:
+  #     - 5050:443
+  #   volumes:
+  #     - ./devops/certs:/certs
+  #   container_name: pgadmin4
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - app_network
 
-networks:
-  libft_network:
-    driver: bridge
-
-volumes:
-  postgres_data:
+  # <--- Monotoring --->
+  
+  # node-exporter:
+  #   image: quay.io/prometheus/node-exporter:latest
+  #   container_name: node-exporter
+  #   command:
+  #     - '--path.rootfs=/host'
+  #   ports:
+  #     - 9101:9100
+  #   pid: host # to see all the processes on the host and collect the metrics about them
+  #   restart: unless-stopped
+  #   networks:
+  #     - monitoring
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   volumes:
+  #     - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - prometheus_data:/prometheus
+  #   command:
+  #     - '--web.enable-lifecycle'
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #   ports:
+  #     - 9090:9090
+  #   restart: unless-stopped
+  #   networks:
+  #     - app_network
+  #   depends_on:
+  #     - back-end
+  
+  # nginx-exporter:
+  #   image: nginx/nginx-prometheus-exporter:0.9.0
+  #   container_name: nginx-exporter
+  #   command:
+  #     - "-nginx.scrape-uri=https://front-end/stub_status"
+  #     - "-nginx.ssl-verify=false"
+  #   ports:
+  #     - 9113:9113
+  #   networks:
+  #     - app_network
+  #   depends_on:
+  #     - front-end
+  # telegraf:
+  #   image: telegraf:latest
+  #   container_name: telegraf
+  #   volumes:
+  #     - ./devops/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+  #   ports:
+  #     - 9273:9273
+  #   networks:
+  #     - app_network
+  #   depends_on:
+  #     - front-end
+  
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: grafana
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   restart: unless-stopped
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - app_network
+  #   depends_on:
+  #     - prometheus
 
 # docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
-# docker volume prune
-# docker-compose up --build

@@ -1,5 +1,5 @@
 import { getApiData } from "../../../Utils/APIManager.js";
-import { HOST } from "../../../Utils/APIUrls.js";
+import { HOST } from "../../../Utils/GlobalVariables.js";
 import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
 import { ChatFooterComponent } from "../ChatRoom/ChatFooterComponent.js";
 import { ChatHeaderComponent } from "../ChatRoom/ChatHeaderComponent.js";
