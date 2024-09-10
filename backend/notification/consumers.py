@@ -26,25 +26,32 @@ class UserNotificationConsumer(WebsocketConsumer):
         data = json.loads(text_data)
         try:
             receiver = self.get_user(data['receiver'])
-            # sender = self.get_user(self.id)
+            sender   = self.get_user(self.id)
 
-            notification_data = {
-                'sender' : self.id,
-                'receiver' : receiver.id,
-                'content' : data['message']
-            }
-            notification_serializer = NotificationSerializer(data=notification_data)
-            if notification_serializer.is_valid():
-                notification_serializer.save()
-                self.broadcast_notification(notification_serializer.data)
-            else:    
+            # notification_data = {
+            #     'sender' : self.id,
+            #     'receiver' : receiver.id,
+            #     'content' : data['message']
+            # }
+            # notification_serializer = NotificationSerializer(data=notification_data, context=self.scope)
+            # if notification_serializer.is_valid():
+            #     notification_serializer.save()
+                # self.broadcast_notification(notification_serializer.data)
+            # else:    
+            #     self.send_error('Notification data not valid!')
+            new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'])
+            if new_notification:
+                self.broadcast_notification(NotificationSerializer(new_notification).data)
+            else:
                 self.send_error('Notification data not valid!')
+
         except User.DoesNotExist:
             self.send_error('Receiver user not exists!')
 
     def broadcast_notification(self, message_data):
+        # print(message_data)
         async_to_sync(self.channel_layer.group_send)(
-            f'notification_{message_data["receiver"]}',
+            f'notification_{message_data["receiver"]["id"]}',
             {
                 'type': 'send_message',
                 'data': message_data

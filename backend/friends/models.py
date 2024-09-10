@@ -103,23 +103,22 @@ class FriendRequest(models.Model):
         self.save()
 
 
-class BlockUser(models.Model):
-    blocked = models.ForeignKey(User, related_name='blocked', on_delete=models.CASCADE)
-    blocker = models.ForeignKey(User, related_name='blocker', on_delete=models.CASCADE)
-    create_at = models.TimeField(auto_now_add=True)
+# class BlockUser(models.Model):
+#     blocked = models.ForeignKey(User, related_name='blocked', on_delete=models.CASCADE)
+#     blocker = models.ManyToManyField(User, on_delete=models.CASCADE)
+#     # blocker = models.ForeignKey(User, related_name='blocker', on_delete=models.CASCADE)
+#     create_at = models.TimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.blocked.username} Block {self.blocker.username}" 
+#     def __str__(self):
+#         return f"{self.blocked.username} Block {self.blocker.username}" 
 
-    def is_friend(self):
-        blocked_friend = Friendship.objects.get(user=self.blocked)
-        blocker_friend = Friendship.objects.get(user=self.blocker)
+#     def is_blocked(self, user):
+#         if user in self.blocker.all():
+#             return True
+#         return False
+    
 
-        if blocked_friend.is_my_friend(self.blocker) and blocker_friend.is_my_friend(self.blocked):
-            return True
-        return False
-
-    def remove_friendship(self):
-        Friendship.objects.get(user=self.blocked).unfriend(self.blocker)
+#     def remove_friendship(self):
+#         Friendship.objects.get(user=self.blocked).unfriend(self.blocker)
 
 
