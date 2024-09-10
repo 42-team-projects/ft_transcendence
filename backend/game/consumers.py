@@ -44,7 +44,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         add_to_game_queue(self, game_queue)
-        print(len(game_queue[self.room_group_name]))
+        # print(len(game_queue[self.room_group_name]))
         if len(game_queue[self.room_group_name]) >= 2:
             player_1 = game_queue[self.room_group_name].pop(0)
             player_2 = game_queue[self.room_group_name].pop(0)
@@ -59,6 +59,10 @@ class GameConsumer(AsyncWebsocketConsumer):
             await GameConsumer.rooms[self.room_group_name].assign_data(text_data_json, self)
         if text_data_json['message'] == 'move':
             await GameConsumer.rooms[self.room_group_name].assign_racquet(text_data_json, self)
+        if text_data_json['message'] == 'pause':
+            await GameConsumer.rooms[self.room_group_name].pause_game()
+        if text_data_json['message'] == 'resume':
+            await GameConsumer.rooms[self.room_group_name].resume_game()
     
     async def disconnect(self, close_code):
         if self in game_queue[self.room_group_name]:
@@ -78,8 +82,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         )
             #     del GameConsumer.rooms[self.room_group_name]
             # else:
-        print(game_queue)
-        print(GameConsumer.rooms)
+        # print(game_queue)
+        # print(GameConsumer.rooms)
     
     async def send_message(self, message, function='game_message'):
         await self.channel_layer.group_send(
@@ -132,7 +136,7 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             await remove_from_channel_layer(
                 self
             )
-        print(torunament_queue)
+        # print(torunament_queue)
 
     async def wait_for_opponent(self):
         # while len(torunament_queue) < 2 and self in torunament_queue:
