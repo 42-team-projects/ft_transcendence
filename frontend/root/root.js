@@ -7,6 +7,7 @@ import { MessageNotification } from "../Components/Notification/templates/Messag
 import { NewFriendNotification } from "../Components/Notification/templates/NewFriendNotification.js";
 import { getCurrentPlayerData } from "../Utils/GlobalVariables.js";
 import { createWebSocketsForTournaments } from "../Utils/TournamentWebSocketManager.js";
+import { isTokenValid } from "./fetchWithToken.js";
 const root = document.createElement('template')
 
 root.innerHTML = /*html*/ `
@@ -20,8 +21,12 @@ class Root extends HTMLElement{
     }
 
     async connectedCallback() {
-        await getCurrentPlayerData();
-        await createWebSocketsForTournaments();
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken && isTokenValid(accessToken))
+        {
+            await getCurrentPlayerData();
+            await createWebSocketsForTournaments();
+        }
     }
 }
 customElements.define("root-content", Root)

@@ -1,6 +1,5 @@
 import { FriendItemComponent } from "./FriendItemComponent.js";
 
-const APIUrl = "http://localhost:8080/api/v1/users/all";
 let fakeData = [];
 export class FriendsListComponent extends HTMLElement {
     constructor () {
@@ -28,19 +27,7 @@ export class FriendsListComponent extends HTMLElement {
         });
     }
 
-    async connectedCallback() {
-        // try {
-        //     const response = await fetch(APIUrl);
-        //     if (!response.ok) {
-        //         throw new Error(`Response status: ${response.status}`);
-        //     }
-        //     const json = await response.json();
-        //     fakeData = json;
-        //     this.renderFriendsList();
-        // } catch (error) {
-        //     console.error(error.message);
-        // }
-        
+    async connectedCallback() {        
 
     }
 }
