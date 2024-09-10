@@ -1,10 +1,11 @@
-import { fetchData } from "../../../Utils/Fetcher.js";
-import { ChatItemComponent } from "./ChatItemComponent.js";
-import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
-import { getApiData } from "../../../Utils/APIManager.js";
-import { renderChatBody, renderChatFooter, renderChatHeader } from "../configs/ChatConfigs.js";
-import { getCurrentUserId, HOST } from "../../../Utils/GlobalVariables.js";
-import { setUpWebSocket } from "../configs/ChatWebSocketManager.js";
+import { fetchData } from "/Utils/Fetcher.js";
+import { ChatItemComponent } from "/Components/Chat/ChatList/ChatItemComponent.js";
+import { ChatRoomComponent } from "/Components/Chat/ChatRoom/ChatRoomComponent.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { HOST } from "/Utils/GlobalVariables.js";
+import { renderChatBody, renderChatFooter, renderChatHeader } from "/Components/Chat/configs/ChatConfigs.js";
+import { getCurrentUserId } from "/Utils/GlobalVariables.js";
+import { setUpWebSocket } from "/Components/Chat/configs/ChatWebSocketManager.js";
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
