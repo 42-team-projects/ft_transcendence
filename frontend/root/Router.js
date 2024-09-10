@@ -1,5 +1,5 @@
 import { fetchWithToken, isTokenValid} from './fetchWithToken.js'
-import config from '../../Utils/GlobalVariables.js';
+import { HOST } from '../../Utils/GlobalVariables.js';
 
 export class Router {
 
@@ -106,7 +106,7 @@ export class Router {
         // tmp place should be in function and called somewhere
         let logout = document.querySelector('.logout')
         logout.addEventListener('click', () => {
-            fetchWithToken(`http://${config.serverIP}:8000/api/v1/auth/logout/`, {
+            fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`

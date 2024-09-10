@@ -1,10 +1,20 @@
+export const HOST = "https://127.0.0.1:8000";
+export const wsUrl = 'wss://127.0.0.1:8000/';
 
-// export const apiUrl = 'http://127.0.0.1:8000/tournament/';
-export const apiUrl = 'http://127.0.0.1:8000/tournament/'
-export const wsUrl = 'ws://127.0.0.1:8000/';
+export const PROFILE_API_URL = HOST + "/api/v1/player/";
+
+
+export const UPDATE_USER_API_URL = HOST + "/api/v1/auth/update-user/";
+
+export const ENABLE_2FA_API_URL = HOST + "/api/v1/auth/2fa/enable/";
+export const VIREFY_2FA_API_URL = HOST + "/api/v1/auth/2fa/verify/";
+export const DISABLE_2FA_API_URL = HOST + "/api/v1/auth/2fa/disable/";
+
+export const TOURNAMENT_API_URL = HOST + "/tournament/"
+
+
 
 import { getApiData } from "./APIManager.js";
-import { PROFILE_API_URL } from "./APIUrls.js";
 // set acsses token in local storage
 // localStorage.setItem('accessToken', 'token');
 // get acsses token in local storage
@@ -12,12 +22,13 @@ import { PROFILE_API_URL } from "./APIUrls.js";
 // console.log(accessToken);
 // remove acsses token in local storage
 // localStorage.removeItem('accessToken');
-export const ip = '127.0.0.1';
-const config = {
-    serverIP: ip,
-};
+// export const ip = '127.0.0.1';
+// const config = {
+//     serverIP: ip,
+//     serverURL: 'https://127.0.0.1:8000',
+// };
 
-export default config;
+// export default config;
 
 
 let currentPlayer;

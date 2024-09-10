@@ -2,9 +2,8 @@ import { fetchData } from "../../../Utils/Fetcher.js";
 import { ChatItemComponent } from "./ChatItemComponent.js";
 import { ChatRoomComponent } from "../ChatRoom/ChatRoomComponent.js";
 import { getApiData } from "../../../Utils/APIManager.js";
-import { HOST } from "../../../Utils/APIUrls.js";
 import { renderChatBody, renderChatFooter, renderChatHeader } from "../configs/ChatConfigs.js";
-import { getCurrentUserId } from "../../../Utils/GlobalVariables.js";
+import { getCurrentUserId, HOST } from "../../../Utils/GlobalVariables.js";
 import { setUpWebSocket } from "../configs/ChatWebSocketManager.js";
 
 export class ChatListComponent extends HTMLElement {
@@ -87,13 +86,15 @@ export class ChatListComponent extends HTMLElement {
         const list = this.querySelector(".list-item");
     
         try {
-            const data = await getApiData("http://127.0.0.1:8000/chat/conversation_list/");
-            if (data) {
-                for (const item of data) {
-                    const chatItem = await this.createChatItem(item);
-                    list.appendChild(chatItem);
-                }
-            }
+            // const data = await getApiData(HOST + "/chat/conversation_list/");
+            // if (data) {
+            //     if (data.length == 0)
+            //         return ;
+            //     for (const item of data) {
+            //         const chatItem = await this.createChatItem(item);
+            //         list.appendChild(chatItem);
+            //     }
+            // }
         } catch (error) {
             console.error('Error fetching chat data:', error);
         }
