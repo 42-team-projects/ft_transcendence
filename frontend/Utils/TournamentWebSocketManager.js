@@ -1,7 +1,8 @@
 import { CustomAlert } from "/Components/Alert/CustomAlert.js";
 import { get_tournaments_by_player_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
-import { apiUrl, getCurrentPlayerData, getCurrentPlayerId, wsUrl } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerId, wsUrl } from "/Utils/GlobalVariables.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { HOST } from "./GlobalVariables.js";
 
 let countdownInterval = -1;
 
@@ -324,7 +325,7 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
             tournamentId: tournamentId,
             start_date: start_date,
         }
-        const response = await fetch(`${apiUrl}SetStartDate/`, {
+        const response = await fetch(`${HOST}SetStartDate/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -347,7 +348,7 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
 
 async function get_start_date(tournamentId) {
     try {
-        const response = await fetch(`${apiUrl}${tournamentId}/`);
+        const response = await fetch(`${HOST}${tournamentId}/`);
         if (!response.ok) {
             throw new Error(`${response.status}  ${response.statusText}`);
         }
@@ -363,7 +364,7 @@ async function get_start_date(tournamentId) {
 
 async function getTournamentData(tournament_id) {
     try {
-        const response = await fetch(`${apiUrl}${tournament_id}/`);
+        const response = await fetch(`${HOST}${tournament_id}/`);
         if (!response.ok) {
             throw new Error(`${response.status}  ${response.statusText}`);
         }

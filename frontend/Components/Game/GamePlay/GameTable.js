@@ -1,7 +1,7 @@
 import { GameOver } from "./GameOver.js";
 import { LaunchingGame } from "./launchingGame.js";
 import { userInfo, opponentInfo } from "./Lobby.js";
-import { ip } from "../../../Utils/GlobalVariables.js";
+import { wsUrl } from "../../../Utils/GlobalVariables.js";
 // import { useWebsocket } from "../../../Utils/TournamentWebSocketManager.js";
 import { goNextStage } from "./configs/ScoreManager.js";
 const game_page = document.createElement('template');
@@ -40,7 +40,9 @@ export class GameTable extends HTMLElement{
     constructor(room_name)
     {
         super();
-        this.socket = new WebSocket(`ws://${ip}:8000/ws/game/${room_name}/`);
+        // this.socket = new WebSocket(`wss://${ip}:8000/ws/game/${room_name}/`);
+        this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
+
         this.socket.onopen = () => {
             console.log('connected');
         }

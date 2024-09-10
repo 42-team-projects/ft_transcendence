@@ -1,7 +1,7 @@
 import Header from './Header.js';
 import Shape from './Shape.js';
 import { router } from '../../root/Router.js';
-import config from '../../Utils/GlobalVariables.js';
+import { HOST } from '../../Utils/GlobalVariables.js';
 
 export default class SignupPage extends HTMLElement {
     connectedCallback() {
@@ -74,7 +74,7 @@ export default class SignupPage extends HTMLElement {
     
     async registerUser(formData) {
         const response = await fetch(
-            `http://${config.serverIP}:8000/api/v1/auth/register/`,
+            `${HOST}/api/v1/auth/register/`,
             {
                 method: "POST",
                 headers: {
