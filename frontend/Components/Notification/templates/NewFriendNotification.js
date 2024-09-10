@@ -1,16 +1,27 @@
 import { PROFILE_API_URL, HOST } from "/Utils/APIUrls.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { router } from "/root/Router.js";
 
 export class NewFriendNotification extends HTMLElement {
     constructor() {
         super();
         this.innerHTML = `
+            <style>
+                .notification-profile {
+                    width: auto;
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                }
+            </style>
             <div class="mainContainer">
                 <div class="message">
-                    <c-hexagon class="online" width="56px" height="55px" apply="true" bcolor="#d9d9d9" >
-                        <div class="profile-icon" slot="content"></div>
-                    </c-hexagon>
+                    <a class="notification-profile">
+                        <c-hexagon class="online" width="56px" height="55px" apply="true" bcolor="#d9d9d9" >
+                            <div class="profile-icon" slot="content"></div>
+                        </c-hexagon>
+                    </a>
                     <div style="display: flex; gap: 5px;">
                         <h4></h4>
                         <h4><i></i></h4>
@@ -46,6 +57,15 @@ export class NewFriendNotification extends HTMLElement {
             await this.initProfileImage(this.senderName);
         if (this.message)
             this.initMessage(this.message);
+
+        const profile = this.querySelector("a");
+        profile.href = "/Profile/" + this.senderName;
+        console.log("profile.href: ", profile.href);
+        profile.addEventListener("click", (event) => {
+            event.preventDefault();
+            const url = new URL(profile.href);
+            router.handleRoute(url.pathname);
+        });
 
         const accept = this.querySelector(".notification-actions .accept");
         if (accept) {
