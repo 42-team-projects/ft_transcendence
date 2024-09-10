@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
 from django.conf import settings
+from django_prometheus import exports
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +28,8 @@ urlpatterns = [
     path('chat/', include("chat.urls"), name="chat"),
     path('notification/', include("notification.urls"), name="notification"),
     path('api/v1/auth/', include('accounts.urls')),
+
+    path('metrics', exports.ExportToDjangoView, name='prometheus-django-metrics'),
 ]
 
 

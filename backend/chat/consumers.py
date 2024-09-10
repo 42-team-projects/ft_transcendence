@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+import django
+django.setup() # used to fix the error "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet." (ogorfti)
 from .models import *
 from .serializers import *
 
