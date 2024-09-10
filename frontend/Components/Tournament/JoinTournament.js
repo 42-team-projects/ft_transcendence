@@ -157,13 +157,13 @@ export class JoinTournament extends HTMLElement {
         }
         if (accessible.length == 1)
             statement += "&accessible=" + accessible[0].id;
-        console.log("statement : ", statement);
+        console.log("statement: ", statement);
         return statement;
     }
 
 
     searchInterval;
-    connectedCallback() {
+    async connectedCallback() {
 
         this.bindingApiDataIntoComponents();
 
@@ -172,6 +172,7 @@ export class JoinTournament extends HTMLElement {
         
         this.createWebSocket(tournamentsList);
 
+        const player_id = await getCurrentPlayerId();
 
         const input = tournamentSearch.querySelector("input");
         let searchDefaultValue;
@@ -189,13 +190,12 @@ export class JoinTournament extends HTMLElement {
                         storeFilterValues.accessible != accessible.length)
                     ) {
 
-                    this.getQueryStatement(input, searchBy, players, accessible);
                     tournamentsList.innerHTML = '';
-                    const tournaments = await get_Available_Tournaments("tournament_name=" + input.value);
+                    const query = this.getQueryStatement(input, searchBy, players, accessible);
+                    const tournaments = await get_Available_Tournaments(query);
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
-                        const player_id = await getCurrentPlayerId();
-                        if (element.owner.id != player_id)
+                        if (element.players.length && !Array.from(element.players).find( p => p.id == player_id))
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
 
@@ -211,14 +211,13 @@ export class JoinTournament extends HTMLElement {
                     const tournaments = await get_Available_Tournaments();
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
-                        const player_id = await getCurrentPlayerId();
-                        if (element.owner.id != player_id)
+                        if (element.players.length && !Array.from(element.players).find( p => p.id == player_id))
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
                     checker = false;
                 }
 
-            }, 500); 
+            }, 700); 
         });
 
         this.setUpFilterOptions();

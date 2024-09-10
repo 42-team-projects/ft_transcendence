@@ -110,8 +110,9 @@ export class ProfileInfoComponent extends HTMLElement {
         const addFriend = this.shadowRoot.querySelector(".add-friend");
         addFriend.addEventListener("click", async () => {
             const notificationWS = await getNotificationWebSocket();
-            console.log("this.id: ", this.id);
             notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'type': "friend", "infos": ""}));
+            const addFriendImage = addFriend.querySelector("img");
+            addFriendImage.src = "/assets/icons/wait-time-icon.svg";
         });
     }
 }
