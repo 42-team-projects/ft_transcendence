@@ -1,5 +1,6 @@
 
-import { getLeagueColor } from "../../../Utils/LeaguesData.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { router } from "/root/Router.js";
 
 export class ChatHeaderComponent extends HTMLElement {
     constructor () {
@@ -23,9 +24,11 @@ export class ChatHeaderComponent extends HTMLElement {
                 </div>
             </div>
         </div>
-        <img loading="lazy" src="./images/Game.svg">
-        <img loading="lazy" src="./assets/images/profile/account-icon.svg">
-        <img loading="lazy" src="./assets/images/profile/block-icon.svg">
+        <img loading="lazy" src="/images/Game.svg">
+        <a id="profile">
+            <img loading="lazy" src="/assets/icons/account-icon.svg">
+        </a>
+        <img loading="lazy" src="/assets/icons/block-icon.svg">
     `;
     }
 
@@ -33,6 +36,13 @@ export class ChatHeaderComponent extends HTMLElement {
         if (this.userName) {
             this.shadowRoot.querySelector(".infos h1").textContent = this.userName;
             this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
+            const profileIcon = this.shadowRoot.getElementById("profile");
+            profileIcon.href = "/Profile/" + this.userName;
+            profileIcon.addEventListener("click", (e) => {
+                e.preventDefault();
+                const url = new URL(profileIcon.href);
+                router.handleRoute(url.pathname);
+            })
         }
         else
         {

@@ -4,7 +4,7 @@ from ..Models.GraphModel import Graph
 class GraphSerializer(serializers.ModelSerializer):
     class Meta:
         model = Graph
-        fields = [
+        fields = ['id',
                 'skill',
                 'speed',
                 'accuracy',

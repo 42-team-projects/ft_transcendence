@@ -1,5 +1,5 @@
 // export const playerId = JSON.parse(localStorage.getItem('loggedInUser')).id;
-import { TournamentsTable } from "./TournamentsTable.js";
+import { TournamentsTable } from "/Components/Tournament/TournamentsTable.js";
 
 export class TournamentComponent extends HTMLElement {
     constructor () {

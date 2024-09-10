@@ -189,7 +189,7 @@ const cssContent = /*css*/`
     border-radius: 7px;
     align-items: center;
     justify-content: center;
-    background: url("../assets/icons/checked-icon.svg");
+    background: url("/assets/icons/checked-icon.svg");
     background-repeat: no-repeat;
     background-size: cover;
 }

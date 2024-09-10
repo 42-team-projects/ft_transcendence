@@ -1,9 +1,9 @@
-import { Lobby } from "../Lobby.js"
+import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
 
 const OnlineGameTemplate = document.createElement('template')
 
 OnlineGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/GameOnline/OnlineGame.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/GameOnline/OnlineGame.css">
 	<img loading="lazy" class="OrangeCartImg" src="images/OrangeCart/OrangeCartImg.svg" alt="">
 	<div class="shapes3-4">
 		<div class="Online-text">

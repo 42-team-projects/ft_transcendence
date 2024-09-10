@@ -1,6 +1,6 @@
-import { PlayersAndStages } from "./PlayersAndStages.js";
-import { TournamentRules } from "./TournamentRules.js";
-import { Visibility } from "./VisibillitySettings.js";
+import { PlayersAndStages } from "/Components/Tournament/PlayersAndStages.js";
+import { TournamentRules } from "/Components/Tournament/TournamentRules.js";
+import { Visibility } from "/Components/Tournament/VisibillitySettings.js";
 
 
 export class CreateTournament extends HTMLElement {
@@ -191,7 +191,7 @@ const cssContent = /*css*/`
     border-radius: 7px;
     align-items: center;
     justify-content: center;
-    background: url("../assets/icons/checked-icon.svg");
+    background: url("/assets/icons/checked-icon.svg");
     background-repeat: no-repeat;
     background-size: cover;
 }
