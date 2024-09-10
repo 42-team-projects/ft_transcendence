@@ -1,13 +1,10 @@
 // Player == Profile Page
-import { fetchWithToken } from "../root/fetchWithToken.js"
-import { PROFILE_API_URL } from "./APIUrls.js";
+import { fetchWithToken } from "/root/fetchWithToken.js"
 
 export async function getApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-        console.error("Access token is missing.");
-        return;
-    }
+    if (!accessToken)
+        return null;
     const response = await fetchWithToken(APIUrl,
     {
         method: "GET",
@@ -16,8 +13,10 @@ export async function getApiData(APIUrl) {
             Authorization: `Bearer ${accessToken}`,
         },
     });
+    if (!response.ok)
+        return null;
     const apiData = await response.json();
-    console.log("getApiData => apiData: ", apiData);
+    // console.log("getApiData => apiData: ", apiData);
     return apiData;
 }
 
@@ -40,7 +39,6 @@ export async function createApiData(APIUrl, body) {
 }
 
 export async function updateApiData(APIUrl, body) {
-    
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
         console.error("Access token is missing.");

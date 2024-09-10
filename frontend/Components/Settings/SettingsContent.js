@@ -1,6 +1,6 @@
-import { GameContent } from "./Contents/GameContent.js";
-import { ProfileContent } from "./Contents/ProfileContent.js";
-import { AccountContent } from "./Contents/AccountContent.js";
+import { GameContent } from "/Components/Settings/Contents/GameContent.js";
+import { ProfileContent } from "/Components/Settings/Contents/ProfileContent.js";
+import { AccountContent } from "/Components/Settings/Contents/AccountContent.js";
 
 export class SettingsContent extends HTMLElement {
     constructor() {

@@ -1,9 +1,8 @@
-import { PlayerBorder } from "./PlayerBorder.js";
-import { GameHeader } from "./GameHeader.js"
-import { GameTable } from "./GameTable.js"
-import { getCurrentPlayerData, ip } from "../../../Utils/GlobalVariables.js";
-import { getApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL, HOST } from "../../../Utils/APIUrls.js";
+import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
+import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
+import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
+import { getCurrentPlayerData, HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { getApiData } from "/Utils/APIManager.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -13,34 +12,34 @@ const OnlineGameTemplate = document.createElement('template');
 const timer = document.createElement('template')
 let searching_images = [
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ESCANOR'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ITATCHI'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ESALIM'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'KILLUA'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'GOJO'
 	}
 ]
 
 export let userInfo = {
-	picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+	picture: HOST + `/media/defaults/ace.jpeg`,
 	username: 'GOJO',
 }
 
 export let opponentInfo = {
-	picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+	picture: HOST + `/media/defaults/ace.jpeg`,
 	username: 'GOJO',
 }
 
@@ -50,7 +49,7 @@ playerSlot.innerHTML = /*html*/ `
 `
 
 AiGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/AiLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/AiLobby.css">
 	<img id='Player' class="Player" slot="PlayerImg" alt="Player" />
 	<h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 	<h1 id='Opponent' class="Opponent" slot="searshing"></h1>
@@ -58,7 +57,7 @@ AiGameTemplate.innerHTML = /*html*/ `
 `
 
 OnlineGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/OnlineGameLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/OnlineGameLobby.css">
 	<div class="searshingImgs" slot="searshing">
 		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
 		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
@@ -78,7 +77,7 @@ opponentSlot.innerHTML = /*html*/ `
 	`
 
 lobby.innerHTML =  /* html */ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/Lobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/Lobby.css">
 	<page-name width="35%">
 		<div slot="text" class="pageNameText">
 			<h1>MATCH MAKING</h1>
@@ -93,6 +92,9 @@ lobby.innerHTML =  /* html */ `
 
 
 export class Lobby extends HTMLElement{
+	tournament_id;
+	set tournament_id(val) {this.tournament_id = val;}
+	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){
 		super();
@@ -103,24 +105,23 @@ export class Lobby extends HTMLElement{
 		this.setSlots(playerSlot.content, 'false')
 		this.setSlots(opponentSlot.content, 'true')
 		setTimeout(() => {
-			document.body.classList.toggle('body-game-shrink', true);   
+			document.body.classList.toggle('body-game-shrink', true);
+			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
+		// this.headerAnimation();
+		// this.sidebarAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
-			console.log("im here")
+			// console.log("im here")
 			this.OnlineGame(opponentId);
-		}
-		else{
-			this.headerAnimation();
-			this.sidebarAnimation();
 		}
 	}
 
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
 		const profile = headerBar.querySelector('c-profile');
-		const userRunk = profile.querySelector('user-rank');
+		// const userRunk = profile.querySelector('user-rank');
 	
 		userRunk.classList.toggle('drop-100', false);
 		userRunk.classList.toggle('transform-1s', true);
@@ -172,7 +173,8 @@ export class Lobby extends HTMLElement{
 	}
 
 	async openSocket(userId){
-		this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		// this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		this.socket = new WebSocket(`${wsUrl}ws/matchmaking/${userId}/`);
 		this.socket.onopen = (e) => {
 			console.log('socket open');
 		};
@@ -202,7 +204,7 @@ export class Lobby extends HTMLElement{
 		const turnTime = 1;
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
 		let delayNumber = (turnTime / 2) / Players.length;
-		// searching_images = await this.getData(`http://${ip}:8000/game/players/`);
+		// searching_images = await this.getData(HOST + `/game/players/`);
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
@@ -219,7 +221,7 @@ export class Lobby extends HTMLElement{
 		const user_data = await getCurrentPlayerData();
 		userInfo.id = user_data.id;
 		userInfo.picture = HOST + user_data.user.avatar;
-		console.log('user_data:', userInfo.picture);
+		// console.log('user_data:', userInfo.picture);
 		userInfo.username = user_data.user.username;
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
@@ -238,9 +240,10 @@ export class Lobby extends HTMLElement{
 				room_group_name = 'game_' + userInfo.id + '_' + opponentId;
 			else
 				room_group_name = 'game_' + opponentId + '_' + userInfo.id;
-			setInterval(() => {
+			const inter = setInterval(() => {
 				this.time -= 1;
 				this.updateTimer();
+				// console.log("hello from OnlineGame !!!");
 			}, 1000);
 			this.gameMode(room_group_name);
 		}
@@ -255,13 +258,16 @@ export class Lobby extends HTMLElement{
 		const turnTime = 10;
 		let delay = 0;
 		let delayNumber = (turnTime / 2) / Players.length;
-		opponentInfo = await getApiData(PROFILE_API_URL + `${opponentId}/`);
-		console.log('opponentInfo:', opponentInfo);
+		const opponent = await getApiData(PROFILE_API_URL + `${opponentId}/`);
+		opponentInfo.id = opponentId;
+		opponentInfo.picture = HOST + opponent.user.avatar;
+		opponentInfo.username = opponent.user.username;
+		// console.log('opponentInfo:', opponentInfo);
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
-		h1.textContent = opponentInfo.user.username;
-		Players[0].src = HOST + opponentInfo.user.avatar
+		h1.textContent = opponentInfo.username;
+		Players[0].src = opponentInfo.picture
 		Players.forEach((element)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
@@ -290,9 +296,16 @@ export class Lobby extends HTMLElement{
 	playeGame(room_group_name){
 		const header = new GameHeader();
 		const game = new GameTable(room_group_name);
-		document.body.innerHTML = ``;
-		document.body.appendChild(header);
-		document.body.appendChild(game);
+		const root = document.body.querySelector('root-content');
+		const headerBar = document.body.querySelector('header-bar');
+
+		headerBar.classList.toggle('up-100', false);
+		
+		root.innerHTML = ``;
+		root.appendChild(game);
+		headerBar.innerHTML = '';
+		headerBar.appendChild(header);
+		game.id = this.tournament_id;
 	}
 	gameMode(room_group_name){
 		// if (this.socket)
@@ -323,7 +336,7 @@ export class Lobby extends HTMLElement{
 	}
 	createTimer(){
 		timer.innerHTML = /*html*/ `
-			<link rel="stylesheet", href="Components/Game/GamePlay/Timer.css">
+			<link rel="stylesheet", href="/Components/Game/GamePlay/Timer.css">
 			<div class="descounter">
 				<h1>${this.time}</h1>
 			</div>

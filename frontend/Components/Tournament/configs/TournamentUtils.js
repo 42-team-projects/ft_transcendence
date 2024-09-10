@@ -1,7 +1,8 @@
-import { convertTimeStampIntoDate } from "../../../Utils/Convertor.js";
-import { calculateTimeDifferents } from "../../../Utils/DateUtils.js";
-import { closeWebSocket } from "../../../Utils/TournamentWebSocketManager.js";
-import { get_tournament_by_id, player_leave_tournament } from "./TournamentAPIConfigs.js";
+import { convertTimeStampIntoDate } from "/Utils/Convertor.js";
+import { calculateTimeDifferents } from "/Utils/DateUtils.js";
+import { closeWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { get_tournament_by_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { getCurrentPlayerId } from "/Utils/GlobalVariables.js";
 
 
 const TABLEHEADER = `
@@ -22,14 +23,14 @@ const TABLEHEADER = `
 </table>
 `;
 
-export function createTournamentTable(parentNode, mainContainer, data) {
+export async function createTournamentTable(parentNode, mainContainer, data) {
     mainContainer.innerHTML = TABLEHEADER;
     const tbody = mainContainer.querySelector("tbody");
     for (let index = data.length - 1; index >= 0; index--)
-        tbody.appendChild(createRow(parentNode, data[index]));
+        tbody.appendChild(await createRow(parentNode, data[index]));
 }
 
-export function createRow(parentNode, data) {
+export async function createRow(parentNode, data) {
 
     const tr = document.createElement("tr");
     tr.id = data.id;
@@ -72,10 +73,10 @@ export function createRow(parentNode, data) {
         const exitButton = document.createElement("img");
         exitButton.id = data.id;
         exitButton.className = "exitAction";
-        exitButton.src = "./images/logout.svg";
+        exitButton.src = "/images/logout.svg";
         exitButton.width = 24;
         exitButton.addEventListener("click", async () => {
-            player_leave_tournament(data.id);
+            await player_leave_tournament(data.tournament_id);
             closeWebSocket(data.tournament_id);
             tr.remove();
         });
@@ -83,15 +84,16 @@ export function createRow(parentNode, data) {
         const displayButton = document.createElement("img");
         displayButton.id = data.id;
         displayButton.className = "displayAction";
-        displayButton.src = "./assets/images/profile/play-button.svg";
+        displayButton.src = "/assets/images/profile/play-button.svg";
         displayButton.width = 24;
         displayButton.addEventListener("click", async () => {
             parentNode.innerHTML = '';
-            const response = await get_tournament_by_id(data.id);
+            const response = await get_tournament_by_id(data.tournament_id);
             if (!response)
                 throw new Error(`${response.status}  ${response.statusText}`);
             parentNode.innerHTML = '';
             const rounds = document.createElement("generate-rounds");
+            rounds.tournamentId = response.tournament_id;
             rounds.numberOfPlayers = response.number_of_players;
             console.log("response.players: ", response.players);
             rounds.players = response.players;
@@ -100,7 +102,8 @@ export function createRow(parentNode, data) {
 
         const actionsContainer = document.createElement("div");
         actionsContainer.className = "actions";
-        if (data.owner.id != 3)
+        const currentPlayerId = await getCurrentPlayerId();
+        if (data.owner.id != currentPlayerId)
             actionsContainer.appendChild(exitButton);
 
         actionsContainer.appendChild(displayButton);
