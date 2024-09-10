@@ -19,7 +19,7 @@ def send(request):
 def list_user_notifications(request):
     if request.user.is_authenticated:
         notifications = Notification.objects.filter(receiver=request.user)
-        notification_serializer = NotificationViewSerializer(notifications, many=True)
+        notification_serializer = NotificationSerializer(notifications, many=True, context=request)
         return Response(notification_serializer.data)
     else:
         return Response({'error' : 'User not authenticated'}, status=404) 
