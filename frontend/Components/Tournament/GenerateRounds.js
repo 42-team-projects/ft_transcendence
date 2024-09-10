@@ -163,11 +163,11 @@ export class GenerateRounds extends HTMLElement {
     get numberOfPlayers() { return this.getAttribute("number-of-players");}
 
     set players(val) {
-        console.log("val: ", val);
         this.generateRoundsGraph(this.convertPlayersDataIntoRounds(val));
         this.addPlayerEventListener();
     };
     
+
     addPlayerEventListener() {
         const newPlayer = this.shadowRoot.querySelectorAll(".addPlayer");
         newPlayer.forEach( elem => {

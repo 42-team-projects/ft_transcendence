@@ -13,6 +13,20 @@ logger = logging.getLogger(__name__)
 ### Player Views ###
 
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPlayerById(request, playerId):
+
+    try:
+        player = Player.objects.get(id=playerId)
+    except Player.DoesNotExist:
+        return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = CustomPlayer(player)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+    
 
 @csrf_exempt
 @api_view(['GET'])
