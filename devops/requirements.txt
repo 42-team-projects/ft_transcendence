@@ -3,6 +3,7 @@ Pillow
 daphne
 channels
 environ
+django-sslserver
 django-prometheus
 
 whitenoise==5.3.0
@@ -15,10 +16,13 @@ django-ratelimit==4.1.0
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
 PyJWT==2.8.0
+pyotp==2.9.0
 six==1.16.0
 sqlparse==0.5.0
 typing_extensions==4.12.1
 qrcode
+
+
 
 amqp==5.2.0
 attrs==23.2.0
