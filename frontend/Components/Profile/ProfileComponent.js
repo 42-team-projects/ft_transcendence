@@ -148,6 +148,7 @@ export class ProfileComponent extends HTMLElement {
             coverComponent.src = (HOST + this.APIData.cover) || "/images/xxxxxx.png";
 
         const profileInfoComponent = this.shadowRoot.querySelector("profile-info-component");
+        profileInfoComponent.id = this.APIData.user.id;
         profileInfoComponent.league = this.APIData.stats.league;
         profileInfoComponent.username = this.APIData.user.username;
         profileInfoComponent.src = (HOST + this.APIData.user.avatar);

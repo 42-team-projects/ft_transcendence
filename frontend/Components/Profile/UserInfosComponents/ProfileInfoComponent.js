@@ -1,9 +1,42 @@
+import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 
 export class ProfileInfoComponent extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({mode: "open"});
+
+        this.shadowRoot.innerHTML = /* html */ `
+            <style>
+
+                ${cssContent}
+            
+            </style>
+            <div class="box">
+                <div class="profile-image">
+                    <c-hexagon class="c-hexagon-profile" width="250px" height="250px" apply="true">
+                        <div slot="content" class="c-hexagon-content"></div>
+                    </c-hexagon>
+                    <div class="name">
+                        <div class="name-and-online">
+                            <p> </p>
+                            <c-hexagon width="24px" height="24px" apply="true">
+                                <div style="width: 100%; height: 100%;" slot="content"></div>
+                            </c-hexagon>
+                        </div>
+                        <div class="joined-date">
+                            <img loading="lazy"   src="/assets/images/profile/Calendar.svg" width="20px"/>
+                            <p class="joined-text">joined:</p>
+                            <p class="joined-date-text"> </p>
+                            <div class="add-friend">
+                                <img loading="lazy" src="/assets/images/profile/add-friends-icon.svg" width="28px"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        `;
     }
 
     static observedAttributes = ["src", "username", "joindate", "league", "active", "friend"];
@@ -74,38 +107,12 @@ export class ProfileInfoComponent extends HTMLElement {
     set friend(value) { this.setAttribute("friend", value);}
     
     connectedCallback() {
-
-        this.shadowRoot.innerHTML = /* html */ `
-            <style>
-
-                ${cssContent}
-            
-            </style>
-            <div class="box">
-                <div class="profile-image">
-                    <c-hexagon class="c-hexagon-profile" width="250px" height="250px" apply="true">
-                        <div slot="content" class="c-hexagon-content"></div>
-                    </c-hexagon>
-                    <div class="name">
-                        <div class="name-and-online">
-                            <p> </p>
-                            <c-hexagon width="24px" height="24px" apply="true">
-                                <div style="width: 100%; height: 100%;" slot="content"></div>
-                            </c-hexagon>
-                        </div>
-                        <div class="joined-date">
-                            <img loading="lazy"   src="/assets/images/profile/Calendar.svg" width="20px"/>
-                            <p class="joined-text">joined:</p>
-                            <p class="joined-date-text"> </p>
-                            <div class="add-friend">
-                                <img loading="lazy" src="/assets/images/profile/add-friends-icon.svg" width="28px"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        `;
+        const addFriend = this.shadowRoot.querySelector(".add-friend");
+        addFriend.addEventListener("click", async () => {
+            const notificationWS = await getNotificationWebSocket();
+            console.log("this.id: ", this.id);
+            notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'type': "friend", "infos": ""}));
+        });
     }
 }
 

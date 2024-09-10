@@ -102,9 +102,9 @@ export async function createRow(parentNode, data) {
 
         const actionsContainer = document.createElement("div");
         actionsContainer.className = "actions";
-        // const currentPlayerId = await getCurrentPlayerId();
-        // if (data.owner.id != currentPlayerId)
-        //     actionsContainer.appendChild(exitButton);
+        const currentPlayerId = await getCurrentPlayerId();
+        if (data.owner.id != currentPlayerId)
+            actionsContainer.appendChild(exitButton);
 
         actionsContainer.appendChild(displayButton);
 

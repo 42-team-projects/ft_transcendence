@@ -4,6 +4,8 @@ from .Views import PlayerView, StatsView, GraphView, AchievementsView, LinksView
 urlpatterns = [
     path('search/', PlayerView.searchForPlayers, name='searchForPlayers'),
 
+    path('<int:playerId>/',PlayerView.getPlayerById, name='getPlayerById'),
+
     # Players - retrieve, create, update, delete
     path('', PlayerView.getAllPlayers, name='getAllPlayers'),  # GET all players
 
