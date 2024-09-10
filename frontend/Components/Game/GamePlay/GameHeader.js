@@ -1,5 +1,5 @@
 import  {PlayerInfo} from "./Player-info.js";
-
+import "./Pause-Game.js"
 
 const HeaderTemplate = document.createElement('template');
 import { userInfo, opponentInfo } from "./Lobby.js";
@@ -15,14 +15,12 @@ HeaderTemplate.innerHTML = /*html*/ `
             grid-template-areas: "img player_info scor";
             grid-template-columns: 23.5% 35% 1fr;
         }
-        .pause{
-            cursor: pointer;
+        pause-game{
+            width: 5%;
+            aspect-ratio: 1.5;
         }
 </style>
-<div class="Play_Pause">
-    <div class="pause"></div>
-    <p class="status">PAUSE</p>			
-</div>
+<pause-game></pause-game>
 `
 
 export class GameHeader extends HTMLElement{
@@ -54,14 +52,11 @@ export class GameHeader extends HTMLElement{
         // player2Name.querySelector('p').textContent = opponentInfo.username
     }
     connectedCallback(){
-        this.querySelector('.Play_Pause').addEventListener('click', () => {
-            this.querySelector('.status').textContent = 'PAUSED'
-        })
         console.log('opponentInfo : ', opponentInfo);
         console.log('userInfo : ', userInfo);
         const player = new PlayerInfo()
         player.newScore(0, userInfo)
-        this.insertBefore(player, this.querySelector('.Play_Pause'))
+        this.insertBefore(player, this.querySelector('pause-game'))
         const opponent = new PlayerInfo()
         opponent.setAttribute('state', 'reverse')
         opponent.newScore(0, opponentInfo)

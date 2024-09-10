@@ -4,6 +4,10 @@ import { userInfo, opponentInfo } from "./Lobby.js";
 import { ip } from "../../../Utils/GlobalVariables.js";
 import { useWebsocket } from "../../../Utils/TournamentWebSocketManager.js";
 import { goNextStage } from "./configs/ScoreManager.js";
+import { PausePage } from "./Pause-Page.js";
+
+
+
 const game_page = document.createElement('template');
 
 let score = {
@@ -70,17 +74,19 @@ export class GameTable extends HTMLElement{
         this.appendChild(game_page.content.cloneNode(true))
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
-        
+
         // document.addEventListener('visibilitychange', (event)=>{
         //     this.socket.send(JSON.stringify({'status': 'pause'}))
         // })
     }
     async connectedCallback(){
+        document.body.addEventListener('pause-game', () => {
+            this.socket.send(JSON.stringify({'message': 'pause'})) 
+        })
+        document.body.addEventListener('resume-game', () => {
+            this.socket.send(JSON.stringify({'message': 'resume'}))
+        })
         this.runder_call = true;
-        // if(userInfo.id % 2)
-        //     await this.GameOver('lose')
-        // else
-        //     await this.GameOver('win')
         await this.getMessages();
     }
     async getMessages() {
@@ -151,6 +157,16 @@ export class GameTable extends HTMLElement{
                     dx = player_2.ball_dx;
                 }
                 this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
+            }
+            else if(status === 'Pause'){
+                console.log('pause');
+                document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSED'
+                document.body.appendChild(new PausePage())
+            }
+            else if(status === 'Resume'){
+                console.log('resume');
+                document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSE'
+                document.body.appendChild(new PausePage())
             }
         }
     }
