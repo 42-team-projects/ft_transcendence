@@ -9,7 +9,7 @@ import { CustomTable } from "/Components/Profile/TableComponents/CustomTable.js"
 import { StatsContainer } from "/Components/Profile/StatsComponents/StatsContainer.js";
 import { CustomGraph } from "/Components/Profile/GraphComponent/CustomGraph.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL, HOST } from "/Utils/APIUrls.js";
+import { PROFILE_API_URL, HOST } from "/Utils/GlobalVariables.js";
 
 
 const htmlContent = `

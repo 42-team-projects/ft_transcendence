@@ -1,4 +1,4 @@
-import { PROFILE_API_URL, HOST } from "/Utils/APIUrls.js";
+import { PROFILE_API_URL, HOST } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";

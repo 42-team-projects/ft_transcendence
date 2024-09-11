@@ -1,4 +1,4 @@
-import { HOST } from "/Utils/APIUrls.js";
+import { HOST } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { AddPlayerComponent } from "/Components/Tournament/AddPlayerComponent.js";
 import { CustomButton } from "/Components/Tournament/CustomButton.js";

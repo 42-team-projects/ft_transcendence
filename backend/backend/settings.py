@@ -49,44 +49,33 @@ INSTALLED_APPS = [
     'game', #new
     'Player', #new
     'accounts',
-    'rest_framework_simplejwt.token_blacklist', # ogorfti
+    'rest_framework_simplejwt.token_blacklist', # by ogorfti
+    # 'sslserver', # by ogorfti
+    'django_prometheus', # by ogorfti
 
 
     'chat',          #dokoko
     'notification',  #dokoko
-    
-
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_prometheus.middleware.PrometheusBeforeMiddleware', # monotoring
+    
     'corsheaders.middleware.CorsMiddleware', # new
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     
-
-    'django.middleware.csrf.CsrfViewMiddleware',  # Ensure this is included
+    'django_prometheus.middleware.PrometheusAfterMiddleware', # monotoring
 ]
-
-
 
 CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',  # Example: Your frontend origin
-    'http://127.0.0.1:8080',   # Another example: Your frontend origin
-    # Add more origins as needed
-
-    'http://localhost:5501',  # Example: Your frontend origin
-    'http://127.0.0.1:5501',
-    'http://127.0.0.1:5500',
-    'http://127.0.0.1:3000',
-]
+# security risk to allow all origins (must allow only the frontend server)
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -187,6 +176,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

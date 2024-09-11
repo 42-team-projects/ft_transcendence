@@ -211,7 +211,8 @@ const cssContent = /*css*/`
         font-size: 24px;
     }
     
-    .notification-icon
+    .notification-icon,
+    .friends-icon
     {
         display: flex;
         width: 32px;
@@ -294,14 +295,6 @@ const cssContent = /*css*/`
         width: 24px;
     }
 
-    .friends-icon img {
-    }
-
-
-    .friends-icon {
-        
-        height: 100%;
-    }
 
 `
 
@@ -319,10 +312,10 @@ HeaderTemplate.innerHTML = /*html*/`
             <div class="search-box">
                 <search-bar-component></search-bar-component>
                 <div class="friends-icon" >
-                    <img loading="lazy" draggable="false" src="/assets/icons/account-icon.svg" alt="friends">
+                    <img loading="lazy" draggable="false" src="/assets/icons/user-octagon-icon.svg" alt="friends">
                 </div>
                 <div class="notification-icon" >
-                    <img loading="lazy" draggable="false" src="/images/svg-header/alarm.svg" alt="notification">
+                    <img loading="lazy" draggable="false" src="/assets/icons/notification-icon.svg" alt="notification">
                     <div class="number-of-notifications">99</div>
                 </div>
             </div>

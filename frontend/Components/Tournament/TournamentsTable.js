@@ -1,5 +1,4 @@
 import { calculateTimeDifferents } from "/Utils/DateUtils.js";
-import { apiUrl } from "/Utils/GlobalVariables.js";
 import { createTournament, get_tournament_by_id, get_tournaments_by_player_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { CustomButton } from "/Components/Tournament/CustomButton.js";
 import { JoinTournament } from "/Components/Tournament/JoinTournament.js";

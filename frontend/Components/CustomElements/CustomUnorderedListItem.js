@@ -1,5 +1,5 @@
 import { deleteApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/APIUrls.js";
+import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 
 export class CustomUnorderedListItem extends HTMLElement {
     constructor() {
