@@ -3,7 +3,11 @@ Pillow
 daphne
 channels
 environ
+django-sslserver
+django-prometheus
 
+whitenoise==5.3.0
+daphne==3.0.2
 asgiref==3.8.1
 Django==4.2.13
 django-cors-headers==4.4.0

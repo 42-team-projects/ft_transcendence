@@ -1,4 +1,4 @@
-import { DateComponent } from "./BodyComponents/Date/DateComponent.js";
+import { DateComponent } from "/Components/Profile/TableComponents/BodyComponents/Date/DateComponent.js";
 
 const url = "https://jsonplaceholder.org/users";
 const uri = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c280be2d-de9f-469f-85f8-2effee43ee0c/dfw0573-626d7dae-68d8-4914-aa0d-6c67b8b2a94b.jpg/v1/fill/w_894,h_894,q_70,strp/my_hero_academia___deku_full_energy_by_jonadav_dfw0573-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2MyODBiZTJkLWRlOWYtNDY5Zi04NWY4LTJlZmZlZTQzZWUwY1wvZGZ3MDU3My02MjZkN2RhZS02OGQ4LTQ5MTQtYWEwZC02YzY3YjhiMmE5NGIuanBnIiwiaGVpZ2h0IjoiPD0xMDI0Iiwid2lkdGgiOiI8PTEwMjQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uud2F0ZXJtYXJrIl0sIndtayI6eyJwYXRoIjoiXC93bVwvYzI4MGJlMmQtZGU5Zi00NjlmLTg1ZjgtMmVmZmVlNDNlZTBjXC9qb25hZGF2LTQucG5nIiwib3BhY2l0eSI6OTUsInByb3BvcnRpb25zIjowLjQ1LCJncmF2aXR5IjoiY2VudGVyIn19.n5rrqMT9qXeebizFk-Q2ESc-LLpXfreZLLqfDNsrgB8";
@@ -156,7 +156,7 @@ export class CustomTable extends HTMLElement {
                     tableData.appendChild(parag);
                 } else if (counter == 6)  {
                     const icon = document.createElement("img");
-                    icon.src = "./assets/images/profile/play-button.svg";
+                    icon.src = "/assets/images/profile/play-button.svg";
                     icon.width = 24;
                     tableData.appendChild(icon);
                 } else {
@@ -180,7 +180,7 @@ export class CustomTable extends HTMLElement {
     connectedCallback() {
         const styleSheet = document.createElement("link");
         styleSheet.rel = `stylesheet`;
-        styleSheet.href = `./Components/Profile/TableComponents/CustomTable.css`;
+        styleSheet.href = `/Components/Profile/TableComponents/CustomTable.css`;
         this.shadowRoot.appendChild(styleSheet);
 
         const tableContainer = document.createElement("div");

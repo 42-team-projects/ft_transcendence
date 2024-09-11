@@ -1,10 +1,8 @@
-import { PlayerBorder } from "./PlayerBorder.js";
-import { GameHeader } from "./GameHeader.js"
-import { GameTable } from "./GameTable.js"
-import { getCurrentPlayerData, ip } from "../../../Utils/GlobalVariables.js";
-import { getApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL, HOST } from "../../../Utils/APIUrls.js";
-
+import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
+import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
+import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
+import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
+import { getApiData } from "/Utils/APIManager.js";
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
@@ -13,34 +11,34 @@ const OnlineGameTemplate = document.createElement('template');
 const timer = document.createElement('template')
 let searching_images = [
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ESCANOR'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ITATCHI'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ESALIM'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'KILLUA'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'GOJO'
 	}
 ]
 
 export let userInfo = {
-	picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+	picture: HOST + `/media/defaults/ace.jpeg`,
 	username: 'GOJO',
 }
 
 export let opponentInfo = {
-	picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+	picture: HOST + `/media/defaults/ace.jpeg`,
 	username: 'GOJO',
 }
 
@@ -50,7 +48,7 @@ playerSlot.innerHTML = /*html*/ `
 `
 
 AiGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/AiLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/AiLobby.css">
 	<img id='Player' class="Player" slot="PlayerImg" alt="Player" />
 	<h1 id='NPlayer' class="Name" slot="PlayerName"></h1>
 	<h1 id='Opponent' class="Opponent" slot="searshing"></h1>
@@ -58,7 +56,7 @@ AiGameTemplate.innerHTML = /*html*/ `
 `
 
 OnlineGameTemplate.innerHTML = /*html*/ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/OnlineGameLobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/OnlineGameLobby.css">
 	<div class="searshingImgs" slot="searshing">
 		<img id='Opponent1' class="PlayerS" alt="searchingImg"/>
 		<img id='Opponent2' class="PlayerS" alt="searchingImg"/>
@@ -78,7 +76,7 @@ opponentSlot.innerHTML = /*html*/ `
 	`
 
 lobby.innerHTML =  /* html */ `
-	<link rel="stylesheet" href="Components/Game/GamePlay/Lobby.css">
+	<link rel="stylesheet" href="/Components/Game/GamePlay/Lobby.css">
 	<page-name width="35%">
 		<div slot="text" class="pageNameText">
 			<h1>MATCH MAKING</h1>
@@ -114,7 +112,6 @@ export class Lobby extends HTMLElement{
 		if(opponentId && time)
 		{
 			this.time = time;
-			// console.log("im here")
 			this.OnlineGame(opponentId);
 		}
 	}
@@ -147,6 +144,7 @@ export class Lobby extends HTMLElement{
 		sideBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			sideBar.shadowRoot.innerHTML = '';
+			sideBar.classList.toggle('left', false);
 		}, 1000);
 	}
 
@@ -174,7 +172,8 @@ export class Lobby extends HTMLElement{
 	}
 
 	async openSocket(userId){
-		this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		// this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		this.socket = new WebSocket(`${wsUrl}ws/matchmaking/${userId}/`);
 		this.socket.onopen = (e) => {
 			console.log('socket open');
 		};
@@ -204,7 +203,7 @@ export class Lobby extends HTMLElement{
 		const turnTime = 1;
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
 		let delayNumber = (turnTime / 2) / Players.length;
-		// searching_images = await this.getData(`http://${ip}:8000/game/players/`);
+		// searching_images = await this.getData(HOST + `/game/players/`);
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
@@ -336,7 +335,7 @@ export class Lobby extends HTMLElement{
 	}
 	createTimer(){
 		timer.innerHTML = /*html*/ `
-			<link rel="stylesheet", href="Components/Game/GamePlay/Timer.css">
+			<link rel="stylesheet", href="/Components/Game/GamePlay/Timer.css">
 			<div class="descounter">
 				<h1>${this.time}</h1>
 			</div>

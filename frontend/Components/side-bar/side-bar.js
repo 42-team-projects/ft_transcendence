@@ -10,33 +10,33 @@ SideBarButtonTemplate.innerHTML = /*html*/`
     </sb-button>
 `
 SideBarTemplate.innerHTML = /*html*/`
-    <link rel="stylesheet" href="Components/side-bar/side-bar.css"/>
+    <link rel="stylesheet" href="/Components/side-bar/side-bar.css"/>
     <nav class="buttons">
     </nav>
     `
 const Sidebar_button_contetn = [
     {
-        src : './images/Home.svg',
+        src : '/images/Home.svg',
         text : "Home",
     },
     {
-        src : './images/Game.svg',
+        src : '/images/Game.svg',
         text : "Game",
     },
     {
-        src : './assets/icons/message-icon.svg',
+        src : '/assets/icons/message-icon.svg',
         text : "Chat",
     },
     {
-        src : './images/Friends.svg',
-        text : "Friends",
+        src : '/assets/icons/leaderboard-icon.svg',
+        text : "Ranking",
     },
     {
-        src : './assets/icons/champion-cup-icon.svg',
+        src : '/assets/icons/champion-cup-icon.svg',
         text : "Tournament",
     },
     {
-        src : './assets/icons/settings-icon.svg',
+        src : '/assets/icons/settings-icon.svg',
         text : "Settings",
     }
 ]
@@ -105,6 +105,7 @@ export class SideBar extends HTMLElement {
     }
     render(){
         this.shadowRoot.appendChild(SideBarTemplate.content.cloneNode(true));
+        this.classList.toggle('left', false)
         this.setbuttons()
         // this.activeButton = this.shadowRoot.querySelectorAll('sb-button')[0]
         // this.clickEvent = 0;

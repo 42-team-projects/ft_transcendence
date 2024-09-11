@@ -1,9 +1,9 @@
-import { Lobby } from "../Lobby.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
 
 const singlePlayerTemplate = document.createElement('template')
 
 singlePlayerTemplate.innerHTML = /*html*/ `
-    <link rel="stylesheet" href="Components/Game/GamePlay/SinglePlayer/Single-Player.css">
+    <link rel="stylesheet" href="/Components/Game/GamePlay/SinglePlayer/Single-Player.css">
     <img loading="lazy" class="GreenCartImg" src="images/GreenCart/img-singleplayer.svg" alt="GreenImg">
     <img loading="lazy" class="GreenCart" src="images/GreenCart/Single.svg" alt="Green">
     <div class="style-0">
