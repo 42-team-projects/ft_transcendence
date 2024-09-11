@@ -16,7 +16,7 @@ SideBarTemplate.innerHTML = /*html*/`
     `
 const Sidebar_button_contetn = [
     {
-        src : '/images/Home.svg',
+        src : '/assets/icons/home-icon.svg',
         text : "Home",
     },
     {
