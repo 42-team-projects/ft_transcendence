@@ -105,6 +105,7 @@ export class SideBar extends HTMLElement {
     }
     render(){
         this.shadowRoot.appendChild(SideBarTemplate.content.cloneNode(true));
+        this.classList.toggle('left', false)
         this.setbuttons()
         // this.activeButton = this.shadowRoot.querySelectorAll('sb-button')[0]
         // this.clickEvent = 0;

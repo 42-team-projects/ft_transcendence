@@ -3,7 +3,8 @@ import { LaunchingGame } from "/Components/Game/GamePlay/launchingGame.js";
 import { userInfo } from "/Components/Game/GamePlay/Lobby.js";
 import { goNextStage } from "/Components/Game/GamePlay/configs/ScoreManager.js";
 import { wsUrl } from "/Utils/GlobalVariables.js";
-
+import { PausePage } from "./Pause-Page.js";
+import { router } from "/root/Router.js";
 const game_page = document.createElement('template');
 
 let score = {
@@ -72,17 +73,19 @@ export class GameTable extends HTMLElement{
         this.appendChild(game_page.content.cloneNode(true))
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
-        
+
         // document.addEventListener('visibilitychange', (event)=>{
         //     this.socket.send(JSON.stringify({'status': 'pause'}))
         // })
     }
     async connectedCallback(){
+        document.body.addEventListener('pause-game', () => {
+            this.socket.send(JSON.stringify({'message': 'pause'})) 
+        })
+        document.body.addEventListener('resume-game', () => {
+            this.socket.send(JSON.stringify({'message': 'resume'}))
+        })
         this.runder_call = true;
-        // if(userInfo.id % 2)
-        //     await this.GameOver('lose')
-        // else
-        //     await this.GameOver('win')
         await this.getMessages();
     }
     async getMessages() {
@@ -154,6 +157,16 @@ export class GameTable extends HTMLElement{
                 }
                 this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
             }
+            else if(status === 'Pause'){
+                console.log('pause');
+                document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSED'
+                document.body.appendChild(new PausePage())
+            }
+            else if(status === 'Resume'){
+                console.log('resume');
+                document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSE'
+                document.body.querySelector('pause-page').remove();
+            }
         }
     }
     
@@ -199,11 +212,13 @@ export class GameTable extends HTMLElement{
     
     async GameOver(playerState){
         this.Loop_state = false;
-        // console.log("this.id: ", this.id);
-        if (this.id)
+        console.log("this.id: ", this.id);
+        if (this.id && this.id !== 'undefined')
             await goNextStage(playerState, this.id);
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
+        //redirect to last url in hesory
+        router.handleRoute(window.location.pathname);
     }
     async LuncheGame(ctx){
         // console.log('lunching');
@@ -380,5 +395,11 @@ export class GameTable extends HTMLElement{
             'y': player.y,
         }
         this.socket.send(JSON.stringify(message));
+    }
+    disconnectedCallback(){
+        // this.socket.close();
+        router.randring()
+        document.body.querySelector('game-header').remove();
+        document.body.querySelector('game-over').remove();
     }
 }

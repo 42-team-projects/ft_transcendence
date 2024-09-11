@@ -155,7 +155,7 @@ def get_available_tournaments(request):
 def create_tournament(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        print(data)
+        # print(data)
         # tournament = Tournament.objects.create(tournament_name=data.tournament_name, number_of_players=data.number_of_players, is_accessible=data.is_accessible,
         # access_password=data.access_password)
 

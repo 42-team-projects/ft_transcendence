@@ -38,6 +38,7 @@ html, body {
     "head head"
     "sidebar content"
     "foter foter" !important;
+    transition: grid 1s ease;
     /* justify-content: center;
     align-items: center; */
 }
@@ -83,7 +84,6 @@ body{
     background-repeat: no-repeat;
     font-family: 'Sansation';
     height: 100vh;
-    transition: grid 1s ease;
     position: relative;
 }
 body::before{
