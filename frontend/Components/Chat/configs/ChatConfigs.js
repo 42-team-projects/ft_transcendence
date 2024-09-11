@@ -48,6 +48,8 @@ let checker;
 
 export async function renderConversation(chatBody, messages) {
     
+    if (!messages)
+        return ;
     let receiverComponent = document.createElement("receiver-component");
     let senderComponent = document.createElement("sender-component");
     const currentUserId = await getCurrentUserId();
