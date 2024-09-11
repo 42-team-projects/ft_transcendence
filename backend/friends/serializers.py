@@ -5,7 +5,7 @@ from accounts.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'is_active', 'last_login']
+        fields = ['id', 'username', 'is_active']
 
 class FriendshipSerializer(serializers.ModelSerializer):
     friends = UserSerializer(many=True, read_only=True)
