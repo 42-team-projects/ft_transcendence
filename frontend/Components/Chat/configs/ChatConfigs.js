@@ -5,26 +5,21 @@ import { ChatFooterComponent } from "/Components/Chat/ChatRoom/ChatFooterCompone
 import { ChatHeaderComponent } from "/Components/Chat/ChatRoom/ChatHeaderComponent.js";
 
 export function renderChatHeader(chatContainer, conversationData) {
-    const header = new ChatHeaderComponent();
-    header.playerId = conversationData.reciever.id;
-    header.userName = conversationData.reciever.username;
-    // if (targetUserData.stats)
-    // {
-        header.league = "gold";
-    // }
-    header.active = conversationData.reciever.is_active;
-    header.profileImage = HOST + conversationData.reciever.avatar;
-    header.slot = "header";
-    chatContainer.appendChild(header);
+    const header = chatContainer.querySelector("chat-header");
+    header.playerId = conversationData.user.id;
+    header.userName = conversationData.user.username;
+    header.league = conversationData.stats.league;
+    header.active = conversationData.user.is_active;
+    header.profileImage = HOST + conversationData.user.avatar;
 }
 
 
 
 export async function renderChatBody(chatContainer, conversationName) {
+    console.log("conversationName: ", conversationName);
     const messagesContainer = chatContainer.querySelector(".body");
     const messages = await getApiData(HOST + "/chat/messages?cn=" + conversationName);
     renderConversation(messagesContainer, messages);
-    chatContainer.appendChild(messagesContainer);
 }
 
 
@@ -36,7 +31,7 @@ function renderMessageComponent(chatBody, messageContainer, component, message, 
         messageContainer.setAttribute("corner", "");
         component = component.cloneNode();
     }
-    messageContainer.time = message.sent_at.split("T")[0];
+    // messageContainer.time = message.sent_at.split("T")[0];
     component.league = "gold";
     component.profileImage = "/assets/images/profile/tanjuro.jpg";
     component.appendChild(messageContainer);
@@ -48,13 +43,15 @@ let checker;
 
 export async function renderConversation(chatBody, messages) {
     
+    console.log("msgs: ", messages);
     if (!messages)
-        return ;
+        return;
     let receiverComponent = document.createElement("receiver-component");
     let senderComponent = document.createElement("sender-component");
     const currentUserId = await getCurrentUserId();
     for (let index = 0; index < messages.length; index++) {
         const message = messages[index];
+        console.log("message => ", message);
         let messageContainer;
         if (message.user != currentUserId) {
             messageContainer = document.createElement("receiver-message-container");
