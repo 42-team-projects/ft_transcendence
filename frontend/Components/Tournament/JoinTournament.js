@@ -4,6 +4,9 @@ import { hashPassword } from "/Utils/Hasher.js";
 import { initWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { createRow } from "/Components/Tournament/configs/TournamentUtils.js";
+import { createTournamentWebSocket} from "/Utils/TournamentWebSocketManager.js"
+import { checkIsTournamentFull } from "/Utils/TournamentManager.js";
+
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -57,14 +60,21 @@ export class JoinTournament extends HTMLElement {
         return tournamentItem;
     }
 
+
+    async initTournamentSocket(tournamentData) {
+        const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
+        await checkIsTournamentFull(tournamentData, ws);
+    }
+
 /**
  * 
  * @author rida
  */
-    async  updateTournamentsTable(tournamentData, tbody) {
-        tbody.prepend(createRow(this, tournamentData));
-        const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
-        await checkIsTournamentFull(tournamentData, ws);
+    async updateTournamentsTable(tournamentData, tbody) {
+        await this.initTournamentSocket(tournamentData);
+        const row = await createRow(this, tournamentData);
+        tbody.prepend(row);
+        
     }
 
     async addPlayerToTournament(tournamentData) {
