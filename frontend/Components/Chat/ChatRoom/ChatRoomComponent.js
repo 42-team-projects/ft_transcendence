@@ -3,8 +3,11 @@ import { ChatHeaderComponent } from "/Components/Chat/ChatRoom/ChatHeaderCompone
 import { ChatFooterComponent } from "/Components/Chat/ChatRoom/ChatFooterComponent.js";
 import { SenderComponent } from "/Components/Chat/ChatRoom/SenderComponent.js";
 import { ReceiverComponent } from "/Components/Chat/ChatRoom/ReceiverComponent.js";
-import { HOST } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
+import { getCurrentUserId, PROFILE_API_URL, HOST } from "/Utils/GlobalVariables.js";
+import { setUpWebSocket } from "/Components/Chat/configs/ChatWebSocketManager.js";
+import { renderChatHeader, renderChatBody, renderChatFooter } from "/Components/Chat/configs/ChatConfigs.js";
+import { ChatItemComponent } from "/Components/Chat/ChatList/ChatItemComponent.js";
 
 export class ChatRoomComponent extends HTMLElement {
     constructor () {
@@ -14,14 +17,33 @@ export class ChatRoomComponent extends HTMLElement {
                 ${cssContent}
             </style>
             <div class="container">
-                <slot class="header" name="header"></slot>
+                <chat-header></chat-header>
                 <div class="body"></div>
                 <slot class="footer" name="footer"></slot>
             </div>
         `;
     }
 
-    webSocket;
+
+
+    generateRoomName(currentUserId, receiver_id) {
+        let room_name;
+        if (currentUserId < receiver_id)
+            room_name = currentUserId.toString() + receiver_id.toString();
+        else
+            room_name = receiver_id.toString() + currentUserId.toString();
+        return room_name;
+    }
+
+    
+    async renderChatRoom(item) {
+        const currentUserId = await getCurrentUserId();
+        const room_name = this.generateRoomName(currentUserId, item.user.id);
+        const webSocket = setUpWebSocket(this.querySelector(".body"), room_name);
+        renderChatHeader(this, item);
+        await renderChatBody(this, ("chat_" + room_name));
+        renderChatFooter(this, webSocket, item.user.id);
+    }
 
     static observedAttributes = [];
 
@@ -30,9 +52,12 @@ export class ChatRoomComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-        if (!this.targetUser)
+
+        let playerName = window.location.pathname.substring(6);
+        if (!playerName || playerName === undefined)
             return ;
-        console.log("this.dataset.userData: ", this.dataset.userData);
+        const player = await getApiData(PROFILE_API_URL + playerName);
+        await this.renderChatRoom(player);
     }
 
     disconnectedCallback() {
