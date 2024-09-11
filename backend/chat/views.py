@@ -10,9 +10,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 def user1(request):
-    c = Conversation.objects.filter(title='chat_12').last()
+    # c = Conversation.objects.filter(title='chat_12').last()
 
-    print(c.group_name)
+    # print(c.group_name)
     return render(request, 'chat/user1.html')
 def user2(request):
     return render(request, 'chat/user2.html')
