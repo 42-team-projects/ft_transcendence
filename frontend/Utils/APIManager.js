@@ -3,10 +3,8 @@ import { fetchWithToken } from "/root/fetchWithToken.js"
 
 export async function getApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-        console.error("Access token is missing.");
-        return;
-    }
+    if (!accessToken)
+        return null;
     const response = await fetchWithToken(APIUrl,
     {
         method: "GET",

@@ -1,3 +1,4 @@
+import { HOST } from '../../Utils/GlobalVariables.js';
 
 export default class EmailConf extends HTMLElement {
     async connectedCallback() {
@@ -7,7 +8,7 @@ export default class EmailConf extends HTMLElement {
 
         if (token)
         {
-            fetch(`http://127.0.0.1:8000/api/v1/auth/confirm-email/${token}`)
+            fetch(`${HOST}/api/v1/auth/confirm-email/${token}`)
             .then(response => response.json())
             .then(data => {
                 router.handleRoute('/login')
