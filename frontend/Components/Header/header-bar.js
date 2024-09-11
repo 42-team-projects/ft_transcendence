@@ -211,7 +211,8 @@ const cssContent = /*css*/`
         font-size: 24px;
     }
     
-    .notification-icon
+    .notification-icon,
+    .friends-icon
     {
         display: flex;
         width: 32px;
@@ -310,7 +311,7 @@ HeaderTemplate.innerHTML = /*html*/`
         <div class="notification-search">
             <div class="search-box">
                 <search-bar-component></search-bar-component>
-                <div class="notification-icon friends-icon" >
+                <div class="friends-icon" >
                     <img loading="lazy" draggable="false" src="/assets/icons/user-octagon-icon.svg" alt="friends">
                 </div>
                 <div class="notification-icon" >
