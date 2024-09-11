@@ -111,30 +111,12 @@ def cancel_friend_request(request, request_id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def block_user(request):
+def block_user(request, friend_id):
     """Block a user.
-    This endpoint allows an authenticated user to block another user. The request should
-    include the ID of the user to be blocked.
-
-    Request Data:
-    - user_id: The ID of the user to be blocked.
-
-    Response:
-    - 200 OK: If the user was successfully blocked.
-    - 400 Bad Request: If the request data is invalid or missing.
-    - 401 Unauthorized: If the user is not authenticated.
+    This endpoint allows an authenticated user to block another user.
     """
-    # Validate and extract the user to be blocked
-    blocked_user_id = request.data.get('friend_id', None)
-    if not blocked_user_id:
-        return Response({'response': 'blocked_user_id is required.'}, status=400)
-    try:
-        blocked_user_id = int(blocked_user_id)
-    except ValueError:
-        return Response({'response': 'Invalid blocked user ID. It should be an integer.'}, status=400)
-
     current_user = request.user
-    blocked_user = get_object_or_404(User, id=blocked_user_id)
+    blocked_user = get_object_or_404(User, id=friend_id)
 
     if blocked_user == current_user:
         return Response({'response': 'You cannot block yourself.'}, status=400)
@@ -152,29 +134,10 @@ def block_user(request):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def unblock_user(request):
+def unblock_user(request, friend_id):
     """Unblock a user.
-
-    This endpoint allows an authenticated user to unblock a previously blocked friend. The request should
-    include the ID of the friend to be unblocked.
-
-    Request Data:
-    - friend_id: The ID of the friend to be unblocked.
-
-    Response:
-    - 200 OK: If the user was successfully unblocked.
-    - 400 Bad Request: If the request data is invalid or missing.
-    - 401 Unauthorized: If the user is not authenticated.
+    This endpoint allows an authenticated user to unblock a previously blocked friend.
     """
-    friend_id = request.data.get('friend_id', None)
-    if not friend_id:
-        return Response({'response': 'friend_id is required.'}, status=400)
-    try:
-        friend_id = int(friend_id)
-    except ValueError:
-        return Response({'response': 'Invalid unblocked user ID. It should be an integer.'}, status=400)
-
-
     current_user = request.user
     blocked_user = get_object_or_404(User, id=friend_id)
 
