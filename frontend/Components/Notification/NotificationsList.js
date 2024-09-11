@@ -1,12 +1,19 @@
-import { showNotifiactionsList } from "../Header/header-bar.js";
-import { NotificationComponent } from "./NotificationComponent.js";
+import { getCurrentUserId } from "/Utils/GlobalVariables.js";
+import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
+import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { NOTIFICATIONS_API_URL } from "/Utils/GlobalVariables.js";
+import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
+import { hideNotificationsList } from "/Components/Header/header-bar.js";
+
 
 export class NotificationsList extends HTMLElement {
     constructor() {
         super();
         this.innerHTML = `
             <div class="notificationsBar-header">
-                <img class="close-button" src="../../assets/icons/close-icon.svg" width="24px"/>
+                <img class="close-button" src="/assets/icons/close-icon.svg" width="24px"/>
                 <h3>NOTIFICATIONS</h3>
             </div>
             <div class="notificationsBar-body">
@@ -18,30 +25,33 @@ export class NotificationsList extends HTMLElement {
         `;
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         this.style.width = this.width;
         this.style.height = this.height;
         const notificationList = this.querySelector(".notificationsBar-body");
-        notificationList.scrollTop = notificationList.scrollHeight;
+
+        const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
+        if (notifications) {
+            Array.from(notifications).forEach( notif => {
+                const notification = createNotification(notif.user.username, notif.content, "friend");
+                this.appendNotification(notification);
+            });
+        }
         this.querySelector(".close-button").addEventListener("click", () => {
-            showNotifiactionsList();
+            hideNotificationsList();
         });
         this.querySelector(".clear-all").addEventListener("click", () => {
             this.querySelector(".notification-list").innerHTML = '';
         });
-
-        
+        notificationList.scrollTop = notificationList.scrollHeight;
     }
-
     disconnectedCallback() {
-
     }
-
 
     appendNotification(notificationContent) {
         const notification = new NotificationComponent();
         notification.width = "100%";
-        notification.innerHTML = notificationContent;
+        notification.appendChild(notificationContent);
         this.querySelector(".notification-list").prepend(notification);
     }
 

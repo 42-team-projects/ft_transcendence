@@ -13,11 +13,11 @@ export function getLeagueColor(league) {
 
 export function getLeagueImage(league) {
     const leagueColors = new Map();
-    leagueColors.set("bronze", "./assets/images/leagues/bronze-league.svg");
-    leagueColors.set("silver", "./assets/images/leagues/silver-league.svg");
-    leagueColors.set("gold", "./assets/images/leagues/gold-league.svg");
-    leagueColors.set("platinum", "./assets/images/leagues/platinum-league.svg");
-    leagueColors.set("legendary", "./assets/images/leagues/legendary-league.svg");
+    leagueColors.set("bronze", "/assets/images/leagues/bronze-league.svg");
+    leagueColors.set("silver", "/assets/images/leagues/silver-league.svg");
+    leagueColors.set("gold", "/assets/images/leagues/gold-league.svg");
+    leagueColors.set("platinum", "/assets/images/leagues/platinum-league.svg");
+    leagueColors.set("legendary", "/assets/images/leagues/legendary-league.svg");
     return leagueColors.get(league.toLowerCase());
 }
 

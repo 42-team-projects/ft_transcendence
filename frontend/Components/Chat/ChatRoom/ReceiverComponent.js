@@ -1,5 +1,5 @@
-import { getLeagueColor } from "../../../Utils/LeaguesData.js";
-import { ReceiverMessageContainerComponent } from "./MessageComponents/ReceiverMessageContainerComponent.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { ReceiverMessageContainerComponent } from "/Components/Chat/ChatRoom/MessageComponents/ReceiverMessageContainerComponent.js";
 
 export class ReceiverComponent extends HTMLElement {
 

@@ -2,9 +2,9 @@ import  {PlayerInfo} from "./Player-info.js";
 import "./Pause-Game.js"
 
 const HeaderTemplate = document.createElement('template');
-import { userInfo, opponentInfo } from "./Lobby.js";
+import { userInfo, opponentInfo } from "/Components/Game/GamePlay/Lobby.js";
 HeaderTemplate.innerHTML = /*html*/ `
-<link rel="stylesheet" href="Components/Game/GamePlay/GameTable.css">
+<link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
 <style>
     player-info{
         width: 20%;

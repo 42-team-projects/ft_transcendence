@@ -59,7 +59,7 @@ img {
     content: '';
     width: 43%;
     height: 16%;
-    background-image: url(../../../images/game-LT.svg);
+    background-image: url(/images/game-LT.svg);
     background-repeat: no-repeat;
     background-size: contain;
     top: 0;
@@ -70,7 +70,7 @@ img {
     content: '';
     width: 43%;
     height: 16%;
-    background-image: url(../../../images/game-LT.svg);
+    background-image: url(/images/game-LT.svg);
     background-repeat: no-repeat;
     background-size: contain;
     top: 0;
@@ -87,7 +87,7 @@ img {
     content: '';
     width: 43%;
     height: 16%;
-    background-image: url(../../../images/game-LT.svg);
+    background-image: url(/images/game-LT.svg);
     background-repeat: no-repeat;
     background-size: contain;
     bottom: 0;
@@ -99,7 +99,7 @@ img {
     content: '';
     width: 43%;
     height: 16%;
-    background-image: url(../../../images/game-LT.svg);
+    background-image: url(/images/game-LT.svg);
     background-repeat: no-repeat;
     background-size: contain;
     bottom: 0;
@@ -119,7 +119,7 @@ img {
     content: '';
     width: 25%;
     height: 7%;
-    background-image: url(../../../images/game-DT.svg);
+    background-image: url(/images/game-DT.svg);
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -127,7 +127,7 @@ img {
     content: '';
     width: 25%;
     height: 7%;
-    background-image: url(../../../images/game-DT.svg);
+    background-image: url(/images/game-DT.svg);
     background-repeat: no-repeat;
     background-size: contain;
     transform: scaleY(-1) scaleX(-1);
@@ -148,7 +148,7 @@ img {
     content: '';
     width: 6%;
     height: 34%;
-    background-image: url(../../../images/game-LR.svg);
+    background-image: url(/images/game-LR.svg);
     background-repeat: no-repeat;
     background-size: contain;
     top: 0;
@@ -159,7 +159,7 @@ img {
     content: '';
     width: 6%;
     height: 34%;
-    background-image: url(../../../images/game-LR.svg);
+    background-image: url(/images/game-LR.svg);
     background-repeat: no-repeat;
     background-size: contain;
     top: 0;
@@ -177,7 +177,7 @@ img {
     content: '';
     width: 6%;
     height: 34%;
-    background-image: url(../../../images/game-LR.svg);
+    background-image: url(/images/game-LR.svg);
     background-repeat: no-repeat;
     background-size: contain;
     bottom: 0;
@@ -189,7 +189,7 @@ img {
     content: '';
     width: 6%;
     height: 34%;
-    background-image: url(../../../images/game-LR.svg);
+    background-image: url(/images/game-LR.svg);
     background-repeat: no-repeat;
     background-size: contain;
     bottom: 0;
@@ -208,7 +208,7 @@ img {
     content: '';
     width: 2%;
     height: 32%;
-    background-image: url(../../../images/game-MLR.svg);
+    background-image: url(/images/game-MLR.svg);
     background-repeat: no-repeat;
     background-size: contain;
     bottom: 0;
@@ -219,7 +219,7 @@ img {
     content: '';
     width: 2%;
     height: 32%;
-    background-image: url(../../../images/game-MLR.svg);
+    background-image: url(/images/game-MLR.svg);
     background-repeat: no-repeat;
     background-size: contain;
     bottom: 0;
