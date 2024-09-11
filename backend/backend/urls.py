@@ -22,7 +22,7 @@ from django_prometheus import exports
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('game/', include('game.urls')),
+    path('game/', include('game.urls')),
     path('tournament/', include('tournament.urls')),
     path('api/v1/players/', include('Player.urls')),
     path('chat/', include("chat.urls"), name="chat"),
