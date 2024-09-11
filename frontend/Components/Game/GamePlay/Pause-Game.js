@@ -49,11 +49,7 @@ export class PauseGame extends HTMLElement{
     }
     connectedCallback(){
         this.addEventListener('click', () => {
-            if (this.querySelector('.status').textContent == 'PAUSE'){
-                document.body.dispatchEvent(new CustomEvent('pause-game'))
-            }
-            else
-                document.body.dispatchEvent(new CustomEvent('resume-game'))
+            document.body.dispatchEvent(new CustomEvent('pause-game'))
             console.log('pause game')
         })
     }

@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from rest_framework.response    import Response
-from django.http import JsonResponse
 from .models import *
 from .serializers import *
 from rest_framework.decorators  import api_view
@@ -19,7 +18,7 @@ def send(request):
 def list_user_notifications(request):
     if request.user.is_authenticated:
         notifications = Notification.objects.filter(user=request.user)
-        notification_serializer = NotificationSerializer(notifications, many=True)
+        notification_serializer = NotificationListSerializer(notifications, many=True)
         return Response(notification_serializer.data)
     else:
         return Response({'error' : 'User not authenticated'}, status=404) 

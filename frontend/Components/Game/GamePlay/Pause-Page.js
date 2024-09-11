@@ -44,13 +44,13 @@ template.innerHTML = /*html*/`
     }
     pause-buttons p{
         font-size: 1.5rem;
-        color: #00fffb50;
-        text-shadow: 0 0 2px #00b9be;
+        color: #00fffb90;
+        text-shadow: 0 0 1px #00b9be;
     }
     pause-buttons object{
         width: 50px;
         height: 50px;
-        filter: drop-shadow(0 0 2px #00b9be);
+        filter: drop-shadow(0 0 1px #00b9be);
     }
 </style>
 
@@ -74,30 +74,24 @@ template.innerHTML = /*html*/`
     </div>
 </div>
 `
-{/* <img slot="icon" src="../../images/restart.svg" alt="restart"> */}
-{/* <img slot="icon" src="../../images/play.svg" alt="resume"> */}
-{/* <img slot="icon" src="../../images/exit.svg" alt="exit"> */}
 
 export class PausePage extends HTMLElement{
     constructor(){
         super();
         this.attachShadow({mode: 'open'})
         this.shadowRoot.appendChild(template.content.cloneNode(true))
+        this.addBlur()
+    }
+    addBlur(){
         document.body.querySelector('game-header').classList.add('blur')
         document.body.querySelector('game-table').classList.add('blur')
-        // const objects = this.shadowRoot.querySelectorAll('object')
-        // objects.forEach(object => {
-        //     object.addEventListener('load', () => {
-        //         const svgdoc = object.contentDocument
-        //         const svg = svgdoc.querySelector('svg')
-        //         const path = svgdoc.querySelector('path')
-        //         if (svg.getAttribute('fill') == 'none')
-        //             path.style.stroke = '#fffff'
-        //         else
-        //             svg.style.fill = '#00b9be'
-        //     })
-        // })
     }
-    
+    removeBlur(){
+        document.body.querySelector('game-header').classList.remove('blur')
+        document.body.querySelector('game-table').classList.remove('blur')
+    }
+    disconnectedCallback(){
+        this.removeBlur()
+    }
 }
 customElements.define('pause-page', PausePage)
