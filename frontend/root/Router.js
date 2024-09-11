@@ -23,11 +23,13 @@ export class Router {
         this.sideBar = document.querySelector("side-bar");
         this.handleRoute(window.location.pathname);
     }
-    randring(access_token, matchedRoute){
-        document.body.classList.add('body-default-shrink')
-        this.header.render()
-        this.sideBar.render()
-        this.randred = true;
+    randring(){
+        document.body.classList = 'body-default-shrink'
+        // setTimeout(() => {
+            this.header.render()
+            this.sideBar.render()
+            this.randred = true;
+        // }, 1000);
 
     }
     profileRandring(){
@@ -73,7 +75,7 @@ export class Router {
             const isValid = await isTokenValid(access_token);
             if (isValid) {
                 if(this.randred === false)
-                    this.randring(access_token, matchedRoute);
+                    this.randring();
                 this.rootContent.innerHTML = "";
                 this.rootContent.appendChild(document.createElement(matchedRoute.view));
                 this.sideBar.shadowRoot.querySelectorAll('sb-button').forEach((button, index) =>{

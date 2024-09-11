@@ -22,7 +22,7 @@ export class NewFriendNotification extends HTMLElement {
                             <div class="profile-icon" slot="content"></div>
                         </c-hexagon>
                     </a>
-                    <div style="display: flex; gap: 5px;">
+                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                         <h4></h4>
                         <h4><i></i></h4>
                     </div>

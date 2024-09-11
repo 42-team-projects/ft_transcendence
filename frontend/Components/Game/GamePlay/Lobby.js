@@ -1,9 +1,8 @@
 import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
 import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
 import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
-import { getCurrentPlayerData, HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
-
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
@@ -108,12 +107,11 @@ export class Lobby extends HTMLElement{
 			document.body.classList.toggle('body-game-shrink', true);
 			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
-		// this.headerAnimation();
-		// this.sidebarAnimation();
+		this.headerAnimation();
+		this.sidebarAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
-			// console.log("im here")
 			this.OnlineGame(opponentId);
 		}
 	}
@@ -121,7 +119,7 @@ export class Lobby extends HTMLElement{
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
 		const profile = headerBar.querySelector('c-profile');
-		// const userRunk = profile.querySelector('user-rank');
+		const userRunk = profile.querySelector('user-rank');
 	
 		userRunk.classList.toggle('drop-100', false);
 		userRunk.classList.toggle('transform-1s', true);
@@ -146,6 +144,7 @@ export class Lobby extends HTMLElement{
 		sideBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			sideBar.shadowRoot.innerHTML = '';
+			sideBar.classList.toggle('left', false);
 		}, 1000);
 	}
 
@@ -301,10 +300,10 @@ export class Lobby extends HTMLElement{
 
 		headerBar.classList.toggle('up-100', false);
 		
-		root.innerHTML = ``;
-		root.appendChild(game);
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
+		root.innerHTML = ``;
+		root.appendChild(game);
 		game.id = this.tournament_id;
 	}
 	gameMode(room_group_name){

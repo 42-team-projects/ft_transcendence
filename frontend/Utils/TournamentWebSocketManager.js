@@ -324,7 +324,7 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
             tournamentId: tournamentId,
             start_date: start_date,
         }
-        const response = await fetch(`${HOST}SetStartDate/`, {
+        const response = await fetch(`${HOST}/tournament/SetStartDate/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -347,7 +347,7 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
 
 async function get_start_date(tournamentId) {
     try {
-        const response = await fetch(`${TOURNAMENT_API_URL}${tournamentId}/`);
+        const response = await fetch(`${HOST}/tournament/${tournamentId}/`);
         if (!response.ok) {
             throw new Error(`${response.status}  ${response.statusText}`);
         }
@@ -363,7 +363,7 @@ async function get_start_date(tournamentId) {
 
 async function getTournamentData(tournament_id) {
     try {
-        const response = await fetch(`${TOURNAMENT_API_URL}${tournament_id}/`);
+        const response = await fetch(`${HOST}/tournament/${tournament_id}/`);
         if (!response.ok) {
             throw new Error(`${response.status}  ${response.statusText}`);
         }
