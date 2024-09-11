@@ -1,9 +1,8 @@
 import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
 import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
 import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
-import { getCurrentPlayerData, ip } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerData, HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL, HOST } from "/Utils/APIUrls.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -13,34 +12,34 @@ const OnlineGameTemplate = document.createElement('template');
 const timer = document.createElement('template')
 let searching_images = [
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ESCANOR'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ITATCHI'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'ESALIM'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'KILLUA'
 	},
 	{
-		picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+		picture: HOST + `/media/defaults/ace.jpeg`,
 		username: 'GOJO'
 	}
 ]
 
 export let userInfo = {
-	picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+	picture: HOST + `/media/defaults/ace.jpeg`,
 	username: 'GOJO',
 }
 
 export let opponentInfo = {
-	picture: `http://${ip}:8000/media/defaults/ace.jpeg`,
+	picture: HOST + `/media/defaults/ace.jpeg`,
 	username: 'GOJO',
 }
 
@@ -109,8 +108,8 @@ export class Lobby extends HTMLElement{
 			document.body.classList.toggle('body-game-shrink', true);
 			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
-		this.headerAnimation();
-		this.sidebarAnimation();
+		// this.headerAnimation();
+		// this.sidebarAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
@@ -122,7 +121,7 @@ export class Lobby extends HTMLElement{
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
 		const profile = headerBar.querySelector('c-profile');
-		const userRunk = profile.querySelector('user-rank');
+		// const userRunk = profile.querySelector('user-rank');
 	
 		userRunk.classList.toggle('drop-100', false);
 		userRunk.classList.toggle('transform-1s', true);
@@ -174,7 +173,8 @@ export class Lobby extends HTMLElement{
 	}
 
 	async openSocket(userId){
-		this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		// this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		this.socket = new WebSocket(`${wsUrl}ws/matchmaking/${userId}/`);
 		this.socket.onopen = (e) => {
 			console.log('socket open');
 		};
@@ -204,7 +204,7 @@ export class Lobby extends HTMLElement{
 		const turnTime = 1;
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
 		let delayNumber = (turnTime / 2) / Players.length;
-		// searching_images = await this.getData(`http://${ip}:8000/game/players/`);
+		// searching_images = await this.getData(HOST + `/game/players/`);
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');

@@ -3,7 +3,7 @@ import { ChatHeaderComponent } from "/Components/Chat/ChatRoom/ChatHeaderCompone
 import { ChatFooterComponent } from "/Components/Chat/ChatRoom/ChatFooterComponent.js";
 import { SenderComponent } from "/Components/Chat/ChatRoom/SenderComponent.js";
 import { ReceiverComponent } from "/Components/Chat/ChatRoom/ReceiverComponent.js";
-import { HOST } from "/Utils/APIUrls.js";
+import { HOST } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
 
 export class ChatRoomComponent extends HTMLElement {

@@ -3,7 +3,7 @@ import { NotificationComponent } from "/Components/Notification/NotificationComp
 import { displayNotification } from "/Components/Notification/NotificationUtils.js";
 import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { NOTIFICATIONS_API_URL } from "/Utils/APIUrls.js";
+import { NOTIFICATIONS_API_URL } from "/Utils/GlobalVariables.js";
 import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
 import { hideFriendsRequestList } from "/Components/Header/header-bar.js";
 

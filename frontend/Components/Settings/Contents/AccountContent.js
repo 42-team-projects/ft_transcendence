@@ -1,7 +1,7 @@
 import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
 import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
 import { CustomAlert } from "/Components/Alert/CustomAlert.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL } from "/Utils/APIUrls.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL } from "/Utils/GlobalVariables.js";
 import { getApiData, updateApiData } from "/Utils/APIManager.js";
 import {  } from "/Components/CustomElements/CustomSpinner.js";
 

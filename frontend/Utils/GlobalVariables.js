@@ -1,23 +1,22 @@
+export const HOST = "https://127.0.0.1:8000";
+export const wsUrl = 'wss://127.0.0.1:8000/';
 
-// export const apiUrl = 'http://127.0.0.1:8000/tournament/';
-export const apiUrl = 'http://127.0.0.1:8000/tournament/'
-export const wsUrl = 'ws://127.0.0.1:8000/';
+export const PROFILE_API_URL = HOST + "/api/v1/players/";
+
+
+export const UPDATE_USER_API_URL = HOST + "/api/v1/auth/update-user/";
+
+export const ENABLE_2FA_API_URL = HOST + "/api/v1/auth/2fa/enable/";
+export const VIREFY_2FA_API_URL = HOST + "/api/v1/auth/2fa/verify/";
+export const DISABLE_2FA_API_URL = HOST + "/api/v1/auth/2fa/disable/";
+
+export const TOURNAMENT_API_URL = HOST + "/tournament/";
+
+export const NOTIFICATIONS_API_URL = HOST + "/notification/";
+
+
 
 import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/APIUrls.js";
-// set acsses token in local storage
-// localStorage.setItem('accessToken', 'token');
-// get acsses token in local storage
-// export const accessToken = localStorage.getItem('accessToken');
-// console.log(accessToken);
-// remove acsses token in local storage
-// localStorage.removeItem('accessToken');
-export const ip = '127.0.0.1';
-const config = {
-    serverIP: ip,
-};
-
-export default config;
 
 
 let currentPlayer;
@@ -64,9 +63,9 @@ let notificationWebSocket;
 export async function createNotificationWebSocket() {
 
     const userId = await getCurrentUserId();
-    let wsUrl = `ws://${window.location.hostname}:8000/ws/notification/${userId}/`;
-    console.log("wsUrl: ", wsUrl);
-    notificationWebSocket = new WebSocket(wsUrl)
+    let websocket = `${wsUrl}ws/notification/${userId}/`;
+    console.log("wsUrl: ", websocket);
+    notificationWebSocket = new WebSocket(websocket)
     notificationWebSocket.onopen = () => {
         console.log('WebSocket connection of chat is opened');
     };
@@ -95,13 +94,3 @@ export async function getNotificationWebSocket() {
         return notificationWebSocket;
     return await createNotificationWebSocket();   
 }
-
-// webSocket.onmessage = async (e) => {
-//     let data = await JSON.parse(e.data)
-//     if (data.Error) {
-//         console.log(data.Error)
-//     }
-//     else {
-//         displayNotification("<message-notification></message-notification>");
-//     }
-// };

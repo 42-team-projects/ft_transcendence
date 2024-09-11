@@ -5,8 +5,10 @@ import { SettingsComponent } from "/Components/Settings/SettingsComponent.js";
 import { NotificationsList } from "/Components/Notification/NotificationsList.js";
 import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
-import { getCurrentPlayerData, createNotificationWebSocket } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
+import { createNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js";
+import { isTokenValid} from '/root/fetchWithToken.js'
 
 const root = document.createElement('template')
 
@@ -20,9 +22,13 @@ class Root extends HTMLElement{
         this.appendChild(root.content.cloneNode(true))
     }
     async connectedCallback() {
-        await getCurrentPlayerData();
-        await createWebSocketsForTournaments();
-        await createNotificationWebSocket();
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken && isTokenValid(accessToken))
+        {
+            await getCurrentPlayerData();
+            await createWebSocketsForTournaments();
+            await createNotificationWebSocket();
+        }
     }
 }
 customElements.define("root-content", Root)

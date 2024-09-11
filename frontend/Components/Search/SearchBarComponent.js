@@ -4,7 +4,7 @@ import { ChannelsSearchSection } from "/Components/Search/SearchSections/Channel
 import { OthersSearchSection } from "/Components/Search/SearchSections/OthersSearchSection.js";
 import { get_Available_Tournaments } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/APIUrls.js";
+import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 
 
 const menu = ["Home", "Game", "Chat", "Friends", "Tournament", "Settings", "Profile"];

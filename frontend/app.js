@@ -25,7 +25,7 @@ import { SideBarButtonIcons } from '/Components/side-bar/sb-icon.js'
 import { SideBarButtonText } from '/Components/side-bar/sb-text.js'
 import { SideBarButton } from '/Components/side-bar/sb-button.js'
 import { CustomButton } from "/Components/Tournament/CustomButton.js";
-
+import { LeaderBoardPage } from "/Components/LeaderBoard/LeaderBoardPage.js";
 import { SettingsComponent } from "/Components/Settings/SettingsComponent.js"
 import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
 
