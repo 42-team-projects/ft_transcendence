@@ -1,6 +1,7 @@
 import json
 import asyncio
-
+import logging
+logger = logging.getLogger(__name__)
 class GameLoop :
     def __init__(self, controler, opponent):
         self.controler = controler
@@ -15,6 +16,8 @@ class GameLoop :
         self.ready = 0
         self.closed = 0
         self.task = None
+        self.sending_task = None
+        self.pause = False
 
     async def assign_racquet(self, data, ws):
         if ws == self.controler:
@@ -47,7 +50,9 @@ class GameLoop :
                 await self.game_loop()
             except Exception as e:
                 self.active = False
-                self.sending_task.cancel()
+                logger(e)
+                if self.sending_task:
+                    self.sending_task.cancel()
                 if(i != self._rounds):
                     await self.round_over()
 
@@ -57,7 +62,7 @@ class GameLoop :
             await self.rounds_loop()
             await self.game_over()
         except asyncio.CancelledError:
-            print('task cancelled')
+            logger('task cancelled')
             if self.opponent:
                 await self.close_socket(self.controler)
             if self.controler:
@@ -65,20 +70,23 @@ class GameLoop :
 
 
     async def sending(self, i):
-        # print('sending' , self.active)
+        # logger('sending' , self.active)
         try:
             # start time
             while True:
+                if(self.pause):
+                    await asyncio.sleep(0.05)
+                    continue
                 await self.send_message(self.ball_data)
                 await asyncio.sleep(0.05)
         except asyncio.CancelledError:
             # end time
-            print('sending cancelled')
+            logger('sending cancelled')
             raise
 
 
     async def assign_data(self, data, ws):
-        # print('data', data)
+        # logger('data', data)
         self.canvas_width = data['canvas_width']
         self.canvas_height = data['canvas_height']
         self.reset_players()
@@ -94,60 +102,61 @@ class GameLoop :
             self.ready = 0
 
 
+    async def calculate_ball_movement(self):
+        if self.data['ball_y'] + self.data['ball_radius'] >= self.canvas_height or self.data['ball_y'] - self.data['ball_radius'] <= 0:
+            self.data['ball_dy'] = -self.data['ball_dy']
+        if self.data['ball_x'] - self.data['ball_radius'] <= 0 and self.data['ball_y'] >= self.controler.y and self.data['ball_y'] <= self.controler.y + self.racquet['height']:
+            self.data['ball_dx'] = -self.data['ball_dx']
+        elif self.data['ball_x'] + self.data['ball_radius'] >= self.canvas_width and self.data['ball_y'] >= self.opponent.y and self.data['ball_y'] <= self.opponent.y + self.racquet['height']:
+            self.data['ball_dx'] = -self.data['ball_dx']
+        elif self.data['ball_x'] + self.data['ball_radius'] >= self.canvas_width:
+            self.controler.score += 1
+            raise Exception("Round Over")
+        elif self.data['ball_x'] - self.data['ball_radius'] <= 0:
+            self.opponent.score += 1
+            raise Exception("Round Over")
+
+    async def store_data(self):
+        self.ball_data = {
+            'status': 'Game',
+            'player_1': {
+                'id': self.opponent.id,
+                'ball_x':  self.canvas_width - self.data['ball_x'],
+                'ball_dx': -self.data['ball_dx'],
+
+            },
+            'player_2': {
+                'id': self.controler.id,
+                'ball_x': self.data['ball_x'],
+                'ball_dx': self.data['ball_dx'],
+            },
+            'ball': {
+                'y': self.data['ball_y'],
+                'radius': self.data['ball_radius'],
+                'dy': self.data['ball_dy']
+            },
+        }
+
+
     async def game_loop(self):
-        #canvas
-        canvas_width = self.canvas_width
-        canvas_height = self.canvas_height
-
-        #ball data
-        ball_x = canvas_width / 2
-        ball_y = canvas_height / 2
-        ball_radius = 10
-        ball_dx = 8
-        ball_dy = 5
-
-        #racquet data
-        racquet_width = self.racquet['width']
-        racquet_height = self.racquet['height']
-        # print('game_loop', self.active)
         #game loop
-        while self.active and self.break_loop == False:
-            ball_x += ball_dx
-            ball_y += ball_dy
-
+        self.data = {
+            'ball_x': self.canvas_width / 2,
+            'ball_y': self.canvas_height / 2,
+            'ball_radius': 10,
+            'ball_dx': 8,
+            'ball_dy': 5,
+        }
+        while self.active:
+            if self.pause:
+                await asyncio.sleep(0.016)
+                continue
+            self.data['ball_x'] += self.data['ball_dx']
+            self.data['ball_y'] += self.data['ball_dy']
             #calculate ball movement
-            if ball_y + ball_radius >= canvas_height or ball_y - ball_radius <= 0:
-                ball_dy = -ball_dy
-            if ball_x - ball_radius <= 0 and ball_y >= self.controler.y and ball_y <= self.controler.y + racquet_height:
-                ball_dx = -ball_dx
-            elif ball_x + ball_radius >= canvas_width and ball_y >= self.opponent.y and ball_y <= self.opponent.y + racquet_height:
-                ball_dx = -ball_dx
-            elif ball_x + ball_radius >= canvas_width:
-                self.controler.score += 1
-                raise Exception("Round Over")
-            elif ball_x - ball_radius <= 0:
-                self.opponent.score += 1
-                raise Exception("Round Over")
+            await self.calculate_ball_movement()
             #store data
-            self.ball_data = {
-                'status': 'Game',
-                'player_1': {
-                    'id': self.opponent.id,
-                    'ball_x':  canvas_width - ball_x,
-                    'ball_dx': -ball_dx,
-
-                },
-                'player_2': {
-                    'id': self.controler.id,
-                    'ball_x': ball_x,
-                    'ball_dx': ball_dx,
-                },
-                'ball': {
-                    'y': ball_y,
-                    'radius': ball_radius,
-                    'dy': ball_dy,
-                },
-            }
+            await self.store_data()
             await asyncio.sleep(0.016)
 
 
@@ -158,10 +167,6 @@ class GameLoop :
         }
         await self.send_message(message)
     
-
-
-
-
 
     async def round_over(self):
         message = {
@@ -174,8 +179,6 @@ class GameLoop :
             }
         }
         await self.send_message(message)
-
-
 
 
     async def send_message(self, message):
@@ -197,14 +200,11 @@ class GameLoop :
             )
 
 
-
-
-
     def get_players(self):
         return self.controler, self.opponent
         
     async def close_socket(self, ws):
-        print('closing')
+        logger('closing')
         try:
             if ws == self.controler:
                 await self.opponent.close()
@@ -213,7 +213,7 @@ class GameLoop :
                 await self.controler.close()
                 # self.controler = None
         except Exception as e:
-            print(e)
+            logger(e)
         # end task of main
 
 
@@ -248,17 +248,33 @@ class GameLoop :
             }
         await self.send_message(message)
         self.active = False
-        self.task.cancel()
+        if self.task:
+            self.task.cancel()
         self.task = None
 
+    async def pause_game(self):
+        # self.sending_task.cancel()
+        # self.sending_task = None
+        # self.active = False
+        self.pause = True
+        message = {
+            'status': 'Pause'
+        }
+        await self.send_message(message)
 
-
-
+    async def resume_game(self):
+        # self.sending_task = asyncio.create_task(self.sending())
+        # self.active = True
+        self.pause = False
+        message = {
+            'status': 'Resume'
+        }
+        await self.send_message(message)
 
         # try:
         #     self._rounds = 5
         #     for i in range(1, self._rounds + 1) and self.break_loop == False:
-        #         print('round', i)
+        #         logger('round', i)
         #         await self.round_start(i)
         #         await self.reset_players()
         #         self.active = True 
@@ -268,10 +284,10 @@ class GameLoop :
         #         except Exception as e:
         #             self.active = False
         #             await self.round_over()
-        #     # print('game over')
+        #     # logger('game over')
         #     await self.game_over()
         # except asyncio.CancelledError:
-        #     print('cancelled')
+        #     logger('cancelled')
         #     self.active = False
         #     self.break_loop = True
         #     self.task = None

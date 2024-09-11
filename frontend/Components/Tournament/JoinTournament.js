@@ -4,9 +4,8 @@ import { hashPassword } from "/Utils/Hasher.js";
 import { initWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { get_Available_Tournaments, player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { createRow } from "/Components/Tournament/configs/TournamentUtils.js";
-import { createTournamentWebSocket} from "/Utils/TournamentWebSocketManager.js"
+import { createTournamentWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { checkIsTournamentFull } from "/Utils/TournamentManager.js";
-
 
 export class JoinTournament extends HTMLElement {
     constructor() {
