@@ -83,7 +83,13 @@ class FriendRequest(models.Model):
         friends.add_user(self.receiver)
         self.is_active = False
         self.save()
-    
+
+    def reactivate(self):     
+        """Reactivate the friend request
+        """
+        self.is_active = True
+        self.save()
+
     def decline(self):
         """
         Marks the friend request as declined by setting the `is_active` field to False and saves the instance.
@@ -103,22 +109,14 @@ class FriendRequest(models.Model):
         self.save()
 
 
-# class BlockUser(models.Model):
-#     blocked = models.ForeignKey(User, related_name='blocked', on_delete=models.CASCADE)
-#     blocker = models.ManyToManyField(User, on_delete=models.CASCADE)
-#     # blocker = models.ForeignKey(User, related_name='blocker', on_delete=models.CASCADE)
-#     create_at = models.TimeField(auto_now_add=True)
+class BlockUser(models.Model):
+    blocker = models.ForeignKey(User, related_name='blocker', on_delete=models.CASCADE)
+    blocked = models.ForeignKey(User, related_name='blocked', on_delete=models.CASCADE)
+    create_at = models.TimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return f"{self.blocked.username} Block {self.blocker.username}" 
+    def __str__(self):
+        return f"{self.blocker.username} Block {self.blocked.username}" 
 
-#     def is_blocked(self, user):
-#         if user in self.blocker.all():
-#             return True
-#         return False
-    
 
-#     def remove_friendship(self):
-#         Friendship.objects.get(user=self.blocked).unfriend(self.blocker)
 
 
