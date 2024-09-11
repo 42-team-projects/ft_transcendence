@@ -16,7 +16,6 @@ export function renderChatHeader(chatContainer, conversationData) {
 
 
 export async function renderChatBody(chatContainer, conversationName) {
-    console.log("conversationName: ", conversationName);
     const messagesContainer = chatContainer.querySelector(".body");
     const messages = await getApiData(HOST + "/chat/messages?cn=" + conversationName);
     renderConversation(messagesContainer, messages);
@@ -42,8 +41,7 @@ function renderMessageComponent(chatBody, messageContainer, component, message, 
 let checker;
 
 export async function renderConversation(chatBody, messages) {
-    
-    console.log("msgs: ", messages);
+
     if (!messages)
         return;
     let receiverComponent = document.createElement("receiver-component");
@@ -51,7 +49,6 @@ export async function renderConversation(chatBody, messages) {
     const currentUserId = await getCurrentUserId();
     for (let index = 0; index < messages.length; index++) {
         const message = messages[index];
-        console.log("message => ", message);
         let messageContainer;
         if (message.user != currentUserId) {
             messageContainer = document.createElement("receiver-message-container");
