@@ -1,10 +1,11 @@
-import { displayNotification } from "../Notification/NotificationUtils.js";
-import { calculateTimeDifferents } from "../../Utils/DateUtils.js";
-import { getCurrentPlayerId, wsUrl } from "../../Utils/GlobalVariables.js";
-import { hashPassword } from "../../Utils/Hasher.js";
-import { initWebSocket } from "../../Utils/TournamentWebSocketManager.js";
-import { get_Available_Tournaments, player_join_tournament } from "./configs/TournamentAPIConfigs.js";
-import { createRow } from "./configs/TournamentUtils.js";
+import { calculateTimeDifferents } from "/Utils/DateUtils.js";
+import { getCurrentPlayerId, wsUrl } from "/Utils/GlobalVariables.js";
+import { hashPassword } from "/Utils/Hasher.js";
+import { initWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { get_Available_Tournaments, player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { createRow } from "/Components/Tournament/configs/TournamentUtils.js";
+import { createTournamentWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { checkIsTournamentFull } from "/Utils/TournamentManager.js";
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -50,7 +51,6 @@ export class JoinTournament extends HTMLElement {
         if (tournamentData.is_accessible == false)
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
-            displayNotification("<message-notification></message-notification>");
             if (joinButton.className == "lock-button") 
                 this.joinToPrivateTournament(tournamentData);
             else
@@ -63,14 +63,14 @@ export class JoinTournament extends HTMLElement {
  * 
  * @author rida
  */
-    async updateTournamentsTable(tournamentData, tbody) {
+    async  updateTournamentsTable(tournamentData, tbody) {
         tbody.prepend(createRow(this, tournamentData));
-        
-        await initWebSocket(tournamentData);
+        const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
+        await checkIsTournamentFull(tournamentData, ws);
     }
 
     async addPlayerToTournament(tournamentData) {
-        const data = await player_join_tournament(tournamentData.id);
+        const data = await player_join_tournament(tournamentData.tournament_id);
         if (data)
         {
             const tbody = this.parentElement.querySelector("tbody");
@@ -159,13 +159,13 @@ export class JoinTournament extends HTMLElement {
         }
         if (accessible.length == 1)
             statement += "&accessible=" + accessible[0].id;
-        console.log("statement : ", statement);
+        console.log("statement: ", statement);
         return statement;
     }
 
 
     searchInterval;
-    connectedCallback() {
+    async connectedCallback() {
 
         this.bindingApiDataIntoComponents();
 
@@ -174,6 +174,7 @@ export class JoinTournament extends HTMLElement {
         
         this.createWebSocket(tournamentsList);
 
+        const player_id = await getCurrentPlayerId();
 
         const input = tournamentSearch.querySelector("input");
         let searchDefaultValue;
@@ -191,13 +192,12 @@ export class JoinTournament extends HTMLElement {
                         storeFilterValues.accessible != accessible.length)
                     ) {
 
-                    this.getQueryStatement(input, searchBy, players, accessible);
                     tournamentsList.innerHTML = '';
-                    const tournaments = await get_Available_Tournaments("tournament_name=" + input.value);
+                    const query = this.getQueryStatement(input, searchBy, players, accessible);
+                    const tournaments = await get_Available_Tournaments(query);
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
-                        const player_id = await getCurrentPlayerId();
-                        if (element.owner.id != player_id)
+                        if (element.players.length && !Array.from(element.players).find( p => p.id == player_id))
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
 
@@ -213,14 +213,13 @@ export class JoinTournament extends HTMLElement {
                     const tournaments = await get_Available_Tournaments();
                     for (let index = tournaments.length - 1; index >= 0; index--) {
                         const element = tournaments[index];
-                        const player_id = await getCurrentPlayerId();
-                        if (element.owner.id != player_id)
+                        if (element.players.length && !Array.from(element.players).find( p => p.id == player_id))
                             tournamentsList.appendChild(this.createTournamentItem(element));
                     }
                     checker = false;
                 }
 
-            }, 500); 
+            }, 700); 
         });
 
         this.setUpFilterOptions();
@@ -230,11 +229,11 @@ export class JoinTournament extends HTMLElement {
             const filterContainer = this.shadowRoot.querySelector(".filterContainer");
             if (filterContainer.style.display == "none") {
                 filterContainer.style.display = "flex";
-                filterButton.src = "../assets/icons/close-x-icon.svg";
+                filterButton.src = "/assets/icons/close-x-icon.svg";
             }
             else {
                 filterContainer.style.display = "none";
-                filterButton.src = "../assets/icons/filter-icon.svg";
+                filterButton.src = "/assets/icons/filter-icon.svg";
             }
 
 
@@ -302,7 +301,7 @@ export class JoinTournament extends HTMLElement {
 
 const forms = `
 <div class="mainHeader">
-<img src="../assets/icons/back-icon.svg" id="back"/>
+<img src="/assets/icons/back-icon.svg" id="back"/>
 <div class="tournament-search" style="border: none;">
     <h2>Private Tournament</h2>
 </div>
@@ -373,19 +372,19 @@ const filterContent = `
 
 const list = `
         <div class="mainHeader">
-            <img id="close-button" src="../assets/icons/close-x-icon.svg"/>
+            <img id="close-button" src="/assets/icons/close-x-icon.svg"/>
             <div class="searchAndFilterContainer">
                 <div class="tournament-search">
                     <input type="text" placeholder="Tournament Name"/>
-                    <img src="../images/svg-header/search.svg">
+                    <img src="/images/svg-header/search.svg">
                 </div>
-                <img id="filter-tournaments" src="../assets/icons/filter-icon.svg">
+                <img id="filter-tournaments" src="/assets/icons/filter-icon.svg">
             </div>
-            <img id="private-tournament" src="../assets/icons/lock-icon.svg">
+            <img id="private-tournament" src="/assets/icons/lock-icon.svg">
         </div>
         ${filterContent}
         <div class="line">
-            <img class="separator" src="../assets/images/tournament/separator.svg"/>
+            <img class="separator" src="/assets/images/tournament/separator.svg"/>
         </div>
         <div class="tournaments-list">
             <h1 style="color: #d9d9d950; margin: 50px; text-align: center; display: none;">No Tournament Available Right Now</h1>
@@ -592,7 +591,7 @@ const cssContent = /*css*/`
     .join-button {
         width: 24px;
         height: 24px;
-        background: url("../assets/icons/join-icon.svg");
+        background: url("/assets/icons/join-icon.svg");
         background-repeat: no-repeat;
         background-size: cover;
         border: none;
@@ -601,7 +600,7 @@ const cssContent = /*css*/`
     .lock-button {
         width: 24px;
         height: 27px;
-        background: url("../assets/icons/lock-icon.svg");
+        background: url("/assets/icons/lock-icon.svg");
         background-repeat: no-repeat;
         background-size: cover;
         outline: none;
@@ -758,7 +757,7 @@ const cssContent = /*css*/`
         border-radius: 5px;
         align-items: center;
         justify-content: center;
-        background: url("../assets/icons/checked-icon.svg");
+        background: url("/assets/icons/checked-icon.svg");
         background-repeat: no-repeat;
         background-size: cover;
     }

@@ -9,7 +9,7 @@ template.innerHTML = /*html*/`
         justify-content: center;
         align-items: center;
         clip-path: polygon(8% 9%, 92% 9%, 100% 21%, 100% 80%, 92% 91%, 9% 90%, 0 78%, 0 21%);
-        background-color: #00fffb50;
+        background-color: #00fffb30;
         cursor : pointer;
     }
     .child{
@@ -40,18 +40,19 @@ export class PauseButtons extends HTMLElement{
     connectedCallback(){
         
         this.addEventListener('click', () => {
-            if (this.querySelector('slot[name="text"]').textContent == 'RESTART'){
+            const text = this.shadowRoot.querySelector('slot[name="text"]');
+            const textObject = text.assignedElements()[0];
+            console.log(textObject.textContent)
+            if (textObject.textContent == 'RESTART')
                 document.body.dispatchEvent(new CustomEvent('restart-game'))
-            }
-            else if (this.querySelector('slot[name="text"]').textContent == 'RESUME'){
+            else if (textObject.textContent == 'RESUME')
                 document.body.dispatchEvent(new CustomEvent('resume-game'))
-            }
             else
                 document.body.dispatchEvent(new CustomEvent('exit-game'))
         })
         this.addEventListener('mouseover', () => {
-            this.style.backgroundColor = 'white'
-            // this.shadowRoot.querySelector('.child').style.backgroundColor = '#1b5692'
+            this.style.backgroundColor = '#00fffb90'
+            this.shadowRoot.querySelector('.child').style.backgroundColor = 'rgb(2 31 56 / 68%)'
             const icon = this.shadowRoot.querySelector('slot[name="icon"]');
             const text = this.shadowRoot.querySelector('slot[name="text"]');
             const iconObject = icon.assignedElements()[0];
@@ -67,7 +68,7 @@ export class PauseButtons extends HTMLElement{
             textObject.style.color = 'white';
         })
         this.addEventListener('mouseout', () => {
-            this.style.backgroundColor = '#00fffb50'
+            this.style.backgroundColor = '#00fffb30'
             this.shadowRoot.querySelector('.child').style.backgroundColor = '#021f38'
             const icon = this.shadowRoot.querySelector('slot[name="icon"]');
             const text = this.shadowRoot.querySelector('slot[name="text"]');
@@ -77,12 +78,12 @@ export class PauseButtons extends HTMLElement{
             const svg = iconObjectContent.querySelector('svg');
             console.log(svg.getAttribute('fill'));
             if(svg.getAttribute('fill') == 'none'){
-                iconObjectContent.querySelector('path').setAttribute('stroke', '#00fffb50');
+                iconObjectContent.querySelector('path').setAttribute('stroke', '#00fffb90');
             }
             else{
-                svg.setAttribute('fill', '#00fffb50');
+                svg.setAttribute('fill', '#00fffb90');
             }
-            textObject.style.color = '#00fffb50';
+            textObject.style.color = '#00fffb90';
         })
     }
 }

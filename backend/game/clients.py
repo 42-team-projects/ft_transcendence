@@ -1,6 +1,7 @@
 import json
 import asyncio
-
+import logging
+logger = logging.getLogger(__name__)
 class GameLoop :
     def __init__(self, controler, opponent):
         self.controler = controler
@@ -49,8 +50,9 @@ class GameLoop :
                 await self.game_loop()
             except Exception as e:
                 self.active = False
-                print(e)
-                self.sending_task.cancel()
+                logger(e)
+                if self.sending_task:
+                    self.sending_task.cancel()
                 if(i != self._rounds):
                     await self.round_over()
 
@@ -60,7 +62,7 @@ class GameLoop :
             await self.rounds_loop()
             await self.game_over()
         except asyncio.CancelledError:
-            print('task cancelled')
+            logger('task cancelled')
             if self.opponent:
                 await self.close_socket(self.controler)
             if self.controler:
@@ -68,7 +70,7 @@ class GameLoop :
 
 
     async def sending(self, i):
-        # print('sending' , self.active)
+        # logger('sending' , self.active)
         try:
             # start time
             while True:
@@ -79,12 +81,12 @@ class GameLoop :
                 await asyncio.sleep(0.05)
         except asyncio.CancelledError:
             # end time
-            print('sending cancelled')
+            logger('sending cancelled')
             raise
 
 
     async def assign_data(self, data, ws):
-        # print('data', data)
+        # logger('data', data)
         self.canvas_width = data['canvas_width']
         self.canvas_height = data['canvas_height']
         self.reset_players()
@@ -202,7 +204,7 @@ class GameLoop :
         return self.controler, self.opponent
         
     async def close_socket(self, ws):
-        print('closing')
+        logger('closing')
         try:
             if ws == self.controler:
                 await self.opponent.close()
@@ -211,7 +213,7 @@ class GameLoop :
                 await self.controler.close()
                 # self.controler = None
         except Exception as e:
-            print(e)
+            logger(e)
         # end task of main
 
 
@@ -246,7 +248,8 @@ class GameLoop :
             }
         await self.send_message(message)
         self.active = False
-        self.task.cancel()
+        if self.task:
+            self.task.cancel()
         self.task = None
 
     async def pause_game(self):
@@ -271,7 +274,7 @@ class GameLoop :
         # try:
         #     self._rounds = 5
         #     for i in range(1, self._rounds + 1) and self.break_loop == False:
-        #         print('round', i)
+        #         logger('round', i)
         #         await self.round_start(i)
         #         await self.reset_players()
         #         self.active = True 
@@ -281,10 +284,10 @@ class GameLoop :
         #         except Exception as e:
         #             self.active = False
         #             await self.round_over()
-        #     # print('game over')
+        #     # logger('game over')
         #     await self.game_over()
         # except asyncio.CancelledError:
-        #     print('cancelled')
+        #     logger('cancelled')
         #     self.active = False
         #     self.break_loop = True
         #     self.task = None

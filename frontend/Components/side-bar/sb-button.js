@@ -1,8 +1,8 @@
 const SB_ButtonTemplate = document.createElement('template')
-import { router } from "../../root/Router.js";
+import { router } from "/root/Router.js";
 
 SB_ButtonTemplate.innerHTML = /*html*/`
-<link rel="stylesheet" href="Components/side-bar/sb-button.css" />
+<link rel="stylesheet" href="/Components/side-bar/sb-button.css" />
     <a>
         <div class="c-sb-text">
             <sb-text> 

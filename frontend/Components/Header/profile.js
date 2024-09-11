@@ -1,7 +1,7 @@
-import { getCurrentPlayerData } from "../../Utils/GlobalVariables.js";
-import { router } from "../../root/Router.js";
-import { HOST } from "../../Utils/APIUrls.js";
-import { getLeagueColor } from "../../Utils/LeaguesData.js";
+import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
+import { router } from "/root/Router.js";
+import { HOST } from "/Utils/GlobalVariables.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
 
 const ProfileTemplate =  document.createElement('template');
 
@@ -23,7 +23,7 @@ ProfileTemplate.innerHTML = /*html*/`
         }
     
     </style>
-    <a href="Profile">
+    <a href="/Profile/me">
         <c-hexagon width="110px" height="110px" apply="true" >
             <div slot="content" class="c-hexagon-content"></div>
         </c-hexagon>
@@ -40,7 +40,6 @@ export class Profile extends HTMLElement{
             console.log(this.querySelector('a').href)
             event.preventDefault()
             const url = new URL(this.querySelector('a').href)
-            console.log(url.pathname)
             router.handleRoute(url.pathname)
         })
     }
