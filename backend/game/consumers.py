@@ -6,7 +6,6 @@ from . clients import GameLoop
 from asgiref.sync import sync_to_async
 game_queue = {}
 import logging
-logger = logging.getLogger(__name__)
 
 async def join_room(client):
     await client.channel_layer.group_add(
@@ -46,7 +45,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         add_to_game_queue(self, game_queue)
-        # logger(len(game_queue[self.room_group_name]))
+        # print(len(game_queue[self.room_group_name]))
         if len(game_queue[self.room_group_name]) >= 2:
             player_1 = game_queue[self.room_group_name].pop(0)
             player_2 = game_queue[self.room_group_name].pop(0)
@@ -68,29 +67,29 @@ class GameConsumer(AsyncWebsocketConsumer):
     
     async def disconnect(self, close_code):
         try:
-            logger("before", game_queue)
-            logger("before", GameConsumer.rooms)
-            if self.room_group_name in game_queue:
-                if self in game_queue[self.room_group_name]:
-                    game_queue[self.room_group_name].remove(self)
-                if game_queue[self.room_group_name] == []:
-                    del game_queue[self.room_group_name]
-            if(self.room_group_name in GameConsumer.rooms):
-                GameConsumer.rooms[self.room_group_name].closed += 1
-                if(GameConsumer.rooms[self.room_group_name].closed == 2):
-                    await GameConsumer.rooms[self.room_group_name].game_over()
-                    del GameConsumer.rooms[self.room_group_name]
-                else :
-                    await GameConsumer.rooms[self.room_group_name].close_socket(self)
+            print("before", game_queue)
+            print("before", GameConsumer.rooms)
+            # if self.room_group_name in game_queue:
+            #     if self in game_queue[self.room_group_name]:
+            #         game_queue[self.room_group_name].remove(self)
+            #     if game_queue[self.room_group_name] == []:
+            #         del game_queue[self.room_group_name]
+            # if(self.room_group_name in GameConsumer.rooms):
+            #     GameConsumer.rooms[self.room_group_name].closed += 1
+            #     if(GameConsumer.rooms[self.room_group_name].closed == 2):
+            #         await GameConsumer.rooms[self.room_group_name].game_over()
+            #         del GameConsumer.rooms[self.room_group_name]
+            #     else :
+            #         await GameConsumer.rooms[self.room_group_name].close_socket(self)
 
-            await remove_from_channel_layer(
-                self
-            )
+            # await remove_from_channel_layer(
+            #     self
+            # )
             
-            logger("after", game_queue)
-            logger("after", GameConsumer.rooms)
+            print("after", game_queue)
+            print("after", GameConsumer.rooms)
         except KeyError as e:
-            logger("KeyErrooooooooooooooooooooooooooooooooor", e)
+            print("KeyErrooooooooooooooooooooooooooooooooor", e)
     
     async def send_message(self, message, function='game_message'):
         await self.channel_layer.group_send(
@@ -102,10 +101,13 @@ class GameConsumer(AsyncWebsocketConsumer):
         )
     
     async def game_message(self, event):
-        message = event['message']
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
+        try:
+            message = event['message']
+            await self.send(text_data=json.dumps({
+                'message': message
+            }))
+        except Exception as e:
+            print("Error", e)
 
 torunament_queue = []
 def add_to_torunament_queue(client, queue):
@@ -143,7 +145,7 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             await remove_from_channel_layer(
                 self
             )
-        # logger(torunament_queue)
+        # print(torunament_queue)
 
     async def wait_for_opponent(self):
         # while len(torunament_queue) < 2 and self in torunament_queue:
@@ -164,7 +166,7 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             await self.send_message(message=message)
             MatchMaikingConsumer.rooms[self.room_group_name] = 0
 
-    async def send_message(self, message, function='tournament_messages'):
+    async def send_message(self, message, function='match_maiking_message'):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -173,12 +175,15 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             }
         )
     
-    async def tournament_messages(self, event):
-        message = event['message']
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
+    async def match_maiking_message(self, event):
+        try:
+            message = event['message']
+            await self.send(text_data=json.dumps({
+                'message': message
+            }))
+        except Exception as e:
+            print("Error", e)
 
     async def timer_message(self, event):
-        await self.tournament_messages(event)
+        await self.match_maiking_message(event)
         await asyncio.sleep(1)
