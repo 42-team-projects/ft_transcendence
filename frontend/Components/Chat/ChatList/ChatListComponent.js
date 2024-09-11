@@ -87,15 +87,15 @@ export class ChatListComponent extends HTMLElement {
         const list = this.querySelector(".list-item");
     
         try {
-            // const data = await getApiData(HOST + "/chat/conversation_list/");
-            // if (data) {
-            //     if (data.length == 0)
-            //         return ;
-            //     for (const item of data) {
-            //         const chatItem = await this.createChatItem(item);
-            //         list.appendChild(chatItem);
-            //     }
-            // }
+            const data = await getApiData(HOST + "/chat/conversation_list/");
+            if (data) {
+                if (data.length == 0)
+                    return ;
+                for (const item of data) {
+                    const chatItem = await this.createChatItem(item);
+                    list.appendChild(chatItem);
+                }
+            }
         } catch (error) {
             console.error('Error fetching chat data:', error);
         }
