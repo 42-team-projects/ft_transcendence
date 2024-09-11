@@ -1,9 +1,11 @@
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.utils.translation import gettext as _
-from .managers import UserManager
-from .utils import get_default_avatar
+from django.db                          import models
+from django.db                          import transaction
+
+from django.contrib.auth.models         import AbstractBaseUser, PermissionsMixin
+from rest_framework_simplejwt.tokens    import RefreshToken
+from django.utils.translation           import gettext as _
+from .managers                          import UserManager
+from .utils                             import get_default_avatar
 
 AUTH_PROVIDERS = {'email':'email', 'google':'google', 'github':'github'}
 
@@ -29,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self) -> str:
-        return self.email
+        return self.username
 
     @property
     def tokens(self):
