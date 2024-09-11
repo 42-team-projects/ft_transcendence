@@ -1,7 +1,7 @@
-import { HOST } from "/Utils/APIUrls.js";
+import { HOST } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/APIUrls.js";
+import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { router } from "/root/Router.js";
 

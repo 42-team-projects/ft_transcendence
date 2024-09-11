@@ -61,10 +61,10 @@ export class JoinTournament extends HTMLElement {
  * 
  * @author rida
  */
-    async updateTournamentsTable(tournamentData, tbody) {
+    async  updateTournamentsTable(tournamentData, tbody) {
         tbody.prepend(createRow(this, tournamentData));
-        
-        await initWebSocket(tournamentData);
+        const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
+        await checkIsTournamentFull(tournamentData, ws);
     }
 
     async addPlayerToTournament(tournamentData) {

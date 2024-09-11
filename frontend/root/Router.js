@@ -1,5 +1,5 @@
 import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
-import config from '/Utils/GlobalVariables.js';
+import { HOST } from '/Utils/GlobalVariables.js';
 
 export class Router {
 
@@ -12,7 +12,7 @@ export class Router {
             { path: '/Home', view: 'home-page', isAccessed: true },
             { path: '/Game', view: 'game-selection', isAccessed: true },
             { path: '/Chat', view: 'chat-page', isAccessed: true },
-            { path: '/Friends', view: 'freinds-page', isAccessed: true },
+            { path: '/Ranking', view: 'ranking-page', isAccessed: true },
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
@@ -109,7 +109,7 @@ export class Router {
         // tmp place should be in function and called somewhere
         let logout = document.querySelector('.logout')
         logout.addEventListener('click', () => {
-            fetchWithToken(`http://${config.serverIP}:8000/api/v1/auth/logout/`, {
+            fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`

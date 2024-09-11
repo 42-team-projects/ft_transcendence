@@ -16,7 +16,7 @@ SideBarTemplate.innerHTML = /*html*/`
     `
 const Sidebar_button_contetn = [
     {
-        src : '/images/Home.svg',
+        src : '/assets/icons/home-icon.svg',
         text : "Home",
     },
     {
@@ -28,8 +28,8 @@ const Sidebar_button_contetn = [
         text : "Chat",
     },
     {
-        src : '/images/Friends.svg',
-        text : "Friends",
+        src : '/assets/icons/leaderboard-icon.svg',
+        text : "Ranking",
     },
     {
         src : '/assets/icons/champion-cup-icon.svg',
