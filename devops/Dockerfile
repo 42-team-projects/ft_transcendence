@@ -21,5 +21,4 @@ EXPOSE 8000
 
 ENTRYPOINT ["sh", "/start.sh"]
 
-# CMD ["python3", "manage.py", "runsslserver", "--certificate", "/app/certs/server.cert", "--key", "/app/certs/server.key", "0.0.0.0:8000"]
 CMD ["daphne", "-e", "ssl:8000:privateKey=/app/certs/server.key:certKey=/app/certs/server.cert", "backend.asgi:application"]
