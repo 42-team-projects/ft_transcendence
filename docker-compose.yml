@@ -24,24 +24,6 @@ services:
     env_file:
       - .env
   
-  # daphne:
-  #   image: backend
-  #   command: daphne -u /tmp/daphne.sock -v 1 -e ssl:8000:privateKey=/app/certs/server.key:certKey=/app/certs/server.cert backend.asgi:application
-  #   container_name: daphne
-  #   volumes:
-  #     - ./backend/:/app
-  #     - ./devops/certs:/app/certs
-  #   networks:
-  #     - app_network
-  #   ports:
-  #     - "8001:8000"
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - DJANGO_SETTINGS_MODULE=backend.settings
-  #   depends_on:
-  #     - back-end
-
   front-end:
     container_name: front-end
     image: nginx:latest
@@ -68,83 +50,80 @@ services:
     networks:
       - app_network
 
-  # pgadmin4:
-  #   image: dpage/pgadmin4
-  #   ports:
-  #     - 5050:443
-  #   volumes:
-  #     - ./devops/certs:/certs
-  #   container_name: pgadmin4
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - app_network
+  pgadmin4:
+    image: dpage/pgadmin4
+    ports:
+      - 5050:443
+    volumes:
+      - ./devops/certs:/certs
+    container_name: pgadmin4
+    env_file:
+      - .env
+    networks:
+      - app_network
 
   # <--- Monotoring --->
-  
-  # node-exporter:
-  #   image: quay.io/prometheus/node-exporter:latest
-  #   container_name: node-exporter
-  #   command:
-  #     - '--path.rootfs=/host'
-  #   ports:
-  #     - 9101:9100
-  #   pid: host # to see all the processes on the host and collect the metrics about them
-  #   restart: unless-stopped
-  #   networks:
-  #     - monitoring
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   container_name: prometheus
-  #   volumes:
-  #     - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-  #     - prometheus_data:/prometheus
-  #   command:
-  #     - '--web.enable-lifecycle'
-  #     - '--config.file=/etc/prometheus/prometheus.yml'
-  #   ports:
-  #     - 9090:9090
-  #   restart: unless-stopped
-  #   networks:
-  #     - app_network
-  #   depends_on:
-  #     - back-end
-  
-  # nginx-exporter:
-  #   image: nginx/nginx-prometheus-exporter:0.9.0
-  #   container_name: nginx-exporter
-  #   command:
-  #     - "-nginx.scrape-uri=https://front-end/stub_status"
-  #     - "-nginx.ssl-verify=false"
-  #   ports:
-  #     - 9113:9113
-  #   networks:
-  #     - app_network
-  #   depends_on:
-  #     - front-end
-  # telegraf:
-  #   image: telegraf:latest
-  #   container_name: telegraf
-  #   volumes:
-  #     - ./devops/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-  #   ports:
-  #     - 9273:9273
-  #   networks:
-  #     - app_network
-  #   depends_on:
-  #     - front-end
-  
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: grafana
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-  #   restart: unless-stopped
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - app_network
-  #   depends_on:
-  #     - prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./devops/prometheus/web.yml:/etc/prometheus/web.yml
+      - ./devops/certs:/etc/ssl/certs
+      - prometheus_data:/prometheus
+    command:
+      - '--web.enable-lifecycle'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.config.file=/etc/prometheus/web.yml'
+    ports:
+      - 9090:9090
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - app_network
+    depends_on:
+      - back-end
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./devops/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./devops/certs/server.cert:/etc/grafana/server.cert
+      - ./devops/certs/server.key:/etc/grafana/server.key
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - app_network
+    depends_on:
+      - prometheus
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
+    networks:
+      - app_network
+    command:
+      - '--nginx.scrape-uri=https://front-end/stub_status'
+    depends_on:
+      - front-end
+
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:latest
+    container_name: postgres-exporter
+    networks:
+      - app_network
+    env_file:
+      - .env
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=disable"
+    depends_on:
+      - database
 
 # docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
+# grafana ==> nginx: NGINX exporter (12708) | back-end: back-end ( ) | postgres-exporter: postgres-exporter (14114)
