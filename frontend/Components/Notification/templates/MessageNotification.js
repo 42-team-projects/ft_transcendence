@@ -13,8 +13,8 @@ export class MessageNotification extends HTMLElement {
                         <div class="profile-icon" slot="content" style="width:100%; height:100%;"></div>
                     </c-hexagon>
                     <div style="display: flex; gap: 5px;">
-                        <h4></h4>
-                        <h4><i></i></h4>
+                        <h6></h6>
+                        <h6><i></i></h6>
                     </div>
                 </div>
                 <div class="notification-actions">

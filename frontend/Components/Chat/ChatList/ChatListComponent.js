@@ -64,8 +64,6 @@ export class ChatListComponent extends HTMLElement {
         try {
             const data = await getApiData(HOST + "/chat/conversation_list/");
             if (data) {
-                if (data.length == 0)
-                    return ;
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item, item.reciever);
                     if (item.reciever.username === this.playerName)
