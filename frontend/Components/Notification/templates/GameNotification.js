@@ -37,9 +37,7 @@ export class GameNotification extends HTMLElement {
         messageOwner.textContent = sender.user.username;
         const playButton = this.querySelector(".notification-actions img");
         playButton.addEventListener("click", async (event) => {
-            const lobby = new Lobby(sender.id, 30);
-            document.body.querySelector('root-content').innerHTML = '';
-            document.body.querySelector('root-content').appendChild(lobby);
+            new Lobby(sender.id, 30);
         });
     }
 
@@ -49,10 +47,6 @@ export class GameNotification extends HTMLElement {
     }
 
     async connectedCallback() {
-        if (this.senderName)
-            await this.initProfileImage(this.senderName);
-        if (this.message)
-            this.initMessage(this.message);
     }
 
     static observedAttributes = ["sender-name", "message"];

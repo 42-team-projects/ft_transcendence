@@ -130,6 +130,7 @@ export class Lobby extends HTMLElement{
 		headerBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			headerBar.innerHTML = '';
+			console.log("setInterval 2");
 		}, 1000);
 	}
 
@@ -140,11 +141,13 @@ export class Lobby extends HTMLElement{
 	
 		sideBar.classList.toggle('transform-1s', true);
 		sideBar.classList.toggle('left', true);
-		clickedButtons.classList.toggle('on', false);
+		if(clickedButtons)
+			clickedButtons.classList.toggle('on', false);
 		sideBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			sideBar.shadowRoot.innerHTML = '';
 			sideBar.classList.toggle('left', false);
+			console.log("setInterval 1");
 		}, 1000);
 	}
 
@@ -222,7 +225,7 @@ export class Lobby extends HTMLElement{
 		userInfo.picture = HOST + user_data.user.avatar;
 		// console.log('user_data:', userInfo.picture);
 		userInfo.username = user_data.user.username;
-		const root = document.querySelector('root-content');
+		// const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
 		p_img.src = userInfo.picture;
@@ -302,6 +305,7 @@ export class Lobby extends HTMLElement{
 		
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
+		console.log("hellllllllllo : ", root.innerHTML);
 		root.innerHTML = ``;
 		root.appendChild(game);
 		game.id = this.tournament_id;
