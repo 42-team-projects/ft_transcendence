@@ -1,0 +1,6 @@
+tls_server_config:
+  cert_file: /etc/ssl/certs/server.cert
+  key_file: /etc/ssl/certs/server.key
+
+# basic_auth_users:
+#   admin: "$2y$12$5E.lxJo/.RmifT5rFBCwQeMrRDwNR07l6VlRnf5hgnKRTTy867S5e"
