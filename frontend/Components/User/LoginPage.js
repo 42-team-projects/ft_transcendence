@@ -6,47 +6,56 @@ export default class LoginPage extends HTMLElement {
 		super();
 		this.isOAuth = false;
 	}
+//							<div id="error-message"></div>
+
 	connectedCallback() {
 		this.innerHTML = `
 			<style>${css}</style>
 			
 			<header-cpn></header-cpn>
 
+
 			<div id="test">
-				<div id="background"></div>
+				<div class="right-item"></div>
+				<div class="bottom-item"></div>
+				<div class="right-img">
+					<img src="/assets/login-assets-icon.svg"></img>
+				</div>
+				<div class="outerContainer">
+					<div class="innerContainer">
+						<form id="content">
+							<div id="inner-header">
+								<h1>LOGIN</h1>
+							</div>
 
-				<form id="content">
-					<div id="inner-header">
-						<h1>Login</h1>
-					</div>
-					
-					<div id="error-message"></div>
-					
-					<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
-					<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
-					
-					<submit-button
-						title="Login"
-						account-text="Don't have an account? <a href='/signup'>Sign Up</a>">
-					</submit-button>
-					
-					<div class="oauth-footer">
-						<img src="/assets/auth-svg/orLine.svg" alt="Or">
-
-						<div class="button-container">
-
-							<button class="oauth-button google">
-								<img src="/assets/auth-svg/google.svg" alt="Google">
-							</button>
+							<div id="error-message"></div>
 							
-							<button class="oauth-button intra">
-								<img src="/assets/auth-svg/42.svg" alt="Intra">
-							</button>
-						</div>
-					</div>
-				
-				</form>
+							<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
+							<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
+							
+							<submit-button
+								title="LOGIN"
+								account-text="Don't have an account? <a href='/signup'>Sign Up</a>">
+							</submit-button>
+							
+							<div class="oauth-footer">
+								<img src="/assets/auth-svg/orLine.svg" alt="Or">
+
+								<div class="button-container">
+
+									<button class="oauth-button google">
+										<img src="/assets/auth-svg/google.svg" alt="Google">
+									</button>
+									
+									<button class="oauth-button intra">
+										<img src="/assets/auth-svg/42.svg" alt="Intra">
+									</button>
+								</div>
+							</div>
 						
+						</form>
+					</div>
+				</div>
 			</div>
 		`;
 	
