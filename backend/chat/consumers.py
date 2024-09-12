@@ -31,6 +31,7 @@ class ChatConsumer(WebsocketConsumer):
         try:
             data = json.loads(text_data)
             self.receiver = self.get_user(data['receiver'])
+            self.current_user = self.get_user(data['sender'])
             
             # if self.is_blocked(self.current_user, self.receiver):
             #     self.send_error(f'{self.current_user} blocked {self.receiver}!')
@@ -61,6 +62,7 @@ class ChatConsumer(WebsocketConsumer):
     #     ).aexists()
 
     def save_and_broadcast_message(self, content):
+
         conversation = self.get_or_create_conversation()
         message_data = {
             'user': self.current_user.id,
