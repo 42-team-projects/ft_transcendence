@@ -45,8 +45,10 @@ def send_friend_request(request, receiver_id):
     if reverse_request.exists():
         return Response({'response': 'There is already a friend request from this user to you.'}, status=400)
     # Check if they are already friends
-    if Friendship.get_friendship(current_user).is_friend(receiver_user) and \
-        Friendship.get_friendship(receiver_user).is_friend(current_user):
+    # if Friendship.get_friendship(current_user).is_friend(receiver_user) and \
+    #     Friendship.get_friendship(receiver_user).is_friend(current_user):
+    if Friendship.objects.filter(user=current_user, friends=receiver_user).exists() and \
+        Friendship.objects.filter(user=receiver_user, friends=current_user).exists():
         return Response({'response': 'You are already friends with this user.'}, status=400)
     friend_request, created = FriendRequest.objects.get_or_create(sender=current_user, receiver=receiver_user)
     if not created:
