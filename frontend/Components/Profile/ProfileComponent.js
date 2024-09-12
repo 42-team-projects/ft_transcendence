@@ -156,6 +156,8 @@ export class ProfileComponent extends HTMLElement {
         profileInfoComponent.src = (HOST + this.APIData.user.avatar);
         profileInfoComponent.joindate = this.APIData.joinDate;
         profileInfoComponent.active = this.APIData.active;
+        console.log("this.APIData : ", this.APIData);
+        profileInfoComponent.friend = this.APIData.is_friend;
     }
 
     setUpStats() {
