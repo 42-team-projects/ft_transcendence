@@ -15,6 +15,6 @@ urlpatterns = [
     path('cancel/<int:request_id>/', friend_views.cancel_friend_request, name='cancel-friend-request'),
 
     # block user
-    path('block/<int:friend_id>/', friend_views.block_user, name='block-user'),
-    path('unblock/<int:friend_id>/', friend_views.unblock_user, name='unblock-user'),
+    path('block/<int:user_id>/', friend_views.block_user, name='block-user'),
+    path('unblock/<int:user_id>/', friend_views.unblock_user, name='unblock-user'),
 ]
