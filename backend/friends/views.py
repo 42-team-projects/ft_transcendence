@@ -111,12 +111,12 @@ def cancel_friend_request(request, request_id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def block_user(request, friend_id):
+def block_user(request, user_id):
     """Block a user.
     This endpoint allows an authenticated user to block another user.
     """
     current_user = request.user
-    blocked_user = get_object_or_404(User, id=friend_id)
+    blocked_user = get_object_or_404(User, id=user_id)
 
     if blocked_user == current_user:
         return Response({'response': 'You cannot block yourself.'}, status=400)
@@ -134,16 +134,16 @@ def block_user(request, friend_id):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def unblock_user(request, friend_id):
+def unblock_user(request, user_id):
     """Unblock a user.
     This endpoint allows an authenticated user to unblock a previously blocked friend.
     """
     current_user = request.user
-    blocked_user = get_object_or_404(User, id=friend_id)
+    blocked_user = get_object_or_404(User, id=user_id)
 
     block = BlockUser.objects.filter(blocker=current_user, blocked=blocked_user).first()
     if block:
         block.delete()
         return Response({'response': 'User unblocked successfully.'})
-    return Response({'response': 'you not blocked.'})
+    return Response({'response': 'No blocking action found for this user.'})
 
