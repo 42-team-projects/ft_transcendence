@@ -11,3 +11,5 @@ class GamePlay(models.Model):
 
     def __str__(self):
         return str(self.player.user.username)
+    
+

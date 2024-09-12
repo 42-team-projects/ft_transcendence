@@ -92,7 +92,7 @@ lobby.innerHTML =  /* html */ `
 
 export class Lobby extends HTMLElement{
 	tournament_id;
-	set tournament_id(val) {this.tournament_id = val;}
+	// set tournament_id(val) {this.tournament_id = val;}
 	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){

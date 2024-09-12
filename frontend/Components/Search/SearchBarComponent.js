@@ -4,7 +4,7 @@ import { ChannelsSearchSection } from "/Components/Search/SearchSections/Channel
 import { OthersSearchSection } from "/Components/Search/SearchSections/OthersSearchSection.js";
 import { get_Available_Tournaments } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { PROFILE_API_URL, getCurrentPlayerId } from "/Utils/GlobalVariables.js";
 
 
 const menu = ["Home", "Game", "Chat", "Friends", "Tournament", "Settings", "Profile"];
@@ -46,14 +46,14 @@ export class SearchBarComponent extends HTMLElement {
     }
     interval;
     selectedItem;
-    connectedCallback() {
+    async connectedCallback() {
         const searchInput = this.shadowRoot.querySelector(".search-input");
         const searchIcon = this.shadowRoot.querySelector(".search-icon");
         const searchBody = this.shadowRoot.querySelector(".search-body");
         const searchContainer = this.shadowRoot.querySelector(".search-result");
 
         // const Users = this.shadowRoot.querySelector("users-search-section");
-
+        const currentPlayerId = await getCurrentPlayerId();
         this.selectedItem = this.shadowRoot.querySelector(".select");
         let searchInputChecker = false;
         searchInput.addEventListener("click", () => {
@@ -71,7 +71,8 @@ export class SearchBarComponent extends HTMLElement {
                     if (players){
                         players.clearPlayers();
                         oldInputValue = searchInput.value;
-                        const playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+                        let playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+                        playersData = Array.from(playersData).filter(player => player.id != currentPlayerId);
                         players.appendPlayers(playersData);
                     }
                     
@@ -157,8 +158,10 @@ export class SearchBarComponent extends HTMLElement {
     async renderUsersSection(container, searchInput) {
         const usersSection = new UsersSearchSection();
         oldInputValue = searchInput.value;
-        const playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
-        usersSection.appendPlayers(playersData);
+        if (searchInput.value && searchInput.value !== "") {
+            const playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+            usersSection.appendPlayers(playersData);
+        }
         container.appendChild(usersSection);
     }
 
