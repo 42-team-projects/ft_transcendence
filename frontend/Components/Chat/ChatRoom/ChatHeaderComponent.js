@@ -43,9 +43,7 @@ export class ChatHeaderComponent extends HTMLElement {
         playgame.addEventListener("click", async (e) => {
             const websocket = await getNotificationWebSocket();;
             websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, "type": "game", "infos": "hello world"}));
-            const lobby = new Lobby(this.playerId, 30);
-            document.body.querySelector('root-content').innerHTML = '';
-            document.body.querySelector('root-content').appendChild(lobby);
+            new Lobby(this.playerId, 30);
         })
 
 
