@@ -35,14 +35,11 @@ def messages(request):
 @permission_classes([IsAuthenticated])
 def conversation_list(request):
     conversations = Conversation.objects.filter(participants=request.user)
-    if conversations.exists():
-        conversation_serializer = ConversationSerializer(
-            conversations,
-            many=True,
-            context={
-                'request': request
-            })
-        return Response(conversation_serializer.data)
-    else:
-        return Response({'error' : 'no conversation found'}, status=404)
+    conversation_serializer = ConversationSerializer(
+        conversations,
+        many=True,
+        context={
+            'request': request
+        })
+    return Response(conversation_serializer.data)
 
