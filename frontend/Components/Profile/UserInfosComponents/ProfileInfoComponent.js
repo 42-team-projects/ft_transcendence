@@ -1,4 +1,5 @@
-import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
+import { createApiData } from "/Utils/APIManager.js";
+import { getNotificationWebSocket, HOST } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 
 export class ProfileInfoComponent extends HTMLElement {
@@ -82,8 +83,9 @@ export class ProfileInfoComponent extends HTMLElement {
         {
             const element = this.shadowRoot.querySelector(".add-friend img");
             if (!element)
-            return ;
-            element.hidden = newValue === "true" ? true : false;
+                return ;
+            if (newValue === "true")
+                element.remove();
         }
         
     }
@@ -106,13 +108,19 @@ export class ProfileInfoComponent extends HTMLElement {
     get friend() { return this.getAttribute("friend");}
     set friend(value) { this.setAttribute("friend", value);}
     
-    connectedCallback() {
+    async connectedCallback() {
         const addFriend = this.shadowRoot.querySelector(".add-friend");
+        // const currentPlayerId = await getCurrentUserId();
+        // if (this.id === currentPlayerId)
+        //     addFriend.remove();
         addFriend.addEventListener("click", async () => {
-            const notificationWS = await getNotificationWebSocket();
-            notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'type': "friend", "infos": ""}));
-            const addFriendImage = addFriend.querySelector("img");
-            addFriendImage.src = "/assets/icons/wait-time-icon.svg";
+            const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
+            if (sendRequestResponse) {
+                const notificationWS = await getNotificationWebSocket();
+                notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'type': "friend", "infos": ""}));
+                const addFriendImage = addFriend.querySelector("img");
+                addFriendImage.src = "/assets/icons/wait-time-icon.svg";
+            }
         });
     }
 }

@@ -207,8 +207,6 @@ async function displayAlert(e, data) {
             const lobby = new Lobby(opponentId, timeLeft);
             lobby.id = "tournament_lobby";
             lobby.tournament_id = data.tournament_id;
-            document.body.querySelector('root-content').innerHTML = '';
-            document.body.querySelector('root-content').appendChild(lobby);
 
             alertsConrtainer.innerHTML = '';
             alertsConrtainer.style.display = "none";

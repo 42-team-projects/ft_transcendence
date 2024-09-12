@@ -400,6 +400,7 @@ export class GameTable extends HTMLElement{
         this.socket.send(JSON.stringify(message));
     }
     disconnectedCallback(){
+        console.log('disconnected');
         // this.socket.close();
         router.randring()
         document.body.querySelector('game-header').remove();
