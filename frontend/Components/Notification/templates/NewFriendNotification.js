@@ -1,5 +1,5 @@
 import { PROFILE_API_URL, HOST } from "/Utils/GlobalVariables.js";
-import { getApiData } from "/Utils/APIManager.js";
+import { getApiData, createApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
 
@@ -69,8 +69,10 @@ export class NewFriendNotification extends HTMLElement {
 
         const accept = this.querySelector(".notification-actions .accept");
         if (accept) {
-            accept.addEventListener("click", () => {
-                alert("accept friend request.");
+            accept.addEventListener("click", async () => {
+                const acceptResponse = await createApiData(HOST + "/friend/accept/" + this.id + "/", "");
+                console.log("acceptResponse: ", acceptResponse);
+                this.parentElement.remove();
             });
         }
         
