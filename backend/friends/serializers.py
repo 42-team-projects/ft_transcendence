@@ -15,6 +15,8 @@ class FriendshipSerializer(serializers.ModelSerializer):
         fields = ['friends']
 
 class FriendRequestSerializer(serializers.ModelSerializer):
+    sender = UserSerializer()
+    receiver = UserSerializer()
     class Meta:
         model = FriendRequest
         fields = ['id','sender', 'receiver', 'is_active']
