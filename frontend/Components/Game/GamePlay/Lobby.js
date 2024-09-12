@@ -12,23 +12,23 @@ const timer = document.createElement('template')
 let searching_images = [
 	{
 		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'ESCANOR'
+		username: 'ACE'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'ITATCHI'
+		picture: HOST + `/media/defaults/aizen.jpeg`,
+		username: 'AIZEN'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'ESALIM'
+		picture: HOST + `/media/defaults/fshiguro.jpeg`,
+		username: 'FUSHIGURO'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'KILLUA'
+		picture: HOST + `/media/defaults/toji.jpeg`,
+		username: 'TOJI'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'GOJO'
+		picture: HOST + `/media/defaults/zuro.jpeg`,
+		username: 'ZURO'
 	}
 ]
 

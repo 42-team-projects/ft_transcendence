@@ -95,8 +95,9 @@ export class GameTable extends HTMLElement{
             const player_1 = message.player_1;
             const player_2 = message.player_2;
             const status = message.status;
+            console.log('message', message);
             if (status === 'game_start') {
-                console.log('message', message);
+                // console.log('message', message);
                 const messages = {
                     'message': 'firstdata',
                     'canvas_width': CANVAS_WIDTH,
@@ -109,7 +110,7 @@ export class GameTable extends HTMLElement{
                 }
                 this.socket.send(JSON.stringify(messages))
             } else if (status === 'RoundOver') {
-                console.log('message', message);
+                // console.log('message', message);
                 if (userInfo.id === Number(player_1.id)) {
                     score.player = player_1.score;
                     score.opponent = player_2.score;
@@ -120,7 +121,7 @@ export class GameTable extends HTMLElement{
                 await this.RoundOver();
                 // console.log('time', new Date() - now);
             } else if (status === 'RoundStart') {
-                console.log('message', message);
+                // console.log('message', message);
                 this.luanching = true;
                 this.round = message.round;
                 await this.resetGame();
@@ -158,12 +159,12 @@ export class GameTable extends HTMLElement{
                 this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
             }
             else if(status === 'Pause'){
-                console.log('pause');
+                // console.log('pause');
                 document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSED'
                 document.body.appendChild(new PausePage())
             }
             else if(status === 'Resume'){
-                console.log('resume');
+                // console.log('resume');
                 document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSE'
                 document.body.querySelector('pause-page').remove();
             }
@@ -269,7 +270,7 @@ export class GameTable extends HTMLElement{
         const coordonate = this.getCoordonates();
         ctx.fillStyle = 'white';
         ctx.beginPath();
-        ctx.arc(coordonate.x, coordonate.y,coordonate.radius, 0, Math.PI * 2);
+        ctx.arc(coordonate.x, coordonate.y, coordonate.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.closePath();
     }
@@ -295,7 +296,7 @@ export class GameTable extends HTMLElement{
         const opponent = this.getOpponentPosition();
         this.requestID = requestAnimationFrame(() => this.gameLoop(ctx));
         await this.movePlayer(this.getKeys(), player);
-        // await this.moveBall(player, opponent, ctx);
+        await this.moveBall(player, opponent, ctx);
         await this.renderBall(ctx);
         await this.RanderRackit(ctx, player);
         await this.RanderRackit(ctx, opponent);
@@ -378,21 +379,23 @@ export class GameTable extends HTMLElement{
     }
 
     moveDown(player){
-        if(player.y + this.racquet.height <= CANVAS_HEIGHT)
-            player.y += 10;
+        let y = player.y;
+        if (y + this.racquet.height <= CANVAS_HEIGHT)
+            y += 10;
         const message = {
             'message': 'move',
-            'y': player.y
+            'y': y
         }
         this.socket.send(JSON.stringify(message));
     }
 
     moveUp(player){
-        if(player.y >= 0)
-            player.y -= 10;
+        let y = player.y;
+        if(y >= 0)
+            y -= 10;
         const message = {
             'message': 'move',
-            'y': player.y,
+            'y': y -= 10,
         }
         this.socket.send(JSON.stringify(message));
     }
