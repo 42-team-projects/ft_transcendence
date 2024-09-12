@@ -78,8 +78,10 @@ export class NewFriendNotification extends HTMLElement {
         
         const reject = this.querySelector(".notification-actions .reject");
         if (reject) {
-            reject.addEventListener("click", () => {
-                alert("reject friend request.");
+            reject.addEventListener("click", async () => {
+                const acceptResponse = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
+                console.log("acceptResponse: ", acceptResponse);
+                this.parentElement.remove();
             });
         }
 
