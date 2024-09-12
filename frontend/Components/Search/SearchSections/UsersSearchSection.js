@@ -4,6 +4,7 @@ import { ProfileComponent } from "/Components/Profile/ProfileComponent.js";
 import { router } from "/root/Router.js";
 import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { createApiData } from "/Utils/APIManager.js";
 
 export class UsersSearchSection extends HTMLElement {
     constructor() {
@@ -56,7 +57,7 @@ export class UsersSearchSection extends HTMLElement {
                 <h4>${playerData.user.username}</h4>
             </div>
             <div class="search-actions">
-                <img id="chat" src="/assets/icons/add-friends-icon.svg" class="read-message" width="24px" height="24px"></img>
+                <img id="chat" src="${playerData.is_friend ? "/assets/icons/chat-icon.svg" : "/assets/icons/add-friends-icon.svg"}" class="read-message" width="24px" height="24px"></img>
                 <img id="play-game" src="/assets/icons/manette-icon.svg" class="read-message" width="24px" height="24px"></img>
                 <a id="show-profile" href="/Profile/${playerData.user.username}">
                     <img src="/assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
@@ -82,13 +83,18 @@ export class UsersSearchSection extends HTMLElement {
             document.body.querySelector('root-content').appendChild(lobby);
         });
 
-        // chat.addEventListener("click", async () => {
-        //     const websocket = await getNotificationWebSocket();
-        //     websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': playerData.user.id, "type": "friend", "infos": "hello world"}));
-        // });
         chat.addEventListener("click", async () => {
-            const url = new URL(HOST + "/Chat/" + playerData.user.username);
-            router.handleRoute(url.pathname);
+            if (playerData.is_friend) {
+                const url = new URL(HOST + "/Chat/" + playerData.user.username);
+                router.handleRoute(url.pathname);
+                return ;
+            }
+            const sendRequestResponse = await createApiData(HOST + "/friend/send/" + playerData.user.id + "/", "");
+            if (sendRequestResponse.response) {
+                const websocket = await getNotificationWebSocket();
+                websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': playerData.user.id, "type": "friend", "infos": "hello world"}));
+            }
+
         });
         return item;
     }

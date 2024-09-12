@@ -86,10 +86,10 @@ class FriendRequest(models.Model):
         """
         if self.is_active:
             friends, _ = Friendship.objects.get_or_create(user=self.receiver)
-            friends.add_user(self.sender)
+            friends.add_friend(self.sender)
             
             friends, _ = Friendship.objects.get_or_create(user=self.sender)
-            friends.add_user(self.receiver)
+            friends.add_friend(self.receiver)
             self.is_active = False
             self.save()
             return True

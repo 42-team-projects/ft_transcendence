@@ -6,7 +6,9 @@ import { ChatHeaderComponent } from "/Components/Chat/ChatRoom/ChatHeaderCompone
 
 export function renderChatHeader(chatContainer, conversationData) {
     const header = chatContainer.querySelector("chat-header");
-    header.playerId = conversationData.user.id;
+    header.playerId = conversationData.id;
+    header.userId = conversationData.user.id;
+    console.log("header.playerId: ", header.playerId, " header.userId: ", header.userId);
     header.userName = conversationData.user.username;
     header.league = conversationData.stats.league;
     header.active = conversationData.user.is_active;

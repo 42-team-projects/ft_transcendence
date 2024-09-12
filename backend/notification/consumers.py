@@ -50,10 +50,10 @@ class UserNotificationConsumer(WebsocketConsumer):
         except User.DoesNotExist:
             self.send_error('Receiver user not exists!')
 
-    def broadcast_notification(self, data):
-        data['sender'] = self.get_user(self.id).username
-        data['type'] = self.type
-        data['infos'] = self.infos
+    def broadcast_notification(self, message_data):
+        message_data['sender'] = self.get_user(self.id).username
+        message_data['type'] = self.type
+        message_data['infos'] = self.infos
         async_to_sync(self.channel_layer.group_send)(
             f'notification_{message_data["receiver"]["id"]}',
             {

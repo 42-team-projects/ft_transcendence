@@ -3,7 +3,7 @@ import { NotificationComponent } from "/Components/Notification/NotificationComp
 import { displayNotification } from "/Components/Notification/NotificationUtils.js";
 import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { NOTIFICATIONS_API_URL } from "/Utils/GlobalVariables.js";
+import { NOTIFICATIONS_API_URL, HOST } from "/Utils/GlobalVariables.js";
 import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
 import { hideFriendsRequestList } from "/Components/Header/header-bar.js";
 
@@ -31,13 +31,13 @@ export class FriendRequestListComponent extends HTMLElement {
         this.style.height = this.height;
         const notificationList = this.querySelector(".notificationsBar-body");
 
-        // const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
-        // if (notifications) {
-        //     Array.from(notifications).forEach( notif => {
-        //         const notification = createNotification(notif.user.username, notif.content, "message");
-        //         this.appendNotification(notification);
-        //     });
-        // }
+        const requests = await getApiData(HOST + "/friend/requests/");
+        if (requests.response) {
+            Array.from(requests.response).forEach( notif => {
+                const notification = createNotification(notif.id, notif.sender.username, "want to be a friend", "friend");
+                this.appendFriendRequest(notification);
+            });
+        }
         
         this.querySelector(".close-button").addEventListener("click", () => {
             hideFriendsRequestList();

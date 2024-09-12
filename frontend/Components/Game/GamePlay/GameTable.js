@@ -45,7 +45,7 @@ export class GameTable extends HTMLElement{
         this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
 
         this.socket.onopen = () => {
-            console.log('connected');
+            console.log('connected 1');
         }
 
         this.socket.onclose = () => {
