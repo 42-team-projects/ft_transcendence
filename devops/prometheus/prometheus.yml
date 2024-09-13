@@ -1,21 +1,15 @@
 global:
-  scrape_interval: 60s
+  scrape_interval: 15s
 
 scrape_configs:
 
   - job_name: 'prometheus'
-    scheme: https
-    tls_config:
-      ca_file: /etc/ssl/certs/server.cert
-      insecure_skip_verify: true
     static_configs:
       - targets: ['prometheus:9090']
-      # - targets: ['back-end:8000']
-  
+
   - job_name: 'back-end'
     scheme: https
     tls_config:
-      ca_file: /etc/ssl/certs/server.cert
       insecure_skip_verify: true
     static_configs:
       - targets: ['back-end:8000']

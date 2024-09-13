@@ -68,15 +68,12 @@ services:
     container_name: prometheus
     volumes:
       - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./devops/prometheus/web.yml:/etc/prometheus/web.yml
-      - ./devops/certs:/etc/ssl/certs
       - prometheus_data:/prometheus
     command:
       - '--web.enable-lifecycle'
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.config.file=/etc/prometheus/web.yml'
     ports:
-      - 9090:9090
+      - 9090:9090 # ! should not be exposed
     env_file:
       - .env
     restart: unless-stopped
@@ -126,4 +123,4 @@ services:
       - database
 
 # docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
-# grafana ==> nginx: NGINX exporter (12708) | back-end: back-end ( ) | postgres-exporter: postgres-exporter (14114)
+# grafana ==> nginx: NGINX exporter (12708) | back-end: back-end (7996/17658) | postgres-exporter: postgres-exporter (14114)
