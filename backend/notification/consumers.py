@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from .models import *
-from .serializers import NotificationSerializer
+from .serializers import NotificationSerializer, UserSerializer
 
 class UserNotificationConsumer(WebsocketConsumer):
     def connect(self):
@@ -41,11 +41,20 @@ class UserNotificationConsumer(WebsocketConsumer):
                 # self.broadcast_notification(notification_serializer.data)
             # else:    
             #     self.send_error('Notification data not valid!')
-            new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'])
-            if new_notification:
-                self.broadcast_notification(NotificationSerializer(new_notification).data)
-            else:
-                self.send_error('Notification data not valid!')
+            if self.type != "signal":
+                new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'])
+                if new_notification:
+                    self.broadcast_notification(NotificationSerializer(new_notification).data)
+                else:
+                    self.send_error('Notification data not valid!')
+            else :
+                notification = {
+                    'sender': sender.id,
+                    'receiver': UserSerializer(receiver).data,
+                    'content': data['message']
+                }
+                self.broadcast_notification(notification)
+
 
         except User.DoesNotExist:
             self.send_error('Receiver user not exists!')
