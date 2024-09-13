@@ -1,5 +1,5 @@
-export const HOST = "https://10.11.5.3:8000";
-export const wsUrl = 'wss://10.11.5.3:8000/';
+export const HOST = "https://10.11.3.10:8000";
+export const wsUrl = 'wss://10.11.3.10:8000/';
 
 export const PROFILE_API_URL = HOST + "/api/v1/players/";
 
