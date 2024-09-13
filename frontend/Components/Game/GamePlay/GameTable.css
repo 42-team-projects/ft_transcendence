@@ -41,8 +41,12 @@ img {
     width: 90%;
     height: 100%;
 }
+.c_game svg{
+    width: 100%;
+    height: 100%;
+}
 .GameShapes{
-    position:relative;
+    position:absolute;
     width: 90%;
     aspect-ratio: 2.1;
     display: flex;
@@ -227,11 +231,9 @@ img {
     transform: scaleX(-1) scaleY(-1);
 }
 .table_container{
-    /* border: 2px solid #00b9be; */
-    width: 84%;
-    height: 83%;
+    width: 86.5%;
+    height: 77.5%;
     position: absolute;
-    background-color: #00b9be57;
     display: flex;
     justify-content: center;
     align-items: center;
