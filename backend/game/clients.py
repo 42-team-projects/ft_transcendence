@@ -34,7 +34,7 @@ class GameLoop :
                 'y': self.opponent.y
             }
         }
-        await ws.send_message(message, 'game_message')
+        await self.send_message(message)
 
 
     async def rounds_loop(self):
@@ -44,14 +44,15 @@ class GameLoop :
             await self.reset_players()
             self.active = True
             await asyncio.sleep(4)
-            self.sending_task = asyncio.create_task(self.sending())
+            # self.sending_task = asyncio.create_task(self.sending())
             try:
-                await self.game_loop()
+                await asyncio.gather(self.game_loop(), self.sending())
             except Exception as e:
                 self.active = False
-                print(e)
-                if self.sending_task:
-                    self.sending_task.cancel()
+                self.break_loop = True
+                # print(e)
+                # if self.sending_task:
+                #     self.sending_task.cancel()
                 if(i != self._rounds):
                     await self.round_over()
 
@@ -61,27 +62,26 @@ class GameLoop :
             await self.rounds_loop()
             await self.game_over()
         except asyncio.CancelledError:
-            print('task cancelled')
+            # print('task cancelled')
             if self.opponent:
-                await self.close_socket(self.controler)
-            if self.controler:
                 await self.close_socket(self.opponent)
+            if self.controler:
+                await self.close_socket(self.controler)
 
 
     async def sending(self):
         # print('sending' , self.active)
-        try:
             # start time
-            while True:
-                if(self.pause):
-                    await asyncio.sleep(0.05)
-                    continue
-                await self.send_message(self.ball_data)
+        if self.active:
+            self.break_loop = False
+        while True:
+            if self.break_loop:
+                raise Exception("Round Over")
+            if(self.pause):
                 await asyncio.sleep(0.05)
-        except asyncio.CancelledError:
-            # end time
-            print('sending cancelled')
-            raise
+                continue
+            await self.send_message(self.ball_data)
+            await asyncio.sleep(0.05)
 
 
     async def assign_data(self, data, ws):
@@ -122,7 +122,6 @@ class GameLoop :
                 'id': self.opponent.id,
                 'ball_x':  self.canvas_width - self.data['ball_x'],
                 'ball_dx': -self.data['ball_dx'],
-
             },
             'player_2': {
                 'id': self.controler.id,
@@ -142,13 +141,13 @@ class GameLoop :
         self.data = {
             'ball_x': self.canvas_width / 2,
             'ball_y': self.canvas_height / 2,
-            'ball_radius': 10,
-            'ball_dx': 8,
-            'ball_dy': 5,
+            'ball_radius': 12,
+            'ball_dx': 12,
+            'ball_dy': 9,
         }
         while self.active:
             if self.pause:
-                await asyncio.sleep(0.016)
+                await asyncio.sleep(0.0167)
                 continue
             self.data['ball_x'] += self.data['ball_dx']
             self.data['ball_y'] += self.data['ball_dy']
@@ -156,7 +155,7 @@ class GameLoop :
             await self.calculate_ball_movement()
             #store data
             await self.store_data()
-            await asyncio.sleep(0.016)
+            await asyncio.sleep(0.0167)
 
 
     async def round_start(self, round):
@@ -182,37 +181,24 @@ class GameLoop :
 
     async def send_message(self, message):
         if self.controler:
-            await self.controler.channel_layer.group_send(
-                self.controler.room_group_name,
-                {
-                    'type': 'game_message',
-                    'message': message
-                }
-            )
+            await self.controler.send_message(message, 'game_message')
         elif self.opponent:
-            await self.opponent.channel_layer.group_send(
-                self.opponent.room_group_name,
-                {
-                    'type': 'game_message',
-                    'message': message
-                }
-            )
+            await self.opponent.send_message(message, 'game_message')
+
 
 
     def get_players(self):
         return self.controler, self.opponent
         
     async def close_socket(self, ws):
-        print('closing')
-        try:
-            if ws == self.controler:
-                await self.opponent.close()
-                # self.opponent = None
-            else:
-                await self.controler.close()
-                # self.controler = None
-        except Exception as e:
-            print(e)
+        # print('closing')
+        # try:
+        if ws == self.controler:
+            await self.opponent.close()
+        else:
+            await self.controler.close()
+        # except Exception as e:
+            # print(e)
         # end task of main
 
 
