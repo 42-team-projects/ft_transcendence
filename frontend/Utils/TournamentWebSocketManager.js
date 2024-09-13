@@ -22,7 +22,6 @@ export function createTournamentWebSocket(tournament_id, data) {
         tournamentSocket.onmessage = async (e) => { 
             const lobby = document.querySelector("root-content #tournament_lobby");
             if (!lobby) {
-                
                 const response = await JSON.parse(e.data);
                 displayAlert(response.message, data);
             }
@@ -51,9 +50,12 @@ export async function createWebSocketsForTournaments() {
         return;
     for (let index = tournamentsAPIData.length - 1; index >= 0; index--)
     {
-        console.log("tournamentsAPIData[index].tournament_id : ", tournamentsAPIData[index].tournament_id);
-        if (!webSocketIdQueue.includes(tournamentsAPIData[index].tournament_id))
-            createTournamentWebSocket(tournamentsAPIData[index].tournament_id, tournamentsAPIData[index]);
+        if (!webSocketIdQueue.includes(tournamentsAPIData[index].tournament_id)) {
+            initWebSocket(tournamentsAPIData[index]);
+            // const start_date = await get_start_date(tournamentsAPIData[index].tournament_id);
+            // if (start_date)
+            //     displayAlert("", tournamentsAPIData[index]);
+        }
     }
 }
 
@@ -102,7 +104,7 @@ export function getWebSocketByTournamentId(tournament_id) {
  
 let totalCountdownTime = 30;
 
- export async function countDownTimer(start_date, cDownContainer) {
+ export async function countDownTimer(start_date, cDownContainer, tournament_id) {
     const currentDate = new Date();
      
     const parsedStartDate = new Date(start_date);
@@ -120,7 +122,7 @@ let totalCountdownTime = 30;
         countdownInterval = -1;
         return ;
     }
-    startCountdown(cDownContainer);
+    startCountdown(cDownContainer, tournament_id);
 }
 
 async function displayAlert(message, data) {
@@ -137,23 +139,20 @@ async function displayAlert(message, data) {
     const customAlert = new CustomAlert();
     customAlert.className = "id_" + data.tournament_id;
     customAlert.innerHTML = `
-    <h2 slot="header"> Tournament Alert</h2>
-    <div slot="body" class="alert-footer">
-    <h2> ${data.tournament_name} Tournament will start soon</h2>
-    <h4> ${message} </h4>
-    <h1 class="countDown"></h1>
-    </div>
-    <div slot="footer" class="alert-footer buttons">
-    <custom-button id="playBtn" width="160px" height="48px" reverse>PLAY</custom-button>
-    <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
-    </div>
+        <h2 slot="header"> Tournament Alert</h2>
+        <div slot="body" class="alert-footer">
+            <h2> ${data.tournament_name} Tournament will start soon</h2>
+            <h4> ${message} </h4>
+            <h1 class="countDown"></h1>
+        </div>
+        <div slot="footer" class="alert-footer buttons">
+            <custom-button id="playBtn" width="160px" height="48px" reverse>PLAY</custom-button>
+            <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
+        </div>
     `;
     const start_date = await get_start_date(data.tournament_id);
-    console.log("data: ", data);
-    console.log("start_date: ", start_date);
     const cDownContainer = customAlert.querySelector(".countDown");
-    countDownTimer(start_date, cDownContainer);
-    console.log("countdownInterval: ", countdownInterval);
+    countDownTimer(start_date, cDownContainer, data.tournament_id);
     if (countdownInterval == -1)
     {
         closeAndRemovePlayerFromTournament(data.tournament_id);
@@ -161,6 +160,7 @@ async function displayAlert(message, data) {
         alertsConrtainer.style.display = "none";
         alertsConrtainer.innerHTML = '';
     }
+
     // let timeLeft = await countDownTimer(start_date);
     customAlert.querySelector("#playBtn").addEventListener("click", async () => {
         // console.log("\ntimeLeft in playBtn ===>    ", timeLeft);
@@ -379,7 +379,7 @@ function findOpponentId(playerId, playerIds, totalPlayers)
 }
 
 
-function startCountdown(cDownContainer) {
+function startCountdown(cDownContainer, tournament_id) {
     if (countdownInterval)
         clearInterval(countdownInterval);
     countdownInterval = setInterval(function() {
@@ -387,14 +387,24 @@ function startCountdown(cDownContainer) {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
         cDownContainer.innerHTML = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`;
+
+        if (timeLeft <= 10) {
+            const alertsConrtainer = window.document.querySelector("body .alerts");
+            if (alertsConrtainer)
+                alertsConrtainer.style.display = "flex";
+        }
+
         if (timeLeft <= 0) {
             clearInterval(countdownInterval);
             countdownInterval = -1;
+            closeAndRemovePlayerFromTournament(tournament_id);
             const alertsConrtainer = window.document.querySelector("body .alerts");
             alertsConrtainer.style.display = "none";
             alertsConrtainer.innerHTML = '';
             // Add logic to start the tournament here
         }
+
+
         timeLeft--;
     }, 1000);
 }
