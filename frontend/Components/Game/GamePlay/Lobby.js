@@ -297,9 +297,11 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
-	playeGame(room_group_name){
+	async playeGame(room_group_name){
+		const game_play = await getApiData(HOST + `/game/game_play/`);
+		console.log(game_play);
 		const header = new GameHeader();
-		const game = new GameTable(room_group_name);
+		const game = new GameTable(room_group_name, game_play);
 		const root = document.body.querySelector('root-content');
 		const headerBar = document.body.querySelector('header-bar');
 
@@ -322,17 +324,17 @@ export class Lobby extends HTMLElement{
 			else{
 				element.style.animation = 'none';
 				this.createTimer();
-				const countdown = setInterval(()=>{
+				const countdown = setInterval(async()=>{
 					if(this.time <= 0){
 						if(this.socket){
 							this.socket.close();
-							this.socket.onclose = (e) => {
+							this.socket.onclose = async (e) => {
 								console.log('socket close');
-								this.playeGame(room_group_name);
+								await this.playeGame(room_group_name);
 							};
 						}
 						else
-							this.playeGame(room_group_name);
+							await this.playeGame(room_group_name);
 						clearInterval(countdown)
 					}
 				},1000)
