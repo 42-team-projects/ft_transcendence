@@ -307,8 +307,8 @@ export class Lobby extends HTMLElement{
 		game.id = this.tournament_id;
 	}
 	gameMode(room_group_name){
-		// if (this.socket)
-		// 	this.socket.send(JSON.stringify({'message': 'start'}));
+		if (this.socket)
+			this.socket.send(JSON.stringify({'message': 'start'}));
 		const PlayerS = this.querySelectorAll('.PlayerS')
 		PlayerS.forEach((element, index)=>{
 			if(index !== 0)
