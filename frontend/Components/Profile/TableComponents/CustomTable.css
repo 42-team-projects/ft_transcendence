@@ -9,6 +9,8 @@
 .profile-data-stats-history {
     margin-left: 20px;
     margin-right: 20px;
+    width: 100%;
+    
 }
 
 .profile-data-stats-history > table {
