@@ -225,7 +225,7 @@ export class Lobby extends HTMLElement{
 		userInfo.picture = HOST + user_data.user.avatar;
 		// console.log('user_data:', userInfo.picture);
 		userInfo.username = user_data.user.username;
-		// const root = document.querySelector('root-content');
+		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
 		p_img.src = userInfo.picture;
