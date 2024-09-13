@@ -56,6 +56,7 @@ export async function getCurrentUserId() {
 
 import { displayNotification } from "/Components/Notification/NotificationUtils.js";
 import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
+import { router } from "/root/Router.js";
 
 let notificationWebSocket;
 
@@ -82,8 +83,18 @@ export async function createNotificationWebSocket() {
             console.log(data.Error)
             return ;
         }
-        const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.infos);
-        displayNotification(messageNotification);
+        if (data.type !== "signal") {
+            const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.infos);
+            displayNotification(messageNotification);
+        }
+        else {
+            const url = new URL(HOST + data.infos);
+            if (window.location.pathname === url.pathname)
+                router.handleRoute(url.pathname);
+            else if (url.pathname.includes(window.location.pathname)) {
+                router.handleRoute(window.location.pathname);
+            }
+        }
     }
     return (notificationWebSocket);
 }

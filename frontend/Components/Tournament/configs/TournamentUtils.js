@@ -2,7 +2,8 @@ import { convertTimeStampIntoDate } from "/Utils/Convertor.js";
 import { calculateTimeDifferents } from "/Utils/DateUtils.js";
 import { closeWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { get_tournament_by_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
-import { getCurrentPlayerId } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerId, HOST } from "/Utils/GlobalVariables.js";
+import { router } from "/root/Router.js";
 
 
 const TABLEHEADER = `
@@ -94,13 +95,8 @@ export async function createRow(parentNode, data) {
             const response = await get_tournament_by_id(data.tournament_id);
             if (!response)
                 throw new Error(`${response.status}  ${response.statusText}`);
-            parentNode.innerHTML = '';
-            const rounds = document.createElement("generate-rounds");
-            rounds.tournamentId = response.tournament_id;
-            rounds.numberOfPlayers = response.number_of_players;
-            console.log("response.players: ", response.players);
-            rounds.players = response.players;
-            parentNode.appendChild(rounds);
+            const url = new URL(HOST + "/Tournament/" + response.tournament_id);
+            router.handleRoute(url.pathname);
         });
 
         const actionsContainer = document.createElement("div");
