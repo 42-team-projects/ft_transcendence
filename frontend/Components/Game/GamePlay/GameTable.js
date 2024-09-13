@@ -5,6 +5,7 @@ import { goNextStage } from "/Components/Game/GamePlay/configs/ScoreManager.js";
 import { wsUrl } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
+
 const game_page = document.createElement('template');
 
 let score = {
@@ -56,7 +57,7 @@ export class GameTable extends HTMLElement{
             console.log('error', error);
         }
 
-        this.racquet = { width: 5, height: 90 };
+        this.racquet = { width: 8, height: 110 };
         this.player = { 
             x: 0, 
             y: CANVAS_HEIGHT / 2,
@@ -95,7 +96,7 @@ export class GameTable extends HTMLElement{
             const player_1 = message.player_1;
             const player_2 = message.player_2;
             const status = message.status;
-            console.log('message', message);
+            // console.log('message', message);
             if (status === 'game_start') {
                 // console.log('message', message);
                 const messages = {
@@ -213,13 +214,15 @@ export class GameTable extends HTMLElement{
     
     async GameOver(playerState){
         this.Loop_state = false;
-        console.log("this.id: ", this.id);
+        // console.log("this.id: ", this.id);
         if (this.id && this.id !== 'undefined')
             await goNextStage(playerState, this.id);
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
         //redirect to last url in hesory
-        router.handleRoute(window.location.pathname);
+        setTimeout(() => {
+            router.handleRoute(window.location.pathname);
+        }, 5000);
     }
     async LuncheGame(ctx){
         // console.log('lunching');
@@ -275,14 +278,14 @@ export class GameTable extends HTMLElement{
         ctx.closePath();
     }
     async resetGame(){
-        // if(this.requestID)
-        //     cancelAnimationFrame(this.requestID);
-        //     removeEventListener('keydown', (event) => {
-        //         this.setMove(event, this.getKeys());
-        //     })
-        //     removeEventListener('keyup', (event) => {
-        //         this.resetMove(event, this.getKeys());
-        //     })
+        if(this.requestID)
+            cancelAnimationFrame(this.requestID);
+            removeEventListener('keydown', (event) => {
+                this.setMove(event, this.getKeys());
+            })
+            removeEventListener('keyup', (event) => {
+                this.resetMove(event, this.getKeys());
+            })
         this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 0 , 0);
         this.updatePlayerPosition(CANVAS_HEIGHT / 2);
         this.updateOpponentPosition(CANVAS_HEIGHT / 2);
@@ -375,7 +378,6 @@ export class GameTable extends HTMLElement{
         if(keyS === true) { this.moveDown(player) };
         // if(keyArrowUp === true) { this.moveUp(opponent) };
         // if(keyArrowDown === true) { this.moveDown(opponent) };
-        this.updatePlayerPosition(player.y);
     }
 
     moveDown(player){
@@ -395,13 +397,11 @@ export class GameTable extends HTMLElement{
             y -= 10;
         const message = {
             'message': 'move',
-            'y': y -= 10,
+            'y': y
         }
         this.socket.send(JSON.stringify(message));
     }
     disconnectedCallback(){
-        console.log('disconnected');
-        // this.socket.close();
         router.randring()
         document.body.querySelector('game-header').remove();
         document.body.querySelector('game-over').remove();
