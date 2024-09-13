@@ -27,7 +27,10 @@ export async function createTournamentTable(parentNode, mainContainer, data) {
     mainContainer.innerHTML = TABLEHEADER;
     const tbody = mainContainer.querySelector("tbody");
     for (let index = data.length - 1; index >= 0; index--)
-        tbody.appendChild(await createRow(parentNode, data[index]));
+    {
+        const row = await createRow(parentNode, data[index]);
+        tbody.appendChild(row);
+    }
 }
 
 export async function createRow(parentNode, data) {

@@ -20,12 +20,13 @@ import { SearchBar } from '/Components/Header/Search-bar.js'
 import { UserRank } from '/Components/Header/UserRank.js'
 import { Hexagon } from '/Components/Header/hexagon.js'
 import { Profile } from '/Components/Header/profile.js'
+import { HomePage } from '/Components/Home/HomePage.js'
 
 import { SideBarButtonIcons } from '/Components/side-bar/sb-icon.js'
 import { SideBarButtonText } from '/Components/side-bar/sb-text.js'
 import { SideBarButton } from '/Components/side-bar/sb-button.js'
 import { CustomButton } from "/Components/Tournament/CustomButton.js";
-
+import { LeaderBoardPage } from "/Components/LeaderBoard/LeaderBoardPage.js";
 import { SettingsComponent } from "/Components/Settings/SettingsComponent.js"
 import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
 

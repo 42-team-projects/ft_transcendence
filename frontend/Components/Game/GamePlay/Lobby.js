@@ -92,7 +92,7 @@ lobby.innerHTML =  /* html */ `
 
 export class Lobby extends HTMLElement{
 	tournament_id;
-	set tournament_id(val) {this.tournament_id = val;}
+	// set tournament_id(val) {this.tournament_id = val;}
 	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){
@@ -130,6 +130,7 @@ export class Lobby extends HTMLElement{
 		headerBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			headerBar.innerHTML = '';
+			console.log("setInterval 2");
 		}, 1000);
 	}
 
@@ -140,11 +141,13 @@ export class Lobby extends HTMLElement{
 	
 		sideBar.classList.toggle('transform-1s', true);
 		sideBar.classList.toggle('left', true);
-		clickedButtons.classList.toggle('on', false);
+		if(clickedButtons)
+			clickedButtons.classList.toggle('on', false);
 		sideBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			sideBar.shadowRoot.innerHTML = '';
 			sideBar.classList.toggle('left', false);
+			console.log("setInterval 1");
 		}, 1000);
 	}
 
@@ -191,7 +194,9 @@ export class Lobby extends HTMLElement{
 				this.updateTimer();
 			}
 		};
-
+		// this.socket.onclose = (e) => {
+		// 	console.log('socket close');
+		// };
 		this.socket.onerror = (e) => {
 			console.log('socket error');
 		};
@@ -302,6 +307,7 @@ export class Lobby extends HTMLElement{
 		
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
+		console.log("hellllllllllo : ", root.innerHTML);
 		root.innerHTML = ``;
 		root.appendChild(game);
 		game.id = this.tournament_id;
@@ -345,6 +351,12 @@ export class Lobby extends HTMLElement{
 	updateTimer(){
 		const h1 = this.shadowRoot.querySelector('.descounter h1');
 		h1.textContent = this.time;
+	}
+	disconnectedCallback(){
+		if(this.time > 0){
+			if(this.socket)
+				this.socket.close();
+		}
 	}
 }
 

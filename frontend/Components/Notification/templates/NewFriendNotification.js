@@ -1,5 +1,5 @@
 import { PROFILE_API_URL, HOST } from "/Utils/GlobalVariables.js";
-import { getApiData } from "/Utils/APIManager.js";
+import { getApiData, createApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
 
@@ -22,7 +22,7 @@ export class NewFriendNotification extends HTMLElement {
                             <div class="profile-icon" slot="content"></div>
                         </c-hexagon>
                     </a>
-                    <div style="display: flex; gap: 5px;">
+                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                         <h4></h4>
                         <h4><i></i></h4>
                     </div>
@@ -69,15 +69,19 @@ export class NewFriendNotification extends HTMLElement {
 
         const accept = this.querySelector(".notification-actions .accept");
         if (accept) {
-            accept.addEventListener("click", () => {
-                alert("accept friend request.");
+            accept.addEventListener("click", async () => {
+                const acceptResponse = await createApiData(HOST + "/friend/accept/" + this.id + "/", "");
+                console.log("acceptResponse: ", acceptResponse);
+                this.parentElement.remove();
             });
         }
         
         const reject = this.querySelector(".notification-actions .reject");
         if (reject) {
-            reject.addEventListener("click", () => {
-                alert("reject friend request.");
+            reject.addEventListener("click", async () => {
+                const acceptResponse = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
+                console.log("acceptResponse: ", acceptResponse);
+                this.parentElement.remove();
             });
         }
 

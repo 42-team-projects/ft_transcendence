@@ -59,14 +59,21 @@ export class JoinTournament extends HTMLElement {
         return tournamentItem;
     }
 
+
+    async initTournamentSocket(tournamentData) {
+        const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
+        await checkIsTournamentFull(tournamentData, ws);
+    }
+
 /**
  * 
  * @author rida
  */
-    async  updateTournamentsTable(tournamentData, tbody) {
-        tbody.prepend(createRow(this, tournamentData));
-        const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
-        await checkIsTournamentFull(tournamentData, ws);
+    async updateTournamentsTable(tournamentData, tbody) {
+        await this.initTournamentSocket(tournamentData);
+        const row = await createRow(this, tournamentData);
+        tbody.prepend(row);
+        
     }
 
     async addPlayerToTournament(tournamentData) {

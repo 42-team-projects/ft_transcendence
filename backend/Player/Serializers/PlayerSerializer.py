@@ -16,7 +16,7 @@ class DefaultPlayerSerializer(serializers.ModelSerializer):
     stats = DefaultStatsSerializer(required=False)
     class Meta:
         model = Player
-        fields = ['id', 'user', 'fullName', 'cover', 'joinDate', 'active', 'stats']
+        fields = ['id', 'user', 'fullName', 'cover', 'joinDate', 'active', 'stats', 'is_friend']
 
 class PlayerSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
@@ -25,7 +25,7 @@ class PlayerSerializer(serializers.ModelSerializer):
     achievements = AchievementsSerializer(many=True, required=False)
     class Meta:
         model = Player
-        fields = ['id', 'user', 'fullName', 'cover', 'joinDate', 'active', 'stats', 'achievements', 'links']
+        fields = ['id', 'user', 'fullName', 'cover', 'joinDate', 'active', 'stats', 'achievements', 'links', 'is_friend']
 
 
 class CustomPlayer(serializers.ModelSerializer):

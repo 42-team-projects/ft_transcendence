@@ -77,7 +77,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         if(self.room_group_name in GameConsumer.rooms):
             GameConsumer.rooms[self.room_group_name].closed += 1
             if(GameConsumer.rooms[self.room_group_name].closed == 2):
-                await GameConsumer.rooms[self.room_group_name].game_over()
                 del GameConsumer.rooms[self.room_group_name]
             else :
                 await GameConsumer.rooms[self.room_group_name].close_socket(self)
