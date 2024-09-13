@@ -6,6 +6,7 @@ import { wsUrl, HOST } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
 import { createApiData } from "/Utils/APIManager.js";
+import { svgFile, svgFile2 } from "../../../Slides.js";
 
 const game_page = document.createElement('template');
 
@@ -14,33 +15,34 @@ let score = {
     opponent: 0,
 }
 
+//<div class="shapes_LT_RT"></div>
+//<div class="shapes_LB_RB"></div>
+// <div class="shapes_DT"></div>
+// <div class="shapes_LR_container">
+// 	<div class="center_shapes_LT_RT"></div>
+// 	<div class="center_shapes_LB_RB"></div>
+// 	<div class="center_shapes_MLR"></div>
+// </div>
 
 game_page.innerHTML = /*html*/ `
 <link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
 <link rel="stylesheet" href="/Utils/utils.css">
 <div class="c_game">
+    ${svgFile2}
     <div class="GameShapes">
-		<div class="shapes_LT_RT"></div>
-		<div class="shapes_LB_RB"></div>
-		<div class="shapes_DT"></div>
-		<div class="shapes_LR_container">
-			<div class="center_shapes_LT_RT"></div>
-			<div class="center_shapes_LB_RB"></div>
-			<div class="center_shapes_MLR"></div>
-		</div>
-		<div class="table_container">
+        <div class="table_container">
             <canvas id="table" class="pingpongTable"></canvas>
-		</div>
+        </div>
     </div>
 </div>
-`
+    `
 
 let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
 let now;
 export class GameTable extends HTMLElement{
 
-    constructor(room_name)
+    constructor(room_name, game_play)
     {
         super();
         // this.socket = new WebSocket(`wss://${ip}:8000/ws/game/${room_name}/`);
@@ -62,13 +64,16 @@ export class GameTable extends HTMLElement{
         this.player = { 
             x: 0, 
             y: CANVAS_HEIGHT / 2,
-            color: 'white'
+            color: game_play.first_racket_color
         };
+        console.log('this.player', this.player);
         this.opponent = { 
             x: CANVAS_WIDTH - this.racquet.width, 
             y: CANVAS_HEIGHT / 2, 
-            color: '#00b9be'
+            color: game_play.second_racket_color
         };
+        console.log('this.opponent', this.opponent);
+        this.ball_color = game_play.ball_color;
         this.round = 1;
         this.room_name = room_name;
         this.requestID = null;
@@ -283,7 +288,7 @@ export class GameTable extends HTMLElement{
     }
     async renderBall(ctx){
         const coordonate = this.getCoordonates();
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = this.ball_color;
         ctx.beginPath();
         ctx.arc(coordonate.x, coordonate.y, coordonate.radius, 0, Math.PI * 2);
         ctx.fill();
