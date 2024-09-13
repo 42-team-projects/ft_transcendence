@@ -63,17 +63,17 @@ let notificationWebSocket;
 export async function createNotificationWebSocket() {
 
     const userId = await getCurrentUserId();
-    let websocket = `${wsUrl}ws/notification/${userId}/`;
+    let websocket = `${wsUrl}ws/user/notification/${userId}/`;
     console.log("wsUrl: ", websocket);
     notificationWebSocket = new WebSocket(websocket)
     notificationWebSocket.onopen = () => {
-        console.log('WebSocket connection of chat is opened');
+        console.log('WebSocket connection of notification is opened');
     };
     notificationWebSocket.onerror = (error) => {
         console.log('WebSocket encountered an error: ', error);
     };
     notificationWebSocket.onclose = (event) => {
-        console.log('WebSocket connection closed: ', event);
+        console.log('WebSocket connection of notification is closed: ', event);
     };
     notificationWebSocket.onmessage = async (event) => {
         let data = await JSON.parse(event.data)
@@ -82,7 +82,7 @@ export async function createNotificationWebSocket() {
             console.log(data.Error)
             return ;
         }
-        const messageNotification = createNotification(data.sender, data.content, data.type, data.infos);
+        const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.infos);
         displayNotification(messageNotification);
     }
     return (notificationWebSocket);

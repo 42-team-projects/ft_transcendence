@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 import logging
+from friends.models import Friendship
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,19 @@ def getPlayerById(request, playerId):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     
 
+def update_is_friend_field(currentPlayer, player):
+    # Iterate through the players to check for friendship
+    try:
+        friendship = Friendship.objects.get(user=currentPlayer)
+    except Friendship.DoesNotExist:
+        return  # If no friendship exists for this player, move to the next one
+
+    # Check if the friend's username exists in the friends list
+    if friendship.friends.filter(username=player.user).exists():
+        player.is_friend = True
+    else:
+        player.is_friend = False
+
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -37,10 +51,14 @@ def searchForPlayers(request):
             username = request.GET.get("username")
             if username:
                 players = Player.objects.filter(user__username__icontains=username)
-                serializer = PlayerSerializer(players, many=True)
+                for player in players:
+                    update_is_friend_field(request.user, player)
+
+                serializer = DefaultPlayerSerializer(players, many=True)
                 return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except Player.DoesNotExist:
             return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
@@ -48,10 +66,12 @@ def searchForPlayers(request):
 def getAllPlayers(request):
     if request.method == 'GET':
         players = Player.objects.all()
+        for player in players:
+            update_is_friend_field(request.user, player)
         serializer = DefaultPlayerSerializer(players, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        serializer = PlayerSerializer(data=request.data)
+        serializer = DefaultPlayerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
@@ -87,6 +107,7 @@ def getMyInfo(request):
 def getPlayerByUsername(request, username):
     try:
         player = Player.objects.get(user__username=username)
+        update_is_friend_field(request.user, player)
         if request.method == 'GET':
             serializer = PlayerSerializer(player)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)

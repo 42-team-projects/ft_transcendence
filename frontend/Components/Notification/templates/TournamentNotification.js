@@ -4,6 +4,7 @@ import { getApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { router } from "/root/Router.js";
+import { JoinTournament } from "/Components/Tournament/JoinTournament.js";
 
 export class TournamentNotification extends HTMLElement {
     constructor() {
@@ -51,11 +52,15 @@ export class TournamentNotification extends HTMLElement {
         const joinButton = this.querySelector(".notification-actions a");
         joinButton.addEventListener("click", async (event) => {
             event.preventDefault();
-            console.log("this.tournamentId 22:", this.tournamentId);
-            await player_join_tournament(this.tournamentId);
-            const url = new URL(joinButton.href);
-            router.handleRoute(url.pathname);
-            this.parentElement.remove();
+            const addPlayer = new JoinTournament();
+            const data = await player_join_tournament(this.tournamentId);
+            if (data)
+            {
+                await addPlayer.initTournamentSocket(data);
+                const url = new URL(joinButton.href);
+                router.handleRoute(url.pathname);
+                this.parentElement.remove();
+            }
         });
     }
 

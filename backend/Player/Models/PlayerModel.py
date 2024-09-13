@@ -9,6 +9,7 @@ class Player(models.Model):
     joinDate = models.DateField(auto_now_add=True)
     active = models.BooleanField(default=False, null=True, blank=True)
     stats = models.OneToOneField(Stats, on_delete=models.CASCADE, related_name='stats', null=True, blank=True)
+    is_friend = models.BooleanField(default=False, null=True, blank=True)
 
     def __str__(self):
         return self.user.username

@@ -33,7 +33,7 @@ export class NotificationsList extends HTMLElement {
         const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
         if (notifications) {
             Array.from(notifications).forEach( notif => {
-                const notification = createNotification(notif.user.username, notif.content, "friend");
+                const notification = createNotification(notif.id, notif.sender.username, notif.content, "friend");
                 this.appendNotification(notification);
             });
         }
