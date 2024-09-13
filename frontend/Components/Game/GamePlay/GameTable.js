@@ -2,9 +2,10 @@ import { GameOver } from "/Components/Game/GamePlay/GameOver.js";
 import { LaunchingGame } from "/Components/Game/GamePlay/launchingGame.js";
 import { userInfo } from "/Components/Game/GamePlay/Lobby.js";
 import { goNextStage } from "/Components/Game/GamePlay/configs/ScoreManager.js";
-import { wsUrl } from "/Utils/GlobalVariables.js";
+import { wsUrl, HOST } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
+import { createApiData } from "/Utils/APIManager.js";
 
 const game_page = document.createElement('template');
 
@@ -46,7 +47,7 @@ export class GameTable extends HTMLElement{
         this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
 
         this.socket.onopen = () => {
-            console.log('connected');
+            console.log('connected 1');
         }
 
         this.socket.onclose = () => {
@@ -74,7 +75,7 @@ export class GameTable extends HTMLElement{
         this.appendChild(game_page.content.cloneNode(true))
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
-
+        this.pause = false;
         // document.addEventListener('visibilitychange', (event)=>{
         //     this.socket.send(JSON.stringify({'status': 'pause'}))
         // })
@@ -129,13 +130,19 @@ export class GameTable extends HTMLElement{
                 // now = new Date();
             } else if (status === 'GameOver') {
                 let player_state = '';
+                let score = '';
+                let opponent_score = '';
                 if (userInfo.id === Number(player_1.id)) {
                     player_state = player_1.game_state;
+                    score = player_1.score;
+                    opponent_score = player_2.score;
                 } else if (userInfo.id === Number(player_2.id)) {
                     player_state = player_2.game_state;
+                    score = player_2.score;
+                    opponent_score = player_1.score;
                 }
                 this.luanching = false;
-                await this.GameOver(player_state);
+                await this.GameOver(player_state, score, opponent_score);
             } else if (status === 'move') {
                 if (userInfo.id === Number(player_1.id)) {
                     this.updatePlayerPosition(player_1.y);
@@ -160,12 +167,14 @@ export class GameTable extends HTMLElement{
                 this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
             }
             else if(status === 'Pause'){
-                // console.log('pause');
+                this.pause = true;
+                console.log('pause');
                 document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSED'
                 document.body.appendChild(new PausePage())
             }
             else if(status === 'Resume'){
-                // console.log('resume');
+                this.pause = false;
+                console.log('Resume');
                 document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSE'
                 document.body.querySelector('pause-page').remove();
             }
@@ -212,13 +221,16 @@ export class GameTable extends HTMLElement{
     }
     getCoordonates(){return this.concoordonate;}
     
-    async GameOver(playerState){
+    async GameOver(playerState, score, opponent_score){
         this.Loop_state = false;
         // console.log("this.id: ", this.id);
         if (this.id && this.id !== 'undefined')
             await goNextStage(playerState, this.id);
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
+        this.socket.close();
+        const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState});
+        await createApiData(HOST + '/game/game_history/', body)
         //redirect to last url in hesory
         setTimeout(() => {
             router.handleRoute(window.location.pathname);
@@ -324,6 +336,8 @@ export class GameTable extends HTMLElement{
         document.querySelector('game-header').updateScore(score);
     }
     async moveBall(player, opponent, ctx){
+        if(this.pause === true)
+            return;
         let {x, y, radius, dx, dy} = this.getCoordonates();
         // console.log(this.getCoordonates());
         if(y + radius + dy >= CANVAS_HEIGHT || y - radius + dy <= 0)

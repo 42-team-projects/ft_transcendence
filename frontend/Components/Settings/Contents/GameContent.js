@@ -1,5 +1,7 @@
 import { CustomSliders } from "/Components/CustomElements/CustomSliders.js"
 import { CustomField } from "/Components/CustomElements/CustomField.js"
+import { getApiData, updateApiData } from "/Utils/APIManager.js";
+import { HOST } from "/Utils/GlobalVariables.js";
 
 
 export class GameContent extends HTMLElement {
@@ -21,19 +23,65 @@ export class GameContent extends HTMLElement {
                 <custom-field label="SECOND RACKET" description="chose the color of the second racket.">
                     <input type="color" id="secondRacketColor" name="body" value="#b23def" />
                 </custom-field>
+                <custom-field label="BALL" description="chose the color of the ball.">
+                    <input type="color" id="ballColor" name="body" value="#ffffff" />
+                </custom-field>
             </div>
             <div class="actions">
                 <settings-item class="active" color="aqua" border-size="2px" width="64px" height="40px"><h4>SAVE</h4></settings-item>
             </div>
+            <custom-spinner time="10" ></custom-spinner>
         `;
     }
 
     interval;
 
-    connectedCallback() {
+
+    init(gameplayData) {
+        const slider = this.shadowRoot.querySelector("custom-sliders");
+        slider.board = gameplayData.board;
+        console.log("slider.board: ", slider.board);
+        slider.gameColor = gameplayData.board_color;
+        const gamePlayColor = this.shadowRoot.querySelector("#gamePlayColor");
+        gamePlayColor.value = gameplayData.board_color;
+        const firstRacketColor = this.shadowRoot.querySelector("#firstRacketColor");
+        firstRacketColor.value = gameplayData.first_racket_color;
+        const secondRacketColor = this.shadowRoot.querySelector("#secondRacketColor");
+        secondRacketColor.value = gameplayData.second_racket_color;
+        const ballColor = this.shadowRoot.querySelector("#ballColor");
+        ballColor.value = gameplayData.ball_color;
+    }
+
+    getGamePlayData() {
+        const formData = new FormData();
+        const slider = this.shadowRoot.querySelector("custom-sliders");
+        formData.append("board", slider.board);
+    
+        const gamePlayColor = this.shadowRoot.querySelector("#gamePlayColor");
+        formData.append("board_color",gamePlayColor.value);
+        
+        const firstRacketColor = this.shadowRoot.querySelector("#firstRacketColor");
+        formData.append("first_racket_color",firstRacketColor.value);
+        
+        
+        const secondRacketColor = this.shadowRoot.querySelector("#secondRacketColor");
+        formData.append("second_racket_color",secondRacketColor.value);
+        
+        const ballColor = this.shadowRoot.querySelector("#ballColor");
+        formData.append("ball_color",ballColor.value);
+
+        return formData;
+    }
+
+    async connectedCallback() {
         const gamePlayColorSelector = this.shadowRoot.querySelector("#gamePlayColor");
         let gamePlayColor = gamePlayColorSelector.value;
         const customSliders = this.shadowRoot.querySelector("custom-sliders");
+        const playerGamePlayData = await getApiData(HOST + "/game/game_play/");
+
+        this.init(playerGamePlayData);
+        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
+
         gamePlayColorSelector.addEventListener("click", () => {
             let counter = 0;
             if (this.interval)
@@ -47,9 +95,17 @@ export class GameContent extends HTMLElement {
                 }
                 if (counter >= 3000)
                     clearInterval(this.interval);
-                console.log("hello from game play selector : ", this.interval);
                 counter += 100;
             }, 100);
+        });
+
+
+        const action = this.shadowRoot.querySelector(".actions settings-item");
+        action.addEventListener("click", async () => {
+            const form = this.getGamePlayData();
+            const response = await updateApiData(HOST + "/game/game_play/", form);
+            console.log("response: ", response);
+            refreshBox.display();
         });
     }
 

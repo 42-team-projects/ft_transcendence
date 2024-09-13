@@ -1,6 +1,8 @@
 
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
+import { HOST, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
 
 export class ChatHeaderComponent extends HTMLElement {
     constructor () {
@@ -24,25 +26,31 @@ export class ChatHeaderComponent extends HTMLElement {
                 </div>
             </div>
         </div>
-        <img loading="lazy" src="/images/Game.svg">
-        <a id="profile">
-            <img loading="lazy" src="/assets/icons/account-icon.svg">
-        </a>
+        <img class="play-game" loading="lazy" src="/images/Game.svg">
+        <img class="show-profile" loading="lazy" src="/assets/icons/account-icon.svg">
         <img loading="lazy" src="/assets/icons/block-icon.svg">
     `;
     }
 
     connectedCallback() {
+        const profileIcon = this.shadowRoot.querySelector(".show-profile");
+        profileIcon.addEventListener("click", (e) => {
+            e.preventDefault();
+            const url = new URL(HOST + "/Profile/" + this.userName);
+            router.handleRoute(url.pathname);
+        })
+        const playgame = this.shadowRoot.querySelector(".play-game");
+        playgame.addEventListener("click", async (e) => {
+            const websocket = await getNotificationWebSocket();;
+            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, "type": "game", "infos": "hello world"}));
+            new Lobby(this.playerId, 30);
+        })
+
+
+
         if (this.userName) {
             this.shadowRoot.querySelector(".infos h1").textContent = this.userName;
             this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
-            const profileIcon = this.shadowRoot.getElementById("profile");
-            profileIcon.href = "/Profile/" + this.userName;
-            profileIcon.addEventListener("click", (e) => {
-                e.preventDefault();
-                const url = new URL(profileIcon.href);
-                router.handleRoute(url.pathname);
-            })
         }
         else
         {
@@ -65,7 +73,7 @@ export class ChatHeaderComponent extends HTMLElement {
         element.querySelector("div").style.backgroundColor = this.active === "true" ? "#00ffff" : "#d9d9d9";
     }
 
-    static observedAttributes = ["target-id", "user-name", "league", "active", "profile-image"];
+    static observedAttributes = ["player-id", "user-id", "user-name", "league", "active", "profile-image"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "user-name")
@@ -97,8 +105,11 @@ export class ChatHeaderComponent extends HTMLElement {
 
     }
 
-    set targetId(val) { this.setAttribute("target-id", val);}
-    get targetId() { return this.getAttribute("target-id");}
+    set playerId(val) { this.setAttribute("player-id", val);}
+    get playerId() { return this.getAttribute("player-id");}
+
+    set userId(val) { this.setAttribute("user-id", val);}
+    get userId() { return this.getAttribute("user-id");}
 
     set userName(val) { this.setAttribute("user-name", val);}
     get userName() { return this.getAttribute("user-name");}
