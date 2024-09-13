@@ -80,13 +80,17 @@ export class PausePage extends HTMLElement{
         super();
         this.attachShadow({mode: 'open'})
         this.shadowRoot.appendChild(template.content.cloneNode(true))
+    }
+    connectedCallback(){
         this.addBlur()
     }
     addBlur(){
+        console.log('blur')
         document.body.querySelector('game-header').classList.add('blur')
         document.body.querySelector('game-table').classList.add('blur')
     }
     removeBlur(){
+        console.log('remove blur')
         document.body.querySelector('game-header').classList.remove('blur')
         document.body.querySelector('game-table').classList.remove('blur')
     }
