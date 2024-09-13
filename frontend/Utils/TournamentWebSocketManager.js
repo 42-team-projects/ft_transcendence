@@ -10,26 +10,6 @@ let webSocketQueue = [];
 let timeLeft = 0;
 
 
-// export function createTournamentWebSocket(tournament_id) {
-//     const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
-//     tournamentSocket.onopen = async () => {
-//         console.log('WebSocket connection of Tournament is opened');
-//     };
-
-//     tournamentSocket.onmessage = (e) => { 
-//         const lobby = document.querySelector("root-content #tournament_lobby");
-//         if (!lobby)
-//             displayAlert(e, data);
-//     };
-
-//     tournamentSocket.onclose = () => { console.log('WebSocket connection of tournament closed'); };
-
-//     tournamentSocket.onerror = (error) => {console.error('WebSocket tournament error:', error);};
-//     webSocketIdQueue.push(tournament_id);
-//     webSocketQueue.push(tournamentSocket);
-//     return tournamentSocket;
-// }
-
 export function createTournamentWebSocket(tournament_id, data) {
     return new Promise((resolve, reject) => {
         const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
@@ -39,10 +19,13 @@ export function createTournamentWebSocket(tournament_id, data) {
             resolve(tournamentSocket);  // Resolve the promise when the connection is opened
         };
 
-        tournamentSocket.onmessage = (e) => { 
+        tournamentSocket.onmessage = async (e) => { 
             const lobby = document.querySelector("root-content #tournament_lobby");
-            if (!lobby)
-                displayAlert(e, data);
+            if (!lobby) {
+                
+                const response = await JSON.parse(e.data);
+                displayAlert(response.message, data);
+            }
         };
 
         tournamentSocket.onclose = () => {
@@ -140,8 +123,7 @@ let totalCountdownTime = 30;
     startCountdown(cDownContainer);
 }
 
-async function displayAlert(e, data) {
-    const response = await JSON.parse(e.data);
+async function displayAlert(message, data) {
     data = await getTournamentData(data.tournament_id); // use uuid instead of primary id key
     
     // console.log("tournamentSocket.onmessage.data : ", response);
@@ -158,7 +140,7 @@ async function displayAlert(e, data) {
     <h2 slot="header"> Tournament Alert</h2>
     <div slot="body" class="alert-footer">
     <h2> ${data.tournament_name} Tournament will start soon</h2>
-    <h4> ${response.message} </h4>
+    <h4> ${message} </h4>
     <h1 class="countDown"></h1>
     </div>
     <div slot="footer" class="alert-footer buttons">

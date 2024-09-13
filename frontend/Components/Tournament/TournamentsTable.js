@@ -6,6 +6,8 @@ import { CreateTournament } from "/Components/Tournament/CreateTournament.js";
 import { GenerateRounds } from "/Components/Tournament/GenerateRounds.js";
 import { closeWebSocket, initWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { createTournamentTable } from "/Components/Tournament/configs/TournamentUtils.js";
+import { router } from "/root/Router.js";
+import { HOST } from "/Utils/GlobalVariables.js";
 
 
 export class TournamentsTable extends HTMLElement {
@@ -31,8 +33,15 @@ export class TournamentsTable extends HTMLElement {
     }
     interval;
     async connectedCallback() {
+        let tournament_id = window.location.pathname.substring(11);
+        if (tournament_id) {
+            this.innerHTML = '';
+            const rounds = document.createElement("generate-rounds");
+            this.appendChild(rounds);
+            return ;
+        }
+
         const tournamentsAPIData = await get_tournaments_by_player_id();
-        // const tournamentsAPIData =  null;
         if (!tournamentsAPIData)
             return;
         const mainContainer = this.querySelector(".mainContainer");
@@ -77,18 +86,8 @@ export class TournamentsTable extends HTMLElement {
                          * @author rida
                          */
                         await initWebSocket(tournamentResponse);
-                        this.innerHTML = '';
-                        const rounds = document.createElement("generate-rounds");
-                        rounds.tournamentId = tournamentResponse.tournament_id;
-                        console.log("rounds.tournamentId: ", rounds.tournamentId);
-                        rounds.numberOfPlayers = tournamentResponse.number_of_players;
-                        console.log("tournamentResponse.players: ", tournamentResponse.players);
-                        
-                        rounds.players = tournamentResponse.players;
-
-                        console.log("rounds.players: ", rounds.players);
-
-                        this.appendChild(rounds);
+                        const url = new URL(HOST + "/Tournament/" + tournamentResponse.tournament_id);
+                        router.handleRoute(url.pathname);
                     } catch (error) {
                         console.log(error);
                     }

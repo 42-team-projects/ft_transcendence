@@ -1,4 +1,4 @@
-import { PROFILE_API_URL, HOST } from "/Utils/GlobalVariables.js";
+import { PROFILE_API_URL, HOST, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { getApiData, createApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
@@ -37,14 +37,15 @@ export class NewFriendNotification extends HTMLElement {
         `;
     }
 
+    sender;
   
     async initProfileImage(user_name) {
         const profile = this.querySelector(".message c-hexagon");
-        const sender = await getApiData(PROFILE_API_URL + user_name + "/");
-        profile.bcolor = getLeagueColor(sender.stats.league);
-        profile.querySelector("div").style.background =  `url(${HOST + sender.user.avatar}) center center / cover no-repeat`;
+        this.sender = await getApiData(PROFILE_API_URL + user_name + "/");
+        profile.bcolor = getLeagueColor(this.sender.stats.league);
+        profile.querySelector("div").style.background =  `url(${HOST + this.sender.user.avatar}) center center / cover no-repeat`;
         const messageOwner = this.querySelector(".message div h4");
-        messageOwner.textContent = sender.user.username;
+        messageOwner.textContent = this.sender.user.username;
     }
 
     initMessage(message) {
@@ -71,7 +72,13 @@ export class NewFriendNotification extends HTMLElement {
         if (accept) {
             accept.addEventListener("click", async () => {
                 const acceptResponse = await createApiData(HOST + "/friend/accept/" + this.id + "/", "");
+
                 console.log("acceptResponse: ", acceptResponse);
+
+                // const websocket = await getNotificationWebSocket();
+                // websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'type': "signal", "infos": `/Chat/` + this.sender.user.username}));
+                
+
                 this.parentElement.remove();
             });
         }
