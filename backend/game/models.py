@@ -12,4 +12,12 @@ class GamePlay(models.Model):
     def __str__(self):
         return str(self.player.user.username)
     
+class GameHestory(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_hestory', null=True)
+    time = models.DateTimeField(auto_now_add=True)
+    player_score = models.IntegerField(default=0)
+    opponent_score = models.IntegerField(default=0)
+    result = models.CharField(max_length=10, default='win')
 
+    def __str__(self):
+        return str(self.player.user.username)
