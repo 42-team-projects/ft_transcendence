@@ -30,6 +30,7 @@ game_page.innerHTML = /*html*/ `
 
 let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
+
 export class GameTable extends HTMLElement{
 
     constructor(room_name, game_play)
