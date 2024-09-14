@@ -1,5 +1,24 @@
 import { svgFile, svgFile2 } from "/Slides.js";
 
+
+export function gameBard(bard, gameColor) {
+    let rects = bard.querySelectorAll("rect[fill]");
+    rects.forEach(elem => {
+        elem.style.fill = gameColor;
+    });
+    rects = bard.querySelectorAll("rect[stroke]");
+    rects.forEach(elem => {
+        elem.style.stroke = gameColor;
+    });
+    let paths = bard.querySelectorAll("path[fill]");
+    paths.forEach(elem => {
+        elem.style.fill = gameColor;
+    });
+    paths = bard.querySelectorAll("path[stroke]");
+    paths.forEach(elem => {
+        elem.style.stroke = gameColor;
+    });
+}
 export class CustomSliders extends HTMLElement {
     constructor() {
         super();
@@ -50,22 +69,7 @@ export class CustomSliders extends HTMLElement {
         this.shadowRoot.querySelector(".box").style.height = this.height;
         this.shadowRoot.querySelector("h2").textContent = this.label;
         this.shadowRoot.querySelector("p").textContent = this.description;
-        let rects = this.shadowRoot.querySelectorAll("svg rect[fill]");
-        rects.forEach(elem => {
-            elem.style.fill = this.gameColor;
-        });
-        rects = this.shadowRoot.querySelectorAll("svg rect[stroke]");
-        rects.forEach(elem => {
-            elem.style.stroke = this.gameColor;
-        });
-        let paths = this.shadowRoot.querySelectorAll("svg path[fill]");
-        paths.forEach(elem => {
-            elem.style.fill = this.gameColor;
-        });
-        paths = this.shadowRoot.querySelectorAll("svg path[stroke]");
-        paths.forEach(elem => {
-            elem.style.stroke = this.gameColor;
-        });
+        gameBard(this.shadowRoot.querySelector("svg"), this.gameColor);
 
 
 
