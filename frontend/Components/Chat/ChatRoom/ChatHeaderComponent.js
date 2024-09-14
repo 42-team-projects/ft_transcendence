@@ -42,7 +42,7 @@ export class ChatHeaderComponent extends HTMLElement {
         const playgame = this.shadowRoot.querySelector(".play-game");
         playgame.addEventListener("click", async (e) => {
             const websocket = await getNotificationWebSocket();;
-            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, "type": "game", "infos": "hello world"}));
+            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, 'is_signal': false, "type": "game", "infos": "hello world"}));
             new Lobby(this.playerId, 30);
         })
 
