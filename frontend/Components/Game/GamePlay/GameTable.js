@@ -7,22 +7,13 @@ import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
 import { createApiData } from "/Utils/APIManager.js";
 import { svgFile, svgFile2 } from "../../../Slides.js";
-
+import { gameBard } from "../../CustomElements/CustomSliders.js";
 const game_page = document.createElement('template');
 
 let score = {
     player: 0,
     opponent: 0,
 }
-
-//<div class="shapes_LT_RT"></div>
-//<div class="shapes_LB_RB"></div>
-// <div class="shapes_DT"></div>
-// <div class="shapes_LR_container">
-// 	<div class="center_shapes_LT_RT"></div>
-// 	<div class="center_shapes_LB_RB"></div>
-// 	<div class="center_shapes_MLR"></div>
-// </div>
 
 game_page.innerHTML = /*html*/ `
 <link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
@@ -39,7 +30,6 @@ game_page.innerHTML = /*html*/ `
 
 let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
-let now;
 export class GameTable extends HTMLElement{
 
     constructor(room_name, game_play)
@@ -77,6 +67,8 @@ export class GameTable extends HTMLElement{
         this.round = 1;
         this.room_name = room_name;
         this.requestID = null;
+        console.log('svg', game_page.content.querySelector('svg'));
+        gameBard(game_page.content.querySelector('svg'), game_play.board_color);
         this.appendChild(game_page.content.cloneNode(true))
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
