@@ -50,23 +50,12 @@ class GameLoop :
             except Exception as e:
                 self.active = False
                 self.break_loop = True
-                # print(e)
-                # if self.sending_task:
-                #     self.sending_task.cancel()
-                if(i != self._rounds):
-                    await self.round_over()
+                await self.round_over()
 
 
     async def main(self): 
-        try:
-            await self.rounds_loop()
-            await self.game_over()
-        except asyncio.CancelledError:
-            # print('task cancelled')
-            if self.opponent:
-                await self.close_socket(self.opponent)
-            if self.controler:
-                await self.close_socket(self.controler)
+        await self.rounds_loop()
+        await self.game_over()
 
 
     async def sending(self):
@@ -211,24 +200,24 @@ class GameLoop :
             message = {
                 'status': 'GameOver',
                 'player_1': {
-                    'id': self.controler.id, 'game_state': 'win' if self.controler.score > self.opponent.score else 'lose'
+                    'id': self.controler.id, 'game_state': 'win' if self.controler.score > self.opponent.score else 'lose' , 'score': self.controler.score, 'opponent_score': self.opponent.score
                 },
                 'player_2': {
-                    'id': self.opponent.id, 'game_state': 'win' if self.opponent.score > self.controler.score else 'lose'
+                    'id': self.opponent.id, 'game_state': 'win' if self.opponent.score > self.controler.score else 'lose', 'score': self.opponent.score, 'opponent_score': self.controler.score
                 }
             }
         elif self.controler:
             message = {
                 'status': 'GameOver',
                 'player_1': {
-                    'id': self.controler.id, 'game_state': 'win'
+                    'id': self.controler.id, 'game_state': 'win', 'score': self.controler.score, 'opponent_score': self.opponent.score
                 },
             }
         elif self.opponent:
             message = {
                 'status': 'GameOver',
                 'player_1': {
-                    'id': self.opponent.id, 'game_state': 'win'
+                    'id': self.opponent.id, 'game_state': 'win', 'score': self.opponent.score, 'opponent_score': self.controler.score
                 }
             }
         await self.send_message(message)
