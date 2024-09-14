@@ -59,7 +59,7 @@ export class TournamentNotification extends HTMLElement {
                 console.log("sender.user.id: ", this.sender.user.id);
 
                 const websocket = await getNotificationWebSocket();
-                websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'type': "signal", "infos": `/Tournament/${this.tournamentId}`}));
+                websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "tournament", "infos": `/Tournament/${this.tournamentId}`}));
                 
 
                 await addPlayer.initTournamentSocket(data);

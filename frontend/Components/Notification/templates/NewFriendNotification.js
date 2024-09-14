@@ -75,11 +75,11 @@ export class NewFriendNotification extends HTMLElement {
 
                 console.log("acceptResponse: ", acceptResponse);
 
-                // const websocket = await getNotificationWebSocket();
-                // websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'type': "signal", "infos": `/Chat/` + this.sender.user.username}));
-                
-
+                const websocket = await getNotificationWebSocket();
+                websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "friend", "infos": `/Chat/` + this.sender.user.username}));
                 this.parentElement.remove();
+                if (window.location.pathname.includes("/Chat"))
+                    router.handleRoute(window.location.pathname);
             });
         }
         
