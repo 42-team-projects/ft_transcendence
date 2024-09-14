@@ -1,0 +1,14 @@
+route:
+  receiver: 'mail'
+  repeat_interval: 4h
+  group_by: [ alertname ]
+
+receivers:
+  - name: 'mail'
+    email_configs:
+      - to: 'oussamagf1@gmail.com'
+        from: 'ft.transcendencee.42@gmail.com'
+        smarthost: smtp.gmail.com:587
+        auth_username: 'ft.transcendencee.42@gmail.com'
+        auth_identity: 'ft.transcendencee.42@gmail.com'
+        auth_password: 'wncg rbyb ewgx xsnv'
