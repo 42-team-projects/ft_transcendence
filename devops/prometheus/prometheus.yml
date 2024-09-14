@@ -19,4 +19,12 @@ scrape_configs:
       - targets: ['nginx-exporter:9113']
       - targets: ['postgres-exporter:9187']
 
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+rule_files:
+  - 'rules.yml'
+
 # curl -X POST http://0.0.0.0:9090/-/reload
