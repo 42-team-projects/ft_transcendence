@@ -15,7 +15,6 @@ class GameLoop :
         self.ready = 0
         self.closed = 0
         self.task = None
-        self.sending_task = None
         self.pause = False
 
     async def assign_racquet(self, data, ws):
@@ -44,19 +43,38 @@ class GameLoop :
             await self.reset_players()
             self.active = True
             await asyncio.sleep(4)
-            # self.sending_task = asyncio.create_task(self.sending())
             try:
                 await asyncio.gather(self.game_loop(), self.sending())
             except Exception as e:
                 self.active = False
                 self.break_loop = True
                 await self.round_over()
+        return True
 
-
-    async def main(self): 
+    async def main(self):
         await self.rounds_loop()
         await self.game_over()
+    
+    async def cancel_game(self, ws):
+        self.break_loop = True
+        self.active = False
+        self.task.cancel()
+        if self.task.cancelled() == False:
+            await self.forfit(ws)
+            
+        self.task = None
+        self._rounds = 0
+        self.controler = None
+        self.opponent = None
 
+    async def forfit(self, ws):
+        self.opponent.score = 0
+        self.controler.score = 0
+        if ws == self.controler:
+            self.opponent.score = 5
+        elif ws == self.opponent:
+            self.controler.score = 5
+        await self.game_over()
 
     async def sending(self):
         # print('sending' , self.active)
@@ -179,18 +197,6 @@ class GameLoop :
     def get_players(self):
         return self.controler, self.opponent
         
-    async def close_socket(self, ws):
-        # print('closing')
-        # try:
-        if ws == self.controler:
-            await self.opponent.close()
-        else:
-            await self.controler.close()
-        # except Exception as e:
-            # print(e)
-        # end task of main
-
-
     async def reset_players(self):
         self.controler.y = self.canvas_height / 2
         self.opponent.y = self.canvas_height / 2
@@ -222,13 +228,8 @@ class GameLoop :
             }
         await self.send_message(message)
         self.active = False
-        if self.task:
-            self.task.cancel()
-        self.task = None
 
     async def pause_game(self):
-        # self.sending_task.cancel()
-        # self.sending_task = None
         # self.active = False
         self.pause = True
         message = {
@@ -237,7 +238,6 @@ class GameLoop :
         await self.send_message(message)
 
     async def resume_game(self):
-        # self.sending_task = asyncio.create_task(self.sending())
         # self.active = True
         self.pause = False
         message = {

@@ -3,6 +3,7 @@ import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
 import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
 import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
+import { router } from "/root/Router.js";
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
@@ -194,9 +195,10 @@ export class Lobby extends HTMLElement{
 				this.updateTimer();
 			}
 		};
-		// this.socket.onclose = (e) => {
-		// 	console.log('socket close');
-		// };
+		this.socket.onclose = (e) => {
+			router.handleRoute(window.location.pathname);
+			router.randring();
+		};
 		this.socket.onerror = (e) => {
 			console.log('socket error');
 		};
@@ -246,6 +248,8 @@ export class Lobby extends HTMLElement{
 				room_group_name = 'game_' + opponentId + '_' + userInfo.id;
 			const inter = setInterval(() => {
 				this.time -= 1;
+				if(this.time <= 0)
+					clearInterval(inter);
 				this.updateTimer();
 				// console.log("hello from OnlineGame !!!");
 			}, 1000);
@@ -327,11 +331,11 @@ export class Lobby extends HTMLElement{
 				const countdown = setInterval(async()=>{
 					if(this.time <= 0){
 						if(this.socket){
-							this.socket.close();
 							this.socket.onclose = async (e) => {
 								console.log('socket close');
 								await this.playeGame(room_group_name);
 							};
+							this.socket.close();
 						}
 						else
 							await this.playeGame(room_group_name);
@@ -358,7 +362,9 @@ export class Lobby extends HTMLElement{
 		if(this.time > 0){
 			if(this.socket)
 				this.socket.close();
+			
 		}
+		
 	}
 }
 
