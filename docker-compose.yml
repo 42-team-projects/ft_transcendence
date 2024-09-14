@@ -6,6 +6,7 @@ volumes:
   postgres_data:
   prometheus_data:
   grafana_data:
+  alertmanager_data:
 
 services:
   back-end:
@@ -68,10 +69,12 @@ services:
     container_name: prometheus
     volumes:
       - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./devops/prometheus/rules.yml:/etc/prometheus/rules.yml
       - prometheus_data:/prometheus
     command:
       - '--web.enable-lifecycle'
       - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=1d'
     ports:
       - 9090:9090 # ! should not be exposed
     env_file:
@@ -122,5 +125,22 @@ services:
     depends_on:
       - database
 
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    volumes:
+      - alertmanager_data:/alertmanager
+      - ./devops/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+    ports:
+      - 9093:9093 # ! should not be exposed
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - app_network
+    depends_on:
+      - prometheus
 # docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
 # grafana ==> nginx: NGINX exporter (12708) | back-end: back-end (7996/17658) | postgres-exporter: postgres-exporter (14114)
