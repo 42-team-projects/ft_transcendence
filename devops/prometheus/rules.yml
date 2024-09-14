@@ -1,0 +1,22 @@
+# simple rule if an instance is down
+groups:
+- name: instance_down
+  rules:
+  - alert: InstanceDown
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} down"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
+
+- name: backend_errors
+  rules:
+  - alert: High500Errors
+    expr: increase(django_http_responses_total_by_status_total{status="500"}[1m]) > 0
+    labels:
+      severity: critical
+    annotations:
+      summary: "HTTP 500 error occurred"
+      description: "An HTTP 500 error has occurred."
