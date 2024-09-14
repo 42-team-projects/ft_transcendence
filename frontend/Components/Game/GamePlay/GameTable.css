@@ -240,7 +240,7 @@ img {
     border-radius: 15px 15px 15px 15px;
 }
 
-.table_container::before{
+/* .table_container::before{
     content: '';
     width: 1px;
     height: 100%;
@@ -256,7 +256,7 @@ img {
     border : 1px solid white;
     border-radius:50%;
     z-index: -1;
-}
+} */
 
 
 .pingpongTable{
