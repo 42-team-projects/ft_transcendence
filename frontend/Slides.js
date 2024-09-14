@@ -1,22 +1,22 @@
 export const svgFile = `
-<svg width="1570" height="724" viewBox="0 0 1570 724" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M1 1H1569V719H1V1Z" stroke="#00FFFF" stroke-width="2"/>
-<rect x="29" y="42" width="1512.16" height="644" fill="#00FFFF" fill-opacity="0.1"/>
-<path d="M361.267 680.15L320 716.279H402.535L361.267 680.15Z" stroke="#00FFFF" stroke-width="2"/>
-<path d="M1202.27 682.416L1161 718.545H1243.53L1202.27 682.416Z" stroke="#00FFFF" stroke-width="2"/>
-<path d="M779.273 672.381L732.11 713.671H826.436L779.273 672.381Z" fill="#00FFFF"/>
-<path d="M781.862 641.328L696 716.499H867.724L781.862 641.328Z" stroke="#00FFFF" stroke-width="2"/>
-<rect y="713" width="1570" height="11" fill="#00FFFF"/>
-<path d="M378 0H1184.24C1184.24 0 1180.13 10.3226 1172.39 10.3226C1164.66 10.3226 403.791 10.3226 393.475 10.3226C383.159 10.3226 378 0 378 0Z" fill="#00FFFF"/>
-<path d="M566.644 26.0371L543.062 5.39195H590.225L566.644 26.0371Z" stroke="#00FFFF" stroke-width="2"/>
-<path d="M989.581 26.0371L966 5.39195H1013.16L989.581 26.0371Z" stroke="#00FFFF" stroke-width="2"/>
-<path d="M779.308 29.6162L755.321 8.28288H803.295L779.308 29.6162Z" fill="#00FFFF"/>
-<path d="M778.569 45.5479L734 6.52859H823.138L778.569 45.5479Z" stroke="#00FFFF" stroke-width="2"/>
-<path d="M1120.6 363.229H450M782.719 196V533.032" stroke="#00FFFF" stroke-opacity="0.7" stroke-width="2"/>
-<rect x="780.129" y="330.25" width="5.15842" height="67.0969" fill="#00FFFF" fill-opacity="0.7"/>
-<rect x="781.129" y="331.25" width="3.15842" height="65.0969" stroke="#00FFFF" stroke-opacity="0.7" stroke-width="2"/>
-<rect x="744.038" y="361.303" width="77.3761" height="5.16129" fill="#00FFFF" fill-opacity="0.7"/>
-<rect x="745.038" y="362.303" width="75.3761" height="3.16129" stroke="#00FFFF" stroke-opacity="0.7" stroke-width="2"/>
+<svg width="1755" height="798" viewBox="0 0 1755 798" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M84 36H1670.39V756.983H84V36Z" stroke="#00FFFF" stroke-width="2"/>
+<rect x="119.5" y="77.1742" width="1515.98" height="646.669" fill="#00FFFF" fill-opacity="0.1"/>
+<path d="M446.936 717.969L405.052 754.247H488.819L446.936 717.969Z" stroke="#00FFFF" stroke-width="2"/>
+<path d="M1300.5 720.244L1258.61 756.523H1342.38L1300.5 720.244Z" stroke="#00FFFF" stroke-width="2"/>
+<path d="M871.184 710.167L823.317 751.629H919.052L871.184 710.167Z" fill="#00FFFF"/>
+<path d="M873.814 678.985L786.669 754.468H960.958L873.814 678.985Z" stroke="#00FFFF" stroke-width="2"/>
+<rect x="83" y="750.955" width="1588" height="11.0456" fill="#00FFFF"/>
+<path d="M463.255 35H1274.31C1274.31 35 1270.17 45.3653 1262.39 45.3653C1254.61 45.3653 489.2 45.3653 478.822 45.3653C468.445 45.3653 463.255 35 463.255 35Z" fill="#00FFFF"/>
+<path d="M653.024 61.1449L629.302 40.4142H676.746L653.024 61.1449Z" stroke="#00FFFF" stroke-width="2"/>
+<path d="M1078.49 61.1449L1054.76 40.4142H1102.21L1078.49 61.1449Z" stroke="#00FFFF" stroke-width="2"/>
+<path d="M866.959 64.7395L842.829 43.3178H891.089L866.959 64.7395Z" fill="#00FFFF"/>
+<path d="M866.215 80.7367L821.38 41.5557H911.049L866.215 80.7367Z" stroke="#00FFFF" stroke-width="2"/>
+<path d="M1214.6 399.735H540M874.704 231.812V570.24" stroke="#00FFFF" stroke-opacity="0.7" stroke-width="2"/>
+<rect x="872.098" y="366.618" width="5.1892" height="67.3749" fill="#00FFFF" fill-opacity="0.7"/>
+<rect x="873.098" y="367.618" width="3.1892" height="65.3749" stroke="#00FFFF" stroke-opacity="0.7" stroke-width="2"/>
+<rect x="835.793" y="397.8" width="77.8378" height="5.18267" fill="#00FFFF" fill-opacity="0.7"/>
+<rect x="836.793" y="398.8" width="75.8378" height="3.18267" stroke="#00FFFF" stroke-opacity="0.7" stroke-width="2"/>
 </svg>
 `;
 
@@ -42,7 +42,8 @@ export const svgFile2 = `
 <path d="M694.48 765.222L732.479 799L120.258 799L10.4801 689.222H61.1467L137.147 765.222L694.48 765.222Z" fill="#00FFFC" fill-opacity="0.7" stroke="#00FFFC" stroke-opacity="0.7"/>
 <path d="M639.559 731.415V744.081H711.337L749.337 786.303H994.226L1036.45 744.081H1095.56L1108.23 739.859L1095.56 731.415H994.226L981.559 739.859H757.781L740.892 731.415H639.559Z" fill="#00FFFC" fill-opacity="0.3"/>
 <rect x="118" y="76" width="1516" height="646" rx="21" fill="#00B9BE" fill-opacity="0.3"/>
-<path d="M870.155 76L869.155 720" stroke="white" stroke-opacity="0.5"/>
-<circle cx="870.155" cy="398" r="64.5" stroke="white" stroke-opacity="0.5"/>
+<path d="M876 76L875 720" stroke="white" stroke-opacity="0.5"/>
+<circle cx="876" cy="398" r="64.5" stroke="white" stroke-opacity="0.5"/>
 </svg>
+
 `;
