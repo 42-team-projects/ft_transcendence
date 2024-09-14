@@ -81,7 +81,10 @@ export class ChatListComponent extends HTMLElement {
                 list.prepend(chatItem);
             }
         } catch (error) {
-            console.error('Error fetching chat data:', error);
+            const errorContainer = document.body.querySelector(".display-errors");
+            if (errorContainer) {
+                errorContainer.innerHTML = 'Error fetching chat data';
+            }
         }
     }
 }

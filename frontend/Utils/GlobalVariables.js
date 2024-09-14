@@ -83,20 +83,43 @@ export async function createNotificationWebSocket() {
             console.log(data.Error)
             return ;
         }
-        if (data.type !== "signal") {
+        if (!data.is_signal) {
             const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.infos);
             displayNotification(messageNotification);
         }
-        else {
-            const url = new URL(HOST + data.infos);
-            if (window.location.pathname === url.pathname)
-                router.handleRoute(url.pathname);
-            else if (url.pathname.includes(window.location.pathname)) {
-                router.handleRoute(window.location.pathname);
-            }
-        }
+        else
+            handleSignals(data);
     }
     return (notificationWebSocket);
+}
+
+
+export function handleSignals(signalData) {
+
+    let url;
+    switch (signalData.type) {
+        case "tournament":
+            url = new URL(HOST + signalData.infos);
+            if (window.location.pathname === url.pathname)
+                router.handleRoute(url.pathname);
+            break;
+    
+        case "friend":
+            url = new URL(HOST + signalData.infos);
+            if (url.pathname.includes(window.location.pathname))
+                router.handleRoute(window.location.pathname);
+    
+        case "message":
+            // url = new URL(HOST + signalData.sender);
+            // if (window.location.pathname === url.pathname)
+            //     return ;
+            const messageNotification = createNotification(signalData.id, signalData.sender, signalData.content, "message", signalData.infos);
+            displayNotification(messageNotification);
+        default:
+            break;
+    }
+
+
 }
 
 
