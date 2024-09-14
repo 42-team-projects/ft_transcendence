@@ -8,6 +8,7 @@ import { router } from "/root/Router.js";
 import { createApiData } from "/Utils/APIManager.js";
 import { svgFile, svgFile2 } from "../../../Slides.js";
 import { gameBard } from "../../CustomElements/CustomSliders.js";
+import { opponentInfo } from "./Lobby.js";
 const game_page = document.createElement('template');
 
 let score = {
@@ -80,13 +81,100 @@ export class GameTable extends HTMLElement{
     }
     async connectedCallback(){
         document.body.addEventListener('pause-game', () => {
-            this.socket.send(JSON.stringify({'message': 'pause'})) 
+            this.pauser = true;
+            this.socket.send(JSON.stringify({'message': 'pause', 'id': userInfo.id})) 
         })
         document.body.addEventListener('resume-game', () => {
-            this.socket.send(JSON.stringify({'message': 'resume'}))
+            if(this.pauser === true)
+                this.socket.send(JSON.stringify({'message': 'resume'}))
+        })
+        document.body.addEventListener('exit-game', () => {
+            this.remove();
         })
         this.runder_call = true;
         await this.getMessages();
+    }
+    gameStart = () => {
+
+        const messages = {
+            'message': 'firstdata',
+            'canvas_width': CANVAS_WIDTH,
+            'canvas_height': CANVAS_HEIGHT,
+            'id': userInfo.id,
+            'racquet': {
+                'height': this.racquet.height,
+                'width': this.racquet.width,
+            },
+        }
+        this.socket.send(JSON.stringify(messages))
+    }
+    roundOver = async (player_1, player_2) => {
+        if (userInfo.id === Number(player_1.id)) {
+            score.player = player_1.score;
+            score.opponent = player_2.score;
+        } else if (userInfo.id === Number(player_2.id)) {
+            score.player = player_2.score;
+            score.opponent = player_1.score;
+        }
+        await this.RoundOver();
+    }
+    roundStart = async (message) => {
+        this.luanching = true;
+        this.round = message.round;
+        await this.resetGame();
+    }
+    gameEnd = async (player_1, player_2) => {
+        let player_state = '';
+        let score = '';
+        let opponent_score = '';
+        if (userInfo.id === Number(player_1.id)) {
+            player_state = player_1.game_state;
+            score = player_1.score;
+            opponent_score = player_2.score;
+        } else if (userInfo.id === Number(player_2.id)) {
+            player_state = player_2.game_state;
+            score = player_2.score;
+            opponent_score = player_1.score;
+        }
+        this.luanching = false;
+        await this.GameOver(player_state, score, opponent_score);
+    }
+    moveRacket = (player_1, player_2) => {
+        if (userInfo.id === Number(player_1.id)) {
+            this.updatePlayerPosition(player_1.y);
+            this.updateOpponentPosition(player_2.y);
+        } else if (userInfo.id === Number(player_2.id)) {
+            this.updatePlayerPosition(player_2.y);
+            this.updateOpponentPosition(player_1.y);
+        }
+    }
+    gameData = async (message, player_1, player_2) => {
+        const ball_y = message.ball.y;
+        const ball_radius = message.ball.radius;
+        const dy = message.ball.dy;
+        let ball_x = 0;
+        let dx = 0;
+        if (userInfo.id === Number(player_1.id)) {
+            ball_x = player_1.ball_x;
+            dx = player_1.ball_dx;
+        } else if (userInfo.id === Number(player_2.id)) {
+            ball_x = player_2.ball_x;
+            dx = player_2.ball_dx;
+        }
+        this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
+    }
+    pauseGame = (message) => {
+        this.pause = true;
+        console.log('pause');
+        document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSED'
+        document.body.appendChild(new PausePage())
+    }
+    resumeGame = () => {
+        this.pause = false;
+        this.pauser = false;
+        console.log('Resume');
+        document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSE'
+        document.body.querySelector('pause-page').remove();
     }
     async getMessages() {
         this.socket.onmessage = async (event) => {
@@ -96,86 +184,22 @@ export class GameTable extends HTMLElement{
             const player_2 = message.player_2;
             const status = message.status;
             // console.log('message', message);
-            if (status === 'game_start') {
-                // console.log('message', message);
-                const messages = {
-                    'message': 'firstdata',
-                    'canvas_width': CANVAS_WIDTH,
-                    'canvas_height': CANVAS_HEIGHT,
-                    'id': userInfo.id,
-                    'racquet': {
-                        'height': this.racquet.height,
-                        'width': this.racquet.width,
-                    },
-                }
-                this.socket.send(JSON.stringify(messages))
-            } else if (status === 'RoundOver') {
-                // console.log('message', message);
-                if (userInfo.id === Number(player_1.id)) {
-                    score.player = player_1.score;
-                    score.opponent = player_2.score;
-                } else if (userInfo.id === Number(player_2.id)) {
-                    score.player = player_2.score;
-                    score.opponent = player_1.score;
-                }
-                await this.RoundOver();
-                // console.log('time', new Date() - now);
-            } else if (status === 'RoundStart') {
-                // console.log('message', message);
-                this.luanching = true;
-                this.round = message.round;
-                await this.resetGame();
-                // now = new Date();
-            } else if (status === 'GameOver') {
-                let player_state = '';
-                let score = '';
-                let opponent_score = '';
-                if (userInfo.id === Number(player_1.id)) {
-                    player_state = player_1.game_state;
-                    score = player_1.score;
-                    opponent_score = player_2.score;
-                } else if (userInfo.id === Number(player_2.id)) {
-                    player_state = player_2.game_state;
-                    score = player_2.score;
-                    opponent_score = player_1.score;
-                }
-                this.luanching = false;
-                await this.GameOver(player_state, score, opponent_score);
-            } else if (status === 'move') {
-                if (userInfo.id === Number(player_1.id)) {
-                    this.updatePlayerPosition(player_1.y);
-                    this.updateOpponentPosition(player_2.y);
-                } else if (userInfo.id === Number(player_2.id)) {
-                    this.updatePlayerPosition(player_2.y);
-                    this.updateOpponentPosition(player_1.y);
-                }
-            } else if(status === 'Game'){
-                const ball_y = message.ball.y;
-                const ball_radius = message.ball.radius;
-                const dy = message.ball.dy;
-                let ball_x = 0;
-                let dx = 0;
-                if (userInfo.id === Number(player_1.id)) {
-                    ball_x = player_1.ball_x;
-                    dx = player_1.ball_dx;
-                } else if (userInfo.id === Number(player_2.id)) {
-                    ball_x = player_2.ball_x;
-                    dx = player_2.ball_dx;
-                }
-                this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
-            }
-            else if(status === 'Pause'){
-                this.pause = true;
-                console.log('pause');
-                document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSED'
-                document.body.appendChild(new PausePage())
-            }
-            else if(status === 'Resume'){
-                this.pause = false;
-                console.log('Resume');
-                document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSE'
-                document.body.querySelector('pause-page').remove();
-            }
+            if (status === 'game_start') 
+                this.gameStart();
+            else if (status === 'RoundOver')
+                await this.roundOver(player_1, player_2);
+            else if (status === 'RoundStart')
+                await this.roundStart(message);
+            else if (status === 'GameOver')
+                await this.gameEnd(player_1, player_2);
+            else if (status === 'move')
+                this.moveRacket(player_1, player_2);
+            else if(status === 'Game')
+                await this.gameData(message, player_1, player_2);
+            else if(status === 'Pause')
+                this.pauseGame(message);
+            else if(status === 'Resume')
+                this.resumeGame();
         }
     }
     
@@ -223,15 +247,14 @@ export class GameTable extends HTMLElement{
         this.Loop_state = false;
         // console.log("this.id: ", this.id);
         if (this.id && this.id !== 'undefined')
-            await goNextStage(playerState, this.id);
+            await goNextStage(playerState, this.id, userInfo.id, opponentInfo.id ,score, opponent_score);
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
-        this.socket.close();
         const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState});
         await createApiData(HOST + '/game/game_history/', body)
         //redirect to last url in hesory
         setTimeout(() => {
-            router.handleRoute(window.location.pathname);
+            this.remove();
         }, 5000);
     }
     async LuncheGame(ctx){
@@ -329,7 +352,7 @@ export class GameTable extends HTMLElement{
         await this.RanderRackit(ctx, this.getOpponentPosition());
         await this.LuncheGame(ctx);
     }
-    async RoundOver(ctx){
+    async RoundOver(){
         // this.Loop_state = false;
         document.querySelector('game-header').updateScore(score);
     }
@@ -414,8 +437,14 @@ export class GameTable extends HTMLElement{
         this.socket.send(JSON.stringify(message));
     }
     disconnectedCallback(){
+        this.socket.close();
+        const pause = document.body.querySelector('pause-page');
+        if(pause)
+            pause.remove();
+        router.handleRoute(window.location.pathname);
         router.randring()
         document.body.querySelector('game-header').remove();
         document.body.querySelector('game-over').remove();
+
     }
 }
