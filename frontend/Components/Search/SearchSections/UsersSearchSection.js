@@ -77,7 +77,7 @@ export class UsersSearchSection extends HTMLElement {
 
         playGame.addEventListener("click", async () => {
             const websocket = await getNotificationWebSocket();
-            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': playerData.user.id, "type": "game", "infos": "hello world"}));
+            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': playerData.user.id, 'is_signal': false, "type": "game", "infos": "hello world"}));
             new Lobby(playerData.user.id, 30);
         });
 
@@ -90,7 +90,7 @@ export class UsersSearchSection extends HTMLElement {
             const sendRequestResponse = await createApiData(HOST + "/friend/send/" + playerData.user.id + "/", "");
             if (sendRequestResponse.response) {
                 const websocket = await getNotificationWebSocket();
-                websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': playerData.user.id, "type": "friend", "infos": "hello world"}));
+                websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': playerData.user.id, 'is_signal': false, "type": "friend", "infos": "hello world"}));
             }
 
         });
