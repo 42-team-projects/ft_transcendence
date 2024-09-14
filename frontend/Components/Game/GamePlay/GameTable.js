@@ -2,10 +2,12 @@ import { GameOver } from "/Components/Game/GamePlay/GameOver.js";
 import { LaunchingGame } from "/Components/Game/GamePlay/launchingGame.js";
 import { userInfo } from "/Components/Game/GamePlay/Lobby.js";
 import { goNextStage } from "/Components/Game/GamePlay/configs/ScoreManager.js";
-import { wsUrl } from "/Utils/GlobalVariables.js";
+import { wsUrl, HOST } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
-
+import { createApiData } from "/Utils/APIManager.js";
+import { svgFile, svgFile2 } from "../../../Slides.js";
+import { gameBard } from "../../CustomElements/CustomSliders.js";
 const game_page = document.createElement('template');
 
 let score = {
@@ -13,33 +15,25 @@ let score = {
     opponent: 0,
 }
 
-
 game_page.innerHTML = /*html*/ `
 <link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
 <link rel="stylesheet" href="/Utils/utils.css">
 <div class="c_game">
+    ${svgFile2}
     <div class="GameShapes">
-		<div class="shapes_LT_RT"></div>
-		<div class="shapes_LB_RB"></div>
-		<div class="shapes_DT"></div>
-		<div class="shapes_LR_container">
-			<div class="center_shapes_LT_RT"></div>
-			<div class="center_shapes_LB_RB"></div>
-			<div class="center_shapes_MLR"></div>
-		</div>
-		<div class="table_container">
+        <div class="table_container">
             <canvas id="table" class="pingpongTable"></canvas>
-		</div>
+        </div>
     </div>
 </div>
-`
+    `
 
 let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
-let now;
+
 export class GameTable extends HTMLElement{
 
-    constructor(room_name)
+    constructor(room_name, game_play)
     {
         super();
         // this.socket = new WebSocket(`wss://${ip}:8000/ws/game/${room_name}/`);
@@ -61,20 +55,25 @@ export class GameTable extends HTMLElement{
         this.player = { 
             x: 0, 
             y: CANVAS_HEIGHT / 2,
-            color: 'white'
+            color: game_play.first_racket_color
         };
+        console.log('this.player', this.player);
         this.opponent = { 
             x: CANVAS_WIDTH - this.racquet.width, 
             y: CANVAS_HEIGHT / 2, 
-            color: '#00b9be'
+            color: game_play.second_racket_color
         };
+        console.log('this.opponent', this.opponent);
+        this.ball_color = game_play.ball_color;
         this.round = 1;
         this.room_name = room_name;
         this.requestID = null;
+        console.log('svg', game_page.content.querySelector('svg'));
+        gameBard(game_page.content.querySelector('svg'), game_play.board_color);
         this.appendChild(game_page.content.cloneNode(true))
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
-
+        this.pause = false;
         // document.addEventListener('visibilitychange', (event)=>{
         //     this.socket.send(JSON.stringify({'status': 'pause'}))
         // })
@@ -129,13 +128,19 @@ export class GameTable extends HTMLElement{
                 // now = new Date();
             } else if (status === 'GameOver') {
                 let player_state = '';
+                let score = '';
+                let opponent_score = '';
                 if (userInfo.id === Number(player_1.id)) {
                     player_state = player_1.game_state;
+                    score = player_1.score;
+                    opponent_score = player_2.score;
                 } else if (userInfo.id === Number(player_2.id)) {
                     player_state = player_2.game_state;
+                    score = player_2.score;
+                    opponent_score = player_1.score;
                 }
                 this.luanching = false;
-                await this.GameOver(player_state);
+                await this.GameOver(player_state, score, opponent_score);
             } else if (status === 'move') {
                 if (userInfo.id === Number(player_1.id)) {
                     this.updatePlayerPosition(player_1.y);
@@ -160,12 +165,14 @@ export class GameTable extends HTMLElement{
                 this.setCoordonates(ball_x , ball_y, ball_radius, dx, dy);
             }
             else if(status === 'Pause'){
-                // console.log('pause');
+                this.pause = true;
+                console.log('pause');
                 document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSED'
                 document.body.appendChild(new PausePage())
             }
             else if(status === 'Resume'){
-                // console.log('resume');
+                this.pause = false;
+                console.log('Resume');
                 document.body.querySelector('.Play_Pause').querySelector('.status').textContent = 'PAUSE'
                 document.body.querySelector('pause-page').remove();
             }
@@ -212,13 +219,16 @@ export class GameTable extends HTMLElement{
     }
     getCoordonates(){return this.concoordonate;}
     
-    async GameOver(playerState){
+    async GameOver(playerState, score, opponent_score){
         this.Loop_state = false;
         // console.log("this.id: ", this.id);
         if (this.id && this.id !== 'undefined')
             await goNextStage(playerState, this.id);
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
+        this.socket.close();
+        const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState});
+        await createApiData(HOST + '/game/game_history/', body)
         //redirect to last url in hesory
         setTimeout(() => {
             router.handleRoute(window.location.pathname);
@@ -271,7 +281,7 @@ export class GameTable extends HTMLElement{
     }
     async renderBall(ctx){
         const coordonate = this.getCoordonates();
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = this.ball_color;
         ctx.beginPath();
         ctx.arc(coordonate.x, coordonate.y, coordonate.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -324,6 +334,8 @@ export class GameTable extends HTMLElement{
         document.querySelector('game-header').updateScore(score);
     }
     async moveBall(player, opponent, ctx){
+        if(this.pause === true)
+            return;
         let {x, y, radius, dx, dy} = this.getCoordonates();
         // console.log(this.getCoordonates());
         if(y + radius + dy >= CANVAS_HEIGHT || y - radius + dy <= 0)
