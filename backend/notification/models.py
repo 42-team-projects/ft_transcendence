@@ -10,6 +10,7 @@ class Notification(models.Model):
     receiver = models.ForeignKey(User, related_name='receiver_notification', on_delete=models.CASCADE)
     content = models.TextField()
     type = models.CharField(max_length=255, null=True)
+    data = models.CharField(max_length=255, null=True)
     create_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
