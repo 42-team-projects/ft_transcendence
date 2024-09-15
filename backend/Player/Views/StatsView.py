@@ -24,6 +24,7 @@ def getPlayerStats(request, username):
             serializer = StatsSerializer(stats)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         elif request.method == 'PUT':
+            
             serializer = StatsSerializer(stats, data=request.data)
             if serializer.is_valid():
                 serializer.save()

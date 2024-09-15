@@ -16,7 +16,7 @@ export async function getApiData(APIUrl) {
     if (!response.ok)
         return null;
     const apiData = await response.json();
-    // console.log("getApiData => apiData: ", apiData);
+    console.log("getApiData => apiData: ", apiData);
     return apiData;
 }
 

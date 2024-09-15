@@ -33,9 +33,9 @@ def getGamePlayOfTheCurrentUser(request):
 @csrf_exempt
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
-def getGameHestoryByUserName(request):
+def getMyGameHistory(request):
     if request.method == 'GET':
-        gamehistory = GameHestory.objects.filter(player__user=request.user)
+        gamehistory = GameHestory.objects.filter(player__user=request.user).order_by('-id')
         serializer = GameHestorySerializer(gamehistory, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     
@@ -43,13 +43,21 @@ def getGameHestoryByUserName(request):
         data = request.data
         try:
             player = Player.objects.get(user=request.user)
-            history = GameHestory.objects.create(player=player, player_score=data['player_score'], opponent_score=data['opponent_score'], result=data['result'])
+            opponent_player = Player.objects.get(user=data['opponent_player'])
+            GameHestory.objects.create(player=player, player_score=data['player_score'], opponent_score=data['opponent_score'], result=data['result'], opponent_player=opponent_player)
             return JsonResponse({"response": "the history has been succefully created!!!"}, safe=False, status=status.HTTP_201_CREATED)
         except Player.DoesNotExist:
             return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
-        # serializer = GameHestorySerializer(data=data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return JsonResponse(serializer.data, safe=False, status=status.HTTP_201_CREATED)
-        # return JsonResponse(serializer.errors, safe=False, status=status.HTTP_400_BAD_REQUEST)
+
     
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getGameHistoryByUserName(request, username):
+    try:
+        player = Player.objects.get(user__username=username);
+        gamehistory = GameHestory.objects.filter(player=player).order_by('-id')
+        serializer = GameHestorySerializer(gamehistory, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+    except Player.DoesNotExist:
+        return JsonResponse({"error": "Player Doesn't Exist !!!"}, safe=False, status=status.HTTP_404_NOT_FOUND)
