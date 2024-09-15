@@ -1,5 +1,5 @@
 import { createApiData, getApiData, updateApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL, HOST } from "/Utils/GlobalVariables.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL, HOST, updateCurrentPlayer, getCurrentPlayerId } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { fetchWithToken } from "/root/fetchWithToken.js";
 import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
@@ -8,6 +8,7 @@ import { CustomUnorderedList } from "/Components/CustomElements/CustomUnorderedL
 import { CustomUnorderedListItem } from "/Components/CustomElements/CustomUnorderedListItem.js";
 import { CustomSelect } from "/Components/CustomElements/CustomSelect.js";
 import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
+
 
 
 export class ProfileContent extends HTMLElement {
@@ -38,6 +39,10 @@ export class ProfileContent extends HTMLElement {
     }
     interval;
     async connectedCallback() {
+        const currentPlayerId = await getCurrentPlayerId();
+        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
+
+        refreshBox.display();
 
         const playerData = await getApiData(PROFILE_API_URL + "me/");
 
@@ -59,7 +64,6 @@ export class ProfileContent extends HTMLElement {
 
         const fullNameField = this.shadowRoot.querySelector(".full-name-field");
         fullNameField.value = playerData.fullName;
-
         const coverField = this.shadowRoot.querySelector(".cover-field");
 
         let playerCover;
@@ -71,7 +75,6 @@ export class ProfileContent extends HTMLElement {
         links.list = playerData.links;
         let linksList = links.list.length;
 
-        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
 
         const saveButton = this.shadowRoot.querySelector(".save-button");
         this.interval = setInterval(() => {
@@ -96,9 +99,11 @@ export class ProfileContent extends HTMLElement {
             }
      
             if (list.length) {
-                const linksData = {"links": list};
                 linksList = list.length;
-                await createApiData(PROFILE_API_URL + "links/", JSON.stringify(linksData));
+                Array.from(list).forEach(async (item) => {
+                    item.player = currentPlayerId;
+                    await createApiData(PROFILE_API_URL + "me/links/", JSON.stringify(item));
+                });
             }
             
             if ((fullNameField.value && fullNameField.value != playerData.fullName) || coverField.file)
@@ -115,6 +120,7 @@ export class ProfileContent extends HTMLElement {
                 const res = await updateApiData(PROFILE_API_URL + "me/", formData);
                 console.log("res: ", res);
             }
+            await updateCurrentPlayer();
             refreshBox.display();
             saveButton.classList.add("disable");
 

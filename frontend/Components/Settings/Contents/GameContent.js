@@ -74,13 +74,15 @@ export class GameContent extends HTMLElement {
     }
 
     async connectedCallback() {
+        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
+        refreshBox.display();
+
         const gamePlayColorSelector = this.shadowRoot.querySelector("#gamePlayColor");
         let gamePlayColor = gamePlayColorSelector.value;
         const customSliders = this.shadowRoot.querySelector("custom-sliders");
         const playerGamePlayData = await getApiData(HOST + "/game/game_play/");
 
         this.init(playerGamePlayData);
-        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
 
         gamePlayColorSelector.addEventListener("click", () => {
             let counter = 0;

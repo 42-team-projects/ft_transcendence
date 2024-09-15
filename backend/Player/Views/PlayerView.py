@@ -100,6 +100,7 @@ def getMyInfo(request):
             Links.objects.filter(player=player).delete()
             player.stats.graph.delete();
             player.stats.delete();
+            player.user.delete()
             player.delete()
             return JsonResponse({"message": "Player deleted successfully"}, status=status.HTTP_200_OK)
     except Player.DoesNotExist:
