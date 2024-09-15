@@ -58,7 +58,8 @@ class GameLoop :
     async def cancel_game(self, ws):
         self.break_loop = True
         self.active = False
-        self.task.cancel()
+        if self.task:
+            self.task.cancel()
         if self.task.cancelled() == False:
             await self.forfit(ws)
             
