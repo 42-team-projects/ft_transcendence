@@ -10,6 +10,86 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from dotenv import load_dotenv
+
+
+
+from web3 import Web3
+import os
+from eth_account import Account
+import os
+
+# Load environment variables from .env file
+load_dotenv()
+
+
+# Web3.py setup 
+SEPOLIA_URL = os.getenv('SEPOLIA_URL')
+CONTRACT_ADDRESS = os.getenv('CONTRACT_ADDRESS')
+PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+
+w3 = Web3(Web3.HTTPProvider(SEPOLIA_URL))
+
+@csrf_exempt
+@api_view(['POST'])
+def leave_tournament_and_store_score(request):
+    if request.method == 'POST':
+        try:
+            # Extract data from the request
+            tournament_id = request.data.get('tournamentId')
+            winner_id = request.data.get('winnerId')
+            winner_score = request.data.get('winnerIdScore')
+            loser_id = request.data.get('loserId')
+            loser_score = request.data.get('loserIdScore')
+            CONTRACT_ABI = request.data.get('abi')
+            # Check if the tournament exists
+            # try:
+            #     tournament = Tournament.objects.get(tournament_id=tournament_id)
+            # except Tournament.DoesNotExist:
+            #     return JsonResponse({'statusText': 'Tournament not found'}, status=404)
+            # # If the player is the loser, remove them from the tournament
+            # if player.id == loser_id:
+            #     tournament.players.remove(player)
+            #     tournament.save()
+            # Validate required parameters
+            if not all([tournament_id, winner_id, winner_score, loser_id, loser_score, CONTRACT_ABI]):
+                return JsonResponse({'statusText': 'Missing required parameters'}, status=400)
+            # Create contract instance
+            contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
+            # Create account from private key
+            account = w3.eth.account.privateKeyToAccount(PRIVATE_KEY)
+            # Build the transaction
+            tx = contract.functions.storeScore(
+                tournament_id,
+                winner_id,
+                winner_score,
+                loser_id,
+                loser_score
+            ).buildTransaction({
+                'from': account.address,
+                'chainId': 11155111,  # Sepolia Testnet Chain ID
+                'gas': 2000000,
+                'gasPrice': w3.toWei('50', 'gwei'),
+                'nonce': w3.eth.getTransactionCount(account.address),
+            })
+            # Sign the transaction
+            signed_txn = w3.eth.account.signTransaction(tx, private_key=PRIVATE_KEY)
+            # Send the transaction
+            try:
+                tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+                receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+                scores = contract.functions.getScores(tournament_id).call()
+                return JsonResponse({
+                    'success': 'Player successfully left the tournament (if loser) and score stored on blockchain',
+                    'txHash': tx_hash.hex(),
+                    'scores': scores
+                }, status=200)
+            except Exception as e:
+                return JsonResponse({'statusText': f'Error sending transaction: {str(e)}'}, status=500)
+
+        except Exception as e:
+            return JsonResponse({'statusText': str(e)}, status=500)
+    return JsonResponse({'statusText': 'Invalid request method'}, status=405)
 
 
 
@@ -245,3 +325,21 @@ def player_leave_tournament(request, tournamentId):
 #         serializer = TournamentSerializer(tournament)
 #         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
 #     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+
+
+
+
+################ leave tournament code ################
+
+# Check if the tournament exists
+            # try:
+            #     tournament = Tournament.objects.get(tournament_id=tournament_id)
+            # except Tournament.DoesNotExist:
+            #     return JsonResponse({'statusText': 'Tournament not found'}, status=404)
+
+            # If the player is the loser, remove them from the tournament
+            # if player.id == loser_id:
+            #     tournament.players.remove(player)
+            #     tournament.save()
