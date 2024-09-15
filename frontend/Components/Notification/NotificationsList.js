@@ -17,7 +17,9 @@ export class NotificationsList extends HTMLElement {
                 <h3>NOTIFICATIONS</h3>
             </div>
             <div class="notificationsBar-body">
-                <div class="notification-list"></div>
+                <div class="notification-list">
+                    <h5 style="display: flex;width: 100%; color: #d9d9d980; justify-content: center; align-items: center; height: 100%;">There's no notification right now.</h5>
+                </div>
             </div>
             <div class="notificationsBar-footer">
                 <h4 class="clear-all">Clear All</h4>
@@ -28,31 +30,42 @@ export class NotificationsList extends HTMLElement {
     async connectedCallback() {
         this.style.width = this.width;
         this.style.height = this.height;
-        const notificationList = this.querySelector(".notificationsBar-body");
+        const notificationList = this.querySelector(".notification-list");
 
         const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
-        if (notifications) {
+        console.log("notifications: ", notifications);
+        if (notifications && notifications.length != 0) {
+            notificationList.innerHTML = "";
+
             Array.from(notifications).forEach( notif => {
                 const notification = createNotification(notif.id, notif.sender.username, notif.content, "friend");
                 this.appendNotification(notification);
             });
+            // increment the notification counter.
+            const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
+            if (notificationIcon)
+                notificationIcon.textContent = Number(notifications.length);
+            notificationList.scrollTop = notificationList.scrollHeight;
         }
+
         this.querySelector(".close-button").addEventListener("click", () => {
             hideNotificationsList();
         });
         this.querySelector(".clear-all").addEventListener("click", () => {
             this.querySelector(".notification-list").innerHTML = '';
         });
-        notificationList.scrollTop = notificationList.scrollHeight;
     }
     disconnectedCallback() {
     }
 
     appendNotification(notificationContent) {
+        const not = this.querySelector(".notification-list");
+        if (!not.querySelector("notification-component"))
+            not.innerHTML = "";
         const notification = new NotificationComponent();
         notification.width = "100%";
         notification.appendChild(notificationContent);
-        this.querySelector(".notification-list").prepend(notification);
+        not.prepend(notification);
     }
 
     static observedAttributes = ["width", "height"];
