@@ -16,8 +16,7 @@ export class TournamentNotification extends HTMLElement {
                         <div class="profile-icon" slot="content" style="width:100%; height:100%;"></div>
                     </c-hexagon>
                     <div style="display: flex; gap: 5px;">
-                        <h4></h4>
-                        <h4><i></i></h4>
+                        <h6></h6>
                     </div>
                 </div>
                 <div class="notification-actions">
@@ -35,13 +34,13 @@ export class TournamentNotification extends HTMLElement {
         this.sender = await getApiData(PROFILE_API_URL + user_name + "/");
         profile.bcolor = getLeagueColor(this.sender.stats.league);
         profile.querySelector("div").style.background =  `url(${HOST + this.sender.user.avatar}) center center / cover no-repeat`;
-        const messageOwner = this.querySelector(".message div h4");
+        const messageOwner = this.querySelector(".message div h6");
         messageOwner.textContent = this.sender.user.username;
     }
 
     initMessage(message) {
-        const messageOwner = this.querySelector(".message div h4 i");
-        messageOwner.textContent = message;
+        const messageOwner = this.querySelector(".message div h6");
+        messageOwner.textContent = messageOwner.textContent + " " + message;
     }
 
     async connectedCallback() {
