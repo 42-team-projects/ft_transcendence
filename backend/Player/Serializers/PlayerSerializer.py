@@ -28,9 +28,19 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'fullName', 'cover', 'joinDate', 'active', 'stats', 'achievements', 'links', 'is_friend']
 
 
-class CustomPlayer(serializers.ModelSerializer):
+class CustomPlayerSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
     stats = DefaultStatsSerializer(required=False)
     class Meta:
         model = Player
         fields = ['id', 'user', 'active', 'stats']
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    links = LinksSerializer(many=True, required=False)
+    stats = StatsSerializer(required=False)
+    achievements = AchievementsSerializer(many=True, required=False)
+    class Meta:
+        model = Player
+        fields = ['id', 'user', 'fullName', 'cover', 'joinDate', 'active', 'stats', 'achievements', 'links', 'is_friend']

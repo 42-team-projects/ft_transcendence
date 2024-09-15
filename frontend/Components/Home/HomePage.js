@@ -9,7 +9,7 @@ export class HomePage extends HTMLElement {
                     <div class="stats">
                         <h1>PLAY NOW</h1>
                     </div>
-                    <custom-table></custom-table>
+                    <custom-table username="me"></custom-table>
                 </div>
                 <div class="leaderboard">
                     <page-name width="35%">
