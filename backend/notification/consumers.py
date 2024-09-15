@@ -43,7 +43,7 @@ class UserNotificationConsumer(WebsocketConsumer):
             # else:    
             #     self.send_error('Notification data not valid!')
             if not self.is_signal:
-                new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'])
+                new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'], type=data['type'])
                 if new_notification:
                     self.broadcast_notification(NotificationSerializer(new_notification).data)
                 else:
