@@ -30,7 +30,7 @@ export async function createApiData(APIUrl, body) {
         method: "POST",
         headers: {
             Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
         body: body,
     });
