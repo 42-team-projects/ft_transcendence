@@ -25,7 +25,6 @@ npx hardhat console --network hardhat ===> ???
 npm install ===> will recreate the node_modules directory and reinstall all dependencies listed in your package.json file.
 
 npm install @nomiclabs/hardhat-ethers ethers dotenv ==> for using .env File: Store sensitive information
-
 ==================== informations ===========================
 Ethereum block times generally range from around 10 to 20 seconds.
 
@@ -96,5 +95,3 @@ Signature (r, s, v): Components of the transaction's cryptographic signature.
 Chain Details (chainId): Chain ID where the transaction was sent.
 
 ================ End Transaction Details ============================
-
-================ compile deploy do transaction ======================
