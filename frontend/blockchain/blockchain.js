@@ -36,6 +36,17 @@ async function leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScor
     }
 }
 
+async function getAbi() {
+    const Response = await fetch('/usr/share/nginx/html/artifacts/contracts/TournamentScores.sol/TournamentScores.json');
+    console.log("Response: " , Response);
+    const json = await Response.json();
+    console.log("json: ", json);
+    const ABI = json.abi;
+    console.log("ABI:  ", ABI);
+    return ABI;
+}
+
+
 const abi = [
 	{
 		"inputs": [],
