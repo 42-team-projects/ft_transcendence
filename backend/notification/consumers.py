@@ -24,8 +24,6 @@ class UserNotificationConsumer(WebsocketConsumer):
         )
     def receive(self, text_data):
         data = json.loads(text_data)
-        self.type = data["type"]
-        self.infos = data["infos"]
         self.is_signal = data["is_signal"]
         try:
             receiver = self.get_user(data['receiver'])
@@ -43,7 +41,7 @@ class UserNotificationConsumer(WebsocketConsumer):
             # else:    
             #     self.send_error('Notification data not valid!')
             if not self.is_signal:
-                new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'], type=data['type'])
+                new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'], type=data['type'], data=data['data'])
                 if new_notification:
                     self.broadcast_notification(NotificationSerializer(new_notification).data)
                 else:
@@ -63,8 +61,6 @@ class UserNotificationConsumer(WebsocketConsumer):
     def broadcast_notification(self, message_data):
         message_data['sender'] = self.get_user(self.id).username
         message_data['is_signal'] = self.is_signal
-        message_data['type'] = self.type
-        message_data['infos'] = self.infos
         async_to_sync(self.channel_layer.group_send)(
             f'notification_{message_data["receiver"]["id"]}',
             {
