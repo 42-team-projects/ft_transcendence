@@ -1,9 +1,11 @@
 import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
 import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
 import { CustomAlert } from "/Components/Alert/CustomAlert.js";
-import { PROFILE_API_URL, UPDATE_USER_API_URL } from "/Utils/GlobalVariables.js";
-import { getApiData, updateApiData } from "/Utils/APIManager.js";
-import {  } from "/Components/CustomElements/CustomSpinner.js";
+import { PROFILE_API_URL, UPDATE_USER_API_URL, HOST, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
+import { getApiData, updateApiData, deleteApiData, createApiData} from "/Utils/APIManager.js";
+import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
+import { fetchWithToken } from "/root/fetchWithToken.js";
+import { router } from "/root/Router.js";
 
 export class AccountContent extends HTMLElement {
     constructor() {
@@ -14,8 +16,8 @@ export class AccountContent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="container">
-                <custom-input-field class="username-field" label="USERNAME" description="Username must be unique." placeholder="esalim" type="text" readonly="true"></custom-input-field>
-                <custom-input-field editable="true" class="email-field" label="EMAIL" description="You can not change your email." placeholder="elmehdi.salim@gmail.com" type="email" readonly="true"></custom-input-field>
+                <custom-input-field class="username-field" label="USERNAME" description="Username must be unique." placeholder="" type="text" readonly="true"></custom-input-field>
+                <custom-input-field editable="true" class="email-field" label="EMAIL" description="You can not change your email." placeholder="" type="email" readonly="true"></custom-input-field>
                 <custom-input-field class="password-field" label="PASSWORD" description="the password must be contains at least two lower case and two upper case alphabitecs, two special characters and two numbers." placeholder="" type="password" readonly="true"></custom-input-field>
                 <custom-toggle-switch></custom-toggle-switch>
             </div>
@@ -29,7 +31,12 @@ export class AccountContent extends HTMLElement {
     interval;
 
     async connectedCallback() {
+        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
+
+        refreshBox.display();
+
         const playerData = await getApiData(PROFILE_API_URL + "me/");
+
         const usernameField = this.shadowRoot.querySelector(".username-field");
         if (usernameField)
             usernameField.value = playerData.user.username;
@@ -45,10 +52,13 @@ export class AccountContent extends HTMLElement {
         }
 
         const twoFactorAuth = this.shadowRoot.querySelector("custom-toggle-switch");
-        if (twoFactorAuth)
-            twoFactorAuth.active = playerData.user.is_2fa_enabled;
+        if (twoFactorAuth){
+            if (playerData.user.auth_provider != "email")
+                twoFactorAuth.remove();
+            else 
+                twoFactorAuth.active = playerData.user.is_2fa_enabled;
+        }
 
-        const refreshBox = this.shadowRoot.querySelector("custom-spinner");
 
         this.interval = setInterval(() => {
             if (usernameField.value != playerData.user.username || passwordField.value)
@@ -69,12 +79,12 @@ export class AccountContent extends HTMLElement {
                 accountDataForm.append("username", usernameField.value)
             if (passwordField.value)
                 accountDataForm.append("password", passwordField.value)
-            const res = await updateApiData(UPDATE_USER_API_URL + "me/", accountDataForm);
+            const res = await updateApiData(UPDATE_USER_API_URL, accountDataForm);
             if (usernameField.value)
             {
                 playerData.user.username = usernameField.value;
             }
-
+            await updateCurrentPlayer();
             refreshBox.display();
             saveButton.classList.add("disable");
 
@@ -104,10 +114,33 @@ export class AccountContent extends HTMLElement {
                     <custom-button id="cancelBtn" width="160px" height="48px" reverse>CANCEL</custom-button>
                 </div>
             `;
+            customAlert.querySelector("#playBtn").addEventListener("click", async () => {
+                const accessToken = localStorage.getItem('accessToken');
+                const logoutResponse = await fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    credentials: 'include'
+                });
+                // const logoutResponse = await createApiData(HOST + "/api/v1/auth/logout/", "");
+                if (logoutResponse) {
+                    const response = await deleteApiData(PROFILE_API_URL + "me/");
+                    if (response) {
+                        customAlert.remove();
+                        alertsConrtainer.style.display = "none";
+                        localStorage.removeItem('accessToken');
+                        router.handleRoute('/login')
+                    }
+
+                }
+            });
+            customAlert.querySelector("#cancelBtn").addEventListener("click", () => {
+                customAlert.remove();
+                alertsConrtainer.style.display = "none";
+            });
 
             alertsConrtainer.appendChild(customAlert);
-
-            // you can now delete the account
         });
 
     }

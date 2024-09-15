@@ -16,9 +16,9 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
-def getPlayerStatsGraph(request, username):
+def getMyStatsGraph(request):
     try:
-        graph = Player.objects.get(user__username=username).stats.graph
+        graph = Player.objects.get(user=request.user).stats.graph
         if request.method == 'GET':
             serializer = GraphSerializer(graph)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
@@ -28,5 +28,18 @@ def getPlayerStatsGraph(request, username):
                 serializer.save()
                 return JsonResponse(serializer.data, status=status.HTTP_200_OK)
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Graph.DoesNotExist:
+        return JsonResponse({"error": "Graph not found for player"}, status=status.HTTP_404_NOT_FOUND)
+
+### Graph Views ###
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPlayerStatsGraph(request, username):
+    try:
+        graph = Player.objects.get(user__username=username).stats.graph
+        if request.method == 'GET':
+            serializer = GraphSerializer(graph)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     except Graph.DoesNotExist:
         return JsonResponse({"error": "Graph not found for player"}, status=status.HTTP_404_NOT_FOUND)
