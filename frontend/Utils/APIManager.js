@@ -16,7 +16,7 @@ export async function getApiData(APIUrl) {
     if (!response.ok)
         return null;
     const apiData = await response.json();
-    // console.log("getApiData => apiData: ", apiData);
+    console.log("getApiData => apiData: ", apiData);
     return apiData;
 }
 
@@ -30,7 +30,7 @@ export async function createApiData(APIUrl, body) {
         method: "POST",
         headers: {
             Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
         body: body,
     });
