@@ -116,7 +116,7 @@ export class ProfileInfoComponent extends HTMLElement {
             const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
             if (sendRequestResponse) {
                 const notificationWS = await getNotificationWebSocket();
-                notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "infos": ""}));
+                notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
                 const addFriendImage = addFriend.querySelector("img");
                 addFriendImage.src = "/assets/icons/wait-time-icon.svg";
             }

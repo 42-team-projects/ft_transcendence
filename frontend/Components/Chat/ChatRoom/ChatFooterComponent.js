@@ -29,7 +29,7 @@ export class ChatFooterComponent extends HTMLElement {
             {
                 this.chat(currentUser.id, this.targetId, message);
 
-                websocket.send(JSON.stringify({'message': `sent you a new message.`, 'receiver': this.targetId, 'is_signal': true, 'type': "message", "infos": "/Chat/" + currentUser.username}));
+                websocket.send(JSON.stringify({'message': `sent you a new message.`, 'receiver': this.targetId, 'is_signal': true, 'type': "message", "data": "/Chat/" + currentUser.username}));
             }
             inputArea.value = '';
         });

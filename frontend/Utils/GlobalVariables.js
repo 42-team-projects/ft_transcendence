@@ -84,7 +84,7 @@ export async function createNotificationWebSocket() {
             return ;
         }
         if (!data.is_signal) {
-            const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.infos);
+            const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.data);
             displayNotification(messageNotification);
         }
         else
@@ -99,13 +99,13 @@ export function handleSignals(signalData) {
     let url;
     switch (signalData.type) {
         case "tournament":
-            url = new URL(HOST + signalData.infos);
+            url = new URL(HOST + signalData.data);
             if (window.location.pathname === url.pathname)
                 router.handleRoute(url.pathname);
             break;
     
         case "friend":
-            url = new URL(HOST + signalData.infos);
+            url = new URL(HOST + signalData.data);
             if (url.pathname.includes(window.location.pathname))
                 router.handleRoute(window.location.pathname);
     
@@ -113,7 +113,7 @@ export function handleSignals(signalData) {
             // url = new URL(HOST + signalData.sender);
             // if (window.location.pathname === url.pathname)
             //     return ;
-            const messageNotification = createNotification(signalData.id, signalData.sender, signalData.content, "message", signalData.infos);
+            const messageNotification = createNotification(signalData.id, signalData.sender, signalData.content, "message", signalData.data);
             displayNotification(messageNotification);
         default:
             break;
