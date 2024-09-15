@@ -19,21 +19,29 @@ export const NOTIFICATIONS_API_URL = HOST + "/notification/";
 import { getApiData } from "/Utils/APIManager.js";
 
 
+// let profileImage;
+
 let currentPlayer;
+
+export async function updateCurrentPlayer() {
+    currentPlayer = await getApiData(PROFILE_API_URL + "me/");
+    // profileImage = window.document.querySelector("c-profile")
+    // console.log("profileImage: ", profileImage);
+    return currentPlayer;
+}
 
 export async function getCurrentPlayerData() {
 
     if (currentPlayer)
         return currentPlayer;
-    currentPlayer = await getApiData(PROFILE_API_URL + "me/");
-    return currentPlayer;
+    return await updateCurrentPlayer();
 }
 
 export async function getCurrentPlayerId() {
 
     if (currentPlayer)
         return currentPlayer.id;
-    currentPlayer = await getApiData(PROFILE_API_URL + "me/");
+    currentPlayer = await getCurrentPlayerData();
     return currentPlayer.id;
 }
 
@@ -41,7 +49,7 @@ export async function getCurrentUserData() {
 
     if (currentPlayer)
         return currentPlayer.user;
-    currentPlayer = await getApiData(PROFILE_API_URL + "me/");
+    currentPlayer = await getCurrentPlayerData();
     return currentPlayer.user;
 }
 
@@ -49,7 +57,7 @@ export async function getCurrentUserId() {
 
     if (currentPlayer)
         return currentPlayer.user.id;
-    currentPlayer = await getApiData(PROFILE_API_URL + "me/");
+    currentPlayer = await getCurrentPlayerData();
     return currentPlayer.user.id;
 }
 
