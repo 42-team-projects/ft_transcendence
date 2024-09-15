@@ -44,14 +44,28 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         add_to_game_queue(self, game_queue)
-        # print(len(game_queue[self.room_group_name]))
+        await self.accept()
+        if len(game_queue[self.room_group_name]) == 1:
+            # add variable of the task the game queue of this room
+            game_queue[self.room_group_name][0].task = asyncio.create_task(self.start())
+            try:
+                await asyncio.wait_for(game_queue[self.room_group_name][0].task, timeout=5)
+            except asyncio.TimeoutError:
+                game_queue[self.room_group_name][0].task.cancel()
+                await self.close()
+        
+
+
+
+    async def start (self):
+        while len(game_queue[self.room_group_name]) < 2:
+            await asyncio.sleep(0.1)
+
         if len(game_queue[self.room_group_name]) >= 2:
             player_1 = game_queue[self.room_group_name].pop(0)
             player_2 = game_queue[self.room_group_name].pop(0)
             GameConsumer.rooms[self.room_group_name] = GameLoop(player_1, player_2)
             await self.send_message({'status': 'game_start'}, function='game_message')
-
-        await self.accept()
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -128,20 +142,22 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             
 
     async def disconnect(self, close_code):
-        await remove_from_channel_layer(self)
         if self in match_making_queue:
             match_making_queue.remove(self)
         if self.room_group_name and self.room_group_name in MatchMaikingConsumer.rooms:
+            await remove_from_channel_layer(self)
             MatchMaikingConsumer.rooms[self.room_group_name] -= 1
             if MatchMaikingConsumer.rooms[self.room_group_name] == 0:
                 del MatchMaikingConsumer.rooms[self.room_group_name]
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'terminate_game',
-            }
-        )
+                
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'terminate_game',
+                }
+            )
 
+  
     async def terminate_game(self, event):
         await self.close()
 
