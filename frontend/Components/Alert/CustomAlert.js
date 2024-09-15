@@ -26,10 +26,10 @@ export class CustomAlert extends HTMLElement {
         // Get the <span> element that closes the modal
         const closeButton = this.shadowRoot.querySelector(".closeButton");
         closeButton.addEventListener("click", () => {
-            this.remove();
+            // this.style.display = "none";
             const alertsConrtainer = window.document.querySelector("body .alerts");
-            if (!alertsConrtainer.childElementCount)
-                alertsConrtainer.style.display = "none";
+            // if (!alertsConrtainer.childElementCount)
+            alertsConrtainer.style.display = "none";
 
         });
 

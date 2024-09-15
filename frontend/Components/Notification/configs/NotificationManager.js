@@ -28,6 +28,7 @@ export function createNotification(notificationId, senderName, message, notifica
         notification.id = notificationId;
         notification.senderName = senderName;
         notification.message = message;
+        console.log("createNotification data: ", data);
         notification.tournamentId = data;
     
     }

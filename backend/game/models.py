@@ -14,6 +14,7 @@ class GamePlay(models.Model):
     
 class GameHestory(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_hestory', null=True)
+    opponent_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='opponent_player', null=True)
     time = models.DateTimeField(auto_now_add=True)
     player_score = models.IntegerField(default=0)
     opponent_score = models.IntegerField(default=0)

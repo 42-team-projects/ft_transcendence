@@ -335,3 +335,13 @@ friends-request-list {
     height: 24px;
 }
 
+.display-errors {
+    width: 100px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    font-size: 24px;
+    font-family: 'Sansation Bold';
+}
