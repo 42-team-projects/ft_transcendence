@@ -329,6 +329,7 @@ export class Lobby extends HTMLElement{
 				element.style.animation = 'none';
 				this.createTimer();
 				const countdown = setInterval(async()=>{
+					console.log(this.time)
 					if(this.time <= 0){
 						if(this.socket){
 							this.socket.onclose = async (e) => {
