@@ -28,15 +28,12 @@ export class SearchBarComponent extends HTMLElement {
                         <div class="filter-1 select">ALL</div>
                         <div class="filter-1">USERS</div>
                         <div class="filter-1">TOURNAMENTS</div>
-                        <div class="filter-1">CHANNELS</div>
                         <div class="filter-1">OTHERS</div>
                     </div>
                     <div class="search-result">
                         <users-search-section></users-search-section>
 
                         <tournaments-search-section></tournaments-search-section>
-
-                        <channels-search-section></channels-search-section>
 
                         <others-search-section></others-search-section>
                     </div>

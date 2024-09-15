@@ -316,7 +316,7 @@ HeaderTemplate.innerHTML = /*html*/`
                 </div>
                 <div class="notification-icon" >
                     <img loading="lazy" draggable="false" src="/assets/icons/notification-icon.svg" alt="notification">
-                    <div class="number-of-notifications">99</div>
+                    <div class="number-of-notifications">0</div>
                 </div>
             </div>
                 <div class="notification-container">

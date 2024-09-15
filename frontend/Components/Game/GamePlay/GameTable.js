@@ -130,17 +130,20 @@ export class GameTable extends HTMLElement{
                 let player_state = '';
                 let score = '';
                 let opponent_score = '';
+                let opponent_player;
                 if (userInfo.id === Number(player_1.id)) {
                     player_state = player_1.game_state;
                     score = player_1.score;
                     opponent_score = player_2.score;
+                    opponent_player = player_2.id;
                 } else if (userInfo.id === Number(player_2.id)) {
                     player_state = player_2.game_state;
                     score = player_2.score;
                     opponent_score = player_1.score;
+                    opponent_player = player_1.id;
                 }
                 this.luanching = false;
-                await this.GameOver(player_state, score, opponent_score);
+                await this.GameOver(player_state, score, opponent_score, opponent_player);
             } else if (status === 'move') {
                 if (userInfo.id === Number(player_1.id)) {
                     this.updatePlayerPosition(player_1.y);
@@ -219,7 +222,7 @@ export class GameTable extends HTMLElement{
     }
     getCoordonates(){return this.concoordonate;}
     
-    async GameOver(playerState, score, opponent_score){
+    async GameOver(playerState, score, opponent_score, opponent_player){
         this.Loop_state = false;
         // console.log("this.id: ", this.id);
         if (this.id && this.id !== 'undefined')
@@ -227,10 +230,12 @@ export class GameTable extends HTMLElement{
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
         this.socket.close();
-        const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState});
-        await createApiData(HOST + '/game/game_history/', body)
+        const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState, 'opponent_player': opponent_player});
+        const response = await createApiData(HOST + '/game/game_history/me/', body)
+        console.log("createApiData response: ", response);
         //redirect to last url in hesory
-        setTimeout(() => {
+        const interval = setTimeout(() => {
+            clearInterval(interval);
             router.handleRoute(window.location.pathname);
         }, 5000);
     }
