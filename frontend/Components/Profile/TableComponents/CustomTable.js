@@ -1,79 +1,9 @@
+import { getApiData } from "/Utils/APIManager.js";
 import { DateComponent } from "/Components/Profile/TableComponents/BodyComponents/Date/DateComponent.js";
-
-const url = "https://jsonplaceholder.org/users";
-const uri = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c280be2d-de9f-469f-85f8-2effee43ee0c/dfw0573-626d7dae-68d8-4914-aa0d-6c67b8b2a94b.jpg/v1/fill/w_894,h_894,q_70,strp/my_hero_academia___deku_full_energy_by_jonadav_dfw0573-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2MyODBiZTJkLWRlOWYtNDY5Zi04NWY4LTJlZmZlZTQzZWUwY1wvZGZ3MDU3My02MjZkN2RhZS02OGQ4LTQ5MTQtYWEwZC02YzY3YjhiMmE5NGIuanBnIiwiaGVpZ2h0IjoiPD0xMDI0Iiwid2lkdGgiOiI8PTEwMjQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uud2F0ZXJtYXJrIl0sIndtayI6eyJwYXRoIjoiXC93bVwvYzI4MGJlMmQtZGU5Zi00NjlmLTg1ZjgtMmVmZmVlNDNlZTBjXC9qb25hZGF2LTQucG5nIiwib3BhY2l0eSI6OTUsInByb3BvcnRpb25zIjowLjQ1LCJncmF2aXR5IjoiY2VudGVyIn19.n5rrqMT9qXeebizFk-Q2ESc-LLpXfreZLLqfDNsrgB8";
-const fakeData = [
-    {
-        id: 1,
-        date: {day: 19, month: "MAY"},
-        username: "ESALIM",
-        profile: uri,
-        time: "2 HOURS AGO",
-        score: "5 - 6",
-        result: "WIN",
-        replay: ">"
-    },
-    {
-        id: 1,
-        date: {day: 10, month: "MAY"},
-        username: "NOURDIN",
-        profile: uri,
-        time: "2 HOURS AGO",
-        score: "5 - 6",
-        result: "LOSS",
-        replay: ">"
-    },
-    {
-        id: 1,
-        date: {day: 10, month: "MAY"},
-        username: "NOURDIN",
-        profile: uri,
-        time: "2 HOURS AGO",
-        score: "5 - 6",
-        result: "LOSS",
-        replay: ">"
-    },
-    {
-        id: 1,
-        date: {day: 10, month: "MAY"},
-        username: "NOURDIN",
-        profile: uri,
-        time: "2 HOURS AGO",
-        score: "5 - 6",
-        result: "LOSS",
-        replay: ">"
-    },
-    {
-        id: 1,
-        date: {day: 10, month: "MAY"},
-        username: "NOURDIN",
-        profile: uri,
-        time: "2 HOURS AGO",
-        score: "5 - 6",
-        result: "LOSS",
-        replay: ">"
-    },
-    {
-        id: 1,
-        date: {day: 10, month: "MAY"},
-        username: "NOURDIN",
-        profile: uri,
-        time: "2 HOURS AGO",
-        score: "5 - 6",
-        result: "LOSS",
-        replay: ">"
-    },
-    {
-        id: 1,
-        date: {day: 10, month: "MAY"},
-        username: "NOURDIN",
-        profile: uri,
-        time: "2 HOURS AGO",
-        score: "5 - 6",
-        result: "LOSS",
-        replay: ">"
-    }
-];
+import { HOST } from "/Utils/GlobalVariables.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { DateFormater } from "/Utils/DateUtils.js";
+import { router } from "/root/Router.js";
 
 export class CustomTable extends HTMLElement {
     
@@ -88,121 +18,96 @@ export class CustomTable extends HTMLElement {
                     height: 100%;
                 }
             </style>
+            <link href="/Components/Profile/TableComponents/CustomTable.css" rel="stylesheet"/>
+            <div class="profile-data-stats-history">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>DATE</th>
+                            <th>USERNAME</th>
+                            <th>PROFILE</th>
+                            <th>TIME</th>
+                            <th>SCORE</th>
+                            <th>RESULT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
         `;
     }
 
-    async getDataFromApi(APIUrl) {
-        /*
-        try {
-            const response = await fetch(APIUrl);
-            if (!response.ok) {
-              throw new Error(`Response status: ${response.status}`);
-            }
-            const json = await response.json();
-            return json;
-        } catch (error) {
-            console.error(error.message);
-        }
-        */
-       return fakeData;
+    createNewRow(gameData) {
+        const playerData = gameData.opponent_player;
+        const date = DateFormater(gameData.time);
+        const row = document.createElement("tr");
+        if (gameData.result.toLowerCase() === "lose")
+            row.style.backgroundImage = "linear-gradient(to right, #D22C2250 , #D22C2210)";
+        row.innerHTML = `
+            <td>
+                <date-component day="${date.day}" month="${date.month}"></date-component>
+            </td>
+            <td>
+                <div class="profile-container">
+                    <c-hexagon width="55px" height="55px" apply="true" bcolor="${getLeagueColor(playerData.stats.league)}">
+                        <img slot="content" draggable="false" src="${HOST + playerData.user.avatar}" width="55px" height="55px"></img>
+                    </c-hexagon>
+                </div>
+            </td>
+            <td>
+                <p>${playerData.user.username}</p>
+            </td>
+            <td>
+                <p class="table-time">${date.time} HOURS AGO</p>
+            </td>
+            <td>
+                <p class="score">${gameData.player_score} - ${gameData.opponent_score}</p>
+            </td>
+            <td>
+                <p class="resulte">${gameData.result.toUpperCase()}</p>
+            </td>
+        `;
+
+        row.querySelector(".profile-container").addEventListener("click", () => {
+            const url = new URL(HOST + "/Profile/" + playerData.user.username + "/");
+            router.handleRoute(url.pathname);
+        });
+        return row;
     }
 
-    getTableHeader(titles) {
-        const tableRow = document.createElement("tr");
-        titles.forEach(element => {
-            const tableData = document.createElement("th");
-            tableData.textContent = element.toUpperCase();
-            tableRow.appendChild(tableData);
-        });
-        const tableHeader = document.createElement("thead");
-        tableHeader.appendChild(tableRow);
-        return tableHeader;
-    }
+    async getTableBody() {
+        const tableBody = this.shadowRoot.querySelector("tbody");
+        if (!this.username || this.username === undefined)
+            return ;
+        const gameHistoryData = await getApiData(HOST + "/game/game_history/" + this.username);
+        console.log("gameHistoryData: ", gameHistoryData);
+        if (!gameHistoryData)
+            return ;
 
-    getTableBody(data) {
-        const tableBody = document.createElement("tbody");
-        const keys = Object.keys(data[0]).splice(1);
-        data.forEach(element => {
-            const tableRow = document.createElement("tr");
-            const values = Object.values(element).splice(1);
-            let counter = 0;
-            values.forEach( val => {
-                const tableData = document.createElement("td");
-                if (counter == 0) {
-                    const dateComponent = document.createElement("date-component");
-                    dateComponent.day = val.day;
-                    dateComponent.month = val.month;
-                    tableData.appendChild(dateComponent);
-                } else if (counter == 2)  {
-                    const profileContainer = document.createElement("div");
-                    profileContainer.className = "profile-container";
-                    const profile = document.createElement("c-hexagon");
-                    profile.width = "55px";
-                    profile.height = "55px";
-                    profile.apply = true;
-                    profile.bcolor = "#EB9A45";
-                    const profileImage = document.createElement("img");
-                    profileImage.slot = "content";
-                    profileImage.width = 55;
-                    profileImage.height = 55;
-                    profileImage.draggable = "false";
-                    profileImage.src = val;
-                    profile.appendChild(profileImage);
-                    profileContainer.appendChild(profile);
-                    tableData.appendChild(profileContainer);
-                } else if (counter == 3)  {
-                    const parag = document.createElement("p");
-                    parag.className = "table-time";
-                    parag.textContent = val;
-                    parag.textContent = parag.textContent.toUpperCase();
-                    tableData.appendChild(parag);
-                } else if (counter == 6)  {
-                    const icon = document.createElement("img");
-                    icon.src = "/assets/images/profile/play-button.svg";
-                    icon.width = 24;
-                    tableData.appendChild(icon);
-                } else {
-                    const parag = document.createElement("p");
-                    parag.textContent = val;
-                    parag.textContent = parag.textContent.toUpperCase();
-                    tableData.appendChild(parag);
-                }
-
-                if (counter === 5 && val.toLowerCase() === "loss")
-                    tableRow.style.backgroundImage = "linear-gradient(to right, #D22C2250 , #D22C2210)";
-
-                counter++;
-                tableRow.appendChild(tableData);
-            });
-            tableBody.appendChild(tableRow);
-        });
-        return tableBody;
+        Array.from(gameHistoryData).forEach(item => {
+            tableBody.appendChild(this.createNewRow(item));
+        })
     }
 
     connectedCallback() {
-        const styleSheet = document.createElement("link");
-        styleSheet.rel = `stylesheet`;
-        styleSheet.href = `/Components/Profile/TableComponents/CustomTable.css`;
-        this.shadowRoot.appendChild(styleSheet);
-
-        const tableContainer = document.createElement("div");
-        tableContainer.className = `profile-data-stats-history`;
-
-
-        const table = document.createElement("table");
-        table.cellSpacing = 0;
-        table.cellPadding = 0;
-        const data = this.getDataFromApi(url);
-        const json = data.then((values) => {
-            table.appendChild(this.getTableHeader(Object.keys(values[0]).splice(1)));
-            table.appendChild(this.getTableBody(values));
-        });
-        tableContainer.appendChild(table);
-        this.shadowRoot.appendChild(tableContainer);
     }
 
+
+    set username(val) {
+        this.setAttribute("username", val);
+    }
+
+    get username() {
+        return this.getAttribute("username");
+    }
+
+    static observedAttributes = ["username"];
+
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`Attribute ${name} has changed.`);
+        if (name === "username")
+            this.getTableBody();
     }
 
 }
