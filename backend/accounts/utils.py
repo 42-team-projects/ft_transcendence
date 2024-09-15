@@ -32,7 +32,7 @@ def send_confirmation_email(user, request, token):
 
 def send_reset_email(user, request, reset_token):
     mail_subject = 'Password Reset'
-    reset_url = f'http://127.0.0.1:3000/html/confirm-reset-password.html?token={ reset_token }'
+    reset_url = f'{settings.FRONTEND_BASE_URL}/confirm-password?token={reset_token}'
     body = f'Click the link below to reset your password:<br><a href="{reset_url}">{reset_url}</a>'
 
     email = EmailMessage(
@@ -47,3 +47,11 @@ def send_reset_email(user, request, reset_token):
 def get_default_avatar():
     avatar_folder = 'media/defaults'
     return 'defaults/' + random.choice(os.listdir(avatar_folder))
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
