@@ -1,0 +1,100 @@
+npm install --save-dev hardhat  ===>  Install Hardhat
+
+npx hardhat ===>  Initialize a New Hardhat Project
+
+npx hardhat compile ===> Compile My Contract ==> make a artifacts directory is used to store the compiled output of your Solidity contracts
+
+
+npx hardhat run scripts/deploy.js --network hardhat ===> Deploy the Contract
+
+npx hardhat test ===> Test the Contract
+
+
+npm install --save-dev hardhat @nomiclabs/hardhat-ethers ethers ===>  install hardhat and ethers
+
+npx hardhat clean ===>   Delete the artifacts directory
+
+
+npx hardhat node ===>  start a local Ethereum blockchain from scratch, ==> no need to run this command because When you use Hardhat, 
+                        a local blockchain environment is automatically set up with an initial block (the "genesis block")
+
+npx hardhat console --network hardhat ===> ???
+
+
+
+npm install ===> will recreate the node_modules directory and reinstall all dependencies listed in your package.json file.
+
+npm install @nomiclabs/hardhat-ethers ethers dotenv ==> for using .env File: Store sensitive information
+
+==================== informations ===========================
+Ethereum block times generally range from around 10 to 20 seconds.
+
+
+
+
+================== Transaction Details =========================
+example :
+{
+  hash: '0xd1aed66076c76b6a5f57b88e3f4f3a0fb5cac893c332bfdaea85c29304ab8586',
+  type: 2,
+  accessList: [],
+  blockHash: '0xd5774f925a72bb8bd23edc1420a5a4e077bfcf8e5f9cb5719d7f421b8e6d5f3d',
+  blockNumber: 7,
+  transactionIndex: 0,
+  confirmations: 1,
+  from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  gasPrice: BigNumber { value: "505151100" },
+  maxPriorityFeePerGas: BigNumber { value: "120763136" },
+  maxFeePerGas: BigNumber { value: "505151100" },
+  gasLimit: BigNumber { value: "155915" },
+  to: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+  value: BigNumber { value: "0" },
+  nonce: 6,
+  data: '0xfe8195ce0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000006500000000000000000000000000000000000000000000000000000000000000320000000000000000000000000000000000000000000000000000000000000066000000000000000000000000000000000000000000000000000000000000001e',
+  r: '0x9be03cab889ba716def2c46a6a77ced3871c57ee135c9b70647cf80729134a03',
+  s: '0x6d777b78b5775af3abbfeeaf940f981b3a30a120cf7ca9e1c06e4cc14e191e4e',
+  v: 1,
+  creates: null,
+  chainId: 1337,
+  wait: [Function (anonymous)]
+}
+hash: The unique identifier for the transaction.
+type: The type of transaction. 2 indicates EIP-1559 transactions.
+         which use maxFeePerGas and maxPriorityFeePerGas fields for gas pricing.
+accessList: A list of addresses and storage keys that the transaction will access. In this case, it's empty.
+blockHash: The hash of the block that contains the transaction.
+blockNumber: The number of the block that contains the transaction.
+transactionIndex: The index of the transaction within the block.
+confirmations: The number of confirmations the transaction has received.
+                it' s a number of blocks have been added to the blockchain after the block containing your transaction
+from: The address that sent the transaction.
+gasPrice: The price of gas in wei. This field is relevant for legacy transactions ==> ?
+maxPriorityFeePerGas: he maximum priority fee per gas in wei for EIP-1559 transactions. This fee is a tip given to miners. ==> ?
+maxFeePerGas: The maximum fee per gas in wei that the sender is willing to pay, including the priority fee and base fee. ==> ?
+gasLimit: The maximum amount of gas the transaction can consume. ==> ?
+to: The address of the recipient of the transaction. If the transaction is creating a contract, this field is null.
+value: The amount of ether (in wei) sent with the transaction. In this case, it is 0, meaning no ether was sent.
+nonce:  The number of transactions sent from the sender's address. This ensures transactions are processed in order.
+data: The data payload sent with the transaction. For contract interactions, 
+        this contains the encoded function call and parameters.
+r: The r component of the transaction's cryptographic signature. => ?
+s: The s component of the transaction's cryptographic signature. => ?
+v: The v component of the transaction's cryptographic signature, which indicates the chain ID for the transaction.
+creates: If the transaction is a contract creation, this field contains the address of the newly created contract.
+         For regular transactions, this field is null
+chainId: The ID of the chain where the transaction was broadcasted. In this case, it's 1337,
+         which is the chain ID for the Hardhat local network.
+wait: A function to wait for the transaction to be mined and return receipt.
+
+Summary
+Transaction Hash (hash): Unique ID of the transaction.
+Block Details (blockHash, blockNumber): Information about the block containing the transaction.
+Transaction Details (from, to, value, nonce): Sender, recipient, amount, and sequence number of the transaction.
+Gas Details (gasPrice, maxFeePerGas, gasLimit): Gas price and limits for the transaction.
+Data (data): Encoded data sent with the transaction, often used for contract interactions.
+Signature (r, s, v): Components of the transaction's cryptographic signature.
+Chain Details (chainId): Chain ID where the transaction was sent.
+
+================ End Transaction Details ============================
+
+================ compile deploy do transaction ======================
