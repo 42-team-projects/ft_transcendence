@@ -38,7 +38,7 @@ export class NotificationsList extends HTMLElement {
             notificationList.innerHTML = "";
 
             Array.from(notifications).forEach( notif => {
-                const notification = createNotification(notif.id, notif.sender.username, notif.content, notif.type);
+                const notification = createNotification(notif.id, notif.sender.username, notif.content, notif.type, notif.data);
                 this.appendNotification(notification);
             });
             // increment the notification counter.
