@@ -7,7 +7,7 @@ function sleep(ms) {
 }
 
 
-export async function goNextStage(playerState, tournament_id) {
+export async function goNextStage(playerState, tournament_id, user_id, opponent_id, user_score, opponent_score) {
     try {
         if (playerState === 'lose') {
             console.log("you have lost: ", tournament_id);
