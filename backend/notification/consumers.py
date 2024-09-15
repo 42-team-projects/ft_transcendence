@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from .models import *
-from .serializers import NotificationSerializer
+from .serializers import NotificationSerializer, UserSerializer
 
 class UserNotificationConsumer(WebsocketConsumer):
     def connect(self):
@@ -24,8 +24,7 @@ class UserNotificationConsumer(WebsocketConsumer):
         )
     def receive(self, text_data):
         data = json.loads(text_data)
-        self.type = data["type"]
-        self.infos = data["infos"]
+        self.is_signal = data["is_signal"]
         try:
             receiver = self.get_user(data['receiver'])
             sender   = self.get_user(self.id)
@@ -41,19 +40,27 @@ class UserNotificationConsumer(WebsocketConsumer):
                 # self.broadcast_notification(notification_serializer.data)
             # else:    
             #     self.send_error('Notification data not valid!')
-            new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'])
-            if new_notification:
-                self.broadcast_notification(NotificationSerializer(new_notification).data)
-            else:
-                self.send_error('Notification data not valid!')
+            if not self.is_signal:
+                new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'], type=data['type'], data=data['data'])
+                if new_notification:
+                    self.broadcast_notification(NotificationSerializer(new_notification).data)
+                else:
+                    self.send_error('Notification data not valid!')
+            else :
+                notification = {
+                    'sender': sender.id,
+                    'receiver': UserSerializer(receiver).data,
+                    'content': data['message']
+                }
+                self.broadcast_notification(notification)
+
 
         except User.DoesNotExist:
             self.send_error('Receiver user not exists!')
 
     def broadcast_notification(self, message_data):
         message_data['sender'] = self.get_user(self.id).username
-        message_data['type'] = self.type
-        message_data['infos'] = self.infos
+        message_data['is_signal'] = self.is_signal
         async_to_sync(self.channel_layer.group_send)(
             f'notification_{message_data["receiver"]["id"]}',
             {

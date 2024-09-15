@@ -27,8 +27,7 @@ export class ProfileInfoComponent extends HTMLElement {
                         </div>
                         <div class="joined-date">
                             <img loading="lazy"   src="/assets/images/profile/Calendar.svg" width="20px"/>
-                            <p class="joined-text">joined:</p>
-                            <p class="joined-date-text"> </p>
+                            <div><p class="joined-text">joined:</p><p class="joined-date-text"> </p></div>
                             <div class="add-friend">
                                 <img loading="lazy" src="/assets/images/profile/add-friends-icon.svg" width="28px"/>
                             </div>
@@ -117,7 +116,7 @@ export class ProfileInfoComponent extends HTMLElement {
             const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
             if (sendRequestResponse) {
                 const notificationWS = await getNotificationWebSocket();
-                notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'type': "friend", "infos": ""}));
+                notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
                 const addFriendImage = addFriend.querySelector("img");
                 addFriendImage.src = "/assets/icons/wait-time-icon.svg";
             }
@@ -209,6 +208,15 @@ const cssContent = /*css*/`
 
     .joined-date > img {
         opacity: 0.7;
+    }
+
+    .joined-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .joined-date-text {
+        font-size: 12px;
     }
 
 `;

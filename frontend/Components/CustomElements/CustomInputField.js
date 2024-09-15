@@ -190,9 +190,15 @@ export class CustomInputField extends HTMLElement {
     }
     
     get file() {
-        const files = this.shadowRoot.querySelector(".inputContainer input[type='file']").files;
-        if (files.length)
+        const field = this.shadowRoot.querySelector(".inputContainer input[type='file']");
+        const files = field.files;
+        if (files.length && Number(files[0].size) <= (2 * 1e6))
+        {
+            field.style.border = "1px solid aqua";
             return files;
+
+        }
+        field.style.border = "1px solid red";
         return null;
     }
     

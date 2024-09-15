@@ -24,6 +24,7 @@ export class Router {
         this.handleRoute(window.location.pathname);
     }
     randring(){
+        this.removeRandring();
         document.body.classList = 'body-default-shrink'
         // setTimeout(() => {
             this.header.render()
