@@ -32,6 +32,9 @@ export class FriendRequestListComponent extends HTMLElement {
         const notificationList = this.querySelector(".notificationsBar-body");
 
         const requests = await getApiData(HOST + "/friend/requests/");
+        if (!requests)
+            return ;
+
         if (requests.response) {
             Array.from(requests.response).forEach( notif => {
                 const notification = createNotification(notif.id, notif.sender.username, "want to be a friend", "friend");

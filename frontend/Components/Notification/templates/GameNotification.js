@@ -16,8 +16,8 @@ export class GameNotification extends HTMLElement {
                         <div class="profile-icon" slot="content" style="width:100%; height:100%;"></div>
                     </c-hexagon>
                     <div style="display: flex; gap: 5px;">
-                        <h4></h4>
-                        <h4><i></i></h4>
+                        <h6></h6>
+                        <h6><i></i></h6>
                     </div>
                 </div>
                 <div class="notification-actions">
@@ -33,7 +33,7 @@ export class GameNotification extends HTMLElement {
         const sender = await getApiData(PROFILE_API_URL + user_name + "/");
         profile.bcolor = getLeagueColor(sender.stats.league);
         profile.querySelector("div").style.background =  `url(${HOST + sender.user.avatar}) center center / cover no-repeat`;
-        const messageOwner = this.querySelector(".message div h4");
+        const messageOwner = this.querySelector(".message div h6");
         messageOwner.textContent = sender.user.username;
         const playButton = this.querySelector(".notification-actions img");
         playButton.addEventListener("click", async (event) => {
@@ -42,7 +42,7 @@ export class GameNotification extends HTMLElement {
     }
 
     initMessage(message) {
-        const messageOwner = this.querySelector(".message div h4 i");
+        const messageOwner = this.querySelector(".message div h6 i");
         messageOwner.textContent = message;
     }
 

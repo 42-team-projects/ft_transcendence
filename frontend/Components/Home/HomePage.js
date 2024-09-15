@@ -7,10 +7,9 @@ export class HomePage extends HTMLElement {
             <div class="homeContainer">
                 <div class="history">
                     <div class="stats">
-                        <h2>Unleash the thrill of fast-paced action and precision with every swing—Welcome to the world of Ping Pong, where every point brings excitement!</h2>
                         <h1>PLAY NOW</h1>
                     </div>
-                    <custom-table></custom-table>
+                    <custom-table username="me"></custom-table>
                 </div>
                 <div class="leaderboard">
                     <page-name width="35%">
@@ -132,6 +131,7 @@ const cssContent = /*css*/`
 .leaderboard {
     flex: 1;
     height: 100%;
+    min-width: 400px;
     position: relative;
     background: #d9d9d910;
     border-radius: 10px;

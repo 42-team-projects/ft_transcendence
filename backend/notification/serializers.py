@@ -15,7 +15,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
-        fields = ['id', 'sender', 'receiver', 'content', 'create_at']
+        fields = ['id', 'sender', 'receiver', 'content', 'type', 'data', 'create_at']
 
 
     # def create(self, validated_data):

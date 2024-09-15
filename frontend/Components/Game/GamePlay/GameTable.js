@@ -42,7 +42,7 @@ export class GameTable extends HTMLElement {
         };
 
         this.socket.onclose = () => {
-            console.log("closed");
+            console.log("closed 1");
             score.player = 5;
             score.opponent = 0;
             this.GameOver("win", score.player, score.opponent);
@@ -58,18 +58,15 @@ export class GameTable extends HTMLElement {
             y: CANVAS_HEIGHT / 2,
             color: game_play.first_racket_color,
         };
-        console.log("this.player", this.player);
         this.opponent = {
             x: CANVAS_WIDTH - this.racquet.width,
             y: CANVAS_HEIGHT / 2,
             color: game_play.second_racket_color,
         };
-        console.log("this.opponent", this.opponent);
         this.ball_color = game_play.ball_color;
         this.round = 1;
         this.room_name = room_name;
         this.requestID = null;
-        console.log("svg", game_page.content.querySelector("svg"));
         gameBard(game_page.content.querySelector("svg"), game_play.board_color);
         this.appendChild(game_page.content.cloneNode(true));
         this.setKeys(false, false, false, false);
@@ -241,11 +238,9 @@ export class GameTable extends HTMLElement {
             dy: dy,
         };
     }
-    getCoordonates() {
-        return this.concoordonate;
-    }
-
-    async GameOver(playerState, score, opponent_score) {
+    getCoordonates(){return this.concoordonate;}
+    
+    async GameOver(playerState, score, opponent_score, opponent_player){
         this.Loop_state = false;
         // console.log("this.id: ", this.id);
         if (this.id && this.id !== "undefined")
@@ -259,12 +254,9 @@ export class GameTable extends HTMLElement {
             );
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
-        const body = JSON.stringify({
-            player_score: score,
-            opponent_score: opponent_score,
-            result: playerState,
-        });
-        await createApiData(HOST + "/game/game_history/", body);
+        const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState, 'opponent_player': opponent_player});
+        const response = await createApiData(HOST + '/game/game_history/me/', body);
+        console.log("GameOver createApiData response: ", response);
         //redirect to last url in hesory
         setTimeout(() => {
             this.remove();
@@ -476,7 +468,7 @@ export class GameTable extends HTMLElement {
     }
     disconnectedCallback() {
         this.socket.onclose = () => {
-            console.log("closed");
+            console.log("closed 2");
         };
         this.socket.close();
         const pause = document.body.querySelector("pause-page");
