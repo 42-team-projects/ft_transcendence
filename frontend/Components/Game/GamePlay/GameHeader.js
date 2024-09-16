@@ -52,8 +52,6 @@ export class GameHeader extends HTMLElement{
         // player2Name.querySelector('p').textContent = opponentInfo.username
     }
     connectedCallback(){
-        console.log('opponentInfo : ', opponentInfo);
-        console.log('userInfo : ', userInfo);
         const player = new PlayerInfo()
         player.newScore(0, userInfo)
         this.insertBefore(player, this.querySelector('pause-game'))
