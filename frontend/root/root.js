@@ -30,5 +30,9 @@ class Root extends HTMLElement{
             await createNotificationWebSocket();
         }
     }
+    
+    disconnectedCallback() {
+        
+    }
 }
 customElements.define("root-content", Root)
