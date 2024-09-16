@@ -42,6 +42,9 @@ export class TwoFactorAuthTemplate extends HTMLElement {
     get code() {
         return this.shadowRoot.querySelector(".entered-code").value;
     }
+    set code(val) {
+        this.shadowRoot.querySelector(".inputContainer").style.border = "1px solid red";
+    }
 }
 
 
