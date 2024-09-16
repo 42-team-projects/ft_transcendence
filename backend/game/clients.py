@@ -60,7 +60,7 @@ class GameLoop :
         self.active = False
         if self.task:
             self.task.cancel()
-        if self.task.cancelled() == False:
+        if not self.task or self.task.cancelled() == False:
             await self.forfit(ws)
             
         self.task = None
