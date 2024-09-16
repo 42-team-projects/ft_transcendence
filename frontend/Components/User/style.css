@@ -339,7 +339,7 @@ email-page {
     color: #1966b1;
 }
 
-forgot-password, confirm-password {
+forgot-password, confirm-password, two-factor {
     /* border: 1px solid red; */
     display: flex;
     justify-content: flex-start;
@@ -358,19 +358,19 @@ forgot-password, confirm-password {
     /* gap: 1rem; */
 }
 
-#pass-form h1 {
+#pass-form h1, #two-fa-id h1 {
     color: #00FFFC;
     font-size: 28px;
 }
 
-#pass-form p {
+#pass-form p, #two-fa-id p {
     font-size: 1rem;
     text-align: center;
     margin-bottom: 4rem;
 }
 
 
-#confirm-pass {
+#confirm-pass, #two-fa-id {
     /* border: 1px solid red; */
     width: 60%;
     display: flex;

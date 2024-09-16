@@ -17,7 +17,7 @@ def send_confirmation_email(user, request, token):
     confirm_url = f'{settings.FRONTEND_BASE_URL}/confirm-email?token={token}'
     body = (
         f'Hi {user.username},<br><br>'
-        f'Please confirm your new account by visiting <a href="{confirm_url}">{confirm_url}</a><br><br>'
+        f'Please confirm your new account by visiting <a href="{confirm_url}" target="_blank">{confirm_url}</a><br><br>'
         f'Thank you from ft_transcendence team!'
     )
     
@@ -33,7 +33,7 @@ def send_confirmation_email(user, request, token):
 def send_reset_email(user, request, reset_token):
     mail_subject = 'Password Reset'
     reset_url = f'{settings.FRONTEND_BASE_URL}/confirm-password?token={reset_token}'
-    body = f'Click the link below to reset your password:<br><a href="{reset_url}">{reset_url}</a>'
+    body = f'Click the link below to reset your password:<br><a href="{reset_url}" target="_blank">{reset_url}</a>'
 
     email = EmailMessage(
         mail_subject,
