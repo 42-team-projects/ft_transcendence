@@ -34,6 +34,7 @@ services:
       - ./frontend/:/usr/share/nginx/html
       - ./devops/nginx:/etc/nginx/conf.d
       - ./devops/certs:/etc/ssl/certs
+      - ./blockchain/artifacts:/usr/share/nginx/html/artifacts
     networks:
       - app_network
     depends_on:

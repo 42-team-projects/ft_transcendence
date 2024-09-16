@@ -5,6 +5,8 @@ channels
 environ
 django-sslserver
 django-prometheus
+web3==5.27.0
+python-dotenv
 
 whitenoise==5.3.0
 daphne==3.0.2
