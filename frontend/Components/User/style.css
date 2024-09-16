@@ -263,19 +263,23 @@ submit-button button:hover {
     height: 1.2rem;
 }
 
+#error-message.margin {
+    margin-bottom: 0.5rem;
+}
+
 #error-message.show {
     visibility: visible;
 }
 
-#error-message.success {
-    color: #34C759;
-}
-
 #error-message.success::before {
     content: "";
-    background: url('/svg/success.svg') no-repeat;
+    background: url('/assets/auth-svg/success.svg') no-repeat;
     width: 1.5rem;
     height: 1.2rem;
+}
+
+#error-message.success {
+    color: #34C759;
 }
 
 /* EmailConf.js */
@@ -300,13 +304,7 @@ email-page {
     gap: 1.5rem;
 }
 
-/* #center-container img {
-    border: #fc3d3d 1px solid;
-
-} */
-
 #center-container h1 {
-    /* border: #fc3d3d 1px solid; */
     font-family: 'Sansation', sans-serif;
     font-weight: 700;
     font-size: 2rem;
@@ -314,13 +312,128 @@ email-page {
 }
 
 #center-container p {
-    /* all: initial; */
-    /* color: white; */
-    /* font-weight: 550 !important; */
-    /* font-size: 1rem; */
-    /* font-family: 'Sansation', sans-serif !important; */
-
-    /* font-family: 'Courier New', Courier, monospace; */
     text-align: center;
     opacity: 0.7;
+}
+
+/*  ForgetPassword.js */
+
+#forget-password {
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 75%;
+
+}
+
+#forget-password a {
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    font-family: 'Sansation', sans-serif;
+    font-weight: 500;
+}
+
+#forget-password a:hover {
+    color: #1966b1;
+}
+
+forgot-password, confirm-password, two-factor {
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    padding-top:  10rem;
+    gap: 10rem;
+    height: 100vh;
+}
+
+#pass-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* gap: 1rem; */
+}
+
+#pass-form h1, #two-fa-id h1 {
+    color: #00FFFC;
+    font-size: 28px;
+}
+
+#pass-form p, #two-fa-id p {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+
+#confirm-pass, #two-fa-id {
+    /* border: 1px solid red; */
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+#confirm-pass h1 {
+    font-size: 28px;
+    color: #00FFFC;
+    margin-bottom: 2rem;
+}
+
+#confirm-pass button {
+    margin-top: 5rem;
+}
+
+custom-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 2.5rem;
+    border: #00FFFC 1.5px solid;
+    border-radius: 5px;
+}
+
+custom-input .input-icon {
+    height: 1rem;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+custom-input input {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    color: white;
+    font-family: 'Sansation', sans-serif;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.btk {
+    background-color: rgba(0, 255, 252, 0.7);
+    color: white;
+    padding: 10px;
+    width: 80%;
+    height: 2.5rem;
+    font-family: 'Sansation', sans-serif;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+    
+    margin-top: 2rem;
+}
+
+.btk:hover {
+    background-color: #00ccca;
 }

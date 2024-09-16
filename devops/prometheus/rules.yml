@@ -1,4 +1,3 @@
-# simple rule if an instance is down
 groups:
 - name: instance_down
   rules:
