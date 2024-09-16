@@ -1,6 +1,8 @@
 import { initTournamentWebSocket } from "/Utils/TournamentManager.js";
-import { closeAndRemovePlayerFromTournament, closeWebSocket, getWebSocketByTournamentId } from "/Utils/TournamentWebSocketManager.js";
+import { closeAndRemovePlayerFromTournament, closeWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { get_tournament_by_id } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { leaveTournamentAndStoreScore, getAbi } from "/blockchain/blockchain.js";
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -11,13 +13,18 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
     try {
         if (playerState === 'lose') {
             console.log("you have lost: ", tournament_id);
-            await closeAndRemovePlayerFromTournament(tournament_id);  // Close WebSocket and remove the player
+            // await closeAndRemovePlayerFromTournament(tournament_id);  // Close WebSocket and remove the player
+            // leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi)
+            closeWebSocket(tournament_id);
+            const abi = await getAbi();
+            await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
+
         } else {
-            // await sleep(5000);  // Sleep for 5 seconds (5000 milliseconds)
+            await sleep(5000);  // Sleep for 5 seconds (5000 milliseconds)
 
 
-            const interval = setInterval(async () => {
-                clearInterval(interval);
+            // const interval = setInterval(async () => {
+            //     clearInterval(interval);
                 console.log("you have won: ", tournament_id);
                 const newTournamentData = await get_tournament_by_id(tournament_id);
                 console.log("newTournamentData: ", newTournamentData);
@@ -32,7 +39,7 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
                 // Initialize a new WebSocket connection or re-establish if necessary
                 initTournamentWebSocket(newTournamentData);
                 
-            }, 5000);
+            // }, 5000);
 
         }
     } catch (error) {
