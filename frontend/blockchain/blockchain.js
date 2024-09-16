@@ -1,15 +1,16 @@
+import { HOST } from "/Utils/GlobalVariables.js";
+
 // this function will called in loser player check 
 
-async function leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi) {
-    const apiUrl = 'https://127.0.0.1:8000/tournament/StoreScore/';
-    // const accessToken = localStorage.getItem('accessToken'); // Retrieve the access token from localStorage
+export async function leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi) {
+    const apiUrl = HOST + '/tournament/StoreScore/';
+    const accessToken = localStorage.getItem('accessToken'); // Retrieve the access token from localStorage
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${accessToken}`, // Attach the access token in the Authorization header
-                // 'X-CSRFToken': getCsrfToken(), // Ensure CSRF protection for Django
+                'Authorization': `Bearer ${accessToken}`, // Attach the access token in the Authorization header
             },
             body: JSON.stringify({
                 tournamentId: tournamentId,
@@ -35,6 +36,17 @@ async function leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScor
         // alert('An error occurred while leaving tournament and storing score.');
     }
 }
+
+export async function getAbi() {
+    const Response = await fetch('/usr/share/nginx/html/artifacts/contracts/TournamentScores.sol/TournamentScores.json');
+    console.log("Response: " , Response);
+    const json = await Response.json();
+    console.log("json: ", json);
+    const ABI = json.abi;
+    console.log("ABI:  ", ABI);
+    return ABI;
+}
+
 
 const abi = [
 	{
@@ -130,12 +142,12 @@ const abi = [
 		"type": "function"
 	}
 ];
-const tournamentId = 11000;
-const winnerId = 2000;
-const winnerIdScore = 2000;
-const loserId = 2000;
-const loserIdScore = 2000;
+// const tournamentId = 11000;
+// const winnerId = 2000;
+// const winnerIdScore = 2000;
+// const loserId = 2000;
+// const loserIdScore = 2000;
 
-document.getElementById('leaveAndStoreScoreButton').addEventListener('click', () => {
-    leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi);
-});
+// document.getElementById('leaveAndStoreScoreButton').addEventListener('click', () => {
+//     leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi);
+// });
