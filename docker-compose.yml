@@ -43,104 +43,103 @@ services:
     image: postgres:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
     container_name: postgres
     env_file:
       - .env 
     networks:
       - app_network
 
-  # pgadmin4:
-  #   image: dpage/pgadmin4
-  #   ports:
-  #     - 5050:443
-  #   volumes:
-  #     - ./devops/certs:/certs
-  #   container_name: pgadmin4
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - app_network
+  pgadmin4:
+    image: dpage/pgadmin4
+    ports:
+      - 5050:443
+    volumes:
+      - ./devops/certs:/certs
+    container_name: pgadmin4
+    env_file:
+      - .env
+    networks:
+      - app_network
 
   # # <--- Monotoring --->
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   container_name: prometheus
-  #   volumes:
-  #     - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-  #     - ./devops/prometheus/rules.yml:/etc/prometheus/rules.yml
-  #     - prometheus_data:/prometheus
-  #   command:
-  #     - '--web.enable-lifecycle'
-  #     - '--config.file=/etc/prometheus/prometheus.yml'
-  #     - '--storage.tsdb.retention.time=1d'
-  #   ports:
-  #     - 9090:9090 # ! should not be exposed
-  #   env_file:
-  #     - .env
-  #   restart: unless-stopped
-  #   networks:
-  #     - app_network
-  #   depends_on:
-  #     - back-end
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./devops/prometheus/rules.yml:/etc/prometheus/rules.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--web.enable-lifecycle'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=1d'
+    # ports:
+    #   - 9090:9090 # ! should not be exposed (removed later)
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - app_network
+    depends_on:
+      - back-end
 
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: grafana
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-  #     - ./devops/grafana/grafana.ini:/etc/grafana/grafana.ini
-  #     - ./devops/certs/server.cert:/etc/grafana/server.cert
-  #     - ./devops/certs/server.key:/etc/grafana/server.key
-  #   env_file:
-  #     - .env
-  #   restart: unless-stopped
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - app_network
-  #   depends_on:
-  #     - prometheus
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./devops/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./devops/certs/server.cert:/etc/grafana/server.cert
+      - ./devops/certs/server.key:/etc/grafana/server.key
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - app_network
+    depends_on:
+      - prometheus
 
-  # nginx-exporter:
-  #   image: nginx/nginx-prometheus-exporter:latest
-  #   container_name: nginx-exporter
-  #   networks:
-  #     - app_network
-  #   command:
-  #     - '--nginx.scrape-uri=https://front-end/stub_status'
-  #   depends_on:
-  #     - front-end
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
+    networks:
+      - app_network
+    command:
+      - '--nginx.scrape-uri=https://front-end/stub_status'
+    depends_on:
+      - front-end
 
-  # postgres-exporter:
-  #   image: wrouesnel/postgres_exporter:latest
-  #   container_name: postgres-exporter
-  #   networks:
-  #     - app_network
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=disable"
-  #   depends_on:
-  #     - database
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:latest
+    container_name: postgres-exporter
+    networks:
+      - app_network
+    env_file:
+      - .env
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=disable"
+    depends_on:
+      - database
 
-  # alertmanager:
-  #   image: prom/alertmanager:latest
-  #   container_name: alertmanager
-  #   volumes:
-  #     - alertmanager_data:/alertmanager
-  #     - ./devops/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-  #   command:
-  #     - '--config.file=/etc/alertmanager/alertmanager.yml'
-  #   ports:
-  #     - 9093:9093 # ! should not be exposed
-  #   env_file:
-  #     - .env
-  #   restart: unless-stopped
-  #   networks:
-  #     - app_network
-  #   depends_on:
-  #     - prometheus
+  alertmanager:
+    build:
+      context: ./devops/alertmanager
+      args:
+        - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+    container_name: alertmanager
+    volumes:
+      - alertmanager_data:/alertmanager
+    command: ["/opt/alertmanager-0.21.0.linux-amd64/alertmanager", "--config.file=/etc/alertmanager/alertmanager.yml"]
+    # ports:
+    #   - 9093:9093 # ! should not be exposed
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - app_network
+    depends_on:
+      - prometheus
 # docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
 # grafana ==> nginx: NGINX exporter (12708) | back-end: back-end (7996/17658) | postgres-exporter: postgres-exporter (14114)
