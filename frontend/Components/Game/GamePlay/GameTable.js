@@ -45,7 +45,7 @@ export class GameTable extends HTMLElement {
             console.log("closed");
             score.player = 5;
             score.opponent = 0;
-            this.GameOver("win", score.player, score.opponent);
+            this.GameOver("win", score.player, score.opponent, opponentInfo.id);
         };
 
         this.socket.onerror = (error) => {
@@ -138,7 +138,7 @@ export class GameTable extends HTMLElement {
             opponent_score = player_1.score;
         }
         this.luanching = false;
-        await this.GameOver(player_state, score, opponent_score);
+        await this.GameOver(player_state, score, opponent_score, opponentInfo.id);
     };
     moveRacket = (player_1, player_2) => {
         if (userInfo.id === Number(player_1.id)) {
@@ -263,11 +263,11 @@ export class GameTable extends HTMLElement {
             result: playerState,
             opponent_player: opponent_player
         });
-        await createApiData(HOST + "/game/game_history/", body);
+        await createApiData(HOST + "/game/game_history/me/", body);
         //redirect to last url in hesory
-        setTimeout(() => {
+        // setTimeout(() => {
             this.remove();
-        }, 5000);
+        // }, 5000);
     }
     async LuncheGame(ctx) {
         // console.log('lunching');

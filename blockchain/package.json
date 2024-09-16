@@ -1,0 +1,14 @@
+{
+  "name": "hardhat-project",
+  "type": "module",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "chai": "^5.1.1",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.22.10",
+    "mocha": "^10.7.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
