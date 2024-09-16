@@ -29,6 +29,101 @@ PRIVATE_KEY = os.getenv('PRIVATE_KEY')
 
 w3 = Web3(Web3.HTTPProvider(SEPOLIA_URL))
 
+aabi = [
+	{
+		"inputs": [],
+		"name": "getAllTournamentIds",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_tournamentId",
+				"type": "uint256"
+			}
+		],
+		"name": "getScores",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "tournamentId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "winnerId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "winnerIdScore",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "loserId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "loserIdScore",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct TournamentScores.Score[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_tournamentId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_winnerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_winnerIdScore",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_loserId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_loserIdScore",
+				"type": "uint256"
+			}
+		],
+		"name": "storeScore",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -36,48 +131,52 @@ def leave_tournament_and_store_score(request):
     if request.method == 'POST':
         try:
             # Extract data from the request
-            tournament_id = request.data.get('tournamentId')
-            winner_id = request.data.get('winnerId')
-            winner_score = request.data.get('winnerIdScore')
-            loser_id = request.data.get('loserId')
-            loser_score = request.data.get('loserIdScore')
-            CONTRACT_ABI = request.data.get('abi')
+            tournamentId = int(request.data.get('tournamentId'))
+            winnerId = int(request.data.get('winnerId'))
+            winnerIdScore = int(request.data.get('winnerIdScore'))
+            loserId = int(request.data.get('loserId'))
+            loserIdScore = int(request.data.get('loserIdScore'))
+
+            CONTRACT_ABI = request.data.get('CONTRACT_ABI')
             player = Player.objects.get(user=request.user)
             # Check if the tournament exists
             try:
-                tournament = Tournament.objects.get(tournament_id=tournament_id)
+                tournament = Tournament.objects.get(tournament_id=tournamentId)
             except Tournament.DoesNotExist:
-                return JsonResponse({'statusText': 'Tournament not found'}, status=404)
+                return JsonResponse({'statusText': 'Tournament not found', 'Testid': tournamentId}, status=404)
             tournament.players.remove(player)
             tournament.save()
             # Validate required parameters
-            if not all([tournament_id, winner_id, winner_score, loser_id, loser_score, CONTRACT_ABI]):
-                return JsonResponse({'statusText': 'Missing required parameters'}, status=400)
+            # if not all([tournament_id, winnerId, winnerIdScore, loserId, loserIdScore, CONTRACT_ABI]):
+            #     return JsonResponse({'statusText': f'Missing required parameters ${tournament_id} ${winnerId} ${winnerIdScore} ${loserId} ${loserIdScore} ${CONTRACT_ABI}'}, status=400)
+
             # Create contract instance
-            contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
+            contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=aabi)
             # Create account from private key
             account = w3.eth.account.privateKeyToAccount(PRIVATE_KEY)
-            # Build the transaction
+            # # Build the transaction
+
+            current_gas_price = w3.eth.gas_price
             tx = contract.functions.storeScore(
-                tournament_id,
-                winner_id,
-                winner_score,
-                loser_id,
-                loser_score
+                tournamentId,
+                winnerId,
+                winnerIdScore,
+                loserId,
+                loserIdScore
             ).buildTransaction({
                 'from': account.address,
                 'chainId': 11155111,  # Sepolia Testnet Chain ID
                 'gas': 2000000,
-                'gasPrice': w3.toWei('50', 'gwei'),
+                'gasPrice': int(current_gas_price * 1.5),
                 'nonce': w3.eth.getTransactionCount(account.address),
             })
-            # Sign the transaction
+            # # Sign the transaction
             signed_txn = w3.eth.account.signTransaction(tx, private_key=PRIVATE_KEY)
-            # Send the transaction
+            # # Send the transaction
             try:
                 tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
                 receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-                scores = contract.functions.getScores(tournament_id).call()
+                scores = contract.functions.getScores(tournamentId).call()
                 return JsonResponse({
                     'success': 'Player successfully left the tournament (if loser) and score stored on blockchain',
                     'txHash': tx_hash.hex(),
@@ -87,7 +186,7 @@ def leave_tournament_and_store_score(request):
                 return JsonResponse({'statusText': f'Error sending transaction: {str(e)}'}, status=500)
 
         except Exception as e:
-            return JsonResponse({'statusText': str(e)}, status=500)
+            return JsonResponse({'statusText': f'Error 500 2 : {str(e)}', 'abi': CONTRACT_ABI}, status=500)
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
 
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Example</title>
+</head>
+<body>
+    <h1>Sample Button</h1>
+    <button onclick="getAbi()">Click Me</button>
+
+    <script>
+        // function buttonClicked() {
+
+        // }
+
+   async function getAbi() {
+    const Response = await fetch('./blockchain/artifacts/contracts/TournamentScores.sol/test.json');
+    console.log("Response: " , Response);
+    // console.log("Response.body: ", Response.body);
+    const jsonn = await Response.json();
+    console.log("json: ", jsonn);
+    const ABI = jsonn.abi;
+    console.log("ABI:  ", ABI);
+    return ABI;
+}
+    </script>
+</body>
+</html>
