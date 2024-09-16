@@ -27,7 +27,7 @@ export class ProfileContent extends HTMLElement {
                     <input class="profile-image" type="file" accept="image/png, image/jpeg" readonly/>
                 </div>
                 <custom-input-field class="full-name-field" label="FULL NAME" type="text"></custom-input-field>
-                <custom-input-field class="cover-field" label="COVER" description="Supported extenstions: JPEG JPG PNG SVG." type="file"></custom-input-field>
+                <custom-input-field class="cover-field" label="COVER" description="Supported extenstions: JPEG JPG PNG SVG. and the size most be less than 2 MB." type="file"></custom-input-field>
                 <custom-select label="LANGUAGE" description="Select your favorite language."></custom-select>
                 <custom-unordered-list label="LINKS" description="Max links you can add is 4."></custom-unordered-list>
             </div>
@@ -57,6 +57,12 @@ export class ProfileContent extends HTMLElement {
         input.addEventListener( 'change', (e) => {
             if (input.files && input.files.length > 0) {
                 const file = input.files[0];
+                if (file.size >= 2*1e6)
+                {
+                    console.log("the size of the image is too large!!");
+                    profileImageFile = null;
+                    return ;
+                }
                 profileImage.src = URL.createObjectURL(file);
                 profileImageFile = file;
             }
