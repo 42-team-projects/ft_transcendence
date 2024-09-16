@@ -5,7 +5,7 @@
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
 import { Buttons } from "/Components/Game/GamePlay/buttons.js"
 import { SinglePlayer } from '/Components/Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
-import { MultiPlayer } from '/Components/Game/GamePlay/MultiPlayer/MultiPlayerCart.js'
+import { MultiPlayer } from '/Components/Game/GamePlay/GameOfline/GameOfline.js'
 import { OnlineGame } from '/Components/Game/GamePlay/GameOnline/OnlineGameCart.js'
 import { PageName } from "/Components/Game/GamePlay/PageName.js";
 import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";

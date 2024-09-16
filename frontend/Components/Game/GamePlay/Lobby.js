@@ -131,7 +131,6 @@ export class Lobby extends HTMLElement{
 		headerBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			headerBar.innerHTML = '';
-			console.log("setInterval 2");
 		}, 1000);
 	}
 
@@ -148,7 +147,6 @@ export class Lobby extends HTMLElement{
 		setTimeout(() => {
 			sideBar.shadowRoot.innerHTML = '';
 			sideBar.classList.toggle('left', false);
-			console.log("setInterval 1");
 		}, 1000);
 	}
 
@@ -196,8 +194,10 @@ export class Lobby extends HTMLElement{
 			}
 		};
 		this.socket.onclose = (e) => {
+			console.log('socket close 1');
 			router.handleRoute(window.location.pathname);
 			router.randring();
+			this.socket = null;
 		};
 		this.socket.onerror = (e) => {
 			console.log('socket error');
@@ -270,7 +270,6 @@ export class Lobby extends HTMLElement{
 		opponentInfo.id = opponentId;
 		opponentInfo.picture = HOST + opponent.user.avatar;
 		opponentInfo.username = opponent.user.username;
-		// console.log('opponentInfo:', opponentInfo);
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
@@ -303,7 +302,6 @@ export class Lobby extends HTMLElement{
 	}
 	async playeGame(room_group_name){
 		const game_play = await getApiData(HOST + `/game/game_play/`);
-		console.log(game_play);
 		const header = new GameHeader();
 		const game = new GameTable(room_group_name, game_play);
 		const root = document.body.querySelector('root-content');
@@ -313,7 +311,6 @@ export class Lobby extends HTMLElement{
 		
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
-		console.log("hellllllllllo : ", root.innerHTML);
 		root.innerHTML = ``;
 		root.appendChild(game);
 		game.id = this.tournament_id;
@@ -333,10 +330,12 @@ export class Lobby extends HTMLElement{
 					if(this.time <= 0){
 						if(this.socket){
 							this.socket.onclose = async (e) => {
-								console.log('socket close');
+								console.log('socket close 2');
+								this.socket = null;
 								await this.playeGame(room_group_name);
 							};
-							this.socket.close();
+							if(this.socket)
+								this.socket.close();
 						}
 						else
 							await this.playeGame(room_group_name);
@@ -363,7 +362,6 @@ export class Lobby extends HTMLElement{
 		if(this.time > 0){
 			if(this.socket)
 				this.socket.close();
-			
 		}
 		
 	}
