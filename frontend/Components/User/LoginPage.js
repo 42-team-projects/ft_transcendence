@@ -121,7 +121,11 @@ export default class LoginPage extends HTMLElement {
 			if (response.status == 200) {
 				localStorage.setItem('accessToken', data.access_token);
 				router.handleRoute('/home')
-			} else {
+			}
+			else if (response.status == 401 && data.is_2fa_enabled) {
+				router.handleRoute('/two-factor');
+			}
+			else {
 				const eMsg = this.shadowRoot.querySelector('#error-message');
 				eMsg.textContent = data.detail;
 				eMsg.classList.add('show');
@@ -130,7 +134,6 @@ export default class LoginPage extends HTMLElement {
 			console.error('Error:', error);
 		}
 	}
-
 }
 
 const css = `
