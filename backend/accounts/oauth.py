@@ -1,8 +1,6 @@
 from django.shortcuts import redirect
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from django.http import HttpResponseRedirect
-from rest_framework import status
 from .models import User
 import requests
 from django.conf import settings
@@ -19,6 +17,12 @@ def register_social_user(provider, email, username, avatar_url=None):
     user = User.objects.filter(email=email).first()
 
     if not user:
+        original_username = username
+        i = 1
+        while User.objects.filter(username=username).exists():
+            username = original_username + str(i)
+            i += 1
+        
         user = User.objects.create(email=email, username=username, avatar=avatar_url)
         user.auth_provider = provider
         user.is_verified = True
@@ -35,7 +39,6 @@ def register_social_user(provider, email, username, avatar_url=None):
     else:
         if provider != user.auth_provider:
             return {
-                # 'error': f'You originally registered with {user.auth_provider}. Please continue your login with {user.auth_provider}.'
                 'error': f'Use {user.auth_provider} for login.'
             }
 
@@ -52,7 +55,6 @@ def register_social_user(provider, email, username, avatar_url=None):
 def redirect_to_provider(request, provider):
     conf = settings.OAUTH_PROVIDERS.get(provider.upper())
     if not conf:
-        # return Response({'error': f'Unknown provider: {provider}'}, status=status.HTTP_400_BAD_REQUEST)
         return redirect_error(f'Unknown provider: {provider}')
 
 
@@ -71,12 +73,10 @@ def redirect_to_provider(request, provider):
 def oauth_callback(request, provider):
     conf = settings.OAUTH_PROVIDERS.get(provider.upper())
     if not conf:
-        # return Response({'error': f'Unknown provider: {provider}'}, status=status.HTTP_400_BAD_REQUEST)
         return redirect_error(f'Unknown provider: {provider}')
 
     code = request.GET.get('code')
     if code is None:
-        # return Response({'error': 'No code provided'}, status=status.HTTP_400_BAD_REQUEST)
         return redirect_error('No code provided')
     
     url = conf['TOKEN_URL']
@@ -91,7 +91,6 @@ def oauth_callback(request, provider):
     response = requests.post(url, data=data)
     response_data = response.json()
     if response.status_code != 200:
-        # return Response({'error': 'Failed to exchange code for token'}, status=status.HTTP_400_BAD_REQUEST)
         return redirect_error('Failed to exchange code for token')
 
     access_token = response_data.get('access_token')

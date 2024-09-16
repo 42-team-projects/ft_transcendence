@@ -4,10 +4,11 @@ import { HOST } from '/Utils/GlobalVariables.js';
 export default class LoginPage extends HTMLElement {
 	constructor() {
 		super();
+		this.attachShadow({ mode: 'open' });
 		this.isOAuth = false;
 	}
 	connectedCallback() {
-		this.innerHTML = `
+		this.shadowRoot.innerHTML = `
 			<style>${css}</style>
 			
 			<header-cpn></header-cpn>
@@ -24,6 +25,10 @@ export default class LoginPage extends HTMLElement {
 					
 					<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
 					<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
+					
+					<div id="forget-password">
+						<a href="/forgot-password">Forgot Password?</a>
+					</div>
 					
 					<submit-button
 						title="Login"
@@ -51,15 +56,15 @@ export default class LoginPage extends HTMLElement {
 		`;
 	
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.querySelector('#content').addEventListener('submit', this.handleSubmit.bind(this));
+		this.shadowRoot.querySelector('#content').addEventListener('submit', this.handleSubmit.bind(this));
 		
 		// oauth
-		this.querySelector('.oauth-button.google').addEventListener('click', () => {
+		this.shadowRoot.querySelector('.oauth-button.google').addEventListener('click', () => {
 			this.isOAuth = true;
 			window.location.href = `${HOST}/api/v1/auth/google/redirect/`;
 		});
 		
-		this.querySelector('.oauth-button.intra').addEventListener('click', () => {
+		this.shadowRoot.querySelector('.oauth-button.intra').addEventListener('click', () => {
 			this.isOAuth = true; 
 			window.location.href = `${HOST}/api/v1/auth/intra/redirect/`;
 		});
@@ -75,7 +80,7 @@ export default class LoginPage extends HTMLElement {
 		let isEmpty = false;
 	
 		fields.forEach(field => {
-			const inputField = this.querySelector(`input-field[placeholder="${field}"]`);
+			const inputField = this.shadowRoot.querySelector(`input-field[placeholder="${field}"]`);
 			const value = inputField.querySelector('input').value;
 			const errorMsg = inputField.querySelector('.warning');
 	
@@ -116,8 +121,12 @@ export default class LoginPage extends HTMLElement {
 			if (response.status == 200) {
 				localStorage.setItem('accessToken', data.access_token);
 				router.handleRoute('/home')
-			} else {
-				const eMsg = this.querySelector('#error-message');
+			}
+			else if (response.status == 401 && data.is_2fa_enabled) {
+				router.handleRoute('/two-factor');
+			}
+			else {
+				const eMsg = this.shadowRoot.querySelector('#error-message');
 				eMsg.textContent = data.detail;
 				eMsg.classList.add('show');
 			}
@@ -125,7 +134,6 @@ export default class LoginPage extends HTMLElement {
 			console.error('Error:', error);
 		}
 	}
-
 }
 
 const css = `
