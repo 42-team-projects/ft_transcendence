@@ -43,7 +43,7 @@ def getMyGameHistory(request):
         data = request.data
         try:
             player = Player.objects.get(user=request.user)
-            opponent_player = Player.objects.get(user=data['opponent_player'])
+            opponent_player = Player.objects.get(id=data['opponent_player'])
             GameHestory.objects.create(player=player, player_score=data['player_score'], opponent_score=data['opponent_score'], result=data['result'], opponent_player=opponent_player)
             return JsonResponse({"response": "the history has been succefully created!!!"}, safe=False, status=status.HTTP_201_CREATED)
         except Player.DoesNotExist:
