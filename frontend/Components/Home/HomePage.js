@@ -2,6 +2,7 @@ import { getApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { LeaderboardItem } from "/Components/Home/Leaderboard/LeaderboardItem.js";
 import { HOST } from "/Utils/GlobalVariables.js";
+import { getAbi } from "/blockchain/blockchain.js";
 
 export class HomePage extends HTMLElement {
     constructor() {
@@ -60,6 +61,14 @@ export class HomePage extends HTMLElement {
         `;
     }
     async connectedCallback() {
+
+        const stats = this.shadowRoot.querySelector(".stats");
+        stats.addEventListener("click", async () => {
+            const abi = await getAbi();
+            console.log('abi: ' ,abi);
+            // await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
+        });
+
         const leaderboardList = this.shadowRoot.querySelector(".body-board");
         const players = await getApiData(PROFILE_API_URL + "leaderboard/");
         if (!players)
