@@ -42,7 +42,7 @@ export class GameTable extends HTMLElement {
         };
 
         this.socket.onclose = () => {
-            console.log("closed");
+            console.log("closed 1");
             score.player = 5;
             score.opponent = 0;
             this.GameOver("win", score.player, score.opponent, opponentInfo.id);
@@ -58,18 +58,15 @@ export class GameTable extends HTMLElement {
             y: CANVAS_HEIGHT / 2,
             color: game_play.first_racket_color,
         };
-        console.log("this.player", this.player);
         this.opponent = {
             x: CANVAS_WIDTH - this.racquet.width,
             y: CANVAS_HEIGHT / 2,
             color: game_play.second_racket_color,
         };
-        console.log("this.opponent", this.opponent);
         this.ball_color = game_play.ball_color;
         this.round = 1;
         this.room_name = room_name;
         this.requestID = null;
-        console.log("svg", game_page.content.querySelector("svg"));
         gameBard(game_page.content.querySelector("svg"), game_play.board_color);
         this.appendChild(game_page.content.cloneNode(true));
         this.setKeys(false, false, false, false);
@@ -475,7 +472,7 @@ export class GameTable extends HTMLElement {
     }
     disconnectedCallback() {
         this.socket.onclose = () => {
-            console.log("closed");
+            console.log("closed 2");
         };
         this.socket.close();
         const pause = document.body.querySelector("pause-page");
