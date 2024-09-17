@@ -2,7 +2,7 @@ import { NotificationComponent } from "/Components/Notification/NotificationComp
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 
 let notificationInterval;
-export function displayNotification(notificationContent) {
+export function displayNotification(notificationContent, notifType) {
     
     // clear the notification container.
     const notificationContainer = window.document.querySelector(".notification-search .notification-container");
@@ -13,8 +13,10 @@ export function displayNotification(notificationContent) {
     notification.width = "100%";
     notification.appendChild(notificationContent.cloneNode());
 
-    // add notification to notification list.
-    window.document.querySelector(".right-sidebar notifications-list").appendNotification(notificationContent);
+    if (notifType === "friend")
+        window.document.querySelector(".right-sidebar friends-request-list").appendFriendRequest(notificationContent);
+    else
+        window.document.querySelector(".right-sidebar notifications-list").appendNotification(notificationContent); // add notification to notification list.
 
     // display notification on the top corner.
     notificationContainer.appendChild(notification);
