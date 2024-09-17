@@ -190,12 +190,12 @@ export class Lobby extends HTMLElement{
 			if (Number(data.user_1) === userId) {
 				setTimeout(() => {
 					setTimeout(() => this.setPlayer(data.user_2), 5000);
-					setTimeout(() => this.gameMode(data.room_group_name), 6000);
+					setTimeout(() => this.gameMode(data.room_group_name), 5500);
 				}, 500 - decimalPart);
 			} else if (Number(data.user_2) === userId) {
 				setTimeout(() => {
 					setTimeout(() => this.setPlayer(data.user_1), 5000);
-					setTimeout(() => this.gameMode(data.room_group_name), 6000);
+					setTimeout(() => this.gameMode(data.room_group_name), 5500);
 				}, 500 - decimalPart);
 			} else {
 				this.time = data.time;
@@ -272,28 +272,34 @@ export class Lobby extends HTMLElement{
 	async setPlayer(opponentId){
 		const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
-		console.log(opponentId)
-		const turnTime = 10;
-		let delay = 0;
-		let delayNumber = (turnTime / 2) / Players.length;
 		const opponent = await getApiData(PROFILE_API_URL + `${opponentId}/`);
 		opponentInfo.id = opponentId;
 		opponentInfo.picture = HOST + opponent.user.avatar;
 		opponentInfo.username = opponent.user.username;
+		console.log(opponentId)
+		const turnTime = 1;
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
 		h1.textContent = opponentInfo.username;
 		Players[0].src = opponentInfo.picture
-		Players.forEach((element)=>{
-			// element.style.animation = 'none';
+		let delay = 0;
+		let delayNumber = (turnTime / 2) / Players.length;
+
+		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
 			element.style.opacity = '1';
 			delay += delayNumber;
+				
 		})
 		this.appendChild(h1.cloneNode(true));
+		// setTimeout(() => {
+		// 	Players.forEach((element, index)=>{
+		// 		element.style.animation = 'none';
+		// 	})
+		// }, 5000);
 	}
 	SinglePlayer()
 	{

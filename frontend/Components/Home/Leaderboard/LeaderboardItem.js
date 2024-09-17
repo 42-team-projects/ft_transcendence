@@ -17,9 +17,9 @@ export class LeaderboardItem extends HTMLElement {
                     <div slot="content" class="c-hexagon-content"></div>
                 </c-hexagon>
                 <img src="/assets/images/leagues/bronze-league.svg" width="32px"></img>
-                <div>
+                <div style="display: flex; flex-direction: column; align-items:center; justify-content: center;">
                     <h3>5644</h3>
-                    <h4>WIN</h4>
+                    <h4>XP</h4>
                 </div>
             </div>
         `;

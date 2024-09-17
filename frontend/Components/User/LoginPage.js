@@ -4,71 +4,67 @@ import { HOST } from '/Utils/GlobalVariables.js';
 export default class LoginPage extends HTMLElement {
 	constructor() {
 		super();
+		this.attachShadow({ mode: 'open' });
 		this.isOAuth = false;
 	}
-//							<div id="error-message"></div>
-
 	connectedCallback() {
-		this.innerHTML = `
+		this.shadowRoot.innerHTML = `
 			<style>${css}</style>
 			
 			<header-cpn></header-cpn>
 
-
 			<div id="test">
-				<div class="right-item"></div>
-				<div class="bottom-item"></div>
-				<div class="right-img">
-					<img src="/assets/login-assets-icon.svg"></img>
-				</div>
-				<div class="outerContainer">
-					<div class="innerContainer">
-						<form id="content">
-							<div id="inner-header">
-								<h1>LOGIN</h1>
-							</div>
+				<div id="background"></div>
 
-							<div id="error-message"></div>
-							
-							<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
-							<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
-							
-							<submit-button
-								title="LOGIN"
-								account-text="Don't have an account? <a href='/signup'>Sign Up</a>">
-							</submit-button>
-							
-							<div class="oauth-footer">
-								<img src="/assets/auth-svg/orLine.svg" alt="Or">
-
-								<div class="button-container">
-
-									<button class="oauth-button google">
-										<img src="/assets/auth-svg/google.svg" alt="Google">
-									</button>
-									
-									<button class="oauth-button intra">
-										<img src="/assets/auth-svg/42.svg" alt="Intra">
-									</button>
-								</div>
-							</div>
-						
-						</form>
+				<form id="content">
+					<div id="inner-header">
+						<h1>Login</h1>
 					</div>
-				</div>
+					
+					<div id="error-message"></div>
+					
+					<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
+					<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
+					
+					<div id="forget-password">
+						<a href="/forgot-password">Forgot Password?</a>
+					</div>
+					
+					<submit-button
+						title="Login"
+						account-text="Don't have an account? <a href='/signup'>Sign Up</a>">
+					</submit-button>
+					
+					<div class="oauth-footer">
+						<img src="/assets/auth-svg/orLine.svg" alt="Or">
+
+						<div class="button-container">
+
+							<button class="oauth-button google">
+								<img src="/assets/auth-svg/google.svg" alt="Google">
+							</button>
+							
+							<button class="oauth-button intra">
+								<img src="/assets/auth-svg/42.svg" alt="Intra">
+							</button>
+						</div>
+					</div>
+				
+				</form>
+						
 			</div>
 		`;
 	
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.querySelector('#content').addEventListener('submit', this.handleSubmit.bind(this));
+		this.shadowRoot.querySelector('#content').addEventListener('submit', this.handleSubmit.bind(this));
 		
 		// oauth
-		this.querySelector('.oauth-button.google').addEventListener('click', () => {
+		this.shadowRoot.querySelector('.oauth-button.google').addEventListener('click', () => {
 			this.isOAuth = true;
 			window.location.href = `${HOST}/api/v1/auth/google/redirect/`;
 		});
 		
-		this.querySelector('.oauth-button.intra').addEventListener('click', () => {
+		this.shadowRoot.querySelector('.oauth-button.intra').addEventListener('click', () => {
 			this.isOAuth = true; 
 			window.location.href = `${HOST}/api/v1/auth/intra/redirect/`;
 		});
@@ -84,7 +80,7 @@ export default class LoginPage extends HTMLElement {
 		let isEmpty = false;
 	
 		fields.forEach(field => {
-			const inputField = this.querySelector(`input-field[placeholder="${field}"]`);
+			const inputField = this.shadowRoot.querySelector(`input-field[placeholder="${field}"]`);
 			const value = inputField.querySelector('input').value;
 			const errorMsg = inputField.querySelector('.warning');
 	
@@ -125,8 +121,12 @@ export default class LoginPage extends HTMLElement {
 			if (response.status == 200) {
 				localStorage.setItem('accessToken', data.access_token);
 				router.handleRoute('/home')
-			} else {
-				const eMsg = this.querySelector('#error-message');
+			}
+			else if (response.status == 401 && data.is_2fa_enabled) {
+				router.handleRoute('/two-factor');
+			}
+			else {
+				const eMsg = this.shadowRoot.querySelector('#error-message');
 				eMsg.textContent = data.detail;
 				eMsg.classList.add('show');
 			}
@@ -134,7 +134,6 @@ export default class LoginPage extends HTMLElement {
 			console.error('Error:', error);
 		}
 	}
-
 }
 
 const css = `
