@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from ..Models.StatsModel import Stats
 from ..Models.PlayerModel import Player
-from ..Serializers.StatsSerializer import StatsSerializer
+from ..Serializers.StatsSerializer import StatsSerializer, UpdateStatsSerializer
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -24,16 +24,16 @@ def getMyStats(request):
             serializer = StatsSerializer(stats)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         elif request.method == 'PUT': 
-            # result = request.data["result"]
-            # if result == "win":
-            #     stats.save(win=stats.win + 1)
-            # elif result == "lose":
-            #     stats.save(loss=stats.loss + 1)
-            serializer = StatsSerializer(stats, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            win = request.data.get("win", 0)  # default to 0 if 'win' is not present
+            loss = request.data.get("loss", 0)  # default to 0 if 'loss' is not present
+            stats.save(win=win, loss=loss)
+            return JsonResponse({"response": "hello"}, status=status.HTTP_200_OK)
+            # serializer = StatsSerializer(stats, data=request.data)
+            # if serializer.is_valid():
+            #     serializer.save()
+            #     return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+            # return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     except Stats.DoesNotExist:
         return JsonResponse({"error": "Stats not found for player"}, status=status.HTTP_404_NOT_FOUND)
     

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username Combobox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, select {
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <label for="username-select">Select a username option:</label>
+    <select id="username-select"></select>
+
+    <script>
+        // Username variable
+        const username = "rida";
+        
+        // Updated suffixes to match with the username
+        const suffixes = ["King", "strong", "brave", "killer", "friendly"];
+        
+        // Get the select element
+        const select = document.getElementById('username-select');
+        
+        // Populate the select options dynamically
+        suffixes.forEach(suffix => {
+            select.add(new Option(`${username} ${suffix}`));
+        });
+
+        // tournment_id   nickname
+    </script>
+</body>
+</html>
