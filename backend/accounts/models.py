@@ -16,9 +16,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True) ## mode search
-    date_joined = models.DateTimeField(auto_now_add=True) ## 
-    last_login = models.DateTimeField(auto_now=True) ##
     auth_provider = models.CharField(max_length=50, default=AUTH_PROVIDERS.get("email")) 
     totp_secret_key = models.CharField(max_length=50, null=True, blank=True)
     is_2fa_enabled = models.BooleanField(default=False)
