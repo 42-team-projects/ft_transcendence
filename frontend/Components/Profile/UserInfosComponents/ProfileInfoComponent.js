@@ -1,4 +1,5 @@
-import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
+import { createApiData } from "/Utils/APIManager.js";
+import { getNotificationWebSocket, HOST } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 
 export class ProfileInfoComponent extends HTMLElement {
@@ -26,8 +27,7 @@ export class ProfileInfoComponent extends HTMLElement {
                         </div>
                         <div class="joined-date">
                             <img loading="lazy"   src="/assets/images/profile/Calendar.svg" width="20px"/>
-                            <p class="joined-text">joined:</p>
-                            <p class="joined-date-text"> </p>
+                            <div><p class="joined-text">joined:</p><p class="joined-date-text"> </p></div>
                             <div class="add-friend">
                                 <img loading="lazy" src="/assets/images/profile/add-friends-icon.svg" width="28px"/>
                             </div>
@@ -82,8 +82,9 @@ export class ProfileInfoComponent extends HTMLElement {
         {
             const element = this.shadowRoot.querySelector(".add-friend img");
             if (!element)
-            return ;
-            element.hidden = newValue === "true" ? true : false;
+                return ;
+            if (newValue === "true")
+                element.remove();
         }
         
     }
@@ -106,13 +107,19 @@ export class ProfileInfoComponent extends HTMLElement {
     get friend() { return this.getAttribute("friend");}
     set friend(value) { this.setAttribute("friend", value);}
     
-    connectedCallback() {
+    async connectedCallback() {
         const addFriend = this.shadowRoot.querySelector(".add-friend");
+        // const currentPlayerId = await getCurrentUserId();
+        // if (this.id === currentPlayerId)
+        //     addFriend.remove();
         addFriend.addEventListener("click", async () => {
-            const notificationWS = await getNotificationWebSocket();
-            notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'type': "friend", "infos": ""}));
-            const addFriendImage = addFriend.querySelector("img");
-            addFriendImage.src = "/assets/icons/wait-time-icon.svg";
+            const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
+            if (sendRequestResponse) {
+                const notificationWS = await getNotificationWebSocket();
+                notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
+                const addFriendImage = addFriend.querySelector("img");
+                addFriendImage.src = "/assets/icons/wait-time-icon.svg";
+            }
         });
     }
 }
@@ -201,6 +208,15 @@ const cssContent = /*css*/`
 
     .joined-date > img {
         opacity: 0.7;
+    }
+
+    .joined-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .joined-date-text {
+        font-size: 12px;
     }
 
 `;

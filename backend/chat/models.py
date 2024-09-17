@@ -2,8 +2,11 @@ from django.db import models
 # from django.core.exceptions import ValidationError
 # from django.contrib.auth.models import User
 from accounts.models import User
+
+
+
     
-    
+
 class Conversation(models.Model):
     """
     Represents a conversation between users.
@@ -40,15 +43,15 @@ class Conversation(models.Model):
     #     """
     #     return f'chat_{self.title}'
     
-    def add_participant(self, user):
-        if not user in self.participants.all():
-            self.participants.add(user)
-            self.save()
+    # def add_participant(self, user):
+    #     if not user in self.participants.all():
+    #         self.participants.add(user)
+    #         self.save()
 
-    def remove_participant(self, user):
-        if user in self.participants.all():
-            self.participants.remove(user)
-            self.save()
+    # def remove_participant(self, user):
+    #     if user in self.participants.all():
+    #         self.participants.remove(user)
+    #         self.save()
     
     def get_all_messages(self):
         return self.messages

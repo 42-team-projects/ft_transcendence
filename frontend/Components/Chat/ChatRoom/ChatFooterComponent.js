@@ -1,4 +1,4 @@
-import { getCurrentUserId } from "/Utils/GlobalVariables.js";
+import { getCurrentUserData, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 
 let ws;
 
@@ -21,13 +21,15 @@ export class ChatFooterComponent extends HTMLElement {
     async connectedCallback() {
         const sendButton = this.shadowRoot.querySelector("img");
         const inputArea = this.shadowRoot.querySelector("input");
-        const currentUserId = await getCurrentUserId();
+        const currentUser = await getCurrentUserData();
+        const websocket = await getNotificationWebSocket();
         sendButton.addEventListener("click", () => {
             const message = inputArea.value.trim();
             if (message.length)
             {
-                this.chat(currentUserId, this.targetId, message);
-                console.log("the message has been successfully send !!");
+                this.chat(currentUser.id, this.targetId, message);
+
+                websocket.send(JSON.stringify({'message': `sent you a new message.`, 'receiver': this.targetId, 'is_signal': true, 'type': "message", "data": "/Chat/" + currentUser.username}));
             }
             inputArea.value = '';
         });
