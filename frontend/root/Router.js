@@ -143,6 +143,18 @@ export class Router {
                 this.handleRoute(link.getAttribute('href'));
             });
         });
+    
+        // add by oussama to fix the problem of refreshing the page
+        this.rootContent.querySelectorAll('*').forEach(element => {
+            if (element.shadowRoot) {
+                element.shadowRoot.querySelectorAll('a[href^="/"]').forEach(link => {
+                    link.addEventListener('click', event => {
+                        event.preventDefault();
+                        this.handleRoute(link.getAttribute('href'));
+                    });
+                });
+            }
+        });
     }
 }
 
