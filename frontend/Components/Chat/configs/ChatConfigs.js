@@ -3,6 +3,7 @@ import { HOST } from "/Utils/GlobalVariables.js";
 import { getCurrentUserId } from "/Utils/GlobalVariables.js";
 import { ChatFooterComponent } from "/Components/Chat/ChatRoom/ChatFooterComponent.js";
 import { ChatHeaderComponent } from "/Components/Chat/ChatRoom/ChatHeaderComponent.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
 
 export function renderChatHeader(chatContainer, conversationData) {
     const header = chatContainer.querySelector("chat-header");
@@ -32,15 +33,13 @@ function renderMessageComponent(chatBody, messageContainer, component, message, 
         messageContainer.setAttribute("corner", "");
         component = component.cloneNode();
     }
-    // messageContainer.time = message.sent_at.split("T")[0];
-    component.league = "gold";
-    component.profileImage = "/assets/images/profile/tanjuro.jpg";
     component.appendChild(messageContainer);
     return component;
 }
 
 
 let checker;
+
 
 export async function renderConversation(chatBody, messages) {
     if (!messages)

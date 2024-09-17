@@ -140,3 +140,12 @@ def getLeaderBoard(request):
     players = Player.objects.all().order_by("-stats__xp")
     serializer = DefaultPlayerSerializer(players, many=True)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateActiveField(request):
+    isActive = request.data["active"]
+    player = Player.objects.get(user=request.user)
+    player.active = isActive
+    player.save()
+    return JsonResponse({"message": "is active has successfully updated."}, safe=False, status=status.HTTP_200_OK)
