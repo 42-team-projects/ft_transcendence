@@ -1,9 +1,8 @@
 from accounts.models            import User
-from friends.models             import(FriendRequest, Friendship, BlockUser)
+from friend.models             import(FriendRequest, Friendship, BlockUser)
 from rest_framework.response    import Response
 from rest_framework.decorators  import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from django.core.exceptions     import ObjectDoesNotExist,ValidationError
 from django.shortcuts           import get_object_or_404
 
 from .serializers               import FriendRequestSerializer, FriendshipSerializer
@@ -28,9 +27,9 @@ def get_friend_requests(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_friends_list(request):
-    friends = Friendship.get_friendship(request.user)
-    friends_serializer = FriendshipSerializer(friends, read_only=True)
-    return Response({'response': friends_serializer.data})
+    friendship = Friendship.get_friendship(request.user)
+    friendship_serializer = FriendshipSerializer(friendship, read_only=True)
+    return Response({'response': friendship_serializer.data})
 
 
 @api_view(['POST'])
@@ -45,8 +44,8 @@ def send_friend_request(request, receiver_id):
     if reverse_request.exists():
         return Response({'response': 'There is already a friend request from this user to you.'}, status=400)
     # Check if they are already friends
-    if Friendship.get_friendship(current_user).is_friend(receiver_user) and \
-        Friendship.get_friendship(receiver_user).is_friend(current_user):
+    if Friendship.objects.filter(user=current_user, friends=receiver_user).exists() and \
+        Friendship.objects.filter(user=receiver_user, friends=current_user).exists():
         return Response({'response': 'You are already friends with this user.'}, status=400)
     friend_request, created = FriendRequest.objects.get_or_create(sender=current_user, receiver=receiver_user)
     if not created:
@@ -141,9 +140,34 @@ def unblock_user(request, user_id):
     current_user = request.user
     blocked_user = get_object_or_404(User, id=user_id)
 
-    block = BlockUser.objects.filter(blocker=current_user, blocked=blocked_user).first()
-    if block:
+    try:
+        block = BlockUser.objects.get(blocker=current_user, blocked=blocked_user)
         block.delete()
         return Response({'response': 'User unblocked successfully.'})
-    return Response({'response': 'No blocking action found for this user.'})
+    except BlockUser.DoesNotExist:
+        return Response({'response': 'No blocking action found for this user.'})
 
+
+def accept_or_decline(user, action):
+    friend_requests = FriendRequest.objects.filter(receiver=user, is_active=True)
+    if friend_requests.exists():
+        for friend_request in friend_requests:
+            if action == 'accept':
+                friend_request.accept()
+            elif action == 'decline':
+                friend_request.decline()
+        return Response({'response': f'{action} all friend requests.'})
+    else:
+        return Response({'response': 'No friend request found.'})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def accept_all_friend_requests(request):
+    user = request.user
+    return accept_or_decline(user, 'Accept')
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def decline_all_friend_requests(request):
+    user = request.user
+    return accept_or_decline(user, 'Decline')

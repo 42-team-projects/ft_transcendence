@@ -2,6 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from .models import *
+from friend.models import BlockUser
 from .serializers import *
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -9,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
+        print(self.scope['user'].username)
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.group_name = f"chat_{self.room_name}"
         
@@ -18,6 +20,7 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+
 
     def disconnect(self, close_code):
         
@@ -30,34 +33,22 @@ class ChatConsumer(WebsocketConsumer):
         try:
             data = json.loads(text_data)
             self.receiver = self.get_user(data['receiver'])
-            
-            # if self.is_blocked(self.current_user, self.receiver):
-            #     self.send_error(f'{self.current_user} blocked {self.receiver}!')
-            # elif self.is_blocked(self.receiver, self.current_user):
-            #     self.send_error(f'{self.receiver} blocked {self.current}!')
-            # elif (self.current_user.id == self.receiver.id):
-            #     self.send_error('sender and receiver is same user!')
-            # else:
-            #     self.save_and_broadcast_message(data['message'])
-            
-            
-            
+            self.current_user = self.get_user(data['sender'])            
+
             # handle block user here
-            self.save_and_broadcast_message(data['message'])
-                
+            blocked = BlockUser.objects.filter(blocker=self.current_user, blocked=self.receiver).first()
+            block = BlockUser.objects.filter(blocker=self.receiver, blocked=self.current_user).first()
+            
+            if blocked and block:
+                self.send_error(f'can\'t send message, block!')
+            else:
+                self.save_and_broadcast_message(data['message'])
         except ObjectDoesNotExist:
             self.send_error('User does not exist.')
         except json.JSONDecodeError:
             self.send_error('Invalid JSON format.')
         except KeyError as e:
             self.send_error(f'Missing key: {e}')
-
-    # @staticmethod
-    # def is_blocked(self, user1, user2):
-    #     # Check if the sender or receiver is blocked
-    #     return  Block.objects.filter(
-    #         blocker=user1, blocked=user2
-    #     ).aexists()
 
     def save_and_broadcast_message(self, content):
         conversation = self.get_or_create_conversation()
