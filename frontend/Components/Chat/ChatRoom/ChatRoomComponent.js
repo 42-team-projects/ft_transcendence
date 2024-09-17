@@ -36,13 +36,14 @@ export class ChatRoomComponent extends HTMLElement {
     }
 
     
-    async renderChatRoom(item) {
+    async renderChatRoom(item, is_blocked) {
         const currentUserId = await getCurrentUserId();
         const room_name = this.generateRoomName(currentUserId, item.user.id);
         const webSocket = setUpWebSocket(this.querySelector(".body"), room_name);
         renderChatHeader(this, item);
         await renderChatBody(this, ("chat_" + room_name));
-        renderChatFooter(this, webSocket, item.user.id);
+        if (!is_blocked)
+            renderChatFooter(this, webSocket, item.user.id);
     }
 
     static observedAttributes = [];
@@ -57,7 +58,11 @@ export class ChatRoomComponent extends HTMLElement {
         if (!playerName || playerName === undefined)
             return ;
         const player = await getApiData(PROFILE_API_URL + playerName);
-        await this.renderChatRoom(player);
+        const is_blocked = await getApiData(HOST + "/friend/is_blocked/" + player.user.username);
+        console.log("is_blocked: ", is_blocked);
+        if (is_blocked)
+            is_blocked = is_blocked.response;
+        await this.renderChatRoom(player, is_blocked);
     }
 
     disconnectedCallback() {

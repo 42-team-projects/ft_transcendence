@@ -93,7 +93,8 @@ export async function createNotificationWebSocket() {
         }
         if (!data.is_signal) {
             const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.data);
-            displayNotification(messageNotification);
+            displayNotification(messageNotification, data.type );
+            
         }
         else
             handleSignals(data);
