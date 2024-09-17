@@ -3,7 +3,7 @@ import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
 import { HOST, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
-import { createApiData } from "/Utils/APIManager.js";
+import { createApiData, deleteApiData } from "/Utils/APIManager.js";
 
 export class ChatHeaderComponent extends HTMLElement {
     constructor () {
@@ -48,13 +48,15 @@ export class ChatHeaderComponent extends HTMLElement {
 
         const blockProfile = this.querySelector(".block-profile");
         blockProfile.addEventListener("click", async (e) => {
-            const blockResponse = await createApiData(HOST + "/friend/block/" + this.userId + "/", "");
-            if (blockResponse) {
-                console.log("blockResponse: ", blockResponse);
-                const chatFooter = window.document.querySelector(".footer");
-                if (chatFooter)
-                    chatFooter.remove();
+            if (blockProfile.id === "blocked") {
+                const blockResponse = await deleteApiData(HOST + "/friend/unblock/" + this.userId + "/");
+                if (blockResponse)
+                    router.handleRoute(window.location.pathname);
+                return;
             }
+            const blockResponse = await createApiData(HOST + "/friend/block/" + this.userId + "/", "");
+            if (blockResponse)
+                router.handleRoute(window.location.pathname);
         })
 
 
@@ -84,7 +86,7 @@ export class ChatHeaderComponent extends HTMLElement {
         element.querySelector("div").style.backgroundColor = this.active === "true" ? "#00ffff" : "#d9d9d9";
     }
 
-    static observedAttributes = ["player-id", "user-id", "user-name", "league", "active", "profile-image"];
+    static observedAttributes = ["player-id", "user-id", "user-name", "league", "active", "profile-image", "isblocked"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "user-name")
@@ -113,8 +115,19 @@ export class ChatHeaderComponent extends HTMLElement {
             profileComponent.background = "url(" + newValue + ") center / cover no-repeat";
             profileComponent.display = "flex";
         }
+        else if (attrName === "isblocked")
+        {
+            if (newValue == "true") {
+                const profileComponent = this.querySelector(".block-profile");
+                profileComponent.id = "blocked";
+                profileComponent.src = "/assets/icons/unblock-icon.svg";
+            }
+        }
 
     }
+
+    set isblocked(val) { this.setAttribute("isblocked", val);}
+    get isblocked() { return this.getAttribute("isblocked");}
 
     set playerId(val) { this.setAttribute("player-id", val);}
     get playerId() { return this.getAttribute("player-id");}
