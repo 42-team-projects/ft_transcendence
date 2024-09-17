@@ -1,6 +1,6 @@
 .vscode
 .DS_Store
-env
+.env
 ignore
 
 #Ignore all vscode settings

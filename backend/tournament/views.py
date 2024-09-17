@@ -45,12 +45,12 @@ def leave_tournament_and_store_score(request):
             CONTRACT_ABI = request.data.get('abi')
             player = Player.objects.get(user=request.user)
             # Check if the tournament exists
-            try:
-                tournament = Tournament.objects.get(tournament_id=tournament_id)
-            except Tournament.DoesNotExist:
-                return JsonResponse({'statusText': 'Tournament not found'}, status=404)
-            tournament.players.remove(player)
-            tournament.save()
+            # try:
+            #     tournament = Tournament.objects.get(tournament_id=tournament_id)
+            # except Tournament.DoesNotExist:
+            #     return JsonResponse({'statusText': 'Tournament not found'}, status=404)
+            # tournament.players.remove(player)
+            # tournament.save()
             # Create contract instance
             contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
             # Create account from private key
