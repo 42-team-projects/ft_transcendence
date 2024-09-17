@@ -6,12 +6,12 @@ import { wsUrl, HOST } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
 import { createApiData } from "/Utils/APIManager.js";
-import { svgFile, svgFile2 } from "../../../Slides.js";
-import { gameBard } from "../../CustomElements/CustomSliders.js";
+import { svgFile, svgFile2 } from "/Slides.js";
+import { gameBard } from "/Components/CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
-import { updateApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../../Utils/GlobalVariables.js";
-const game_page = document.createElement("template");
+import { updateApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
+plate");
 
 let score = {
     player: 0,
@@ -268,8 +268,8 @@ export class GameTable extends HTMLElement {
             else
                 form.append('loss', 1);
             const updateResponse =  await updateApiData(PROFILE_API_URL + "me/stats/", form);
+            await updateCurrentPlayer();
             console.log("GameOver updateApiData response: ", updateResponse);
-
 
             const response = await createApiData(HOST + '/game/game_history/me/', body);
             console.log("GameOver createApiData response: ", response);
