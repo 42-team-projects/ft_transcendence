@@ -40,12 +40,32 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = self.room_name
+        self.close_code = 0
+        self.task = None
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
         add_to_game_queue(self, game_queue)
-        # print(len(game_queue[self.room_group_name]))
+
+        await self.accept()
+        if len(game_queue[self.room_group_name]) == 1:
+            self.task = asyncio.create_task(self.waiting())
+            
+            # add variable of the task the game queue of this room
+            
+
+    async def waiting(self):
+        try:
+            await asyncio.wait_for(self.start(), timeout=5)
+        except asyncio.TimeoutError:
+            await self.close()
+        except asyncio.CancelledError:
+            await self.close()
+
+    async def start (self):
+        while len(game_queue[self.room_group_name]) < 2:
+            await asyncio.sleep(0.1)
         if len(game_queue[self.room_group_name]) >= 2:
             player_1 = game_queue[self.room_group_name].pop(0)
             player_2 = game_queue[self.room_group_name].pop(0)
@@ -66,32 +86,29 @@ class GameConsumer(AsyncWebsocketConsumer):
             await GameConsumer.rooms[self.room_group_name].resume_game()
     
     async def disconnect(self, close_code):
-        # try:
-            # print("before", game_queue)
-            # print("before", GameConsumer.rooms)
+        self.close_code = close_code
         await remove_from_channel_layer(self)
-        if self.room_group_name in game_queue:
+        if self.task:
+            self.task.cancel()
+        if self.room_group_name in game_queue :
             if self in game_queue[self.room_group_name]:
                 game_queue[self.room_group_name].remove(self)
             if game_queue[self.room_group_name] == []:
                 del game_queue[self.room_group_name]
         if(self.room_group_name in GameConsumer.rooms):
             GameConsumer.rooms[self.room_group_name].closed += 1
-            if(GameConsumer.rooms[self.room_group_name].closed == 2):
+            if(GameConsumer.rooms[self.room_group_name]._game_over == False):
+                await GameConsumer.rooms[self.room_group_name].cancel_game(self)
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'terminate_game',
+                    }
+                )
+            if GameConsumer.rooms[self.room_group_name].closed == 2 :
                 del GameConsumer.rooms[self.room_group_name]
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'terminate_game',
-                }
-            )
-  
-            # print("after", game_queue)
-            # print("after", GameConsumer.rooms)
-        # except KeyError as e:
-        #     print("KeyErrooooooooooooooooooooooooooooooooor", e)
-    
-
+        
+            
     async def terminate_game(self, event):
         await self.close()
 
@@ -147,10 +164,16 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             MatchMaikingConsumer.rooms[self.room_group_name] -= 1
             if MatchMaikingConsumer.rooms[self.room_group_name] == 0:
                 del MatchMaikingConsumer.rooms[self.room_group_name]
-            await remove_from_channel_layer(
-                self
-            )
-        # print(match_making_queue)
+            # await self.channel_layer.group_send(
+            #     self.room_group_name,
+            #     {
+            #         'type': 'terminate_game',
+            #     }
+            # )
+  
+
+    async def terminate_game(self, event):
+        await self.close()
 
     async def wait_for_opponent(self):
         # while len(match_making_queue) < 2 and self in match_making_queue:

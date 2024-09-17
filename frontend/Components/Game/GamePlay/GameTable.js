@@ -33,8 +33,9 @@ let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
 
 export class GameTable extends HTMLElement {
-    constructor(room_name, game_play) {
+    constructor(room_name, game_play, save) {
         super();
+        this.save_match = save;
         this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
 
         this.socket.onopen = () => {
@@ -43,9 +44,11 @@ export class GameTable extends HTMLElement {
 
         this.socket.onclose = () => {
             console.log("closed 1");
-            score.player = 5;
-            score.opponent = 0;
-            this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+            if(this.Loop_state === true){
+                score.player = 5;
+                score.opponent = 0;
+                this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+            }
         };
 
         this.socket.onerror = (error) => {
@@ -254,17 +257,16 @@ export class GameTable extends HTMLElement {
             );
         const gameOver = new GameOver(playerState);
         document.body.appendChild(gameOver);
-        const body = JSON.stringify({
-            player_score: score,
-            opponent_score: opponent_score,
-            result: playerState,
-            opponent_player: opponent_player
-        });
-        await createApiData(HOST + "/game/game_history/me/", body);
+        if( this.save_match === true)
+        {
+            const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState, 'opponent_player': opponent_player});
+            const response = await createApiData(HOST + '/game/game_history/me/', body);
+            console.log("GameOver createApiData response: ", response);
+        }
         //redirect to last url in hesory
-        // setTimeout(() => {
+        setTimeout(() => {
             this.remove();
-        // }, 5000);
+        }, 5000);
     }
     async LuncheGame(ctx) {
         // console.log('lunching');
@@ -474,12 +476,17 @@ export class GameTable extends HTMLElement {
         this.socket.onclose = () => {
             console.log("closed 2");
         };
-        this.socket.close();
+        if (this.socket.readyState === 1)
+            this.socket.close();
+        if(this.loop_state === true){
+            score.player = 5;
+            score.opponent = 0;
+            this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+        }
         const pause = document.body.querySelector("pause-page");
         if (pause) pause.remove();
         router.handleRoute(window.location.pathname);
         router.randring();
-        document.body.querySelector("game-header").remove();
         document.body.querySelector("game-over").remove();
     }
 }

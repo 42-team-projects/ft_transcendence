@@ -12,7 +12,7 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
     try {
         if (playerState === 'lose') {
             console.log("you have lost: ", tournament_id);
-            // await closeAndRemovePlayerFromTournament(tournament_id);  // Close WebSocket and remove the player
+            await closeAndRemovePlayerFromTournament(tournament_id);  // Close WebSocket and remove the player
             // leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi)
             closeWebSocket(tournament_id);
             // console.log('trow 1')
@@ -30,16 +30,13 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
             //     console.error("An error occurred during tournament handling:", error);
             // });
 
-            await sleep(5000);
-
-            // setTimeout(async () => {
-                // clearInterval(interval);
+            const interval = setInterval(async () => {
+                clearInterval(interval);
                 console.log("you have won: ", tournament_id);
                 const newTournamentData = await get_tournament_by_id(tournament_id);
                 console.log("newTournamentData: ", newTournamentData);
-
-                closeWebSocket(tournament_id);
-    
+				closeWebSocket(tournament_id);
+				
                 if(newTournamentData.players.length == 1)
                 {
                     console.log("you win !!!");
@@ -48,7 +45,7 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
                 // Initialize a new WebSocket connection or re-establish if necessary
                 initTournamentWebSocket(newTournamentData);
                 
-            // }, 5000);
+            }, 5000);
 
         }
     } catch (error) {
