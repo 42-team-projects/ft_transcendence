@@ -44,7 +44,7 @@ export class CustomUnorderedListItem extends HTMLElement {
         const removeIcon = this.shadowRoot.querySelector(".remove-icon");
         removeIcon.addEventListener("click", async () => {
             if (this.id)
-                await deleteApiData(PROFILE_API_URL + "links/" + this.id + "/");
+                await deleteApiData(PROFILE_API_URL + "me/links/" + this.id + "/");
             this.remove();
         });
 

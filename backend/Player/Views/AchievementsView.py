@@ -16,20 +16,30 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
-def getPlayerAchievements(request, username):
+def getMyAchievements(request):
     if request.method == 'GET':
-        achievements = Achievements.objects.filter(player__user__username=username)
+        achievements = Achievements.objects.filter(player__user=request.user)
         serializer = AchievementsSerializer(achievements, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = AchievementsSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(player=Player.objects.get(user__username=username))
+            serializer.save(player=Player.objects.get(user=request.user))
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
-        Achievements.objects.filter(player__user__username=username).delete()
+        Achievements.objects.filter(player__user=request.user).delete()
         return JsonResponse({"message": "The Achievements hs successfully deleted!"}, safe=False, status=status.HTTP_200_OK)
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPlayerAchievements(request, username):
+    if request.method == 'GET':
+        achievements = Achievements.objects.filter(player__user__username=username)
+        serializer = AchievementsSerializer(achievements, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+    
 
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])

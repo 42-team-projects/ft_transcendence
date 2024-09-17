@@ -1,11 +1,12 @@
 import { fetchData } from "/Utils/Fetcher.js";
-import { ChatItemComponent } from "/Components/Chat/ChatList/ChatItemComponent.js";
-import { ChatRoomComponent } from "/Components/Chat/ChatRoom/ChatRoomComponent.js";
+
 import { getApiData } from "/Utils/APIManager.js";
 import { HOST } from "/Utils/GlobalVariables.js";
-import { renderChatBody, renderChatFooter, renderChatHeader } from "/Components/Chat/configs/ChatConfigs.js";
 import { getCurrentUserId } from "/Utils/GlobalVariables.js";
 import { setUpWebSocket } from "/Components/Chat/configs/ChatWebSocketManager.js";
+import { router } from "/root/Router.js";
+import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+
 
 export class ChatListComponent extends HTMLElement {
     constructor () {
@@ -20,24 +21,24 @@ export class ChatListComponent extends HTMLElement {
             </div>
         `;
     }
-
-    selectItem;
-
-    get selectItem() { return this.selectItem; }
     
-    async createChatItem(item) {
+    async createChatItem(item, user) {
         const chatItem = document.createElement("chat-item");
-        chatItem.id = "item_" + item.reciever.id;
-        chatItem.userName = item.reciever.username;
-        chatItem.profileImage = HOST + item.reciever.avatar;
-        chatItem.active = item.reciever.is_active;
-        // if (userInfo.stats)
-            chatItem.league = "gold";
-        // }
+        chatItem.id = "item_" + user.id;
+        chatItem.userName = user.username;
+        chatItem.profileImage = HOST + user.avatar;
+        chatItem.active = user.is_active;
+        chatItem.league = "gold";
         
-        chatItem.backgroundColor = "transparent";
-        chatItem.opacity = 0.6;
-        if (item.last_message) {
+        if (user.username === this.playerName) {
+            chatItem.backgroundColor = "#051d31";
+            chatItem.opacity = 1;
+        }
+        else {
+            chatItem.backgroundColor = "transparent";
+            chatItem.opacity = 0.6;
+        }
+        if (item && item.last_message) {
             if (item.last_message.content.length > 60)
                 chatItem.lastMessage = item.last_message.content.slice(0, 60) + "...";
             else
@@ -46,58 +47,44 @@ export class ChatListComponent extends HTMLElement {
         }
         chatItem.numberOfMessage = "2";
         chatItem.addEventListener("click", async (e) => {
-            const selectItemcomponent = this.querySelectorAll(".list-item #" + this.selectItem);
-            Array.from(selectItemcomponent).forEach(elem => {
-                elem.backgroundColor = "transparent";
-                elem.opacity = 0.6;
-            })
-            chatItem.backgroundColor = "#051d31";
-            chatItem.opacity = 1;
-            this.selectItem = chatItem.id;
-            this.renderChatRoom(item);
+            e.preventDefault();
+            if (user.username === this.playerName)
+                return ;
+            const url = new URL(HOST + "/Chat/" + user.username);
+            router.handleRoute(url.pathname);
         });
         return chatItem;
     }
 
-    async renderChatRoom(item) {
-        const chatRoom = this.parentElement.querySelector("chat-room .container");
-        chatRoom.innerHTML = `
-            <slot class="header" name="header"></slot>
-            <div class="body"></div>
-            <slot class="footer" name="footer"></slot>
-        `;
-        const currentUserId = await getCurrentUserId();
-        const room_name = this.generateRoomName(currentUserId, item.reciever.id);
-        const webSocket = setUpWebSocket(chatRoom.querySelector(".body"), room_name);
-        renderChatHeader(chatRoom, item);
-        await renderChatBody(chatRoom, ("chat_" + room_name));
-        renderChatFooter(chatRoom, webSocket, item.reciever.id);
-    }
-
-    generateRoomName(currentUserId, receiver_id) {
-        let room_name;
-        if (currentUserId < receiver_id)
-            room_name = currentUserId.toString() + receiver_id.toString();
-        else
-            room_name = receiver_id.toString() + currentUserId.toString();
-        return room_name;
-    }
-
+    playerName;
     async connectedCallback() {
         const list = this.querySelector(".list-item");
-    
+        this.playerName = window.location.pathname.substring(6);
+        let isPlayerExest = false;
         try {
-            // const data = await getApiData(HOST + "/chat/conversation_list/");
-            // if (data) {
-            //     if (data.length == 0)
-            //         return ;
-            //     for (const item of data) {
-            //         const chatItem = await this.createChatItem(item);
-            //         list.appendChild(chatItem);
-            //     }
-            // }
+            const data = await getApiData(HOST + "/chat/conversation_list/");
+            if (data) {
+                for (const item of data) {
+                    const chatItem = await this.createChatItem(item, item.reciever);
+                    if (item.reciever.username === this.playerName)
+                    {
+                        list.prepend(chatItem);
+                        isPlayerExest = true;
+                    }
+                    else
+                        list.appendChild(chatItem);
+                }
+            }
+            if (!isPlayerExest && this.playerName && this.playerName !== undefined) {
+                const player = await getApiData(PROFILE_API_URL + this.playerName);
+                const chatItem = await this.createChatItem(null, player.user);
+                list.prepend(chatItem);
+            }
         } catch (error) {
-            console.error('Error fetching chat data:', error);
+            const errorContainer = document.body.querySelector(".display-errors");
+            if (errorContainer) {
+                errorContainer.innerHTML = 'Error fetching chat data';
+            }
         }
     }
 }

@@ -1,22 +1,24 @@
 from django.db import models
-# from accounts.models import User
-# class Player(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
-#     username = models.CharField(max_length=50, default='player')
-#     picture = models.ImageField(upload_to='%y/%m/%d/', blank=True)
+from Player.Models.PlayerModel import Player
 
-#     def __str__(self):
-#         return self.username
+class GamePlay(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player', null=True)
+    board = models.IntegerField(default=0)
+    board_color = models.CharField(max_length=10, default='#00fffc')
+    first_racket_color = models.CharField(max_length=10, default='#FFFFFF')
+    second_racket_color = models.CharField(max_length=10, default='#000000')
+    ball_color = models.CharField(max_length=10, default='#CCCCCC')
 
-# class Game(models.Model):
-#     player_1 = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_1', null=True)
-#     player_2 = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_2', null=True)
-#     winner = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='winner', default=None)
-#     looser = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='looser', default=None)
-#     game_name = models.CharField(max_length=50)
-#     score_1 = models.IntegerField(default=0)
-#     score_2 = models.IntegerField(default=0)
-#     date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return str(self.player.user.username)
     
-#     def __str__(self):
-#         return str(self.game_name)
+class GameHestory(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_hestory', null=True)
+    opponent_player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='opponent_player', null=True)
+    time = models.DateTimeField(auto_now_add=True)
+    player_score = models.IntegerField(default=0)
+    opponent_score = models.IntegerField(default=0)
+    result = models.CharField(max_length=10, default='win')
+
+    def __str__(self):
+        return str(self.player.user.username)

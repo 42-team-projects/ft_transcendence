@@ -22,11 +22,12 @@ from django_prometheus import exports
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('game/', include('game.urls')),
+    path('game/', include('game.urls')),
     path('tournament/', include('tournament.urls')),
     path('api/v1/players/', include('Player.urls')),
     path('chat/', include("chat.urls"), name="chat"),
     path('notification/', include("notification.urls"), name="notification"),
+    path('friend/', include("friends.urls"), name="friend"),
     path('api/v1/auth/', include('accounts.urls')),
 
     path('metrics', exports.ExportToDjangoView, name='prometheus-django-metrics'),
