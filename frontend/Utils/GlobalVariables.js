@@ -19,14 +19,15 @@ export const NOTIFICATIONS_API_URL = HOST + "/notification/";
 import { getApiData } from "/Utils/APIManager.js";
 
 
-// let profileImage;
-
 let currentPlayer;
 
 export async function updateCurrentPlayer() {
     currentPlayer = await getApiData(PROFILE_API_URL + "me/");
-    // profileImage = window.document.querySelector("c-profile")
-    // console.log("profileImage: ", profileImage);
+    if (PROFILE_COMPONENT) {
+        PROFILE_COMPONENT.profileImage = currentPlayer.user.avatar;
+        PROFILE_COMPONENT.rank = currentPlayer.stats.rank;
+        PROFILE_COMPONENT.league = currentPlayer.stats.league;
+    }
     return currentPlayer;
 }
 
@@ -65,6 +66,11 @@ export async function getCurrentUserId() {
 import { displayNotification } from "/Components/Notification/NotificationUtils.js";
 import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
 import { router } from "/root/Router.js";
+
+import { Profile } from "/Components/Header/profile.js";
+
+
+export const PROFILE_COMPONENT = document.createElement("c-profile");
 
 let notificationWebSocket;
 
@@ -137,3 +143,5 @@ export async function getNotificationWebSocket() {
         return notificationWebSocket;
     return await createNotificationWebSocket();   
 }
+
+
