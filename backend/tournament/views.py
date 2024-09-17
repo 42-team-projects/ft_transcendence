@@ -66,7 +66,7 @@ def leave_tournament_and_store_score(request):
                 'from': account.address,
                 'chainId': 11155111,  # Sepolia Testnet Chain ID
                 'gas': 2000000,
-                'gasPrice': w3.toWei('50', 'gwei'),
+                'gasPrice': w3.toWei('100', 'gwei'),
                 'nonce': w3.eth.getTransactionCount(account.address),
             })
             # Sign the transaction

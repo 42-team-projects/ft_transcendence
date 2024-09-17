@@ -16,7 +16,7 @@ class GameLoop :
         self.closed = 0
         self.task = None
         self.pause = False
-
+        self._game_over = False
     async def assign_racquet(self, data, ws):
         if ws == self.controler:
             self.controler.y = data['y']
@@ -203,6 +203,7 @@ class GameLoop :
         self.opponent.y = self.canvas_height / 2
 
     async def game_over(self):
+        self._game_over = True
         if self.controler and self.opponent:
             message = {
                 'status': 'GameOver',
