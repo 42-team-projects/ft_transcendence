@@ -7,6 +7,7 @@ urlpatterns = [
     path('<int:playerId>/',PlayerView.getPlayerById, name='getPlayerById'),
 
     # Players - retrieve, create, update, delete
+    path('leaderboard/', PlayerView.getLeaderBoard, name='getAllPlayers'),  # GET all players
     path('', PlayerView.getAllPlayers, name='getAllPlayers'),  # GET all players
 
     path('me/', PlayerView.getMyInfo, name='getMyInfo'),  # GET all players

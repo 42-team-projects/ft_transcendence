@@ -1,28 +1,13 @@
-import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { LeaderboardItem } from "/Components/Home/Leaderboard/LeaderboardItem.js";
-import { HOST } from "/Utils/GlobalVariables.js";
-import { getAbi } from "/blockchain/blockchain.js";
 
-export class HomePage extends HTMLElement {
+export class LeaderboardComponent extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = `
-            <style> ${cssContent} </style>
-            <div class="homeContainer">
-                <div class="history">
-                    <div class="stats">
-                        <h1>PLAY NOW</h1>
-                    </div>
-                    <custom-table username="me"></custom-table>
-                </div>
+                <style> ${cssContent} </style>
                 <div class="leaderboard">
-                    <page-name width="35%">
-                        <div slot="text" class="pageNameText">
-                            <h2>Leaderboard</h2>
-                        </div>
-                    </page-name>
+
                     <div class="leaderboard-content">
                         <div class="top-board">
                             <div class="second-place">
@@ -50,95 +35,43 @@ export class HomePage extends HTMLElement {
                                 </user-rank>
                             </div>
                         </div>
-
-
-                        <div class="body-board"></div>
-
-
+                        <div class="body-board">
+                            <leaderboard-item></leaderboard-item>
+                            <leaderboard-item></leaderboard-item>
+                            <leaderboard-item></leaderboard-item>
+                            <leaderboard-item></leaderboard-item>
+                            <leaderboard-item></leaderboard-item>
+                            <leaderboard-item></leaderboard-item>
+                        </div>
                     </div>
                 </div>
-            </div>
         `;
     }
-    async connectedCallback() {
 
-        const stats = this.shadowRoot.querySelector(".stats");
-        stats.addEventListener("click", async () => {
-            const abi = await getAbi();
-            console.log('abi: ' ,abi);
-            // await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
-        });
-
-        const leaderboardList = this.shadowRoot.querySelector(".body-board");
-        const players = await getApiData(PROFILE_API_URL + "leaderboard/");
-        if (!players)
-            return ;
-        for (let index = 0; index < players.length; index++) {
-            const element = players[index];
-            const result = this.createNewPlayerItem(index + 1, element);
-            leaderboardList.appendChild(result);
-        }
+    connectedCallback() {
+        console.log("welcome to leaderboard component !!");
     }
 
-
-    createNewPlayerItem(rank, player) {
-        const newItem = new LeaderboardItem();
-        newItem.rank = rank;
-        newItem.username = player.user.username;
-        newItem.profile = HOST + player.user.avatar;
-        newItem.league = player.stats.league;
-        newItem.total_win = player.stats.total_win;
-        return newItem;
-    }
 }
 
-customElements.define("home-page", HomePage);
+customElements.define("leaderboard-component", LeaderboardComponent);
+
 
 const cssContent = /*css*/`
-
-* {
-    margin: 0;
-    padding: 0;
-}
-
 :host {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: scroll;
-}
-
-.homeContainer {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    min-width: 400px;
-    gap: 50px;
-}
-
-.history {
-    flex: 2.5;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-}
-
-.leaderboard {
     flex: 1;
     height: 100%;
     min-width: 400px;
     position: relative;
-    background: #d9d9d910;
     border-radius: 10px;
+
+}
+
+.leaderboard {
+    position: relative;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
 }
 
 .leaderboard-content {
@@ -244,16 +177,6 @@ leaderboard-item {
     left: 30px;
     font-size: 30px;
     max-width: 400px;
-}
-
-custom-table {
-    flex: 1;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
 }
 
 `;

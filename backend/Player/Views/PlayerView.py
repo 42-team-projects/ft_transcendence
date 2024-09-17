@@ -134,4 +134,9 @@ def getPlayerCount(request):
     return JsonResponse({"count": player_count}, status=status.HTTP_200_OK)
 
 
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getLeaderBoard(request):
+    players = Player.objects.all().order_by("-stats__total_win")
+    serializer = DefaultPlayerSerializer(players, many=True)
+    return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
