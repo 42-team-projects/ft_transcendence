@@ -12,3 +12,8 @@ class DefaultStatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stats
         fields = ['id', 'win', 'loss', 'rank', 'progress_bar', 'xp', 'league']
+
+class UpdateStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stats
+        fields = ['win', 'loss']
