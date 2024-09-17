@@ -1,3 +1,4 @@
+import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
 import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
 import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
 
@@ -9,12 +10,13 @@ export class ReportContent extends HTMLElement {
         });
     }
 
-    connectedCallback() {
+    async connectedCallback() {
+        const playerData = await getCurrentPlayerData();
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="container">
-                <custom-input-field label="NAME" description="Please put your name." placeholder="example" type="text"></custom-input-field>
-                <custom-input-field label="EMAIL" description="Please Put your email." placeholder="example@mail.com" type="email"></custom-input-field>
+                <custom-input-field label="NAME" placeholder="${playerData.user.username}" type="text" readonly="true" editable="true"></custom-input-field>
+                <custom-input-field label="EMAIL" placeholder="${playerData.user.email}" type="email" readonly="true" editable="true"></custom-input-field>
                 <div class="feedback-block">
                     <div class="label">
                         <h2>MESSAGE</h2>
@@ -29,6 +31,15 @@ export class ReportContent extends HTMLElement {
                 <settings-item class="active" color="aqua" border-size="2px" width="64px" height="40px"><h4>SEND</h4></settings-item>
             </div>
         `;
+
+        const message = this.shadowRoot.querySelector(".box textarea");
+        const action = this.shadowRoot.querySelector(".actions settings-item");
+        let oldMessage = message.value;
+        action.addEventListener("click", () => {
+            if (message.value && oldMessage != message.value) {
+                // put here send email logic.
+            }
+        });
     }
 
     disconnectedCallback() {

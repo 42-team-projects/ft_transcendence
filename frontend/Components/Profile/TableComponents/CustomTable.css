@@ -9,6 +9,8 @@
 .profile-data-stats-history {
     margin-left: 20px;
     margin-right: 20px;
+    width: 100%;
+    
 }
 
 .profile-data-stats-history > table {
@@ -20,36 +22,41 @@
 
 .profile-data-stats-history > table > thead > tr {
     background-image: linear-gradient(to right, #00ffff50 , #00ffff20);
-    width: 100%;
+    width: calc(100% - 20px);
     height: 56px;
 }
 
 .profile-data-stats-history > table > tbody > tr {
     background-image: linear-gradient(to right, #00ffff25 , #00ffff10);
+    width: calc(100% - 20px);
+    height: 56px;
+    opacity: 0.7;
     
 }
 
 .profile-data-stats-history > table > tbody > tr > td {
     font-size: 22px;
     padding: 6px;
-    opacity: 0.7;
     text-align: center;
     margin: 0;
 }
-
+.profile-data-stats-history > table > tbody > tr:hover {
+    opacity: 1;
+    height: 64px;
+}
 
 .table-time {
     font-family: 'Sansation';
     font-size: 16px;
-    opacity: 0.7;
+    /* opacity: 0.7; */
     margin: 0;
 }
 
-.table-score > p,
+/* .table-score > p,
 .table-username > p,
 .table-result > p {
     opacity: 0.7;
-}
+} */
 
 .table-profile,
 .table-replay {

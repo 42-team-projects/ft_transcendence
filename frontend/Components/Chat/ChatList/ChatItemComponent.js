@@ -9,7 +9,7 @@ export class ChatItemComponent extends HTMLElement {
             <style>
                 ${cssContent}
             </style>
-            <div class="container">
+            <a class="container">
                 <div class="profileAndOnlineContainer">
                     <div class="profileAndOnline">
                         <c-hexagon class="profile" width="90px" height="87px" apply="true" bcolor="#d9d9d9">
@@ -28,7 +28,7 @@ export class ChatItemComponent extends HTMLElement {
                     <p></p>
                     <div class="numberOfMessage"></div>
                 </div>
-            </div>
+            </a>
         `;
     }
 
@@ -56,8 +56,10 @@ export class ChatItemComponent extends HTMLElement {
             this.style.backgroundColor = newValue;
         else if (name === "opacity")
             this.shadowRoot.querySelector(".container").style.opacity = newValue;
-        else if (name === "user-name")
+        else if (name === "user-name") {
+            this.shadowRoot.querySelector(".container").href = "/Chat/" + newValue;
             this.shadowRoot.querySelector("h2").textContent = newValue;
+        }
         else if (name === "last-message")
             this.shadowRoot.querySelector(".userNameAndLastMessageContainer p").textContent = newValue;
         else if (name === "time")
@@ -121,18 +123,7 @@ const cssContent = /*css*/`
         justify-content: space-between;
         height: 100px;
         background-color: "transparent";
-        animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     }
-
-    @keyframes slide-right {
-        0% {
-          transform: translateY(-100px);
-        }
-        100% {
-          transform: translateY(0);
-        }
-    }              
-
 
     .c-hexagon-content {
         width: 90px;
@@ -145,6 +136,7 @@ const cssContent = /*css*/`
         justify-content: space-between;
         height: 100px;
         opacity: 0.6;
+        text-decoration: none;
         
     }
 
