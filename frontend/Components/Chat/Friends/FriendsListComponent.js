@@ -2,6 +2,7 @@ import { HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { FriendItemComponent } from "/Components/Chat/Friends/FriendItemComponent.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { router } from "/root/Router.js";
+import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
 
 export class FriendsListComponent extends HTMLElement {
     constructor () {
@@ -23,18 +24,31 @@ export class FriendsListComponent extends HTMLElement {
             return ;
         Array.from(friends.response.friends).forEach(async (item) => {
             const playerData = await getApiData(PROFILE_API_URL + item.username);
-            const friendItem = document.createElement("friend-item");
-            friendItem.league = playerData.stats.league;
-            friendItem.profileImage = HOST + playerData.user.avatar;
-            friendItem.status = playerData.active;
-            friendItem.userName = playerData.user.username;
-            friendItem.addEventListener("click", (event) => {
-                event.preventDefault();
-                const url = new URL(HOST + "/Chat/" + playerData.user.username);
-                router.handleRoute(url.pathname);
-            });
-            listContaier.appendChild(friendItem);
+            listContaier.appendChild(this.createFriendItem(playerData));
         });
+    }
+
+    createFriendItem(playerData) {
+        const friendItem = document.createElement("friend-item");
+        friendItem.league = playerData.stats.league;
+        friendItem.profileImage = HOST + playerData.user.avatar;
+        friendItem.status = playerData.active;
+        friendItem.userName = playerData.user.username;
+        friendItem.addEventListener("click", (event) => {
+            event.preventDefault();
+            const url = new URL(HOST + "/Chat/" + playerData.user.username);
+            router.handleRoute(url.pathname);
+        });
+        return friendItem;
+    }
+
+
+    appendFriendRequest(notificationContent) {
+        const listContaier = this.shadowRoot.querySelector(".friends-list-container");
+        const notification = new NotificationComponent();
+        notification.width = "100%";
+        notification.appendChild(notificationContent);
+        listContaier.prepend(notification);
     }
 
     async connectedCallback() {        

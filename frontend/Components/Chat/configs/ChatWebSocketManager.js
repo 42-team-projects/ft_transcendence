@@ -30,7 +30,6 @@ export function onmessage(webSocket, chatContainer) {
             console.log(data.Error)
         }
         else {
-            console.log("data: ", data);
             renderConversation(chatContainer, [data]);
         }
     };

@@ -56,7 +56,7 @@ export class SearchBarComponent extends HTMLElement {
         searchInput.addEventListener("click", () => {
             if (searchInputChecker)
                 return;
-                searchInputChecker = true;
+            searchInputChecker = true;
             searchBody.style.display = "flex";
             searchIcon.src = "/assets/icons/close-icon.svg";
             searchIcon.id = "close";
