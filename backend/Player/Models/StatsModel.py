@@ -10,13 +10,13 @@ class Stats(models.Model):
     xp = models.IntegerField(default=0)
     graph = models.OneToOneField(Graph, on_delete=models.CASCADE, related_name='graph', null=True, blank=True)
 
-    # LEAGUES = {
-    #     "bronze": 1000,
-    #     "silver": 2000,
-    #     "gold": 3000,
-    #     "platinum": 4000,
-    #     "legendary": 6000
-    # }
+    LEAGUES = {
+        "bronze": 1000,
+        "silver": 2000,
+        "gold": 3000,
+        "platinum": 4000,
+        "legendary": 6000
+    }
 
     def __str__(self):
         return self.league
