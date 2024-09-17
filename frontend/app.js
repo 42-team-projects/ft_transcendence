@@ -57,14 +57,17 @@ import SignupPage from "/Components/User/SignupPage.js";
 import LoginPage from "/Components/User/LoginPage.js";
 import EmailConf from "/Components/User/EmailConf.js";
 import OAuth from "/Components/User/Oauth.js";
-import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js"
+import { ForgotPassword, ConfirmPassword } from "/Components/User/ForgotPassword.js";
+import { TwoFactorAuth } from "/Components/User/TwoFactorAuth.js";
 import { router } from "/root/Router.js"
 
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);
 customElements.define("oauth-callback", OAuth);
-
+customElements.define("forgot-password", ForgotPassword);
+customElements.define("confirm-password", ConfirmPassword);
+customElements.define("two-factor", TwoFactorAuth);
 
 document.addEventListener('DOMContentLoaded', async (event) => {
     window.addEventListener("popstate", () =>
