@@ -1,15 +1,16 @@
+import { HOST } from "/Utils/GlobalVariables.js";
+
 // this function will called in loser player check 
 
-async function leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi) {
-    const apiUrl = 'https://127.0.0.1:8000/tournament/StoreScore/';
-    // const accessToken = localStorage.getItem('accessToken'); // Retrieve the access token from localStorage
+export async function leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi) {
+    const apiUrl = HOST + '/tournament/StoreScore/';
+    const accessToken = localStorage.getItem('accessToken'); // Retrieve the access token from localStorage
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${accessToken}`, // Attach the access token in the Authorization header
-                // 'X-CSRFToken': getCsrfToken(), // Ensure CSRF protection for Django
+                'Authorization': `Bearer ${accessToken}`, // Attach the access token in the Authorization header
             },
             body: JSON.stringify({
                 tournamentId: tournamentId,
@@ -36,117 +37,12 @@ async function leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScor
     }
 }
 
-async function getAbi() {
+export async function getAbi() {
     const Response = await fetch('/usr/share/nginx/html/artifacts/contracts/TournamentScores.sol/TournamentScores.json');
-    console.log("Response: " , Response);
+
     const json = await Response.json();
     console.log("json: ", json);
     const ABI = json.abi;
     console.log("ABI:  ", ABI);
     return ABI;
 }
-
-
-const abi = [
-	{
-		"inputs": [],
-		"name": "getAllTournamentIds",
-		"outputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "",
-				"type": "uint256[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_tournamentId",
-				"type": "uint256"
-			}
-		],
-		"name": "getScores",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "tournamentId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "winnerId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "winnerIdScore",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "loserId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "loserIdScore",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct TournamentScores.Score[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_tournamentId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_winnerId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_winnerIdScore",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_loserId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_loserIdScore",
-				"type": "uint256"
-			}
-		],
-		"name": "storeScore",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-];
-const tournamentId = 11000;
-const winnerId = 2000;
-const winnerIdScore = 2000;
-const loserId = 2000;
-const loserIdScore = 2000;
-
-document.getElementById('leaveAndStoreScoreButton').addEventListener('click', () => {
-    leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi);
-});

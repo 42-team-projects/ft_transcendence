@@ -1,9 +1,11 @@
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.utils.translation import gettext as _
-from .managers import UserManager
-from .utils import get_default_avatar
+from django.db                          import models
+from django.db                          import transaction
+
+from django.contrib.auth.models         import AbstractBaseUser, PermissionsMixin
+from rest_framework_simplejwt.tokens    import RefreshToken
+from django.utils.translation           import gettext as _
+from .managers                          import UserManager
+from .utils                             import get_default_avatar
 
 AUTH_PROVIDERS = {'email':'email', 'google':'google', 'github':'github'}
 
@@ -14,9 +16,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True) ## mode search
+    date_joined = models.DateTimeField(auto_now_add=True) ## 
+    last_login = models.DateTimeField(auto_now=True) ##
     auth_provider = models.CharField(max_length=50, default=AUTH_PROVIDERS.get("email")) 
     totp_secret_key = models.CharField(max_length=50, null=True, blank=True)
     is_2fa_enabled = models.BooleanField(default=False)
@@ -29,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self) -> str:
-        return self.email
+        return self.username
 
     @property
     def tokens(self):
