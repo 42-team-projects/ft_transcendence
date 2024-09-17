@@ -13,13 +13,14 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
         if (playerState === 'lose') {
             console.log("you have lost: ", tournament_id);
             await closeAndRemovePlayerFromTournament(tournament_id);  // Close WebSocket and remove the player
+            return ;
             // leaveTournamentAndStoreScore(tournamentId, winnerId, winnerIdScore, loserId, loserIdScore, abi)
-            closeWebSocket(tournament_id);
-            // console.log('trow 1')
-            const abi = await getAbi();
-            // console.log('abi: ' ,abi);
-            console.log(tournament_id, opponent_id, opponent_score, user_id, user_score);
-            await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
+            // closeWebSocket(tournament_id);
+            // // console.log('trow 1')
+            // const abi = await getAbi();
+            // // console.log('abi: ' ,abi);
+            // console.log(tournament_id, opponent_id, opponent_score, user_id, user_score);
+            // await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
 
         } else {
             // handleTournament(tournament_id)
@@ -39,6 +40,13 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
 				
                 if(newTournamentData.players.length == 1)
                 {
+
+                    const abi = await getAbi();
+                    // console.log('abi: ' ,abi);
+                    console.log(tournament_id, opponent_id, opponent_score, user_id, user_score);
+                    await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
+
+
                     console.log("you win !!!");
                     return;
                 }
