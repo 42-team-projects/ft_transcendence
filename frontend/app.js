@@ -5,7 +5,7 @@
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
 import { Buttons } from "/Components/Game/GamePlay/buttons.js"
 import { SinglePlayer } from '/Components/Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
-import { MultiPlayer } from '/Components/Game/GamePlay/MultiPlayer/MultiPlayerCart.js'
+import { MultiPlayer } from '/Components/Game/GamePlay/GameOfline/GameOfline.js'
 import { OnlineGame } from '/Components/Game/GamePlay/GameOnline/OnlineGameCart.js'
 import { PageName } from "/Components/Game/GamePlay/PageName.js";
 import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
@@ -20,12 +20,13 @@ import { SearchBar } from '/Components/Header/Search-bar.js'
 import { UserRank } from '/Components/Header/UserRank.js'
 import { Hexagon } from '/Components/Header/hexagon.js'
 import { Profile } from '/Components/Header/profile.js'
+import { HomePage } from '/Components/Home/HomePage.js'
 
 import { SideBarButtonIcons } from '/Components/side-bar/sb-icon.js'
 import { SideBarButtonText } from '/Components/side-bar/sb-text.js'
 import { SideBarButton } from '/Components/side-bar/sb-button.js'
 import { CustomButton } from "/Components/Tournament/CustomButton.js";
-
+import { LeaderBoardPage } from "/Components/LeaderBoard/LeaderBoardPage.js";
 import { SettingsComponent } from "/Components/Settings/SettingsComponent.js"
 import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
 

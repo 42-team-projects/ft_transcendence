@@ -1,6 +1,6 @@
 .vscode
 .DS_Store
-env
+.env
 ignore
 
 #Ignore all vscode settings
@@ -38,6 +38,8 @@ __pycache__/
 *backend/media/avatars/
 *backend/media/cover/
 *backend/static/*
+
+backend/static
 
 # find . -type d -name "__pycache__" -exec rm -r {} \+
 # find . -path "*/migrations/*.py" -not -name "__init__.py" -delete

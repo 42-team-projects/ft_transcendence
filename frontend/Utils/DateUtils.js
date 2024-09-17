@@ -21,3 +21,16 @@ export function calculateTimeDifferents(date) {
         // alert("the tournament will start soon.");
     return `${hours}h ${minutes}m ${seconds}s`;
 }
+
+export function DateFormater(date) {
+    const srcDate = new Date(date);
+    const now = new Date();
+
+    const day = new Intl.DateTimeFormat('en-US', { day: '2-digit' }).format(srcDate);
+    const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(srcDate).toUpperCase();
+
+    const diffInHours = Math.abs(now - srcDate) / 36e5;
+    const hoursAgo = Math.round(diffInHours);
+
+    return {'day': day, 'month': month, 'time': hoursAgo};
+}

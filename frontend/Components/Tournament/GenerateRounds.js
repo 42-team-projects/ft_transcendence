@@ -3,6 +3,9 @@ import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { AddPlayerComponent } from "/Components/Tournament/AddPlayerComponent.js";
 import { CustomButton } from "/Components/Tournament/CustomButton.js";
 import { TournamentRound } from "/Components/Tournament/TournamentRound.js";
+import { router } from "/root/Router.js";
+import { get_tournament_by_id } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { getCurrentPlayerId } from "/Utils/GlobalVariables.js";
 
 export class GenerateRounds extends HTMLElement {
     constructor () {
@@ -19,7 +22,8 @@ export class GenerateRounds extends HTMLElement {
         `;
 
         this.shadowRoot.querySelector("#back-button").addEventListener("click", () => {
-            this.parentNode.innerHTML = '<tournaments-table></tournaments-table>';
+            const url = new URL(HOST + "/Tournament");
+            router.handleRoute(url.pathname);
         });
     }
 
@@ -53,6 +57,41 @@ export class GenerateRounds extends HTMLElement {
                 `;
         else
             playerContainer.innerHTML = `<img loading="lazy" class="addPlayer" src="/assets/images/profile/add-friends-icon.svg" width="24px"/>`;
+        const hexagon = playerContainer.querySelector("c-hexagon");
+        if (hexagon) {
+            playerContainer.addEventListener("click", () => {
+                const url = new URL(HOST + "/Profile/" + player.user.username);
+                router.handleRoute(url.pathname);
+            });
+        }
+        const addPlayer = playerContainer.querySelector(".addPlayer");
+        if (addPlayer) {
+            playerContainer.addEventListener("click", () => {
+                const container = this.shadowRoot.querySelector(".container");
+                container.style.opacity = 0.5;
+                const addPlayerContainer = document.createElement("div");
+                addPlayerContainer.className = "addPlayerContainer";
+                addPlayerContainer.innerHTML = `
+                <div class="box">
+                    <div class="friendsList">
+                        <img loading="lazy" class="closeButton" src="/assets/icons/close-x-icon.svg"/>
+                        <h2>YOUR FRIENDS</h2>
+                        <div class="line">
+                            <img loading="lazy" class="separator" src="/assets/images/tournament/separator.svg"/>
+                        </div>
+                        <add-player-component tournament-id="${this.tournamentId}"></add-player-component>
+                    </div>
+                </div>
+                `;
+                addPlayerContainer.querySelector(".closeButton").addEventListener("click", () => {
+                    container.style.opacity = 1;
+                    this.shadowRoot.removeChild(addPlayerContainer);
+                });
+                this.shadowRoot.appendChild(addPlayerContainer);
+            })
+        }
+    ;
+
         return playerContainer;
     }
 
@@ -142,73 +181,32 @@ export class GenerateRounds extends HTMLElement {
        this.structuringRounds(leftRounds, rightRounds);
 
     }
+    tournamentId;
+    async connectedCallback() {
+        this.tournamentId = window.location.pathname.substring(12);
+        if (!this.tournamentId || this.tournamentId === "")
+        {
+            const url = new URL(HOST + "/Tournament");
+            router.handleRoute(url.pathname);
+            return ;
+        }
 
-    connectedCallback() {
+        const currentPlayerId = await getCurrentPlayerId();
+        const tournamentData = await get_tournament_by_id(this.tournamentId);
+        const player = Array.from(tournamentData.players).find(player => player.id === currentPlayerId);
+        if (!tournamentData || !player || player === undefined) {
+            const url = new URL(HOST + "/Tournament");
+            router.handleRoute(url.pathname);
+            return ;
+        }
+        const tournamentPlayers = tournamentData.players;
+        this.numberOfPlayers = tournamentData.number_of_players;
+        this.generateRoundsGraph(this.convertPlayersDataIntoRounds(tournamentPlayers));
+
     }
 
     disconnectedCallback() {
 
-    }
-
-    set tournamentId(value) {
-        this.setAttribute("tournament-id", value);
-    }
-
-    get tournamentId() { return this.getAttribute("tournament-id");}
-
-    set numberOfPlayers(value) {
-        this.setAttribute("number-of-players", value);
-    }
-
-    get numberOfPlayers() { return this.getAttribute("number-of-players");}
-
-    set players(val) {
-        this.generateRoundsGraph(this.convertPlayersDataIntoRounds(val));
-        this.addPlayerEventListener();
-    };
-    
-
-    addPlayerEventListener() {
-        const newPlayer = this.shadowRoot.querySelectorAll(".addPlayer");
-        newPlayer.forEach( elem => {
-            elem.addEventListener("click", () => {
-                const container = this.shadowRoot.querySelector(".container");
-                container.style.opacity = 0.5;
-                const addPlayerContainer = document.createElement("div");
-                addPlayerContainer.className = "addPlayerContainer";
-                addPlayerContainer.innerHTML = `
-                <div class="box">
-                    <div class="friendsList">
-                        <img loading="lazy" class="closeButton" src="/assets/icons/close-x-icon.svg"/>
-                        <h2>YOUR FRIENDS</h2>
-                        <div class="line">
-                            <img loading="lazy" class="separator" src="/assets/images/tournament/separator.svg"/>
-                        </div>
-                        <add-player-component tournament-id="${this.tournamentId}"></add-player-component>
-                    </div>
-                </div>
-                `;
-                addPlayerContainer.querySelector(".closeButton").addEventListener("click", () => {
-                    container.style.opacity = 1;
-                    this.shadowRoot.removeChild(addPlayerContainer);
-                });
-                this.shadowRoot.appendChild(addPlayerContainer);
-            });
-        });
-    }
-
-    get players() {
-        return this.getAttribute("players");
-    };
-
-    static observedAttributes = ["players", "tournament-id"];
-
-    attributeChangedCallback(attrName, oldVdalue, newValue) {
-        if (attrName == "players")
-        {
-            this.generateRoundsGraph(this.convertPlayersDataIntoRounds(newValue));
-            this.addPlayerEventListener();
-        }
     }
 
 }
