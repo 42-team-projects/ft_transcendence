@@ -37,13 +37,21 @@ def login(request):
         return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     data = serializer.validated_data
-    response = Response({
-        # 'email': data['email'],
-        # 'username': data['username'],
-        'access_token': data['access_token'],
-    })
-    response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True, samesite='None', secure=True)
-    return response
+    if data['is_2fa_enabled']:
+        user = User.objects.get(email=data['email'])
+        response = Response({
+            'message': '2FA verification required',
+            'is_2fa_enabled': data['is_2fa_enabled'],
+        }, status=status.HTTP_401_UNAUTHORIZED)
+        response.set_cookie(key='temp_token', value=str(user.id), httponly=True, samesite='None', secure=True)
+        return response
+    
+    else:
+        response = Response({
+            'access_token': data['access_token'],
+        })
+        response.set_cookie(key='refresh_token', value=data['refresh_token'], httponly=True, samesite='None', secure=True)
+        return response
 
 @api_view(['POST'])
 def refresh(request):

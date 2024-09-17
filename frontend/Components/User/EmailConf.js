@@ -12,8 +12,9 @@ export default class EmailConf extends HTMLElement {
             .then(response => response.json())
             .then(data => {
                 router.handleRoute('/login')
-
-                const messageDiv = document.querySelector('#error-message');
+                
+                const login = document.querySelector('login-page');
+                const messageDiv = login.shadowRoot.querySelector('#error-message');
                 messageDiv.innerHTML = data.message;
 
                 if (data.status === 'success') {

@@ -2,7 +2,8 @@ import { getApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { LeaderboardItem } from "/Components/Home/Leaderboard/LeaderboardItem.js";
 import { HOST } from "/Utils/GlobalVariables.js";
-import { getAbi } from "/blockchain/blockchain.js";
+import { getLeagueColor } from "/Utils/LeaguesData.js";
+import { router } from "/root/Router.js";
 
 export class HomePage extends HTMLElement {
     constructor() {
@@ -25,30 +26,9 @@ export class HomePage extends HTMLElement {
                     </page-name>
                     <div class="leaderboard-content">
                         <div class="top-board">
-                            <div class="second-place">
-                                <c-hexagon width="110px" height="110px" apply="true" >
-                                    <div slot="content" class="c-hexagon-content"></div>
-                                </c-hexagon>
-                                <user-rank width="80px" height="110px"> 
-                                    <h2> 2 </h2>
-                                </user-rank>
-                            </div>
-                            <div class="first-place">
-                                <c-hexagon width="130px" height="130px" apply="true" >
-                                    <div slot="content" class="c-hexagon-content"></div>
-                                </c-hexagon>
-                                <user-rank width="90px" height="130px"> 
-                                    <h2> 2 </h2>
-                                </user-rank>
-                            </div>
-                            <div class="third-place">
-                                <c-hexagon width="90px" height="90px" apply="true" >
-                                    <div slot="content" class="c-hexagon-content"></div>
-                                </c-hexagon>
-                                <user-rank width="60px" height="90px"> 
-                                    <h2> 2 </h2>
-                                </user-rank>
-                            </div>
+                            <div class="second-place"></div>
+                            <div class="first-place"></div>
+                            <div class="third-place"></div>
                         </div>
 
 
@@ -60,20 +40,76 @@ export class HomePage extends HTMLElement {
             </div>
         `;
     }
+
+    createFirstPlaceItem(playerData) {
+        const div = this.shadowRoot.querySelector(".first-place");
+        div.innerHTML = `
+            <c-hexagon width="130px" height="130px" apply="true" bcolor="${getLeagueColor(playerData.stats.league)}">
+                <div slot="content" class="c-hexagon-content" style="background: url('${HOST + playerData.user.avatar}') center / cover no-repeat"></div>
+            </c-hexagon>
+            <user-rank width="90px" height="130px" bcolor="${getLeagueColor(playerData.stats.league)}"> 
+                <h2> ${playerData.stats.rank} </h2>
+            </user-rank>
+        `;
+
+        div.querySelector("c-hexagon").addEventListener("click", () => {
+            const url = new URL(HOST + "/Profile/" + playerData.user.username);
+            router.handleRoute(url.pathname);
+        });
+    }
+
+    createSecondPlaceItem(playerData) {
+        const div = this.shadowRoot.querySelector(".second-place");
+        div.innerHTML = `
+            <c-hexagon width="110px" height="110px" apply="true" bcolor="${getLeagueColor(playerData.stats.league)}">
+                <div slot="content" class="c-hexagon-content" style="background: url('${HOST + playerData.user.avatar}') center / cover no-repeat"></div>
+            </c-hexagon>
+            <user-rank width="80px" height="110px" bcolor="${getLeagueColor(playerData.stats.league)}"> 
+                <h2> ${playerData.stats.rank} </h2>
+            </user-rank>
+        `;
+        div.querySelector("c-hexagon").addEventListener("click", () => {
+            const url = new URL(HOST + "/Profile/" + playerData.user.username);
+            router.handleRoute(url.pathname);
+        });
+    }
+
+    createThirdPlaceItem(playerData) {
+        const div = this.shadowRoot.querySelector(".third-place");
+        div.innerHTML = `
+            <c-hexagon width="90px" height="90px" apply="true" bcolor="${getLeagueColor(playerData.stats.league)}">
+                <div slot="content" class="c-hexagon-content" style="background: url('${HOST + playerData.user.avatar}') center / cover no-repeat;"></div>
+            </c-hexagon>
+            <user-rank width="60px" height="90px" bcolor="${getLeagueColor(playerData.stats.league)}"> 
+                <h2> ${playerData.stats.rank} </h2>
+            </user-rank>
+        `;
+        div.querySelector("c-hexagon").addEventListener("click", () => {
+            const url = new URL(HOST + "/Profile/" + playerData.user.username);
+            router.handleRoute(url.pathname);
+        });
+    }
+
     async connectedCallback() {
 
         const stats = this.shadowRoot.querySelector(".stats");
         stats.addEventListener("click", async () => {
-            const abi = await getAbi();
-            console.log('abi: ' ,abi);
-            // await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
+            // const abi = await getAbi();
+            // console.log('abi: ' ,abi);
+            // // await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
         });
 
         const leaderboardList = this.shadowRoot.querySelector(".body-board");
         const players = await getApiData(PROFILE_API_URL + "leaderboard/");
         if (!players)
             return ;
-        for (let index = 0; index < players.length; index++) {
+        if (players.length > 1)
+            this.createSecondPlaceItem(players[1]);
+        if (players.length > 0)
+            this.createFirstPlaceItem(players[0]);
+        if (players.length > 2)
+            this.createThirdPlaceItem(players[2]);
+        for (let index = 3; index < players.length; index++) {
             const element = players[index];
             const result = this.createNewPlayerItem(index + 1, element);
             leaderboardList.appendChild(result);
@@ -87,7 +123,7 @@ export class HomePage extends HTMLElement {
         newItem.username = player.user.username;
         newItem.profile = HOST + player.user.avatar;
         newItem.league = player.stats.league;
-        newItem.total_win = player.stats.total_win;
+        newItem.total_win = player.stats.xp;
         return newItem;
     }
 }
@@ -160,6 +196,7 @@ const cssContent = /*css*/`
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
@@ -169,7 +206,6 @@ const cssContent = /*css*/`
     display: flex;
     justify-content: center;
     flex: 1;
-    height: 100%;
     position: relative;
 }
 

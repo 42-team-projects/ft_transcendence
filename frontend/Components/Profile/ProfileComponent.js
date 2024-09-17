@@ -122,18 +122,18 @@ export class ProfileComponent extends HTMLElement {
         userInfo.appendChild(userInfoContainer);
 
     }
-
+    playerName;
     async connectedCallback() {
-        let playerName = window.location.pathname.substring(9);
-        playerName = playerName.replace(/^\/+|\/+$/g, '');
-        if (!playerName || playerName === "")
-            playerName = "me";
+        this.playerName = window.location.pathname.substring(9);
+        this.playerName = this.playerName.replace(/^\/+|\/+$/g, '');
+        if (!this.playerName || this.playerName === "")
+            this.playerName = "me";
     
         const mainContainer = this.shadowRoot.querySelector(".main-profile-container");
         const spinner = mainContainer.querySelector("custom-spinner");
         spinner.display();
 
-        this.APIData = await getApiData(PROFILE_API_URL + playerName + "/");
+        this.APIData = await getApiData(PROFILE_API_URL + this.playerName + "/");
         if (!this.APIData) {
             mainContainer.innerHTML = `
                 <error-404></error-404>
@@ -142,7 +142,7 @@ export class ProfileComponent extends HTMLElement {
         }
         mainContainer.innerHTML = htmlContent;
         this.renderProfilePage();
-        this.shadowRoot.querySelector("custom-table").username = playerName;
+        this.shadowRoot.querySelector("custom-table").username = this.playerName;
     }
 
     async renderProfilePage() {
@@ -172,8 +172,9 @@ export class ProfileComponent extends HTMLElement {
         profileInfoComponent.src = (HOST + this.APIData.user.avatar);
         profileInfoComponent.joindate = this.APIData.joinDate;
         profileInfoComponent.active = this.APIData.active;
-        console.log("this.APIData : ", this.APIData);
         profileInfoComponent.friend = this.APIData.is_friend;
+        if (this.playerName === "me")
+            profileInfoComponent.friend = true;
     }
 
     setUpStats() {
