@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from ..Models.PlayerModel import Player
+from ..Models.PlayerModel import Player, Nickname
 from ..Models.LinksModel import Links
 from ..Serializers.PlayerSerializer import PlayerSerializer, CustomPlayerSerializer, DefaultPlayerSerializer, ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -150,3 +150,63 @@ def updateActiveField(request):
     player.active = isActive
     player.save()
     return JsonResponse({"message": "is active has successfully updated."}, safe=False, status=status.HTTP_200_OK)
+
+
+
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def setNickname(request):
+    try:
+        player = Player.objects.get(user=request.user)
+
+        if request.method == 'POST':
+            tournament_id = request.data.get("tournament_id")
+            nickname = request.data.get("nickname")
+
+            if not tournament_id or not nickname:
+                return JsonResponse({'statusText': 'Missing tournament_id or nickname'}, status=400)
+
+            # Check if a nickname already exists for this player and tournament
+            if Nickname.objects.filter(player=player, tournamentid=tournament_id).exists():
+                return JsonResponse({'statusText': 'Nickname already exists for this tournament'}, status=400)
+
+            # Create the new nickname for this player and tournament
+            Nickname.objects.create(player=player, tournamentid=tournament_id, nickname=nickname)
+
+            return JsonResponse({'statusText': 'Nickname created successfully'}, status=201)
+
+    except Player.DoesNotExist:
+        return JsonResponse({'statusText': 'Player not found'}, status=404)
+
+    except Exception as e:
+        return JsonResponse({'statusText': str(e)}, status=500)
+
+    return JsonResponse({'statusText': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getNicknameForTournament(request, tournament_id):
+    try:
+        player = Player.objects.get(user=request.user)
+
+        if request.method == 'GET':
+            try:
+                # Fetch the nickname for the player and tournament
+                nickname = Nickname.objects.get(player=player, tournamentid=tournament_id)
+                return JsonResponse({'nickname': nickname.nickname}, status=200)
+            except Nickname.DoesNotExist:
+                return JsonResponse({'statusText': 'Nickname not found for this tournament'}, status=404)
+
+    except Player.DoesNotExist:
+        return JsonResponse({'statusText': 'Player not found'}, status=404)
+
+    except Exception as e:
+        return JsonResponse({'statusText': str(e)}, status=500)
+
+    return JsonResponse({'statusText': 'Invalid request method'}, status=405)

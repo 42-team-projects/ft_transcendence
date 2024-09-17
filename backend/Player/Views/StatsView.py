@@ -24,15 +24,15 @@ def getMyStats(request):
             serializer = StatsSerializer(stats)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         elif request.method == 'PUT': 
-            win = request.data.get("win", 0)  # default to 0 if 'win' is not present
-            loss = request.data.get("loss", 0)  # default to 0 if 'loss' is not present
-            stats.save(win=win, loss=loss)
-            return JsonResponse({"response": "hello"}, status=status.HTTP_200_OK)
-            # serializer = StatsSerializer(stats, data=request.data)
-            # if serializer.is_valid():
-            #     serializer.save()
-            #     return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-            # return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # win = request.data.get("win", 0)  # default to 0 if 'win' is not present
+            # loss = request.data.get("loss", 0)  # default to 0 if 'loss' is not present
+            # stats.save(win=win, loss=loss)
+            # return JsonResponse({"response": "hello"}, status=status.HTTP_200_OK)
+            serializer = StatsSerializer(stats, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     except Stats.DoesNotExist:
         return JsonResponse({"error": "Stats not found for player"}, status=status.HTTP_404_NOT_FOUND)
@@ -50,3 +50,4 @@ def getPlayerStats(request, username):
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     except Stats.DoesNotExist:
         return JsonResponse({"error": "Stats not found for player"}, status=status.HTTP_404_NOT_FOUND)
+    

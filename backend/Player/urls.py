@@ -2,6 +2,9 @@ from django.urls import path
 from .Views import PlayerView, StatsView, GraphView, AchievementsView, LinksView
 
 urlpatterns = [
+    path('setNickname/', PlayerView.setNickname, name='setnickname'),
+    path('getNickname/<int:tournament_id>/', PlayerView.getNicknameForTournament, name='getnickname'),
+
     path('search/', PlayerView.searchForPlayers, name='searchForPlayers'),
 
     path('<int:playerId>/',PlayerView.getPlayerById, name='getPlayerById'),
