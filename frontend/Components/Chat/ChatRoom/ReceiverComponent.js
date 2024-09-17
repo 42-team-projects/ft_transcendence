@@ -20,13 +20,7 @@ export class ReceiverComponent extends HTMLElement {
                 * {
                     margin: 0;
                 }
-                .content {
-                    margin-top: 20px;
-                }
             </style>
-            <c-hexagon class="profile" width="48px" height="47px" apply="true" bcolor="aqua">
-                <img loading="lazy"   slot="content" draggable="false" width="48px">
-            </c-hexagon>
             <div class="content">
                 <slot ></slot>
             </div>
@@ -34,24 +28,24 @@ export class ReceiverComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
-        this.shadowRoot.querySelector(".profile img").src = this.profileImage;
+        // this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
+        // this.shadowRoot.querySelector(".profile img").src = this.profileImage;
     }
 
-    static observedAttributes = ["league", "profile-image"];
+    static observedAttributes = [];
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (name === "league")
-            this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(newValue);
-        else if (name === "profile-image")
-            this.shadowRoot.querySelector(".profile img").src = newValue;
+        // if (name === "league")
+        //     this.shadowRoot.querySelector(".profile").bcolor = newValue;
+        // else if (name === "profile-image")
+        //     this.shadowRoot.querySelector(".profile img").src = newValue;
     }
     
-    set league(val) { this.setAttribute("league", val);}
-    get league() { return this.getAttribute("league");}
+    // set league(val) { this.setAttribute("league", val);}
+    // get league() { return this.getAttribute("league");}
 
-    set profileImage(val) { this.setAttribute("profile-image", val);}
-    get profileImage() { return this.getAttribute("profile-image");}
+    // set profileImage(val) { this.setAttribute("profile-image", val);}
+    // get profileImage() { return this.getAttribute("profile-image");}
 
 }
 
