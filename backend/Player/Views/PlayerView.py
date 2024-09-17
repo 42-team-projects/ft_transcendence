@@ -8,7 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from game.models import GamePlay, GameHestory
 import logging
-from friend.models import Friendship
+from friend.models import Friendship, BlockUser
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from accounts.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +31,11 @@ def getPlayerById(request, playerId):
     if request.method == 'GET':
         serializer = CustomPlayerSerializer(player)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
-    
 
-def update_is_friend_field(currentPlayer, player):
+def update_is_friend_field(currentUser, player):
     # Iterate through the players to check for friendship
     try:
-        friendship = Friendship.objects.get(user=currentPlayer)
+        friendship = Friendship.objects.get(user=currentUser)
     except Friendship.DoesNotExist:
         return  # If no friendship exists for this player, move to the next one
 
@@ -42,6 +44,7 @@ def update_is_friend_field(currentPlayer, player):
         player.is_friend = True
     else:
         player.is_friend = False
+
 
 @csrf_exempt
 @api_view(['GET'])
@@ -54,12 +57,10 @@ def searchForPlayers(request):
                 players = Player.objects.filter(user__username__icontains=username)
                 for player in players:
                     update_is_friend_field(request.user, player)
-
                 serializer = DefaultPlayerSerializer(players, many=True)
                 return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except Player.DoesNotExist:
             return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
-
 
 @csrf_exempt
 @api_view(['GET', 'POST'])

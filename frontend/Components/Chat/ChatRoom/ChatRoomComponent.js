@@ -40,7 +40,7 @@ export class ChatRoomComponent extends HTMLElement {
         const currentUserId = await getCurrentUserId();
         const room_name = this.generateRoomName(currentUserId, item.user.id);
         const webSocket = setUpWebSocket(this.querySelector(".body"), room_name);
-        renderChatHeader(this, item);
+        renderChatHeader(this, item, is_blocked);
         await renderChatBody(this, ("chat_" + room_name));
         if (!is_blocked)
             renderChatFooter(this, webSocket, item.user.id);
@@ -58,7 +58,7 @@ export class ChatRoomComponent extends HTMLElement {
         if (!playerName || playerName === undefined)
             return ;
         const player = await getApiData(PROFILE_API_URL + playerName);
-        const is_blocked = await getApiData(HOST + "/friend/is_blocked/" + player.user.username);
+        let is_blocked = await getApiData(HOST + "/friend/is_blocked/" + player.user.username);
         console.log("is_blocked: ", is_blocked);
         if (is_blocked)
             is_blocked = is_blocked.response;
