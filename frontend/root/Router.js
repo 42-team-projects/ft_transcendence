@@ -16,6 +16,7 @@ export class Router {
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
+            // { path: '/usr/share/nginx/html/artifacts/contracts/TournamentScores.sol/TournamentScores.json', view: 'profile-component', isAccessed: true },
         ];
         this.randred = false;
         this.rootContent = document.querySelector("root-content");
