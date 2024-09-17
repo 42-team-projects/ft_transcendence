@@ -24,6 +24,11 @@ def getMyStats(request):
             serializer = StatsSerializer(stats)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         elif request.method == 'PUT': 
+            # result = request.data["result"]
+            # if result == "win":
+            #     stats.save(win=stats.win + 1)
+            # elif result == "lose":
+            #     stats.save(loss=stats.loss + 1)
             serializer = StatsSerializer(stats, data=request.data)
             if serializer.is_valid():
                 serializer.save()
