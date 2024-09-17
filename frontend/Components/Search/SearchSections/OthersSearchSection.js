@@ -61,7 +61,7 @@ export class OthersSearchSection extends HTMLElement {
                     <p>${data}</p>
                 </div>
                 <div class="search-actions">
-                    <a href="${data}">
+                    <a href="/${data}">
                         <img src="/assets/icons/arrow-forward-icon.svg" class="read-message" width="32px" height="32px"></img>
                     </a>
                 </div>
