@@ -43,7 +43,6 @@ function renderMessageComponent(chatBody, messageContainer, component, message, 
 let checker;
 
 export async function renderConversation(chatBody, messages) {
-
     if (!messages)
         return;
     let receiverComponent = document.createElement("receiver-component");
