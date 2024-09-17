@@ -1,3 +1,12 @@
+import os
+from django.core.asgi   import get_asgi_application
+from channels.routing   import ProtocolTypeRouter, URLRouter
+from channels.auth      import AuthMiddlewareStack
+from chat               import routing as chat_routing
+from notification       import routing as notification_routing
+from tournament         import routing as tournament_routing
+from game               import routing as game_routing
+
 """
 ASGI config for backend project.
 
@@ -7,29 +16,13 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
-import os
-
-from channels.routing import ProtocolTypeRouter, URLRouter #new
-from channels.auth import AuthMiddlewareStack #new
-import tournament.routing #new
-import chat.routing #dokoko
-import notification.routing #dokoko
-from game.routing import ws_urlpatterns #new
-
-
-from django.core.asgi import get_asgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 # from channels.middleware import BaseMiddleware
 # from channels.db import database_sync_to_async
 # from django.contrib.auth.models import AnonymousUser
 # from rest_framework_simplejwt.tokens import AccessToken
 # from django.contrib.auth import get_user_model
-
 # User = get_user_model()
-
-
 # @database_sync_to_async
 # def get_user_from_token(token):
 #     try:
@@ -54,17 +47,22 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 #                 scope['user'] = AnonymousUser()
 #         else:
 #             scope['user'] = AnonymousUser()
-
 #         return await super().__call__(scope, receive, send)
 
+
+
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+
 application = ProtocolTypeRouter({
-    'http' : get_asgi_application(),
-    'websocket' : AuthMiddlewareStack(
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
         URLRouter(
-            chat.routing.websocket_urlpatterns
-            + notification.routing.websocket_urlpatterns
-            + tournament.routing.websocket_urlpatterns
-            + ws_urlpatterns
+            chat_routing.websocket_urlpatterns +
+            notification_routing.websocket_urlpatterns +
+            tournament_routing.websocket_urlpatterns + 
+            game_routing.websocket_urlpatterns 
         )
-    )
+    ),
 })
+

@@ -56,9 +56,7 @@ INSTALLED_APPS = [
 
     'chat',          #dokoko
     'notification',  #dokoko
-    'friends',  #dokoko
-    
-
+    'friend',  #dokoko
 ]
 
 MIDDLEWARE = [
