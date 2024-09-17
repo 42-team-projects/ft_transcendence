@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from game.models import GamePlay, GameHestory
 import logging
-from friends.models import Friendship
+from friend.models import Friendship
 
 logger = logging.getLogger(__name__)
 
