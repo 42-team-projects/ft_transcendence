@@ -20,7 +20,6 @@ from game.routing import ws_urlpatterns #new
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-
 # from channels.middleware import BaseMiddleware
 # from channels.db import database_sync_to_async
 # from django.contrib.auth.models import AnonymousUser
@@ -56,6 +55,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 #             scope['user'] = AnonymousUser()
 
 #         return await super().__call__(scope, receive, send)
+
+
 
 application = ProtocolTypeRouter({
     'http' : get_asgi_application(),
