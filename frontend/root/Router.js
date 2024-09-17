@@ -9,6 +9,10 @@ export class Router {
             { path: "/confirm-email", view: "email-page", isAccessed: false },
             { path: "/oauth", view: "oauth-callback", isAccessed: false },
             { path: "/login", view: "login-page", isAccessed: false },
+            { path: "/forgot-password", view: "forgot-password", isAccessed: false },
+            { path: "/confirm-password", view: "confirm-password", isAccessed: false },
+            { path: "/two-factor", view: "two-factor", isAccessed: false },
+            
             { path: '/Home', view: 'home-page', isAccessed: true },
             { path: '/Game', view: 'game-selection', isAccessed: true },
             { path: '/Chat', view: 'chat-page', isAccessed: true },

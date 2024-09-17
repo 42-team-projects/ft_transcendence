@@ -44,8 +44,6 @@ services:
     image: postgres:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
     container_name: postgres
     env_file:
       - .env 
@@ -64,7 +62,7 @@ services:
     networks:
       - app_network
 
-  # <--- Monotoring --->
+  # # <--- Monotoring --->
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -76,8 +74,8 @@ services:
       - '--web.enable-lifecycle'
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.retention.time=1d'
-    ports:
-      - 9090:9090 # ! should not be exposed
+    # ports:
+    #   - 9090:9090 # ! should not be exposed (removed later)
     env_file:
       - .env
     restart: unless-stopped
@@ -127,15 +125,16 @@ services:
       - database
 
   alertmanager:
-    image: prom/alertmanager:latest
+    build:
+      context: ./devops/alertmanager
+      args:
+        - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
     container_name: alertmanager
     volumes:
       - alertmanager_data:/alertmanager
-      - ./devops/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-    command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-    ports:
-      - 9093:9093 # ! should not be exposed
+    command: ["/opt/alertmanager-0.21.0.linux-amd64/alertmanager", "--config.file=/etc/alertmanager/alertmanager.yml"]
+    # ports:
+    #   - 9093:9093 # ! should not be exposed
     env_file:
       - .env
     restart: unless-stopped
