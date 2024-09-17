@@ -10,6 +10,7 @@ import { StatsContainer } from "/Components/Profile/StatsComponents/StatsContain
 import { CustomGraph } from "/Components/Profile/GraphComponent/CustomGraph.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, HOST } from "/Utils/GlobalVariables.js";
+import { Error404 } from "/Components/ErrorPages/Error404.js";
 
 
 const htmlContent = `
@@ -58,7 +59,7 @@ export class ProfileComponent extends HTMLElement {
                     </div>
                 </page-name>
                 <div class="main-profile-container">
-                    ${htmlContent}
+                    <custom-spinner time="10" ></custom-spinner>
                 </div>
             `;
     }
@@ -124,13 +125,28 @@ export class ProfileComponent extends HTMLElement {
 
     async connectedCallback() {
         let playerName = window.location.pathname.substring(9);
+        playerName = playerName.replace(/^\/+|\/+$/g, '');
         if (!playerName || playerName === "")
-            playerName = "me"
-        this.renderProfilePage(playerName);
+            playerName = "me";
+    
+        const mainContainer = this.shadowRoot.querySelector(".main-profile-container");
+        const spinner = mainContainer.querySelector("custom-spinner");
+        spinner.display();
+
+        this.APIData = await getApiData(PROFILE_API_URL + playerName + "/");
+        if (!this.APIData) {
+            mainContainer.innerHTML = `
+                <error-404></error-404>
+            `;
+            return ;
+        }
+        mainContainer.innerHTML = htmlContent;
+        this.renderProfilePage();
+        this.shadowRoot.querySelector("custom-table").username = playerName;
     }
 
-    async renderProfilePage(username) {
-        this.APIData = await getApiData(PROFILE_API_URL + username + "/");
+    async renderProfilePage() {
+
         this.setUpProfileInfo();
 
         this.setUpUserInfo();
@@ -156,6 +172,8 @@ export class ProfileComponent extends HTMLElement {
         profileInfoComponent.src = (HOST + this.APIData.user.avatar);
         profileInfoComponent.joindate = this.APIData.joinDate;
         profileInfoComponent.active = this.APIData.active;
+        console.log("this.APIData : ", this.APIData);
+        profileInfoComponent.friend = this.APIData.is_friend;
     }
 
     setUpStats() {

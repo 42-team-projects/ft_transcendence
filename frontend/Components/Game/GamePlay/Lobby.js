@@ -1,9 +1,9 @@
 import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
 import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
 import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
-import { getCurrentPlayerData, HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
-
+import { router } from "/root/Router.js";
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
@@ -13,23 +13,23 @@ const timer = document.createElement('template')
 let searching_images = [
 	{
 		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'ESCANOR'
+		username: 'ACE'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'ITATCHI'
+		picture: HOST + `/media/defaults/aizen.jpeg`,
+		username: 'AIZEN'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'ESALIM'
+		picture: HOST + `/media/defaults/fshiguro.jpeg`,
+		username: 'FUSHIGURO'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'KILLUA'
+		picture: HOST + `/media/defaults/toji.jpeg`,
+		username: 'TOJI'
 	},
 	{
-		picture: HOST + `/media/defaults/ace.jpeg`,
-		username: 'GOJO'
+		picture: HOST + `/media/defaults/zuro.jpeg`,
+		username: 'ZURO'
 	}
 ]
 
@@ -93,7 +93,7 @@ lobby.innerHTML =  /* html */ `
 
 export class Lobby extends HTMLElement{
 	tournament_id;
-	set tournament_id(val) {this.tournament_id = val;}
+	// set tournament_id(val) {this.tournament_id = val;}
 	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){
@@ -108,12 +108,11 @@ export class Lobby extends HTMLElement{
 			document.body.classList.toggle('body-game-shrink', true);
 			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
-		// this.headerAnimation();
-		// this.sidebarAnimation();
+		this.headerAnimation();
+		this.sidebarAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
-			// console.log("im here")
 			this.OnlineGame(opponentId);
 		}
 	}
@@ -121,7 +120,7 @@ export class Lobby extends HTMLElement{
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
 		const profile = headerBar.querySelector('c-profile');
-		// const userRunk = profile.querySelector('user-rank');
+		const userRunk = profile.querySelector('user-rank');
 	
 		userRunk.classList.toggle('drop-100', false);
 		userRunk.classList.toggle('transform-1s', true);
@@ -142,10 +141,12 @@ export class Lobby extends HTMLElement{
 	
 		sideBar.classList.toggle('transform-1s', true);
 		sideBar.classList.toggle('left', true);
-		clickedButtons.classList.toggle('on', false);
+		if(clickedButtons)
+			clickedButtons.classList.toggle('on', false);
 		sideBar.classList.toggle('p-animation', true);
 		setTimeout(() => {
 			sideBar.shadowRoot.innerHTML = '';
+			sideBar.classList.toggle('left', false);
 		}, 1000);
 	}
 
@@ -192,7 +193,12 @@ export class Lobby extends HTMLElement{
 				this.updateTimer();
 			}
 		};
-
+		this.socket.onclose = (e) => {
+			console.log('socket close 1');
+			router.handleRoute(window.location.pathname);
+			router.randring();
+			this.socket = null;
+		};
 		this.socket.onerror = (e) => {
 			console.log('socket error');
 		};
@@ -242,6 +248,8 @@ export class Lobby extends HTMLElement{
 				room_group_name = 'game_' + opponentId + '_' + userInfo.id;
 			const inter = setInterval(() => {
 				this.time -= 1;
+				if(this.time <= 0)
+					clearInterval(inter);
 				this.updateTimer();
 				// console.log("hello from OnlineGame !!!");
 			}, 1000);
@@ -262,7 +270,6 @@ export class Lobby extends HTMLElement{
 		opponentInfo.id = opponentId;
 		opponentInfo.picture = HOST + opponent.user.avatar;
 		opponentInfo.username = opponent.user.username;
-		// console.log('opponentInfo:', opponentInfo);
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
@@ -293,23 +300,24 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
-	playeGame(room_group_name){
+	async playeGame(room_group_name, save){
+		const game_play = await getApiData(HOST + `/game/game_play/`);
 		const header = new GameHeader();
-		const game = new GameTable(room_group_name);
+		const game = new GameTable(room_group_name, game_play, save);
 		const root = document.body.querySelector('root-content');
 		const headerBar = document.body.querySelector('header-bar');
 
 		headerBar.classList.toggle('up-100', false);
 		
-		root.innerHTML = ``;
-		root.appendChild(game);
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
+		root.innerHTML = ``;
+		root.appendChild(game);
 		game.id = this.tournament_id;
 	}
 	gameMode(room_group_name){
-		// if (this.socket)
-		// 	this.socket.send(JSON.stringify({'message': 'start'}));
+		if (this.socket)
+			this.socket.send(JSON.stringify({'message': 'start'}));
 		const PlayerS = this.querySelectorAll('.PlayerS')
 		PlayerS.forEach((element, index)=>{
 			if(index !== 0)
@@ -317,17 +325,20 @@ export class Lobby extends HTMLElement{
 			else{
 				element.style.animation = 'none';
 				this.createTimer();
-				const countdown = setInterval(()=>{
+				const countdown = setInterval(async()=>{
+					console.log(this.time)
 					if(this.time <= 0){
 						if(this.socket){
-							this.socket.close();
-							this.socket.onclose = (e) => {
-								console.log('socket close');
-								this.playeGame(room_group_name);
+							this.socket.onclose = async (e) => {
+								console.log('socket close 2');
+								this.socket = null;
+								await this.playeGame(room_group_name, true);
 							};
+							if(this.socket)
+								this.socket.close();
 						}
 						else
-							this.playeGame(room_group_name);
+							await this.playeGame(room_group_name, false);
 						clearInterval(countdown)
 					}
 				},1000)
@@ -346,6 +357,13 @@ export class Lobby extends HTMLElement{
 	updateTimer(){
 		const h1 = this.shadowRoot.querySelector('.descounter h1');
 		h1.textContent = this.time;
+	}
+	disconnectedCallback(){
+		if(this.time > 0){
+			if(this.socket)
+				this.socket.close();
+		}
+		
 	}
 }
 

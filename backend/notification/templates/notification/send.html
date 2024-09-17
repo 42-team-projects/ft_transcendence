@@ -16,40 +16,30 @@
     </div>
     
     <script type="text/javascript">
-        function notification(room_name) {
-            url = `ws://${window.location.host}/ws/notification/user/${room_name}/`
-            console.log(url)
-            const websocket = new WebSocket(url)
-            // on socket open
-            websocket.onopen = function (e) {
-                console.log('Web-Socket successfully connected.');
-            };
-            // on socket close
-            websocket.onclose = function (e) {
-                console.log('Web-Socket closed unexpectedly');
-            };
-            send_notification()
-
-            function send_notification() {
-                let form = document.getElementById('form')
-                form.addEventListener('submit', (e)=> {
-                    e.preventDefault()
-                    let message = e.target.message.value
-                    websocket.send(JSON.stringify({
-                        'message' : message,
-                    }))
-                    form.reset()
-                })
-            }
-
-        }
+        url = `ws://${window.location.host}/ws/user/notification/`
+        console.log(url)
+        const ws = new WebSocket(url)
+        // on socket open
+        ws.onopen = function (e) {
+            console.log('Web-Socket successfully connected.');
+        };
+        // on socket close
+        ws.onclose = function (e) {
+            console.log('Web-Socket closed unexpectedly');
+        };
 
 
 
-        let num = Math.floor(Math.random() * 4)
-        if (!num)
-            num = 1
-        notification(num)
+        let form = document.getElementById('form')
+        form.addEventListener('submit', (e)=> {
+            e.preventDefault()
+            let message = e.target.message.value
+            ws.send(JSON.stringify({
+                'message' : message,
+                'receiver' : 1
+            }))
+            form.reset()
+        })
         
     </script>
 </body>

@@ -34,7 +34,7 @@ export class AddPlayerComponent extends HTMLElement {
         // put here the logic of sending Request to the backend service.
         const websocket = await getNotificationWebSocket();
         console.log("this.tournamentId : ", this.tournamentId);
-        websocket.send(JSON.stringify({'message': 'ask you to join a tournament', 'receiver': userId, 'type': "tournament", "infos": this.tournamentId}));
+        websocket.send(JSON.stringify({'message': 'ask you to join a tournament', 'receiver': userId, 'is_signal': false, 'type': "tournament", "data": this.tournamentId}));
         sendRequest.src = "/assets/icons/success-circle.svg";
     });
 

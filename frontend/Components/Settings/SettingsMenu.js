@@ -19,9 +19,6 @@ export class SettingsMenu extends HTMLElement {
             <a id="game" href="/Settings/game">
                 <settings-item> GAME </settings-item>
             </a>
-            <a id="sound" href="/sound/account"">
-                <settings-item> SOUND </settings-item>
-            </a>
             <a id="report" href="/Settings/report">
                 <settings-item> REPORT </settings-item>
             </a>
@@ -41,12 +38,6 @@ export class SettingsMenu extends HTMLElement {
                 e.preventDefault();
                 if (settingsSection == elem.id)
                     return ;
-                // const selectItemcomponent = this.shadowRoot.getElementById(this.selectItem);
-                // if (selectItemcomponent)
-                //     selectItemcomponent.classList.remove("active");
-                // elem.classList.add("active");
-                // this.selectItem = elem.id;
-                // settingsContent.innerHTML = `<${elem.id}-content></${elem.id}-content>`;
                 this.selectItem = elem.id;
                 const url = new URL(elem.href);
                 router.handleRoute(url.pathname);
