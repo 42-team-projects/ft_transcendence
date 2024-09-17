@@ -2,6 +2,7 @@ from .models import User
 from rest_framework import generics
 from .serializers import UserRegisterSerializer, LoginSerializer
 from rest_framework.response import Response
+from django.core.mail import EmailMessage
 from rest_framework import status
 from .utils import send_confirmation_email, gen_email_token
 from rest_framework.decorators import api_view, permission_classes
@@ -192,3 +193,31 @@ def update_user(request):
         return Response({'status': 'error', 'message': 'Username already taken.'}, status=status.HTTP_400_BAD_REQUEST)
     except ValidationError as e:
         return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def report_to_support(request):
+    data = request.data
+    name = data.get('name')
+    email = data.get('email')
+    message = data.get('message')
+
+    if not message:
+        return Response({'status': 'error', 'message': 'Message is required.'}, status=status.HTTP_400_BAD_REQUEST)
+    if not email:
+        return Response({'status': 'error', 'message': 'Email is required.'}, status=status.HTTP_400_BAD_REQUEST)
+    if not name:
+        return Response({'status': 'error', 'message': 'Name is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    support_email = settings.EMAIL_HOST_USER
+    mail_subject = f'Support Request from {name}'
+    body = f'Name: {name}<br>Email: {email}<br>Message: {message}'
+    email = EmailMessage(
+        mail_subject,
+        body,
+        settings.EMAIL_HOST_USER,
+        [support_email],
+    )
+    email.content_subtype = 'html'
+    email.send(fail_silently=False)
+
+    return Response({'status': 'success', 'message': 'Support request sent.'}, status=status.HTTP_200_OK)
