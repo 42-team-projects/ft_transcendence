@@ -31,10 +31,11 @@ class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=255, read_only=True)
     access_token = serializers.CharField(max_length=255, read_only=True)
     refresh_token = serializers.CharField(max_length=255, read_only=True)
+    is_2fa_enabled = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'username', 'access_token', 'refresh_token']
+        fields = ['email', 'password', 'username', 'access_token', 'refresh_token', 'is_2fa_enabled']
     
     def validate(self, attrs):
         email = attrs.get('email')
@@ -53,4 +54,5 @@ class LoginSerializer(serializers.ModelSerializer):
             'username': user.username,
             'access_token': tokens['access_token'],
             'refresh_token': tokens['refresh_token'],
+            'is_2fa_enabled': user.is_2fa_enabled,
         }

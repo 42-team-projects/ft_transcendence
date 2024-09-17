@@ -9,6 +9,8 @@ import { createApiData } from "/Utils/APIManager.js";
 import { svgFile, svgFile2 } from "../../../Slides.js";
 import { gameBard } from "../../CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
+import { updateApiData } from "../../../Utils/APIManager.js";
+import { PROFILE_API_URL } from "../../../Utils/GlobalVariables.js";
 const game_page = document.createElement("template");
 
 let score = {
@@ -260,6 +262,15 @@ export class GameTable extends HTMLElement {
         if( this.save_match === true)
         {
             const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState, 'opponent_player': opponent_player});
+            const form = new FormData();
+            if (playerState === "win")
+                form.append('win', 1);
+            else
+                form.append('loss', 1);
+            const updateResponse =  await updateApiData(PROFILE_API_URL + "me/stats/", form);
+            console.log("GameOver updateApiData response: ", updateResponse);
+
+
             const response = await createApiData(HOST + '/game/game_history/me/', body);
             console.log("GameOver createApiData response: ", response);
         }

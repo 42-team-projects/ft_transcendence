@@ -3,12 +3,12 @@ import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
 import { HOST, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { createApiData, deleteApiData } from "/Utils/APIManager.js";
 
 export class ChatHeaderComponent extends HTMLElement {
     constructor () {
         super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = `
+        this.innerHTML = `
         <style>
             ${cssContent}
         </style>
@@ -28,82 +28,106 @@ export class ChatHeaderComponent extends HTMLElement {
         </div>
         <img class="play-game" loading="lazy" src="/images/Game.svg">
         <img class="show-profile" loading="lazy" src="/assets/icons/account-icon.svg">
-        <img loading="lazy" src="/assets/icons/block-icon.svg">
+        <img class="block-profile" loading="lazy" src="/assets/icons/block-icon.svg">
     `;
     }
 
     connectedCallback() {
-        const profileIcon = this.shadowRoot.querySelector(".show-profile");
+        const profileIcon = this.querySelector(".show-profile");
         profileIcon.addEventListener("click", (e) => {
             e.preventDefault();
             const url = new URL(HOST + "/Profile/" + this.userName);
             router.handleRoute(url.pathname);
         })
-        const playgame = this.shadowRoot.querySelector(".play-game");
+        const playgame = this.querySelector(".play-game");
         playgame.addEventListener("click", async (e) => {
             const websocket = await getNotificationWebSocket();;
             websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, 'is_signal': false, "type": "game", "infos": "hello world"}));
             new Lobby(this.playerId, 30);
         })
 
+        const blockProfile = this.querySelector(".block-profile");
+        blockProfile.addEventListener("click", async (e) => {
+            if (blockProfile.id === "blocked") {
+                const blockResponse = await deleteApiData(HOST + "/friend/unblock/" + this.userId + "/");
+                if (blockResponse)
+                    router.handleRoute(window.location.pathname);
+                return;
+            }
+            const blockResponse = await createApiData(HOST + "/friend/block/" + this.userId + "/", "");
+            if (blockResponse)
+                router.handleRoute(window.location.pathname);
+        })
+
 
 
         if (this.userName) {
-            this.shadowRoot.querySelector(".infos h1").textContent = this.userName;
-            this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
+            this.querySelector(".infos h1").textContent = this.userName;
+            this.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
         }
         else
         {
-            this.shadowRoot.querySelector(".infos").style.display = "none";
-            this.shadowRoot.querySelectorAll("img").forEach(elem => {
+            this.querySelector(".infos").style.display = "none";
+            this.querySelectorAll("img").forEach(elem => {
                 elem.style.display = "none";
             });
         }
         if (this.league)
-            this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
+            this.querySelector(".profile").bcolor = getLeagueColor(this.league);
         else
-            this.shadowRoot.querySelector(".profile").style.display = "none";
+            this.querySelector(".profile").style.display = "none";
     
         if (this.profileImage)
-            this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
+            this.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
         else
-            this.shadowRoot.querySelector(".c-hexagon-content").style.display = "none";
-        const element = this.shadowRoot.querySelector(".online");
+            this.querySelector(".c-hexagon-content").style.display = "none";
+        const element = this.querySelector(".online");
         element.bcolor = this.active === "true" ? "#00ffff" : "#d9d9d9";
         element.querySelector("div").style.backgroundColor = this.active === "true" ? "#00ffff" : "#d9d9d9";
     }
 
-    static observedAttributes = ["player-id", "user-id", "user-name", "league", "active", "profile-image"];
+    static observedAttributes = ["player-id", "user-id", "user-name", "league", "active", "profile-image", "isblocked"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "user-name")
         {
-            this.shadowRoot.querySelector(".infos h1").textContent = newValue;
-            this.shadowRoot.querySelector(".infos").style.display = "flex";
-            this.shadowRoot.querySelectorAll("img").forEach(elem => {
+            this.querySelector(".infos h1").textContent = newValue;
+            this.querySelector(".infos").style.display = "flex";
+            this.querySelectorAll("img").forEach(elem => {
                 elem.style.display = "flex";
             });
         }
         else if (attrName === "active")
         {
-            this.shadowRoot.querySelector(".online").bcolor = newValue === "true" ? "#00ffff" : "#d9d9d9";
-            this.shadowRoot.querySelector(".online div").style.background = newValue === "true" ? "#00ffff" : "#d9d9d9";
-            this.shadowRoot.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
+            this.querySelector(".online").bcolor = newValue === "true" ? "#00ffff" : "#d9d9d9";
+            this.querySelector(".online div").style.background = newValue === "true" ? "#00ffff" : "#d9d9d9";
+            this.querySelector(".activation p").textContent = this.active === "true" ? "online" : "offline";
         }
         else if (attrName === "league")
         {
-            const profile = this.shadowRoot.querySelector(".profile");
+            const profile = this.querySelector(".profile");
             profile.bcolor = getLeagueColor(newValue);
             profile.style.display = "flex";
         }
         else if (attrName === "profile-image")
         {
-            const profileComponent = this.shadowRoot.querySelector(".c-hexagon-content").style;
+            const profileComponent = this.querySelector(".c-hexagon-content").style;
             profileComponent.background = "url(" + newValue + ") center / cover no-repeat";
             profileComponent.display = "flex";
         }
+        else if (attrName === "isblocked")
+        {
+            if (newValue == "true") {
+                const profileComponent = this.querySelector(".block-profile");
+                profileComponent.id = "blocked";
+                profileComponent.src = "/assets/icons/unblock-icon.svg";
+            }
+        }
 
     }
+
+    set isblocked(val) { this.setAttribute("isblocked", val);}
+    get isblocked() { return this.getAttribute("isblocked");}
 
     set playerId(val) { this.setAttribute("player-id", val);}
     get playerId() { return this.getAttribute("player-id");}
@@ -131,7 +155,7 @@ customElements.define("chat-header", ChatHeaderComponent);
 
 
 const cssContent = /*css*/ `
-    :host {
+    chat-header {
         font-family: 'Sansation bold';
         display: flex;
         justify-content: space-between;

@@ -26,7 +26,6 @@ export class ChatItemComponent extends HTMLElement {
                 </div>
                 <div class="numberOfMessageAndTimeContainer">
                     <p></p>
-                    <div class="numberOfMessage"></div>
                 </div>
             </a>
         `;
@@ -38,7 +37,6 @@ export class ChatItemComponent extends HTMLElement {
         this.shadowRoot.querySelector(".container").style.opacity = this.opacity || 0.6;
         this.shadowRoot.querySelector(".userNameAndLastMessageContainer p").textContent = this.lastMessage || "...";
         this.shadowRoot.querySelector(".numberOfMessageAndTimeContainer p").textContent = this.time || "00.00.00";
-        this.shadowRoot.querySelector(".numberOfMessage").textContent = this.numberOfMessage || "00.00.00";
         this.shadowRoot.querySelector("h2").textContent = this.userName || "unknown";
         this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
 
@@ -64,8 +62,6 @@ export class ChatItemComponent extends HTMLElement {
             this.shadowRoot.querySelector(".userNameAndLastMessageContainer p").textContent = newValue;
         else if (name === "time")
             this.shadowRoot.querySelector(".numberOfMessageAndTimeContainer p").textContent = newValue;
-        else if (name === "number-of-message")
-            this.shadowRoot.querySelector(".numberOfMessage").textContent = newValue;
         else if (name === "active")
         {
             this.shadowRoot.querySelector(".online").bcolor = newValue === "true" ? "#00ffff" : "#d9d9d9";

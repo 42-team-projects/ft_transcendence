@@ -1,6 +1,5 @@
 from django.urls import path
-from . import password_reset, views, oauth
-from .twofa import enable_2fa, verify_2fa, disable_2fa
+from . import password_reset, views, oauth, twofa
 
 urlpatterns = [
     path('register/', views.UserRegisterView.as_view(), name='register'),
@@ -23,9 +22,10 @@ urlpatterns = [
     path('<str:provider>/oauth_callback/', oauth.oauth_callback, name='oauth_callback'),
     
     
-    path('2fa/enable/', enable_2fa, name='enable_2fa'),
-    path('2fa/verify/', verify_2fa, name='verify_2fa'),
-    path('2fa/disable/', disable_2fa, name='disable_2fa'),
+    path('2fa/enable/', twofa.enable_2fa, name='enable_2fa'),
+    path('2fa/verify/', twofa.verify_2fa, name='verify_2fa'),
+    path('2fa/disable/', twofa.disable_2fa, name='disable_2fa'),
+    path('2fa/verify-code/', twofa.verify_2fa_code, name='verify_2fa_code'),
 
     path('user-data/', views.user_data, name='user_data'),
     path('update-user/', views.update_user, name='update_user'),
