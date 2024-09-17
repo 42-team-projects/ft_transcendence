@@ -28,6 +28,7 @@ class Root extends HTMLElement{
             await getCurrentPlayerData();
             await createWebSocketsForTournaments();
             await createNotificationWebSocket();
+            
         }
     }
     

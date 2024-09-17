@@ -21,7 +21,7 @@ export class CustomGraph extends HTMLElement {
 
     drawAxes(ctx, labels, centerX, centerY, angleStep) {
         const numAxes = labels.length;
-        for (let i = 0; i < numAxes; i++) {
+        for (let i = 1; i < numAxes; i++) {
             const angle = i * angleStep;
             const x = centerX + maxRadius * Math.cos(angle);
             const y = centerY + maxRadius * Math.sin(angle);
@@ -87,7 +87,7 @@ export class CustomGraph extends HTMLElement {
         
 
         // Chart settings
-        const numAxes = values.length;
+        const numAxes = values.length - 1;
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         const angleStep = (2 * Math.PI) / numAxes;
@@ -97,7 +97,7 @@ export class CustomGraph extends HTMLElement {
         this.drawAxes(ctx, labels, centerX, centerY, angleStep);
 
         ctx.beginPath();
-        for (let i = 0; i < numAxes; i++) {
+        for (let i = 1; i < numAxes; i++) {
             const angle = i * angleStep;
             const radius = (values[i] / 100) * maxRadius;
             const x = centerX + radius * Math.cos(angle);
