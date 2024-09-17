@@ -39,7 +39,7 @@ export class CustomToggleSwitch extends HTMLElement {
                 const response = await getApiData(ENABLE_2FA_API_URL);
                 if (!response)
                     return ;
-                console.log("Response: ", response);
+                // console.log("Response: ", response);
 
                 const alertsConrtainer = window.document.querySelector("body .alerts");
                 alertsConrtainer.style.display = "flex";
@@ -69,14 +69,18 @@ export class CustomToggleSwitch extends HTMLElement {
 
                 customButton.addEventListener("click", async () => {
                     const code = twoFA.code;
+                    if (code.length != 6)
+                    {
+                        twoFA.code = "invalide code !!";
+                        return ;
+                    }
                     if (code && code.length == 6)
                     {
                         const isVerify = await getApiData(VIREFY_2FA_API_URL + "?otp=" + code);
-                        if (isVerify.error) {
-                            console.log("Error: ", isVerify.error);
+                        if (!isVerify) {
+                            twoFA.code = "invalide code !!";
                             return ;
                         }
-                        console.log(isVerify);
                         alertsConrtainer.style.display = "none";
                         alertsConrtainer.innerHTML = '';
                         toggle.classList.add("enable");
