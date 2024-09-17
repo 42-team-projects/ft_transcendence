@@ -300,10 +300,10 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
-	async playeGame(room_group_name){
+	async playeGame(room_group_name, save){
 		const game_play = await getApiData(HOST + `/game/game_play/`);
 		const header = new GameHeader();
-		const game = new GameTable(room_group_name, game_play);
+		const game = new GameTable(room_group_name, game_play, save);
 		const root = document.body.querySelector('root-content');
 		const headerBar = document.body.querySelector('header-bar');
 
@@ -332,13 +332,13 @@ export class Lobby extends HTMLElement{
 							this.socket.onclose = async (e) => {
 								console.log('socket close 2');
 								this.socket = null;
-								await this.playeGame(room_group_name);
+								await this.playeGame(room_group_name, true);
 							};
 							if(this.socket)
 								this.socket.close();
 						}
 						else
-							await this.playeGame(room_group_name);
+							await this.playeGame(room_group_name, false);
 						clearInterval(countdown)
 					}
 				},1000)
