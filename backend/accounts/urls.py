@@ -29,4 +29,5 @@ urlpatterns = [
 
     path('user-data/', views.user_data, name='user_data'),
     path('update-user/', views.update_user, name='update_user'),
+    path('report/', views.report_to_support, name='report'),
 ]
