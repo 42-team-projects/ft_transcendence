@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from ..Models.PlayerModel import Player
+from ..Models.PlayerModel import Player, Nickname
 from ..Models.LinksModel import Links
 from ..Serializers.PlayerSerializer import PlayerSerializer, CustomPlayerSerializer, DefaultPlayerSerializer, ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -8,7 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from game.models import GamePlay, GameHestory
 import logging
-from friends.models import Friendship
+from friend.models import Friendship, BlockUser
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from accounts.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +31,11 @@ def getPlayerById(request, playerId):
     if request.method == 'GET':
         serializer = CustomPlayerSerializer(player)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
-    
 
-def update_is_friend_field(currentPlayer, player):
+def update_is_friend_field(currentUser, player):
     # Iterate through the players to check for friendship
     try:
-        friendship = Friendship.objects.get(user=currentPlayer)
+        friendship = Friendship.objects.get(user=currentUser)
     except Friendship.DoesNotExist:
         return  # If no friendship exists for this player, move to the next one
 
@@ -42,6 +44,7 @@ def update_is_friend_field(currentPlayer, player):
         player.is_friend = True
     else:
         player.is_friend = False
+
 
 @csrf_exempt
 @api_view(['GET'])
@@ -54,12 +57,10 @@ def searchForPlayers(request):
                 players = Player.objects.filter(user__username__icontains=username)
                 for player in players:
                     update_is_friend_field(request.user, player)
-
                 serializer = DefaultPlayerSerializer(players, many=True)
                 return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except Player.DoesNotExist:
             return JsonResponse({"error": "User profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
-
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
@@ -140,3 +141,72 @@ def getLeaderBoard(request):
     players = Player.objects.all().order_by("-stats__xp")
     serializer = DefaultPlayerSerializer(players, many=True)
     return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateActiveField(request):
+    isActive = request.data["active"]
+    player = Player.objects.get(user=request.user)
+    player.active = isActive
+    player.save()
+    return JsonResponse({"message": "is active has successfully updated."}, safe=False, status=status.HTTP_200_OK)
+
+
+
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def setNickname(request):
+    try:
+        player = Player.objects.get(user=request.user)
+
+        if request.method == 'POST':
+            tournament_id = request.data.get("tournament_id")
+            nickname = request.data.get("nickname")
+
+            if not tournament_id or not nickname:
+                return JsonResponse({'statusText': 'Missing tournament_id or nickname'}, status=400)
+
+            # Check if a nickname already exists for this player and tournament
+            if Nickname.objects.filter(player=player, tournamentid=tournament_id).exists():
+                return JsonResponse({'statusText': 'Nickname already exists for this tournament'}, status=400)
+
+            # Create the new nickname for this player and tournament
+            Nickname.objects.create(player=player, tournamentid=tournament_id, nickname=nickname)
+
+            return JsonResponse({'statusText': 'Nickname created successfully'}, status=201)
+
+    except Player.DoesNotExist:
+        return JsonResponse({'statusText': 'Player not found'}, status=404)
+
+    except Exception as e:
+        return JsonResponse({'statusText': str(e)}, status=500)
+
+    return JsonResponse({'statusText': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getNicknameForTournament(request, tournament_id):
+    try:
+        player = Player.objects.get(user=request.user)
+
+        if request.method == 'GET':
+            try:
+                # Fetch the nickname for the player and tournament
+                nickname = Nickname.objects.get(player=player, tournamentid=tournament_id)
+                return JsonResponse({'nickname': nickname.nickname}, status=200)
+            except Nickname.DoesNotExist:
+                return JsonResponse({'statusText': 'Nickname not found for this tournament'}, status=404)
+
+    except Player.DoesNotExist:
+        return JsonResponse({'statusText': 'Player not found'}, status=404)
+
+    except Exception as e:
+        return JsonResponse({'statusText': str(e)}, status=500)
+
+    return JsonResponse({'statusText': 'Invalid request method'}, status=405)

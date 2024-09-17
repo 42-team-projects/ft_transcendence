@@ -4,6 +4,7 @@ import { SearchBarComponent } from "/Components/Search/SearchBarComponent.js";
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 import { FriendRequestListComponent } from "/Components/Friends/FriendRequestListComponent.js";
 import { NotificationsList } from "/Components/Notification/NotificationsList.js";
+import { PROFILE_COMPONENT } from "/Utils/GlobalVariables.js";
 
 export class HeaderBar extends HTMLElement{
     constructor(){
@@ -31,9 +32,15 @@ export class HeaderBar extends HTMLElement{
             else
                 hideFriendsRequestList();
         });
+
+        const header = this.querySelector(".header-bar");
+        header.appendChild(PROFILE_COMPONENT);
     }
 
     connectedCallback() {
+
+      
+
     }
     remove(){
         this.innerHTML = '';
@@ -322,6 +329,5 @@ HeaderTemplate.innerHTML = /*html*/`
                 <div class="notification-container">
             </div>
         </div>
-        <c-profile></c-profile>
     </div>
 `

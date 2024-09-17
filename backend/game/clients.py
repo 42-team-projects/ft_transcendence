@@ -88,6 +88,8 @@ class GameLoop :
             if(self.pause):
                 await asyncio.sleep(0.05)
                 continue
+            self.data['ball_dx'] += 0.05
+            self.data['ball_dy'] += 0.05
             await self.send_message(self.ball_data)
             await asyncio.sleep(0.05)
 

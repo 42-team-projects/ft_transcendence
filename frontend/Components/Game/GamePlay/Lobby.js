@@ -174,20 +174,29 @@ export class Lobby extends HTMLElement{
 	}
 
 	async openSocket(userId){
-		// this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
+		//set access token on the cocokies
+		// isValidToken (accessToken); => if expired => refresh token => get new access token else return true
 		this.socket = new WebSocket(`${wsUrl}ws/matchmaking/${userId}/`);
 		this.socket.onopen = (e) => {
 			console.log('socket open');
 		};
+		const startTime = new Date().getTime();
 
 		this.socket.onmessage = (e) => {
 			var data = JSON.parse(e.data).message;
+			const endTime = new Date().getTime();
+			const time = endTime - startTime; // Get the time in milliseconds
+			const decimalPart = time % 500
 			if (Number(data.user_1) === userId) {
-				setTimeout(() => this.setPlayer(data.user_2), 5000);
-				setTimeout(() => this.gameMode(data.room_group_name), 6000);
+				setTimeout(() => {
+					setTimeout(() => this.setPlayer(data.user_2), 5000);
+					setTimeout(() => this.gameMode(data.room_group_name), 5500);
+				}, 500 - decimalPart);
 			} else if (Number(data.user_2) === userId) {
-				setTimeout(() => this.setPlayer(data.user_1), 5000);
-				setTimeout(() => this.gameMode(data.room_group_name), 6000);
+				setTimeout(() => {
+					setTimeout(() => this.setPlayer(data.user_1), 5000);
+					setTimeout(() => this.gameMode(data.room_group_name), 5500);
+				}, 500 - decimalPart);
 			} else {
 				this.time = data.time;
 				this.updateTimer();
@@ -234,12 +243,13 @@ export class Lobby extends HTMLElement{
 		const p_h1 = OnlineGameTemplate.content.getElementById('NPlayer');
 		p_img.src = userInfo.picture;
 		p_h1.textContent = userInfo.username;
-		if(!opponentId)
+		if(!opponentId){
 			await this.setSearchImages();
-		this.appendChild(OnlineGameTemplate.content.cloneNode(true));
-		if (!opponentId)
 			await this.openSocket(userInfo.id);
+			this.appendChild(OnlineGameTemplate.content.cloneNode(true));
+		}
 		else {
+			this.appendChild(OnlineGameTemplate.content.cloneNode(true));
 			await this.setPlayer(opponentId);
 			let room_group_name;
 			if(opponentId > userInfo.id)
@@ -262,27 +272,34 @@ export class Lobby extends HTMLElement{
 	async setPlayer(opponentId){
 		const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
-		console.log(opponentId)
-		const turnTime = 10;
-		let delay = 0;
-		let delayNumber = (turnTime / 2) / Players.length;
 		const opponent = await getApiData(PROFILE_API_URL + `${opponentId}/`);
 		opponentInfo.id = opponentId;
 		opponentInfo.picture = HOST + opponent.user.avatar;
 		opponentInfo.username = opponent.user.username;
+		console.log(opponentId)
+		const turnTime = 1;
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
 		h1.textContent = opponentInfo.username;
 		Players[0].src = opponentInfo.picture
-		Players.forEach((element)=>{
+		let delay = 0;
+		let delayNumber = (turnTime / 2) / Players.length;
+
+		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
 			element.style.opacity = '1';
 			delay += delayNumber;
+				
 		})
 		this.appendChild(h1.cloneNode(true));
+		// setTimeout(() => {
+		// 	Players.forEach((element, index)=>{
+		// 		element.style.animation = 'none';
+		// 	})
+		// }, 5000);
 	}
 	SinglePlayer()
 	{

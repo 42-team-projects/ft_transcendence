@@ -13,3 +13,16 @@ class Player(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+
+
+
+class Nickname(models.Model):
+    nickname = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    tournamentid = models.CharField(max_length=10, unique=True)
+    
+    # one-to-many relationship
+    player = models.ForeignKey(Player, related_name='nicknames', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.nickname} ({self.tournamentid})'
