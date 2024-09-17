@@ -2,12 +2,16 @@ from django.db import models
 from accounts.models import User
 
 
+
 class Friendship(models.Model):
     user = models.OneToOneField(User, related_name='user', on_delete=models.CASCADE)
     friends = models.ManyToManyField(User, blank=True, related_name='friends')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['update_at']
+        
     def __str__(self):
         return f"{self.user.username} friends"
     
@@ -46,12 +50,6 @@ class Friendship(models.Model):
     def count_friends(self):
         """Count the number of friends the user has."""
         return self.friends.count()
-
-    # def mutual_friends(self, other_user):
-    #     """Get the mutual friends between the user and another user."""
-    #     if self.user == other_user:
-    #         return self.get_friends()
-    #     return self.get_friends().intersection(other_user.friends.all())
 
     @classmethod
     def get_friendship(cls, user):
@@ -95,15 +93,8 @@ class FriendRequest(models.Model):
             return True
         return False
 
-        # friends, _ = Friendship.objects.get_or_create(user=self.receiver)
-        # friends.add_user(self.sender)
-        
-        # friends, _ = Friendship.objects.get_or_create(user=self.sender)
-        # friends.add_user(self.receiver)
-        # self.is_active = False
-        # self.save()
 
-    def reactivate(self):     
+    def reactivate(self):
         """Reactivate the friend request
         """
         if not self.is_active:
@@ -152,7 +143,6 @@ class FriendRequest(models.Model):
         """Get the status of the friend request."""
         return "Pending" if self.is_active else "Accepted" if self.is_accepted() else "Declined"
 
-
 class BlockUser(models.Model):
     blocker = models.ForeignKey(User, related_name='blocker', on_delete=models.CASCADE)
     blocked = models.ForeignKey(User, related_name='blocked', on_delete=models.CASCADE)
@@ -160,15 +150,4 @@ class BlockUser(models.Model):
 
     def __str__(self):
         return f"{self.blocker.username} Block {self.blocked.username}" 
-
-    # def is_blocked(self, blocker, friend):
-    #     """check if current user block his friend
-
-    #     Args:
-    #         current: (User) current user
-    #     """
-    #     if self.blocker == blocker and self.blocked == friend:
-    #         return True
-    #     return False
-
 

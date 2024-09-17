@@ -1,4 +1,4 @@
-import { createApiData } from "/Utils/APIManager.js";
+import { createApiData, deleteApiData } from "/Utils/APIManager.js";
 import { getNotificationWebSocket, HOST } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 
@@ -54,6 +54,14 @@ export class ProfileInfoComponent extends HTMLElement {
             const element = this.shadowRoot.querySelector(".name-and-online p");
             if (!element)
                 return ;
+            this.playerName = window.location.pathname.substring(9);
+            this.playerName = this.playerName.replace(/^\/+|\/+$/g, '');
+            if (!this.playerName || this.playerName === "" || this.playerName === "me")
+            {
+                const element = this.shadowRoot.querySelector(".add-friend");
+                if (element)
+                    element.remove();
+            }
             element.textContent = newValue;
         }
         else if (attrName === "joindate")
@@ -83,8 +91,12 @@ export class ProfileInfoComponent extends HTMLElement {
             const element = this.shadowRoot.querySelector(".add-friend img");
             if (!element)
                 return ;
+            element.id = "friend";
             if (newValue === "true")
-                element.remove();
+            {
+                element.id = "unfriend";
+                element.src = "/assets/icons/unfriend-icon.svg";
+            }
         }
         
     }
@@ -108,17 +120,25 @@ export class ProfileInfoComponent extends HTMLElement {
     set friend(value) { this.setAttribute("friend", value);}
     
     async connectedCallback() {
-        const addFriend = this.shadowRoot.querySelector(".add-friend");
+        const addFriend = this.shadowRoot.querySelector(".add-friend img");
         // const currentPlayerId = await getCurrentUserId();
         // if (this.id === currentPlayerId)
         //     addFriend.remove();
         addFriend.addEventListener("click", async () => {
-            const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
-            if (sendRequestResponse) {
-                const notificationWS = await getNotificationWebSocket();
-                notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
-                const addFriendImage = addFriend.querySelector("img");
-                addFriendImage.src = "/assets/icons/wait-time-icon.svg";
+            if (addFriend.id === "friend") {
+                const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
+                if (sendRequestResponse) {
+                    const notificationWS = await getNotificationWebSocket();
+                    notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
+                    addFriend.src = "/assets/icons/wait-time-icon.svg";
+                }
+            }
+            else {
+                const unfriendResponse = await deleteApiData(HOST + "/friend/unfriend/" + this.id + "/");
+                if (unfriendResponse) {
+                    addFriend.src = "/assets/icons/wait-time-icon.svg";
+                    console.log("unfriend unfriend ..... :", unfriendResponse);
+                }
             }
         });
     }
