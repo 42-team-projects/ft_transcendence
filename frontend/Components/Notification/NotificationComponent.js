@@ -16,7 +16,7 @@ const cssContent = /*css*/`
     max-width: 550px;
     position: relative;
     box-shadow: 2px 2px 10px 2px #00fffc40, inset 2px 2px 10px 2px #00fffc40;
-
+    z-index: 100;
     animation: slide-right 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 

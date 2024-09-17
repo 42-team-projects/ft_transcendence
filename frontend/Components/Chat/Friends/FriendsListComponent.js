@@ -1,6 +1,8 @@
+import { HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { FriendItemComponent } from "/Components/Chat/Friends/FriendItemComponent.js";
+import { getApiData } from "/Utils/APIManager.js";
+import { router } from "/root/Router.js";
 
-let fakeData = [];
 export class FriendsListComponent extends HTMLElement {
     constructor () {
         super();
@@ -14,21 +16,29 @@ export class FriendsListComponent extends HTMLElement {
     `;
     }
 
-    renderFriendsList() {
+    async renderFriendsList() {
         const listContaier = this.shadowRoot.querySelector(".friends-list-container");
-        fakeData.forEach(item => {
+        const friends = await getApiData(HOST + "/friend/friends/");
+        if (!friends.response.friends || friends.response.friends === undefined)
+            return ;
+        Array.from(friends.response.friends).forEach(async (item) => {
+            const playerData = await getApiData(PROFILE_API_URL + item.username);
             const friendItem = document.createElement("friend-item");
-            if (item.stats)
-                friendItem.league = item.stats.league;
-            friendItem.profileImage = item.profileImage;
-            friendItem.status = item.active;
-            friendItem.userName = item.userName;
+            friendItem.league = playerData.stats.league;
+            friendItem.profileImage = HOST + playerData.user.avatar;
+            friendItem.status = playerData.active;
+            friendItem.userName = playerData.user.username;
+            friendItem.addEventListener("click", (event) => {
+                event.preventDefault();
+                const url = new URL(HOST + "/Chat/" + playerData.user.username);
+                router.handleRoute(url.pathname);
+            });
             listContaier.appendChild(friendItem);
         });
     }
 
     async connectedCallback() {        
-
+        this.renderFriendsList();
     }
 }
 

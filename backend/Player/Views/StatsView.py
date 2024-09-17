@@ -17,17 +17,36 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
+def getMyStats(request):
+    try:
+        stats = Player.objects.get(user=request.user).stats
+        if request.method == 'GET':
+            serializer = StatsSerializer(stats)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        elif request.method == 'PUT': 
+            # result = request.data["result"]
+            # if result == "win":
+            #     stats.save(win=stats.win + 1)
+            # elif result == "lose":
+            #     stats.save(loss=stats.loss + 1)
+            serializer = StatsSerializer(stats, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Stats.DoesNotExist:
+        return JsonResponse({"error": "Stats not found for player"}, status=status.HTTP_404_NOT_FOUND)
+    
+
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getPlayerStats(request, username):
     try:
         stats = Player.objects.get(user__username=username).stats
         if request.method == 'GET':
             serializer = StatsSerializer(stats)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
-        elif request.method == 'PUT':
-            serializer = StatsSerializer(stats, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Stats.DoesNotExist:
         return JsonResponse({"error": "Stats not found for player"}, status=status.HTTP_404_NOT_FOUND)
