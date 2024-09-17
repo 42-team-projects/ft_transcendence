@@ -37,6 +37,7 @@ __pycache__/
 
 *backend/media/avatars/
 *backend/media/cover/
+*backend/static/*
 
 backend/static
 

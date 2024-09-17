@@ -4,8 +4,14 @@ import { router } from '/root/Router.js';
 import { HOST } from '/Utils/GlobalVariables.js';
 
 export default class SignupPage extends HTMLElement {
+
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+    }
+    
     connectedCallback() {
-        this.innerHTML = `
+        this.shadowRoot.innerHTML = `
             <link rel="stylesheet" href="/Components/User/style.css">
             <header-cpn></header-cpn>
             <shape-cpn 
@@ -16,12 +22,12 @@ export default class SignupPage extends HTMLElement {
         `;
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.querySelector('shape-cpn').addEventListener('submit', this.handleSubmit);
+        this.shadowRoot.querySelector('shape-cpn').addEventListener('submit', this.handleSubmit);
     }
     handleSubmit(event) {
         event.preventDefault();
     
-        const inputFields = this.querySelectorAll('input-field');
+        const inputFields = this.shadowRoot.querySelectorAll('input-field');
         let formData = {};
         let hasError = false;
     
@@ -98,7 +104,7 @@ export default class SignupPage extends HTMLElement {
             const data = await response.json();
             
             if (response.status !== 201) {
-                const shapeCpn = this.querySelector('shape-cpn');
+                const shapeCpn = this.shadowRoot.querySelector('shape-cpn');
                 const errorMessage = data.username ? data.username : data.email;
                 shapeCpn.showError(`${errorMessage}`);
             }
