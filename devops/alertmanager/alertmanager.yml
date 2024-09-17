@@ -6,9 +6,9 @@ route:
 receivers:
   - name: 'mail'
     email_configs:
-      - to: 'oussamagf1@gmail.com'
+      - to: 'ft.transcendencee.42@gmail.com'
         from: 'ft.transcendencee.42@gmail.com'
         smarthost: smtp.gmail.com:587
         auth_username: 'ft.transcendencee.42@gmail.com'
         auth_identity: 'ft.transcendencee.42@gmail.com'
-        auth_password: 'wncg rbyb ewgx xsnv'
+        auth_password: '${EMAIL_HOST_PASSWORD}'
