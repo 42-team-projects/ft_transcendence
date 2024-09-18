@@ -52,8 +52,6 @@ export async function createTournament(data) {
 export async function player_leave_tournament(tournamentId) {
     try {
         const response = await createApiData(`${TOURNAMENT_API_URL}tournament/${tournamentId}/player/leave/`, "");
-        console.log("response: ", response);
-        // handle response message
     } catch (error) {
         console.error('Error of player leave tournament: ', error);
     }
@@ -85,7 +83,6 @@ export async function player_join_tournament(tournamentId)
 {
     try {
         const response = await createApiData(`${TOURNAMENT_API_URL}tournament/${tournamentId}/player/`, "");
-        console.log("response: ", response);
         return response;
     } catch(error) {
         console.log('You already join to this tournament : ', error);
