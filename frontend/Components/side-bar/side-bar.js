@@ -27,10 +27,10 @@ const Sidebar_button_contetn = [
         src : '/assets/icons/message-icon.svg',
         text : "Chat",
     },
-    {
-        src : '/assets/icons/leaderboard-icon.svg',
-        text : "Ranking",
-    },
+    // {
+    //     src : '/assets/icons/leaderboard-icon.svg',
+    //     text : "Ranking",
+    // },
     {
         src : '/assets/icons/champion-cup-icon.svg',
         text : "Tournament",

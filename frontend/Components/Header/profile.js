@@ -37,7 +37,7 @@ export class Profile extends HTMLElement{
         super();
         this.appendChild(ProfileTemplate.content.cloneNode(true))
         this.querySelector('a').addEventListener('click', (event)=>{
-            console.log(this.querySelector('a').href)
+
             event.preventDefault()
             const url = new URL(this.querySelector('a').href)
             router.handleRoute(url.pathname)
