@@ -152,7 +152,29 @@ def updateActiveField(request):
     return JsonResponse({"message": "is active has successfully updated."}, safe=False, status=status.HTTP_200_OK)
 
 
+@csrf_exempt
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def online(request):
+    try:
+        player = Player.objects.get(user=request.user)
+        player.active = True
+        player.save()
+        return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
+    except Player.DoesNotExist:
+        return JsonResponse({"error": "Player not found"}, status=status.HTTP_404_NOT_FOUND)
 
+@csrf_exempt
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def offline(request):
+    try:
+        player = Player.objects.get(user=request.user)
+        player.active = False
+        player.save()
+        return JsonResponse({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)
+    except Player.DoesNotExist:
+        return JsonResponse({"error": "Player not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 

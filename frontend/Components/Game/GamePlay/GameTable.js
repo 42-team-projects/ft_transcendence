@@ -279,19 +279,19 @@ export class GameTable extends HTMLElement {
             const updateResponse =  await updateApiData(PROFILE_API_URL + "me/stats/", form);
             await updateCurrentPlayer();
 
-            const response = await createApiData(HOST + '/game/game_history/me/', body);
+            await createApiData(HOST + '/game/game_history/me/', body);
         }
         setTimeout(() => {
             this.remove();
         }, 5000);
     }
     async LuncheGame(ctx) {
-        document.body
-            .querySelector("game-header")
-            .classList.toggle("blur", true);
-        document.body
-            .querySelector("game-table")
-            .classList.toggle("blur", true);
+        const game_header = document.body.querySelector("game-header")
+        if(game_header)
+            game_header.classList.toggle("blur", true);
+        const game_table = document.body.querySelector("game-table")
+        if(game_table)
+            game_table.classList.toggle("blur", true);
         if (this.luanching === false) return;
         let RoundTime = 3;
         const LunchingGame = new LaunchingGame(RoundTime, this.round);
@@ -413,6 +413,11 @@ export class GameTable extends HTMLElement {
                 score.opponent++;
                 stop = true;
             }
+        }
+        x += dx;
+        y += dy;
+        this.setCoordonates(x, y, radius, dx, dy);
+        if (this.state === "offline") {
             if(stop === true){
                 if (this.round > 2) {
                     this.RoundOver(ctx);
@@ -432,9 +437,6 @@ export class GameTable extends HTMLElement {
                 }
             }
         }
-        x += dx;
-        y += dy;
-        this.setCoordonates(x, y, radius, dx, dy);
     }
 
     setMove = (event, keys) => {

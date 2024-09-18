@@ -31,7 +31,6 @@ export class OnlineGame extends HTMLElement{
 		const button = this.shadowRoot.querySelector('c-button')
 		// setTimeout(() => {
 			button.addEventListener('click', async ()=>{
-				console.log('Clicked : ', isTokenValid(localStorage.getItem('accessToken')))
 				if(isTokenValid(localStorage.getItem('accessToken')) == false)
 				{
 					router.handleRoute('/login')
