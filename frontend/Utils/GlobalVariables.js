@@ -19,14 +19,15 @@ export const NOTIFICATIONS_API_URL = HOST + "/notification/";
 import { getApiData } from "/Utils/APIManager.js";
 
 
-// let profileImage;
-
 let currentPlayer;
 
 export async function updateCurrentPlayer() {
     currentPlayer = await getApiData(PROFILE_API_URL + "me/");
-    // profileImage = window.document.querySelector("c-profile")
-    // console.log("profileImage: ", profileImage);
+    if (PROFILE_COMPONENT) {
+        PROFILE_COMPONENT.profileImage = currentPlayer.user.avatar;
+        PROFILE_COMPONENT.rank = currentPlayer.stats.rank;
+        PROFILE_COMPONENT.league = currentPlayer.stats.league;
+    }
     return currentPlayer;
 }
 
@@ -62,9 +63,15 @@ export async function getCurrentUserId() {
 }
 
 
-import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { displayNotification } from "/Components/Notification/configs/NotificationUtils.js";
 import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
 import { router } from "/root/Router.js";
+
+import { Profile } from "/Components/Header/profile.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+
+
+export const PROFILE_COMPONENT = document.createElement("c-profile");
 
 let notificationWebSocket;
 
@@ -73,11 +80,9 @@ export async function createNotificationWebSocket() {
 
     const userId = await getCurrentUserId();
     let websocket = `${wsUrl}ws/user/notification/${userId}/`;
-    console.log("wsUrl: ", websocket);
     notificationWebSocket = new WebSocket(websocket)
-    notificationWebSocket.onopen = () => {
-        console.log('WebSocket connection of notification is opened');
-    };
+    notificationWebSocket.onopen = () => {};
+    
     notificationWebSocket.onerror = (error) => {
         console.log('WebSocket encountered an error: ', error);
     };
@@ -122,8 +127,11 @@ export function handleSignals(signalData) {
             // url = new URL(HOST + signalData.sender);
             // if (window.location.pathname === url.pathname)
             //     return ;
+            console.log("heyyyyyyyyy =>");
             const messageNotification = createNotification(signalData.id, signalData.sender, signalData.content, "message", signalData.data);
             displayNotification(messageNotification);
+        case "game":
+            new Lobby(Number(signalData.data), 29);
         default:
             break;
     }
@@ -137,3 +145,5 @@ export async function getNotificationWebSocket() {
         return notificationWebSocket;
     return await createNotificationWebSocket();   
 }
+
+

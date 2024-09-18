@@ -82,7 +82,6 @@ export class CustomTable extends HTMLElement {
         if (!this.username || this.username === undefined)
             return ;
         const gameHistoryData = await getApiData(HOST + "/game/game_history/" + this.username);
-        console.log("gameHistoryData: ", gameHistoryData);
         if (!gameHistoryData)
             return ;
 

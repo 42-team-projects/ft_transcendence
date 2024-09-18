@@ -42,7 +42,7 @@ def calculateStats(stats, win, loss):
     try:
         newRank = stats_list.index(stats) + 1
     except ValueError:
-        newRank = 0
+        newRank = 1
 
     return {"win": newWin, "loss": newLoss, "rank": newRank, "progress_bar": progress_bar, "league": league, "xp": newXp}
 

@@ -1,5 +1,6 @@
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
-
+import { isTokenValid } from "../../../../root/fetchWithToken.js";
+import { router } from "../../../../root/Router.js";
 const OnlineGameTemplate = document.createElement('template')
 
 OnlineGameTemplate.innerHTML = /*html*/ `
@@ -24,11 +25,20 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 export class OnlineGame extends HTMLElement{
 	constructor (){
 		super();
+		this.is_clicked = false
 		this.attachShadow({mode:'open'})
 		this.shadowRoot.appendChild(OnlineGameTemplate.content.cloneNode(true))
 		const button = this.shadowRoot.querySelector('c-button')
 		// setTimeout(() => {
-			button.addEventListener('click', ()=>{
+			button.addEventListener('click', async ()=>{
+				console.log('Clicked : ', isTokenValid(localStorage.getItem('accessToken')))
+				if(isTokenValid(localStorage.getItem('accessToken')) == false)
+				{
+					router.handleRoute('/login')
+					return
+				}
+				if(this.is_clicked) return
+				this.is_clicked = true
 				const lobby = new Lobby();
 				lobby.OnlineGame();
 			})

@@ -19,7 +19,7 @@ class Player(models.Model):
 
 class Nickname(models.Model):
     nickname = models.CharField(max_length=255, unique=True, null=True, blank=True)
-    tournamentid = models.CharField(max_length=10, unique=True)
+    tournamentid = models.CharField(max_length=10)
     
     # one-to-many relationship
     player = models.ForeignKey(Player, related_name='nicknames', on_delete=models.CASCADE)

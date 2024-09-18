@@ -27,12 +27,15 @@ export class OflineGame extends HTMLElement{
 
 	constructor (){
 		super();
+        this.clicked = false
 		this.attachShadow({mode:'open'})
 		this.shadowRoot.appendChild(OflineGameTemplate.content.cloneNode(true))
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
 		const button = this.shadowRoot.querySelector('c-button')
 		button.addEventListener('click', ()=>{
+            if(this.clicked) return
+            this.clicked = true
 			const lobby = new Lobby();
             setTimeout(() => {
                 lobby.playeGame('offline', '', false)

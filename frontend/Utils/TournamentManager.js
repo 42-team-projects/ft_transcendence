@@ -15,8 +15,6 @@ export async function checkIsTournamentFull(data, tournamentWebSocket) {
 
 export async function initTournamentWebSocket(newTournamentData) {
     let tournamentSocket = await createTournamentWebSocket(newTournamentData.tournament_id, newTournamentData);
-    // if(!tournamentSocket)
-    //     tournamentSocket = TournamentWebSocket;
     let timeAppend = 86400;
     if (newTournamentData.number_of_players % newTournamentData.players.length == 0)
     {
@@ -25,10 +23,3 @@ export async function initTournamentWebSocket(newTournamentData) {
     }
     await update_start_date(newTournamentData, timeAppend);
 }
-
-
-
-// Stage Two
-
-// if Player lose, hes web socket should be closed.
-// else 

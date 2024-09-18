@@ -132,7 +132,6 @@ export class CustomGraph extends HTMLElement {
     static observedAttributes = ["data-object"];
 
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`Attribute ${name} has changed.`);
     }
 
     set dataObject(value) {

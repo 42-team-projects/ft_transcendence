@@ -4,7 +4,6 @@ import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
 import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { router } from "/root/Router.js";
-import { OflineGame } from "./GameOfline/GameOfline.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -37,12 +36,14 @@ let searching_images = [
 
 export let userInfo = {
 	picture: HOST + `/media/defaults/ace.jpeg`,
-	username: 'GOJO',
+	username: 'Player1',
+	color: 'white',
 }
 
 export let opponentInfo = {
 	picture: HOST + `/media/defaults/ace.jpeg`,
-	username: 'GOJO',
+	username: 'Player2',
+	color: 'black',
 }
 
 playerSlot.innerHTML = /*html*/ `
@@ -101,7 +102,7 @@ export class Lobby extends HTMLElement{
 	constructor(opponentId, time){
 		super();
 		this.socket = null;
-		this.time = undefined;
+		this.time = -1;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
 		this.setSlots(playerSlot.content, 'false')
@@ -216,12 +217,9 @@ export class Lobby extends HTMLElement{
 
 	async OnlineGame(opponentId)
 	{
-		//get user id from local storage
-		// const user_data = JSON.parse(localStorage.getItem('user_data'));
 		const user_data = await getCurrentPlayerData();
 		userInfo.id = user_data.id;
 		userInfo.picture = HOST + user_data.user.avatar;
-		// console.log('user_data:', userInfo.picture);
 		userInfo.username = user_data.user.username;
 		const root = document.querySelector('root-content');
 		const p_img = OnlineGameTemplate.content.getElementById('Player');
@@ -323,31 +321,34 @@ export class Lobby extends HTMLElement{
 				element.remove()
 			else{
 				element.style.animation = 'none';
-				this.createTimer();
+				if(this.time == -1)
+					this.createTimer(4);
+				else
+					this.createTimer(this.time);
 				const countdown = setInterval(async()=>{
-					if(this.time <= 0){
-						if(this.socket){
-							this.socket.onclose = async (e) => {
-								console.log('socket close 2');
-								this.socket = null;
-								await this.playeGame(undefined, room_group_name, true);
-							};
-							if(this.socket)
-								this.socket.close();
-						}
-						else
-							await this.playeGame(undefined, room_group_name, false);
-						clearInterval(countdown)
+				if(this.time <= 0){
+					if(this.socket){
+						this.socket.onclose = async (e) => {
+							console.log('socket close 2');
+							this.socket = null;
+							await this.playeGame(undefined, room_group_name, true);
+						};
+						if(this.socket)
+							this.socket.close();
 					}
+					else
+						await this.playeGame(undefined, room_group_name, false);
+					clearInterval(countdown)
+				}
 				},1000)
 			}
 		})
 	}
-	createTimer(){
+	createTimer(time){
 		timer.innerHTML = /*html*/ `
 			<link rel="stylesheet", href="/Components/Game/GamePlay/Timer.css">
 			<div class="descounter">
-				<h1>${this.time}</h1>
+				<h1>${time}</h1>
 			</div>
 		`
 		this.shadowRoot.appendChild(timer.content.cloneNode(true));
@@ -358,7 +359,7 @@ export class Lobby extends HTMLElement{
 	}
 	disconnectedCallback(){
 		console.log('disconnectedCallback')
-		if(this.time > 0 || this.time === undefined){
+		if(this.time > 0 || this.time === -1){
 			if(this.socket)
 				this.socket.close();
 			router.handleRoute(window.location.pathname);

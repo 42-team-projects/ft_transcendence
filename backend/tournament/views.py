@@ -33,7 +33,7 @@ w3 = Web3(Web3.HTTPProvider(SEPOLIA_URL))
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def leave_tournament_and_store_score(request):
+def store_tournament_score_on_blockchain(request):
     if request.method == 'POST':
         try:
             # Extract data from the request
@@ -44,13 +44,6 @@ def leave_tournament_and_store_score(request):
             loser_score = int(request.data.get('loserIdScore'))
             CONTRACT_ABI = request.data.get('abi')
             player = Player.objects.get(user=request.user)
-            # Check if the tournament exists
-            # try:
-            #     tournament = Tournament.objects.get(tournament_id=tournament_id)
-            # except Tournament.DoesNotExist:
-            #     return JsonResponse({'statusText': 'Tournament not found'}, status=404)
-            # tournament.players.remove(player)
-            # tournament.save()
             # Create contract instance
             contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
             # Create account from private key
@@ -77,7 +70,7 @@ def leave_tournament_and_store_score(request):
                 receipt = w3.eth.waitForTransactionReceipt(tx_hash)
                 scores = contract.functions.getScores(tournament_id).call()
                 return JsonResponse({
-                    'success': 'Player successfully left the tournament (if loser) and score stored on blockchain',
+                    'success': 'Player successfully score stored on blockchain',
                     'txHash': tx_hash.hex(),
                     'scores': scores
                 }, status=200)
@@ -95,12 +88,9 @@ def leave_tournament_and_store_score(request):
 def get_tournament_by_id(request, tournamentId):
     if request.method == 'GET':
         try:
-            # player = Player.objects.get(user=request.user)
             tournament = Tournament.objects.get(tournament_id=tournamentId)
         except Tournament.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
-        # except Player.DoesNotExist:
-        #     return JsonResponse({'status': 'error', 'message': 'User doesn\'t Authenticated'}, status=403)
         serializer = TournamentSerializer(tournament)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -125,27 +115,6 @@ def player_join_tournament(request, tournamentId):
                 tournament.can_join = False
                 tournament.save()
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-        # Send a message to the WebSocket group
-        # channel_layer = get_channel_layer()
-        # tournament_name = "Tournament"
-        # room_group_name = f'tournament_{tournament_name}'
-        # async_to_sync(channel_layer.group_send)(
-        #         room_group_name,
-        #         {
-        #             'type': 'tournament_message',
-        #             'message': 'A new tournament has been created!',
-        #             'dataTest': serializer.data,
-        #             'join': True
-        #         }
-        #     )
-        #     if tournament.players.count() >= tournament.number_of_players:
-        #         tournament.can_join = False
-        #         tournament.save()
-                # launch_tournament(tournament) # here call launch_tournament function
-                # return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-                # return JsonResponse({'success': launch_tournament(tournament)}, status=200)
-            # return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-            # return JsonResponse({'success': 'Player successfully joined the tournament'}, status=200)
         except Player.DoesNotExist:
             return JsonResponse({'statusText': 'Player not found'}, status=404)
         except Tournament.DoesNotExist:
@@ -202,7 +171,6 @@ def get_available_tournaments(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
-# @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @csrf_exempt
@@ -220,24 +188,6 @@ def create_tournament(request):
             tournament.players.add(player)
             tournament.owner = player
             tournament.save()
-
-            # tournaments = Tournament.objects.filter(can_join=True)
-            # serializers = TournamentSerializer(tournaments, many=True)
-
-            # Send a message to the WebSocket group
-            # channel_layer = get_channel_layer()
-            # tournament_name = "Tournament"
-            # room_group_name = f'tournament_{tournament_name}'
-            
-            # async_to_sync(channel_layer.group_send)(
-            #     room_group_name,
-            #     {
-            #         'type': 'tournament_message',
-            #         'message': 'A new tournament has been created!',
-            #         'dataTest': serializer.data,
-            #         'join': False
-            #     }
-            # )
             return JsonResponse({'status': 'success', 'tournament': serializer.data}, status=201)
         return JsonResponse({'status': 'error', 'errors': serializer.errors}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
