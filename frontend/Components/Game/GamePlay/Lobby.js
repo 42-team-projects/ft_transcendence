@@ -4,6 +4,8 @@ import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
 import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { router } from "/root/Router.js";
+import { OflineGame } from "./GameOfline/GameOfline.js";
+
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
 const opponentSlot = document.createElement('template');
@@ -119,8 +121,7 @@ export class Lobby extends HTMLElement{
 	}
 	footerAnimation(){
 		const footerBar = document.body.querySelector('footer-bar');
-		footerBar.setText('Quit');
-		footerBar.quitEventListener();
+		footerBar.setExitEventListeners();
 	}
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
@@ -258,7 +259,6 @@ export class Lobby extends HTMLElement{
 	async setPlayer(opponentId){
 		const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
-		console.log(opponentId)
 		const turnTime = 10;
 		let delay = 0;
 		let delayNumber = (turnTime / 2) / Players.length;
@@ -297,10 +297,12 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
-	async playeGame(room_group_name, save){
-		const game_play = await getApiData(HOST + `/game/game_play/`);
-		const header = new GameHeader();
-		const game = new GameTable(room_group_name, game_play, save);
+	async playeGame(state, room_group_name, save){
+		let game_play = undefined; 
+		if(this.state !== 'offline')
+			game_play = await getApiData(HOST + `/game/game_play/`);
+		const header = new GameHeader(state);
+		const game = new GameTable(state, room_group_name, game_play, save);
 		const root = document.body.querySelector('root-content');
 		const headerBar = document.body.querySelector('header-bar');
 
@@ -323,19 +325,18 @@ export class Lobby extends HTMLElement{
 				element.style.animation = 'none';
 				this.createTimer();
 				const countdown = setInterval(async()=>{
-					console.log(this.time)
 					if(this.time <= 0){
 						if(this.socket){
 							this.socket.onclose = async (e) => {
 								console.log('socket close 2');
 								this.socket = null;
-								await this.playeGame(room_group_name, true);
+								await this.playeGame(undefined, room_group_name, true);
 							};
 							if(this.socket)
 								this.socket.close();
 						}
 						else
-							await this.playeGame(room_group_name, false);
+							await this.playeGame(undefined, room_group_name, false);
 						clearInterval(countdown)
 					}
 				},1000)
@@ -356,7 +357,10 @@ export class Lobby extends HTMLElement{
 		h1.textContent = this.time;
 	}
 	disconnectedCallback(){
+		console.log('disconnectedCallback')
 		if(this.time > 0 || this.time === undefined){
+			if(this.socket)
+				this.socket.close();
 			router.handleRoute(window.location.pathname);
 			router.randring();
 		}

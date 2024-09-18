@@ -33,24 +33,14 @@ html, body {
 
 .body-game-shrink{
     grid-template-columns: 0rem 1fr !important;
-    grid-template-rows: 10rem 1fr 4rem !important;
+    grid-template-rows: 10rem 1fr !important;
     grid-template-areas: 
     "head head"
     "sidebar content"
-    "foter foter" !important;
+    "content content" !important;
     transition: grid 1s ease;
-    /* justify-content: center;
-    align-items: center; */
 }
 
-/* .body-default-shrink{
-    grid-template-columns: 14% 1fr;
-    grid-template-rows: 12rem 1fr 4rem;
-    grid-template-areas:
-        "head head"
-        "sidebar content"
-        "foter foter";
-} */
 
 .body-default-shrink{
     grid-template-columns: 20rem 1fr;
@@ -181,12 +171,6 @@ footer-bar{
     height: 100%;
     display: flex;
 }
-    /* position: absolute;
-    display: flex;
-    gap: 10px;
-    margin-left: 1%;
-    left: 0;
-    top: 0; */
 footer-bar img{
     width: 30%;
 }
