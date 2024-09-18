@@ -1,7 +1,7 @@
 import { PlayersAndStages } from "/Components/Tournament/PlayersAndStages.js";
 import { TournamentRules } from "/Components/Tournament/TournamentRules.js";
 import { Visibility } from "/Components/Tournament/VisibillitySettings.js";
-
+import { CustomSelect } from "/Components/CustomElements/CustomSelect.js";
 
 export class CreateTournament extends HTMLElement {
     constructor() {
@@ -12,8 +12,13 @@ export class CreateTournament extends HTMLElement {
             <div class="settings-section">
 
                 <div class="itemContainer">
+
                     <div class="item">
-                        <h1>Tournament Name</h1>
+                        <custom-select id="nickname" label="Nickname"></custom-select>
+                    </div>
+                    <div style="height: 50px;"></div>
+                    <div class="item">
+                        <h2>Tournament Name</h2>
                         <div class="settingsform">
                             <input type="text" placeholder="Tournament Name...">
                         </div>
@@ -41,7 +46,8 @@ export class CreateTournament extends HTMLElement {
 
 
     get data() {
-        let apiData = {name: null, num_players: 0, access: false, password: null, owner: null};
+        let apiData = {nickname: null, name: null, num_players: 0, access: false, password: null, owner: null};
+
         const name = this.shadowRoot.querySelector(".item .settingsform input");
         if (name)
         {
@@ -53,6 +59,10 @@ export class CreateTournament extends HTMLElement {
             name.style.border = "1px solid aqua";
             apiData.name = name.value;
         }
+        const nickname = this.shadowRoot.querySelector("custom-select");
+        if (nickname)
+            apiData.nickname = nickname.value;
+
         apiData.access = this.shadowRoot.querySelector("visibillity-settings").access;
         if (!apiData.access)
             return null;
@@ -111,30 +121,6 @@ const cssContent = /*css*/`
     align-items: center;
 }
 
-.subitems {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    font-size: 16px;
-    height: calc(100% - 10px);
-    margin: 10px 5%;
-
-}
-
-.subitems .item h1 {
-    margin: 15px;
-    font-size: 24px;
-
-}
-.subitems .item .settingsform input {
-    font-family: 'Sansation';
-    max-width: 200px;
-    min-width: 100px;
-    width: auto;
-    height: 40px;
-    font-size: 16px;
-    padding-right: 10px;
-}
 
 .item h1 {
     min-width: 200px;
@@ -154,6 +140,7 @@ const cssContent = /*css*/`
     display: flex;
     gap: 20px;
 }
+
 .settingsform input {
     height: 100%;
     border-radius: 10px;
