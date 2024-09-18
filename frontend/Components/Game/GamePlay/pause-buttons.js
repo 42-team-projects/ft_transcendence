@@ -50,40 +50,41 @@ export class PauseButtons extends HTMLElement{
             else
                 document.body.dispatchEvent(new CustomEvent('exit-game'))
         })
-        this.addEventListener('mouseover', () => {
-            this.style.backgroundColor = '#00fffb90'
-            this.shadowRoot.querySelector('.child').style.backgroundColor = 'rgb(2 31 56 / 68%)'
-            const icon = this.shadowRoot.querySelector('slot[name="icon"]');
-            const text = this.shadowRoot.querySelector('slot[name="text"]');
-            const iconObject = icon.assignedElements()[0];
-            const textObject = text.assignedElements()[0];
+        const icon = this.shadowRoot.querySelector('slot[name="icon"]');
+        const text = this.shadowRoot.querySelector('slot[name="text"]');
+        const iconObject = icon.assignedElements()[0];
+        const textObject = text.assignedElements()[0];
+        iconObject.addEventListener('load', () => {
             const iconObjectContent = iconObject.contentDocument;
             const svg = iconObjectContent.querySelector('svg');
-            if(svg.getAttribute('fill') == 'none'){
-                iconObjectContent.querySelector('path').setAttribute('stroke', 'white');
+            let color = '#00fffb90';
+            if(textObject.textContent == 'EXIT'){
+                iconObjectContent.querySelector('path').setAttribute('stroke', 'red');
+                textObject.style.color = 'red';
+                color = 'red';
             }
-            else{
-                svg.setAttribute('fill', 'white');
-            }
-            textObject.style.color = 'white';
-        })
-        this.addEventListener('mouseout', () => {
-            this.style.backgroundColor = '#00fffb30'
-            this.shadowRoot.querySelector('.child').style.backgroundColor = '#021f38'
-            const icon = this.shadowRoot.querySelector('slot[name="icon"]');
-            const text = this.shadowRoot.querySelector('slot[name="text"]');
-            const iconObject = icon.assignedElements()[0];
-            const textObject = text.assignedElements()[0];
-            const iconObjectContent = iconObject.contentDocument;
-            const svg = iconObjectContent.querySelector('svg');
-            console.log(svg.getAttribute('fill'));
-            if(svg.getAttribute('fill') == 'none'){
-                iconObjectContent.querySelector('path').setAttribute('stroke', '#00fffb90');
-            }
-            else{
-                svg.setAttribute('fill', '#00fffb90');
-            }
-            textObject.style.color = '#00fffb90';
+            this.addEventListener('mouseover', () => {
+                this.style.backgroundColor = '#00fffb90'
+                this.shadowRoot.querySelector('.child').style.backgroundColor = 'rgb(2 31 56 / 68%)'
+                if(svg.getAttribute('fill') == 'none'){
+                    iconObjectContent.querySelector('path').setAttribute('stroke', 'white');
+                }
+                else{
+                    svg.setAttribute('fill', 'white');
+                }
+                textObject.style.color = 'white';
+            })
+            this.addEventListener('mouseout', () => {
+                this.style.backgroundColor = '#00fffb30'
+                this.shadowRoot.querySelector('.child').style.backgroundColor = '#021f38'
+                if(svg.getAttribute('fill') == 'none'){
+                    iconObjectContent.querySelector('path').setAttribute('stroke', color);
+                }
+                else{
+                    svg.setAttribute('fill', color);
+                }
+                textObject.style.color = color;
+            })
         })
     }
 }

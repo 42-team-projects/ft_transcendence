@@ -35,6 +35,30 @@ template.innerHTML = /*html */`
 	</footer>
 `;
 
+
+const exit = document.createElement('template');
+exit.innerHTML = /*html */`
+<style>
+	.exit {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		cursor: pointer;
+	}
+	.exitText {
+		font-size: 1.3rem;
+		font-weight: 500;
+	}
+	.exit object {
+		width: 40px;
+		transform: scaleX(-1)
+	}
+</style>
+	<div class="exit">
+		<object type="image/svg+xml" data="/images/exit.svg"></object>
+		<div class="exitText"> Exit </div>
+	</div>
+`;
 export class FooterBar extends HTMLElement {
 	constructor() {
 		super();
@@ -66,13 +90,28 @@ export class FooterBar extends HTMLElement {
 			});
 		});
 	}
-	setText(text) {
-		document.querySelector('.logoutText').innerText = text;
-	}
-	quitEventListener() {
-		document.querySelector('.logoutText').addEventListener('click', () => {
+	setExitEventListeners() {
+		document.querySelector('.logout').remove();
+		this.querySelector('footer').insertBefore(exit.content.cloneNode(true), this.querySelector('.display-errors'));
+		this.querySelector('.exit').addEventListener('click', () => {
 			router.handleRoute(window.location.pathname);
 		});
+		const icon = this.querySelector('object');
+		const text = this.querySelector('.exitText');
+		icon.addEventListener('load', () => {
+			const iconObjectContent = icon.contentDocument;
+			const path = iconObjectContent.querySelector('path');
+			path.setAttribute('stroke', 'white');
+			text.style.color = 'white';
+			this.querySelector('.exit').addEventListener('mouseover', () => {
+				path.setAttribute('stroke', 'red');
+				text.style.color = 'red';
+			})
+			this.querySelector('.exit').addEventListener('mouseout', () => {
+				path.setAttribute('stroke', 'white');
+				text.style.color = 'white';
+			})
+		})
 	}
 	remove() {
 		this.innerHTML = "";
