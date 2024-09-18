@@ -15,7 +15,6 @@ export function createTournamentWebSocket(tournament_id, data) {
         const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
         
         tournamentSocket.onopen = () => {
-            console.log('WebSocket connection of Tournament is opened');
             resolve(tournamentSocket);  // Resolve the promise when the connection is opened
         };
 

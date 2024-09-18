@@ -14,11 +14,9 @@ export async function getApiData(APIUrl) {
             Authorization: `Bearer ${accessToken}`,
         },
     });
-    console.log("GET response: ", response);
     if (!response.ok)
         return null;
     const apiData = await response.json();
-    // console.log("getApiData => apiData: ", apiData);
     return apiData;
 }
 
@@ -40,7 +38,6 @@ export async function createApiData(APIUrl, body) {
         },
         body: body,
     });
-    console.log("POST response: ", response);
     if (!response.ok)
         return null;
     return await response.json();
@@ -61,7 +58,6 @@ export async function updateApiData(APIUrl, body) {
         },
         body: body,
     });
-    console.log("PUT response: ", response);
     if (!response.ok)
         return null;
     return await response.json();
@@ -82,7 +78,6 @@ export async function deleteApiData(APIUrl) {
             "Content-Type": "application/json"
         }
     });
-    console.log("DELETE response: ", response);
     if (!response.ok)
         return null;
     return await response.json();
