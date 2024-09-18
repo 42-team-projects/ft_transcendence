@@ -60,7 +60,9 @@ import OAuth from "/Components/User/Oauth.js";
 import { ForgotPassword, ConfirmPassword } from "/Components/User/ForgotPassword.js";
 import { TwoFactorAuth } from "/Components/User/TwoFactorAuth.js";
 import { router } from "/root/Router.js"
+import { FooterBar } from "/Utils/FooterBar.js"
 
+customElements.define("footer-bar", FooterBar);
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);
