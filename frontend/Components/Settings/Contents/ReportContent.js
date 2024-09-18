@@ -39,16 +39,8 @@ export class ReportContent extends HTMLElement {
         let oldMessage = message.value;
         action.addEventListener("click", async () => {
             if (message.value && oldMessage != message.value) {
-                // put here send email logic.
-
-                const form = new FormData();
-
-                form.append("name", playerData.user.username);
-                form.append("email", playerData.user.email);
-                form.append("message", message.value);
-                const response = await createApiData(HOST + "/api/v1/auth/report/", form);
+                const response = await createApiData(HOST + "/api/v1/auth/report/",  JSON.stringify({name: playerData.user.username, email: playerData.user.email, message: message.value}));
                 console.log("report message: ", response);
-
             }
         });
     }
