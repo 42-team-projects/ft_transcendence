@@ -89,7 +89,8 @@ class UserNotificationConsumer(WebsocketConsumer):
                 notification = {
                     'sender': sender.id,
                     'receiver': UserSerializer(receiver).data,
-                    'content': data['message']
+                    'content': data['message'],
+                    'type': data['type']
                 }
                 self.broadcast_notification(notification)
 

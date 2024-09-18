@@ -5,6 +5,8 @@ import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { router } from "/root/Router.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { deleteApiData } from "/Utils/APIManager.js";
+import { removeNotification } from "/Components/Notification/NotificationUtils.js";
 
 export class GameNotification extends HTMLElement {
     constructor() {
@@ -37,6 +39,8 @@ export class GameNotification extends HTMLElement {
         messageOwner.textContent = sender.user.username;
         const playButton = this.querySelector(".notification-actions img");
         playButton.addEventListener("click", async (event) => {
+            removeNotification(this.id);
+            this.parentElement.remove();
             new Lobby(sender.id, 30);
         });
     }
