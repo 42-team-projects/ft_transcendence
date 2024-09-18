@@ -98,25 +98,16 @@ body::before{
     opacity: 0.25;
     z-index: -1;
 }
-footer{
-    grid-area: foter;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-.underbar{
-    
+
+body::after{
+    content: "";
     background: url(/images/bottom.svg);
-    background-position: center;
     background-size: contain;
+    background-position: center 96%;
     background-repeat: no-repeat;
-    position: absolute;
-    bottom: 50%;
     width: 100%;
     height: 100%;
+    position: absolute;
     opacity: 0.25;
     z-index: -1;
 }
@@ -184,19 +175,22 @@ game-over{
     flex-direction: column;
 }
 
-.logout{
-    position: absolute;
+footer-bar{
+    grid-area: foter;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+    /* position: absolute;
     display: flex;
     gap: 10px;
     margin-left: 1%;
     left: 0;
-    top: 0;
-    cursor: pointer;
-}
-.logout img{
+    top: 0; */
+footer-bar img{
     width: 30%;
 }
-.logoutText{
+footer-bar{
     color : white;
     font-size: 1.5rem;
 }
