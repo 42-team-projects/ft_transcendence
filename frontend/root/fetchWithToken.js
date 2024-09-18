@@ -26,7 +26,7 @@ export const fetchWithToken = async (url, options) => {
 };
 
 export const isTokenValid = async (access_token) => {
-    return await fetchWithToken(`${HOST}/api/v1/auth/verify/`, {
+    return fetchWithToken(`${HOST}/api/v1/auth/verify/`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${access_token}`
