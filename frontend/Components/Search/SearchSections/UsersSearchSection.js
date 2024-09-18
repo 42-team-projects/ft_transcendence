@@ -77,8 +77,8 @@ export class UsersSearchSection extends HTMLElement {
 
         playGame.addEventListener("click", async () => {
             const websocket = await getNotificationWebSocket();
-            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': playerData.user.id, 'is_signal': false, "type": "game", "data": "hello world"}));
-            new Lobby(playerData.user.id, 30);
+            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': playerData.user.id, 'is_signal': false, "type": "game", "data": ""}));
+            // new Lobby(playerData.user.id, 30);
         });
 
         chat.addEventListener("click", async () => {

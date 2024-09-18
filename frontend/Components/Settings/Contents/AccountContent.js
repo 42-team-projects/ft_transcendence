@@ -126,6 +126,7 @@ export class AccountContent extends HTMLElement {
                 // const logoutResponse = await createApiData(HOST + "/api/v1/auth/logout/", "");
                 if (logoutResponse) {
                     const response = await deleteApiData(PROFILE_API_URL + "me/");
+                    // add request to /logout
                     if (response) {
                         customAlert.remove();
                         alertsConrtainer.style.display = "none";
