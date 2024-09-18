@@ -45,19 +45,10 @@
     right: 0;
     bottom: 26.5%;
 }
-.multiPlayer{
-    transform: translateY(-20px);
-    grid-area : multiple;
-}
 .online{
     grid-area : online;
     display: flex;
     align-items: center;
-}
-
-.multiPlayer img {
-    margin-top: 7rem;
-    width: 100%;
 }
 
 .online img{

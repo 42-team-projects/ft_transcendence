@@ -1,13 +1,15 @@
-const MultiPlayerTemplate = document.createElement('template')
+import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
 
-MultiPlayerTemplate.innerHTML = /*html*/ `
+const OflineGameTemplate = document.createElement('template')
+
+OflineGameTemplate.innerHTML = /*html*/ `
 	<link rel="stylesheet" href="/Components/Game/GamePlay/GameOfline/GameOfline.css">
 	<img loading="lazy" class="BlueCartImg" src="/images/BlueCart/multi-playerImg.svg" alt="BlueImg">
 	<img loading="lazy" class="BlueCart" src="/images/BlueCart/GameOfline.svg" alt="Blue">
 	<div class="shapes2-3">
 		<div class="shapes4-5">
 			<div class="text">
-				<h1>MULTI PLAYER</h1>
+				<h1>OFLINE GAME</h1>
 			</div>
 			<div class="M-buttonC">
 				<p>
@@ -21,14 +23,23 @@ MultiPlayerTemplate.innerHTML = /*html*/ `
 	</div>
 	`
 
-export class MultiPlayer extends HTMLElement{
+export class OflineGame extends HTMLElement{
 
 	constructor (){
 		super();
 		this.attachShadow({mode:'open'})
-		this.shadowRoot.appendChild(MultiPlayerTemplate.content.cloneNode(true))
+		this.shadowRoot.appendChild(OflineGameTemplate.content.cloneNode(true))
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
+		const button = this.shadowRoot.querySelector('c-button')
+		button.addEventListener('click', ()=>{
+			const lobby = new Lobby();
+            setTimeout(() => {
+                lobby.playeGame('offline', '', false)
+            }, 1000);
+			// const game = document.querySelector('game-play')
+			// game.MultiPlayer()
+		})
 		setTimeout(() => {
 			this.classList.toggle('opacity-0', false)
 			this.classList.toggle('opacity-1', true)

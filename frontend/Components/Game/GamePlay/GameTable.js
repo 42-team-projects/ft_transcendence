@@ -35,53 +35,56 @@ let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
 
 export class GameTable extends HTMLElement {
-    constructor(room_name, game_play, save) {
+    constructor(state, room_name, game_play, save) {
         super();
-        this.save_match = save;
-        this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
+        this.state = state;
+        if(this.state !== "offline"){
 
-        this.socket.onopen = () => {
-            console.log("connected 1");
-        };
-
-        this.socket.onclose = () => {
-            console.log("closed 1");
-            if(this.Loop_state === true){
-                score.player = 5;
-                score.opponent = 0;
-                this.GameOver("win", score.player, score.opponent, opponentInfo.id);
-            }
-        };
-
-        this.socket.onerror = (error) => {
-            console.log("error", error);
-        };
-
+            this.save_match = save;
+            document.body.querySelector("footer-bar").remove();
+            this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
+            
+            this.socket.onopen = () => {
+            };
+            
+            this.socket.onclose = () => {
+                if(this.Loop_state === true){
+                    score.player = 5;
+                    score.opponent = 0;
+                    this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+                }
+            };
+            
+            this.socket.onerror = (error) => {
+            };
+        }
         this.racquet = { width: 8, height: 110 };
         this.player = {
             x: 0,
             y: CANVAS_HEIGHT / 2,
-            color: game_play.first_racket_color,
+            color: game_play.first_racket_color ? game_play.first_racket_color : '#FF0000',
         };
         this.opponent = {
             x: CANVAS_WIDTH - this.racquet.width,
             y: CANVAS_HEIGHT / 2,
-            color: game_play.second_racket_color,
+            color: game_play.second_racket_color ? game_play.second_racket_color : '#FF0000',
         };
-        this.ball_color = game_play.ball_color;
+        this.ball_color = game_play.ball_color ? game_play.ball_color : 'white';
         this.round = 1;
         this.room_name = room_name;
         this.requestID = null;
-        gameBard(game_page.content.querySelector("svg"), game_play.board_color);
+        gameBard(game_page.content.querySelector("svg"), game_play.board_color ? game_play.board_color : '#FF0000');
         this.appendChild(game_page.content.cloneNode(true));
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
         this.pause = false;
-        // document.addEventListener('visibilitychange', (event)=>{
-        //     this.socket.send(JSON.stringify({'status': 'pause'}))
-        // })
+
     }
     async connectedCallback() {
+        if (this.state === "offline") {
+            this.roundStart({ round: 1 });
+            return;
+        }
         document.body.addEventListener("pause-game", () => {
             this.pauser = true;
             this.socket.send(
@@ -124,6 +127,8 @@ export class GameTable extends HTMLElement {
     roundStart = async (message) => {
         this.luanching = true;
         this.round = message.round;
+        const launch = document.body.querySelector("launching-game");
+        if (launch) launch.remove();
         await this.resetGame();
     };
     gameEnd = async (player_1, player_2) => {
@@ -168,7 +173,6 @@ export class GameTable extends HTMLElement {
     };
     pauseGame = (message) => {
         this.pause = true;
-        console.log("pause");
         document.body
             .querySelector(".Play_Pause")
             .querySelector(".status").textContent = "PAUSED";
@@ -177,7 +181,6 @@ export class GameTable extends HTMLElement {
     resumeGame = () => {
         this.pause = false;
         this.pauser = false;
-        console.log("Resume");
         document.body
             .querySelector(".Play_Pause")
             .querySelector(".status").textContent = "PAUSE";
@@ -190,7 +193,6 @@ export class GameTable extends HTMLElement {
             const player_1 = message.player_1;
             const player_2 = message.player_2;
             const status = message.status;
-            // console.log('message', message);
             if (status === "game_start") this.gameStart();
             else if (status === "RoundOver")
                 await this.roundOver(player_1, player_2);
@@ -247,7 +249,12 @@ export class GameTable extends HTMLElement {
     
     async GameOver(playerState, score, opponent_score, opponent_player){
         this.Loop_state = false;
-        // console.log("this.id: ", this.id);
+        const Pause = document.body.querySelector("pause-page");
+        const game_over = document.body.querySelector("game-over");
+        const Launching = document.body.querySelector("launching-game");
+        if (Launching) Launching.remove();
+        if (game_over) game_over.remove();
+        if (Pause) Pause.remove();
         if (this.id && this.id !== "undefined")
             await goNextStage(
                 playerState,
@@ -268,19 +275,15 @@ export class GameTable extends HTMLElement {
             else
                 form.append('loss', 1);
             const updateResponse =  await updateApiData(PROFILE_API_URL + "me/stats/", form);
-            console.log("GameOver updateApiData response: ", updateResponse);
 
 
             const response = await createApiData(HOST + '/game/game_history/me/', body);
-            console.log("GameOver createApiData response: ", response);
         }
-        //redirect to last url in hesory
         setTimeout(() => {
             this.remove();
         }, 5000);
     }
     async LuncheGame(ctx) {
-        // console.log('lunching');
         document.body
             .querySelector("game-header")
             .classList.toggle("blur", true);
@@ -289,7 +292,6 @@ export class GameTable extends HTMLElement {
             .classList.toggle("blur", true);
         if (this.luanching === false) return;
         let RoundTime = 3;
-        // console.log('lunchiiiiiiiiiiiiiiiiiiiiiiiiiing');
         const LunchingGame = new LaunchingGame(RoundTime, this.round);
         document.body.appendChild(LunchingGame);
         const Lunching = setInterval(() => {
@@ -351,7 +353,7 @@ export class GameTable extends HTMLElement {
         removeEventListener("keyup", (event) => {
             this.resetMove(event, this.getKeys());
         });
-        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 0, 0);
+        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 10, 7);
         this.updatePlayerPosition(CANVAS_HEIGHT / 2);
         this.updateOpponentPosition(CANVAS_HEIGHT / 2);
         this.Loop_state = true;
@@ -363,7 +365,7 @@ export class GameTable extends HTMLElement {
         const player = this.getPlayerPosition();
         const opponent = this.getOpponentPosition();
         this.requestID = requestAnimationFrame(() => this.gameLoop(ctx));
-        await this.movePlayer(this.getKeys(), player);
+        await this.movePlayer(this.getKeys(), player, opponent);
         await this.moveBall(player, opponent, ctx);
         await this.renderBall(ctx);
         await this.RanderRackit(ctx, player);
@@ -371,7 +373,6 @@ export class GameTable extends HTMLElement {
         if (this.Loop_state === false) await this.resetGame();
     }
     async runder() {
-        // console.log('rendering');
 
         const container = game_page.querySelector(".table_container");
         const canvas = this.querySelector("#table");
@@ -384,44 +385,50 @@ export class GameTable extends HTMLElement {
         await this.LuncheGame(ctx);
     }
     async RoundOver() {
-        // this.Loop_state = false;
         document.querySelector("game-header").updateScore(score);
     }
+    
     async moveBall(player, opponent, ctx) {
         if (this.pause === true) return;
         let { x, y, radius, dx, dy } = this.getCoordonates();
-        // console.log(this.getCoordonates());
+        let stop = false;
         if (y + radius + dy >= CANVAS_HEIGHT || y - radius + dy <= 0) dy = -dy;
-        if (
-            x + radius + dx >= opponent.x &&
-            y >= opponent.y &&
-            y <= opponent.y + opponent.height
-        )
+        if (x + radius + dx >= opponent.x && y >= opponent.y && y <= opponent.y + this.racquet.height)
             dx = -dx;
-        if (
-            x - radius + dx <= player.x + player.width &&
-            y >= player.y &&
-            y <= player.y + player.height
-        )
+        else if (this.state === "offline" && x + radius + dx >= CANVAS_WIDTH) {
+            score.player++;
+            stop = true;
+        }
+        if (x - radius + dx <= player.x + this.racquet.width && y >= player.y && y <= player.y + this.racquet.height)
             dx = -dx;
+        else if ( this.state === "offline" && x - radius + dx <= 0)
+        {
+            score.opponent++;
+            stop = true;
+        }
         x += dx;
         y += dy;
-        // dx = dx + 0.1;
-        // dy = dy + 0.1;
-        // console.log(dx, dy);
         this.setCoordonates(x, y, radius, dx, dy);
-
-        //round over reset coordonates and update score
-        // if(x - 10 + dx <= 0)
-        // {
-        //     score.opponent++;
-        //     this.RoundOver(ctx);
-        // }
-        // if(x + 10 + dx >= CANVAS_WIDTH)
-        // {
-        //     score.player++;
-        //     this.RoundOver(ctx);
-        // }
+        if ( this.state === "offline" ) {
+            if(stop === true){
+                if (this.round > 2) {
+                    this.RoundOver(ctx);
+                    this.loop_state = false;
+                    this.luanching = false;
+                    if (score.player > score.opponent) {
+                        this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+                    }
+                    else {
+                        this.GameOver("loss", score.player, score.opponent, opponentInfo.id);
+                    }
+                }
+                else {
+                    this.RoundOver(ctx);
+                    this.round++;
+                    this.roundStart({ round: this.round });
+                }
+            }
+        }
     }
 
     setMove = (event, keys) => {
@@ -432,9 +439,10 @@ export class GameTable extends HTMLElement {
         if (event.key === "s" || event.key === "S") {
             keyS = true;
         }
-        // if(event.key === 'ArrowUp') { keyArrowUp = true };
-        // if(event.key === 'ArrowDown') { keyArrowDown = true };
-
+        if(this.state === "offline"){
+            if(event.key === 'ArrowUp') { keyArrowUp = true };
+            if(event.key === 'ArrowDown') { keyArrowDown = true };
+        }
         this.setKeys(keyS, keyW, keyArrowUp, keyArrowDown);
     };
     resetMove = (event, keys) => {
@@ -446,13 +454,16 @@ export class GameTable extends HTMLElement {
         if (event.key === "s" || event.key === "S") {
             keyS = false;
         }
-        // if(event.key === 'ArrowUp') { keyArrowUp = false };
-        // if(event.key === 'ArrowDown') { keyArrowDown = false };
+        if(this.state === "offline") {
+
+            if(event.key === 'ArrowUp') { keyArrowUp = false };
+            if(event.key === 'ArrowDown') { keyArrowDown = false };
+        }
 
         this.setKeys(keyS, keyW, keyArrowUp, keyArrowDown);
     };
 
-    async movePlayer(keys, player) {
+    async movePlayer(keys, player,  opponent) {
         const { keyW, keyS, keyArrowUp, keyArrowDown } = keys;
         if (keyW === true) {
             this.moveUp(player);
@@ -460,13 +471,20 @@ export class GameTable extends HTMLElement {
         if (keyS === true) {
             this.moveDown(player);
         }
-        // if(keyArrowUp === true) { this.moveUp(opponent) };
-        // if(keyArrowDown === true) { this.moveDown(opponent) };
+        this.updatePlayerPosition(player.y);
+        if(opponent === undefined) return;
+        if(keyArrowUp === true) { this.moveUp(opponent) };
+        if(keyArrowDown === true) { this.moveDown(opponent) };
+        this.updateOpponentPosition(opponent.y);
     }
 
     moveDown(player) {
         let y = player.y;
         if (y + this.racquet.height <= CANVAS_HEIGHT) y += 10;
+        if (this.state === "offline") {
+            player.y = y;
+            return;
+        }
         const message = {
             message: "move",
             y: y,
@@ -477,6 +495,10 @@ export class GameTable extends HTMLElement {
     moveUp(player) {
         let y = player.y;
         if (y >= 0) y -= 10;
+        if (this.state === "offline") {
+            player.y = y;
+            return;
+        }
         const message = {
             message: "move",
             y: y,
@@ -484,20 +506,24 @@ export class GameTable extends HTMLElement {
         this.socket.send(JSON.stringify(message));
     }
     disconnectedCallback() {
-        this.socket.onclose = () => {
-            console.log("closed 2");
-        };
-        if (this.socket.readyState === 1)
-            this.socket.close();
+        const Pause = document.body.querySelector("pause-page");
+        const GameOver = document.body.querySelector("game-over");
+        const Launching = document.body.querySelector("launching-game");
+        if (Launching) Launching.remove();
+        if (GameOver) GameOver.remove();
+        if (Pause) Pause.remove();
+        if (this.state !== "offline") {
+            this.socket.onclose = () => {
+            };
+            if (this.socket.readyState === 1)
+                this.socket.close();
+        }
         if(this.loop_state === true){
             score.player = 5;
             score.opponent = 0;
             this.GameOver("win", score.player, score.opponent, opponentInfo.id);
         }
-        const pause = document.body.querySelector("pause-page");
-        if (pause) pause.remove();
         router.handleRoute(window.location.pathname);
         router.randring();
-        document.body.querySelector("game-over").remove();
     }
 }
