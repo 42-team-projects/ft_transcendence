@@ -45,16 +45,12 @@ export function createTournamentWebSocket(tournament_id, data) {
 
 export async function createWebSocketsForTournaments() {
     const tournamentsAPIData = await get_tournaments_by_player_id();
-    // console.log("tournamentsAPIData: ", tournamentsAPIData);
     if (!tournamentsAPIData)
         return;
     for (let index = tournamentsAPIData.length - 1; index >= 0; index--)
     {
         if (!webSocketIdQueue.includes(tournamentsAPIData[index].tournament_id)) {
             initWebSocket(tournamentsAPIData[index]);
-            // const start_date = await get_start_date(tournamentsAPIData[index].tournament_id);
-            // if (start_date)
-            //     displayAlert("", tournamentsAPIData[index]);
         }
     }
 }
@@ -99,8 +95,6 @@ export function getWebSocketByTournamentId(tournament_id) {
     return null;
 }
 
- // 2 minutes in seconds
-
  
 let totalCountdownTime = 30;
 
@@ -110,14 +104,9 @@ let totalCountdownTime = 30;
     const parsedStartDate = new Date(start_date);
     // Calculate the difference in milliseconds
     const timeDifference = currentDate - parsedStartDate;
-    console.log("Current date:", currentDate);
-    console.log("parsedStartDate date:", parsedStartDate);
     // Convert the difference from milliseconds to seconds
     let timespent = Math.floor(timeDifference / 1000);
-    console.log("\ntimespent:    ", timespent);
-    // 60  + 10
     timeLeft = totalCountdownTime - timespent;
-    console.log("\ntimeLeft ===>    ", timeLeft);
     if (timeLeft < 0) {
         countdownInterval = -1;
         return ;
@@ -127,8 +116,6 @@ let totalCountdownTime = 30;
 
 async function displayAlert(message, data) {
     data = await getTournamentData(data.tournament_id); // use uuid instead of primary id key
-    
-    // console.log("tournamentSocket.onmessage.data : ", response);
 
     const alertsConrtainer = window.document.querySelector("body .alerts");
     alertsConrtainer.style.display = "flex";
@@ -161,31 +148,17 @@ async function displayAlert(message, data) {
         alertsConrtainer.innerHTML = '';
     }
 
-    // let timeLeft = await countDownTimer(start_date);
     customAlert.querySelector("#playBtn").addEventListener("click", async () => {
-        // console.log("\ntimeLeft in playBtn ===>    ", timeLeft);
-        // console.log("\ndata ==>  ", data);
         const playerIds = data.players.map(player => player.id);
-        // console.log("\nplayerIds ==> ", playerIds);
         const totalPlayers = playerIds.length;
         const pId = await getCurrentPlayerId();
-        // console.log("\npId ==> ", pId);
 
         
         const opponentId = findOpponentId(pId, playerIds, totalPlayers);
-        // console.log("opponentId:    ", opponentId);
-        // console.log("playertId:    ", pId);
 
         /* -------   start call nordine code here -------- */
         if (opponentId) {
-            // closeWebSocket(data.tournament_id); // new
             clearInterval(countdownInterval);
-
-            console.log("\n============\n");
-            console.log("\nplayerID:     ", pId, "opponentId:    ", opponentId);
-            console.log("\n============\n");
-
-            console.log("time ===> ", timeLeft);
             const lobby = new Lobby(opponentId, timeLeft);
             lobby.id = "tournament_lobby";
             lobby.tournament_id = data.tournament_id;
@@ -216,82 +189,11 @@ async function displayAlert(message, data) {
 export async function closeAndRemovePlayerFromTournament(tournament_id) {
     try {
         await player_leave_tournament(tournament_id);
-        // Close the WebSocket connection
         await closeWebSocket(tournament_id);
     } catch (error) {
         console.error('Error of player leave tournament: ', error);
     }
 }
-
-/**
- * 
- * @author rida
- */
-
-// export async function CheckTournamentStages(data, tournamentSocket)
-// {
-//     if(data.number_of_players == data.players.length || !data.can_join)
-//     {
-//         let nextStage = false;
-//         if (data.number_of_players != data.players.length && data.number_of_players % data.players.length == 0)
-//             nextStage = true;
-//         await update_start_date(data, nextStage);
-//         tournamentSocket.send(JSON.stringify({'type': 'play_cancel', 'message': 'Tournament is starting in 2 minutes'}));
-//     }
-// }
-
-// export async function initTournamentWebSocket(data) {
-//     const tournamentSocket = createTournamentWebSocket(data.tournament_id);
-//     let timeAppend = 86400;
-//     if (data.number_of_players % data.players.length == 0)
-//         timeAppend = 0;
-//     await update_start_date(data, timeAppend);
-//     tournamentSocket.send(JSON.stringify({'type': 'play_cancel', 'message': 'Tournament is starting in 2 minutes'}));
-// }
-
-// export function createTournamentWebSocket(tournament_id) {
-//     // TODO: Tournament Alert
-//     const tournament_id = data.tournament_id;
-//     const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
-//     tournamentSocket.onopen = async () => {
-//         console.log('WebSocket connection of Tournament is opened');
-//         // await CheckTournamentStages(data, tournamentSocket);
-//     };
-
-//     tournamentSocket.onmessage = (e) => { 
-//         const lobby = document.querySelector("root-content #tournament_lobby");
-//         if (!lobby)
-//             displayAlert(e, data);
-//     };
-
-//     tournamentSocket.onclose = () => { console.log('WebSocket connection of tournament closed'); };
-
-//     tournamentSocket.onerror = (error) => {console.error('WebSocket tournament error:', error);};
-
-//     return tournamentSocket;
-// }
-
-// export function useWebsocket(data) {
-//     // TODO: Tournament Alert
-//     const tournament_id = data.tournament_id;
-//     const tournamentSocket = new WebSocket(`${wsUrl}tournament/` + tournament_id + '/');
-//     tournamentSocket.onopen = async () => {
-//         console.log('WebSocket connection of Tournament is opened');
-//         // await CheckTournamentStages(data, tournamentSocket);
-//     };
-
-//     tournamentSocket.onmessage = (e) => { 
-//         const lobby = document.querySelector("root-content #tournament_lobby");
-//         if (!lobby)
-//             displayAlert(e, data);
-//     };
-
-//     tournamentSocket.onclose = () => { console.log('WebSocket connection of tournament closed'); };
-
-//     tournamentSocket.onerror = (error) => {console.error('WebSocket tournament error:', error);};
-
-//     return tournamentSocket;
-// }
 
  export async function update_start_date(data, timeAppend) {
     try {
@@ -316,8 +218,6 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
             console.log(JSON.stringify(responseData, null, 2));
             throw new Error(`${response.status}  ${responseData.statusText}`);
         }
-        // const responseData = await response.json();
-        // console.log("responseData: ", responseData);
     } catch(error) {
         console.error('Error of update start date: ', error);
     }
@@ -332,8 +232,6 @@ async function get_start_date(tournamentId) {
             throw new Error(`${response.status}  ${response.statusText}`);
         }
         const data = await response.json();
-        // console.log(data.start_date);
-        // console.log(JSON.stringify(data, null, 2));
         return data.start_date;
     } catch(error) {
         console.error('Error of tournament list: ', error);
@@ -354,19 +252,8 @@ async function getTournamentData(tournament_id) {
     }
 }
 
-// async function get_players_ids(tournament_id) {
-
-//     const tournamentData = await getTournamentData(); // Function to get tournament data
-//     console.log(JSON.stringify(tournamentData, null, 2));
-
-//     const playerIds = tournamentData.players.map(player => player.id); // Extract sorted player IDs
-//     console.log(playerIds);
-//     return playerIds;
-// }
-
 function findOpponentId(playerId, playerIds, totalPlayers)
 {
-    // 3 - 1 => 2   | 2 => [1] ==> 2 - 1 = [1]
     console.log("\nplayerIds ==> ", playerIds);
     console.log("\ntotalPlayers ==> ", totalPlayers);
     console.log("\nplayerId ==> ", playerId);
@@ -383,7 +270,6 @@ function startCountdown(cDownContainer, tournament_id) {
     if (countdownInterval)
         clearInterval(countdownInterval);
     countdownInterval = setInterval(function() {
-        // console.log("timeLeft in startCountdown function: ", timeLeft);
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
         cDownContainer.innerHTML = `${minutes} : ${seconds < 10 ? '0' + seconds : seconds}`;
@@ -401,10 +287,7 @@ function startCountdown(cDownContainer, tournament_id) {
             const alertsConrtainer = window.document.querySelector("body .alerts");
             alertsConrtainer.style.display = "none";
             alertsConrtainer.innerHTML = '';
-            // Add logic to start the tournament here
         }
-
-
         timeLeft--;
     }, 1000);
 }
