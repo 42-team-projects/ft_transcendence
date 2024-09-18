@@ -1,4 +1,7 @@
-import {isTokenValid} from '/root/fetchWithToken.js'
+import { updateApiData } from '/Utils/APIManager.js';
+import { PROFILE_API_URL } from '/Utils/GlobalVariables.js';
+import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
+import { HOST } from '/Utils/GlobalVariables.js';
 
 export class Router {
 
@@ -70,6 +73,7 @@ export class Router {
             const isValid = await isTokenValid(access_token);
             if (isValid) {
                 this.renderNotificatonAndFriendList();
+                await updateApiData(PROFILE_API_URL + "online/", "");
 
                 if(this.randred === false)
                     this.randring();
@@ -82,7 +86,7 @@ export class Router {
                         this.sideBar.clickEvent = index;
                     }
                 });
-                if (path === "/Profile/me")
+                if (path.includes("/Profile"))
                 {
                     if(this.sideBar.activeButton && this.sideBar.activeButton.classList.length)
                     {
@@ -117,7 +121,6 @@ export class Router {
         this.addLinkEventListeners();
 
         // tmp place should be in function and called somewhere
-        
     }
 
     addLinkEventListeners() {

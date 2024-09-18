@@ -112,12 +112,12 @@ export class ProfileContent extends HTMLElement {
                 linksList = list.length;
                 Array.from(list).forEach(async (item) => {
                     item.player = currentPlayerId;
-                    const res = await createApiData(PROFILE_API_URL + "me/links/", JSON.stringify(item));
-                    if (!res) {
+                    const response = await createApiData(PROFILE_API_URL + "me/links/", JSON.stringify(item));
+                    const res = await response.json();
+                    if (!res.ok)
                         displayToast("error", "somethings wrong happen!!!");
-                        return ;
-                    }
-                    displayToast("success", res.message);
+                    else
+                        displayToast("success", res.message);
                 });
             }
             

@@ -129,7 +129,6 @@ export class AccountContent extends HTMLElement {
                     },
                     credentials: 'include'
                 });
-                // const logoutResponse = await createApiData(HOST + "/api/v1/auth/logout/", "");
                 if (logoutResponse) {
                     const response = await deleteApiData(PROFILE_API_URL + "me/");
                     // add request to /logout
