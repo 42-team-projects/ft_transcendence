@@ -2,7 +2,7 @@ import { fetchWithToken, isTokenValid } from "/root/fetchWithToken.js"
 
 export async function getApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken || !isTokenValid(accessToken)) {
+    if (!accessToken || !(await isTokenValid(accessToken))) {
         console.log("Access token is missing.");
         return null;
     }
@@ -25,7 +25,7 @@ export async function getApiData(APIUrl) {
 export async function createApiData(APIUrl, body) {
     
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken || !isTokenValid(accessToken)) {
+    if (!accessToken || !(await isTokenValid(accessToken))) {
         console.log("Access token is missing.");
         return null;
     }
@@ -44,7 +44,7 @@ export async function createApiData(APIUrl, body) {
 
 export async function updateApiData(APIUrl, body) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken || !isTokenValid(accessToken)) {
+    if (!accessToken || !(await isTokenValid(accessToken))) {
         console.log("Access token is missing.");
         return null;
     }
@@ -64,7 +64,7 @@ export async function updateApiData(APIUrl, body) {
 
 export async function deleteApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken || !isTokenValid(accessToken)) {
+    if (!accessToken || !(await isTokenValid(accessToken))) {
         console.log("Access token is missing.");
         return null;
     }
