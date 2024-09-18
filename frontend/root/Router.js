@@ -1,5 +1,4 @@
-import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
-import { HOST } from '/Utils/GlobalVariables.js';
+import {isTokenValid} from '/root/fetchWithToken.js'
 
 export class Router {
 
@@ -20,23 +19,21 @@ export class Router {
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
-            // { path: '/usr/share/nginx/html/artifacts/contracts/TournamentScores.sol/TournamentScores.json', view: 'profile-component', isAccessed: true },
         ];
         this.randred = false;
         this.rootContent = document.querySelector("root-content");
         this.header = document.querySelector("header-bar");
         this.sideBar = document.querySelector("side-bar");
+        this.footerBar = document.querySelector("footer-bar");
         this.handleRoute(window.location.pathname);
     }
     randring(){
         this.removeRandring();
         document.body.classList = 'body-default-shrink'
-        // setTimeout(() => {
-            this.header.render()
-            this.sideBar.render()
-            this.randred = true;
-        // }, 1000);
-
+        this.header.render()
+        this.sideBar.render()
+        this.footerBar.render()
+        this.randred = true;
     }
     profileRandring(){
         const profile = header.querySelector('c-profile')
@@ -63,6 +60,7 @@ export class Router {
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()
+        this.footerBar.remove()
         this.randred = false;
     }
     
@@ -115,29 +113,7 @@ export class Router {
         this.addLinkEventListeners();
 
         // tmp place should be in function and called somewhere
-        let logout = document.querySelector('.logout')
-        logout.addEventListener('click', () => {
-            fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                },
-                credentials: 'include'
-            })
-            .then(response => {
-                if (response.ok) {
-                    localStorage.removeItem('accessToken');
-                    this.handleRoute('/login')
-                } else {
-                    response.json().then(errorData => {
-                        console.error('Logout failed:', errorData);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('catch ->', error);
-            });
-        });
+        
     }
 
     addLinkEventListeners() {
