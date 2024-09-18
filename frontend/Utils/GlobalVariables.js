@@ -128,6 +128,7 @@ export function handleSignals(signalData) {
             // url = new URL(HOST + signalData.sender);
             // if (window.location.pathname === url.pathname)
             //     return ;
+            console.log("heyyyyyyyyy =>");
             const messageNotification = createNotification(signalData.id, signalData.sender, signalData.content, "message", signalData.data);
             displayNotification(messageNotification);
         default:
