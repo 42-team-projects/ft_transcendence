@@ -270,7 +270,7 @@ export class GameTable extends HTMLElement {
             const updateResponse =  await updateApiData(PROFILE_API_URL + "me/stats/", form);
             await updateCurrentPlayer();
 
-            const response = await createApiData(HOST + '/game/game_history/me/', body);
+            await createApiData(HOST + '/game/game_history/me/', body);
         }
         //redirect to last url in hesory
         setTimeout(() => {

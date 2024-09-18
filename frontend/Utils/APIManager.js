@@ -38,9 +38,7 @@ export async function createApiData(APIUrl, body) {
         },
         body: body,
     });
-    if (!response.ok)
-        return null;
-    return await response.json();
+    return response;
 
 }
 
