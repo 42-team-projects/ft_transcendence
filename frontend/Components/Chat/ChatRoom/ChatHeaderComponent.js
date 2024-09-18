@@ -4,6 +4,7 @@ import { router } from "/root/Router.js";
 import { HOST, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
 import { createApiData, deleteApiData } from "/Utils/APIManager.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export class ChatHeaderComponent extends HTMLElement {
     constructor () {
@@ -52,11 +53,18 @@ export class ChatHeaderComponent extends HTMLElement {
                 const blockResponse = await deleteApiData(HOST + "/friend/unblock/" + this.userId + "/");
                 if (blockResponse)
                     router.handleRoute(window.location.pathname);
+                displayToast("success", "unblock player " + this.userName);
                 return;
             }
             const blockResponse = await createApiData(HOST + "/friend/block/" + this.userId + "/", "");
-            if (blockResponse)
+            const res = await blockResponse.json();
+            if (blockResponse.ok) {
+                displayToast("success", res.response);
                 router.handleRoute(window.location.pathname);
+            }
+            else
+                displayToast("error", res.response);
+
         })
 
 

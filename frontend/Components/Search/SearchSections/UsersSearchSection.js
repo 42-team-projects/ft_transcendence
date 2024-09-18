@@ -5,6 +5,7 @@ import { router } from "/root/Router.js";
 import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
 import { createApiData } from "/Utils/APIManager.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export class UsersSearchSection extends HTMLElement {
     constructor() {
@@ -57,7 +58,6 @@ export class UsersSearchSection extends HTMLElement {
                 <h4>${playerData.user.username}</h4>
             </div>
             <div class="search-actions">
-                <img id="chat" src="${playerData.is_friend ? "/assets/icons/chat-icon.svg" : "/assets/icons/add-friends-icon.svg"}" class="read-message" width="24px" height="24px"></img>
                 <img id="play-game" src="/assets/icons/manette-icon.svg" class="read-message" width="24px" height="24px"></img>
                 <a id="show-profile" href="/Profile/${playerData.user.username}">
                     <img src="/assets/icons/account-icon.svg" class="read-message" width="24px" height="24px"></img>
@@ -81,19 +81,27 @@ export class UsersSearchSection extends HTMLElement {
             // new Lobby(playerData.user.id, 30);
         });
 
-        chat.addEventListener("click", async () => {
-            if (playerData.is_friend) {
-                const url = new URL(HOST + "/Chat/" + playerData.user.username);
-                router.handleRoute(url.pathname);
-                return ;
-            }
-            const sendRequestResponse = await createApiData(HOST + "/friend/send/" + playerData.user.id + "/", "");
-            if (sendRequestResponse.response) {
-                const websocket = await getNotificationWebSocket();
-                websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': playerData.user.id, 'is_signal': false, "type": "friend", "data": "hello world"}));
-            }
+        // chat.addEventListener("click", async () => {
+        //     if (playerData.is_friend) {
+        //         const url = new URL(HOST + "/Chat/" + playerData.user.username);
+        //         router.handleRoute(url.pathname);
+        //         return ;
+        //     }
+        //     const sendRequestResponse = await createApiData(HOST + "/friend/send/" + playerData.user.id + "/", "");
 
-        });
+        //     const res = await sendRequestResponse.json();
+
+        //     if (sendRequestResponse.ok) {
+        //         const notificationWS = await getNotificationWebSocket();
+        //         notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
+        //         chat.src = "/assets/icons/wait-time-icon.svg";
+        //         displayToast("success", res.response);
+        //     }
+        //     else
+        //         displayToast("error", res.response);
+
+
+        // });
         return item;
     }
 

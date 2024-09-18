@@ -1,3 +1,4 @@
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 import { createApiData, deleteApiData } from "/Utils/APIManager.js";
 import { getNotificationWebSocket, HOST } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
@@ -121,23 +122,30 @@ export class ProfileInfoComponent extends HTMLElement {
     
     async connectedCallback() {
         const addFriend = this.shadowRoot.querySelector(".add-friend img");
-        // const currentPlayerId = await getCurrentUserId();
-        // if (this.id === currentPlayerId)
-        //     addFriend.remove();
         addFriend.addEventListener("click", async () => {
             if (addFriend.id === "friend") {
                 const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
-                if (sendRequestResponse) {
-                    const notificationWS = await getNotificationWebSocket();
-                    notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
+                const res = await sendRequestResponse.json();
+
+                
+                if (sendRequestResponse.ok) {
                     addFriend.src = "/assets/icons/wait-time-icon.svg";
+                    const notificationWS = await getNotificationWebSocket()
+                    if (notificationWS.readyState === WebSocket.OPEN) {
+                        notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
+                        displayToast("success", res.response);
+                    } else {
+                        console.error('WebSocket is not open. readyState = ' + notificationWS.readyState);
+                    };
                 }
+                else
+                    displayToast("error", res.response);
             }
             else {
                 const unfriendResponse = await deleteApiData(HOST + "/friend/unfriend/" + this.id + "/");
                 if (unfriendResponse) {
-                    addFriend.src = "/assets/icons/wait-time-icon.svg";
-                    console.log("unfriend unfriend ..... :", unfriendResponse);
+                    addFriend.src = "/assets/images/profile/add-friends-icon.svg";
+                    displayToast("success", "your unfriended " + this.username);
                 }
             }
         });
