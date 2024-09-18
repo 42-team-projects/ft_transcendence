@@ -91,7 +91,7 @@ export class JoinTournament extends HTMLElement {
                 const value = nicknameContainer.querySelector("custom-select").value;
                 if (value && value.length > 1) {
                     const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": tournamentData.tournament_id}));
-                    if (setNicknameResponse) {
+                    if (setNicknameResponse.ok) {
                         await this.addPlayerToTournament(tournamentData);
                         nicknameContainer.remove();
                         alertsConrtainer.style.display = "none";

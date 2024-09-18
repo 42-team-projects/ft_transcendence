@@ -1,3 +1,5 @@
+import { updateApiData } from '/Utils/APIManager.js';
+import { PROFILE_API_URL } from '/Utils/GlobalVariables.js';
 import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
 import { HOST } from '/Utils/GlobalVariables.js';
 
@@ -93,6 +95,7 @@ export class Router {
             if (isValid) {
 
                 this.renderNotificatonAndFriendList();
+                await updateApiData(PROFILE_API_URL + "online/", "");
 
                 if(this.randred === false)
                     this.randring();
@@ -138,10 +141,12 @@ export class Router {
                 },
                 credentials: 'include'
             })
-            .then(response => {
+            .then(async (response) => {
                 if (response.ok) {
 
                     this.removeNotificatonAndFriendList();
+
+                    const res = await updateApiData(PROFILE_API_URL + "offline/", "");
 
                     localStorage.removeItem('accessToken');
                     this.handleRoute('/login')

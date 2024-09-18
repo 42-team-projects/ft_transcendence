@@ -122,16 +122,14 @@ export function handleSignals(signalData) {
             url = new URL(HOST + signalData.data);
             if (url.pathname.includes(window.location.pathname))
                 router.handleRoute(window.location.pathname);
-    
+            break;
         case "message":
-            // url = new URL(HOST + signalData.sender);
-            // if (window.location.pathname === url.pathname)
-            //     return ;
-            console.log("heyyyyyyyyy =>");
             const messageNotification = createNotification(signalData.id, signalData.sender, signalData.content, "message", signalData.data);
             displayNotification(messageNotification);
+            break;
         case "game":
             new Lobby(Number(signalData.data), 29);
+            break;
         default:
             break;
     }
