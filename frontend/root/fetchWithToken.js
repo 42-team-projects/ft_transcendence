@@ -25,7 +25,7 @@ export const fetchWithToken = async (url, options) => {
     return response;
 };
 
-export const isTokenValid = (access_token) => {
+export const isTokenValid = async (access_token) => {
     return fetchWithToken(`${HOST}/api/v1/auth/verify/`, {
         method: 'POST',
         headers: {

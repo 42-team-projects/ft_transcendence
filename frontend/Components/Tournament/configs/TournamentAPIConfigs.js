@@ -83,7 +83,9 @@ export async function player_join_tournament(tournamentId)
 {
     try {
         const response = await createApiData(`${TOURNAMENT_API_URL}tournament/${tournamentId}/player/`, "");
-        return response;
+        if (!response.ok)
+            return null;
+        return await response.json();
     } catch(error) {
         console.log('You already join to this tournament : ', error);
     }
