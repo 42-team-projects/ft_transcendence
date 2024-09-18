@@ -107,7 +107,10 @@ export class GameContent extends HTMLElement {
             const form = this.getGamePlayData();
             const response = await updateApiData(HOST + "/game/game_play/", form);
             console.log("response: ", response);
+            if (!response)
+                displayToast("error", "Opps somethings wrong!!!");
             refreshBox.display();
+            displayToast("success", "The Game Play has  succefully updated!!!");
         });
     }
 
