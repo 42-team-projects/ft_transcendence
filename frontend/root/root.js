@@ -9,6 +9,8 @@ import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
 import { createNotificationWebSocket } from "/Utils/GlobalVariables.js";
 import { createWebSocketsForTournaments } from "/Utils/TournamentWebSocketManager.js";
 import { isTokenValid} from '/root/fetchWithToken.js'
+import { updateApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 
 const root = document.createElement('template')
 
@@ -23,17 +25,19 @@ class Root extends HTMLElement{
     }
     async connectedCallback() {
         const accessToken = localStorage.getItem('accessToken');
-        if (accessToken && isTokenValid(accessToken))
+        if (accessToken && await isTokenValid(accessToken))
         {
             await getCurrentPlayerData();
+            const res = await updateApiData(PROFILE_API_URL + "online/", "");
+            console.log("res: ", res);
             await createWebSocketsForTournaments();
             await createNotificationWebSocket();
-            
         }
     }
     
-    disconnectedCallback() {
-        
+    async disconnectedCallback() {
+        const res = await updateApiData(PROFILE_API_URL + "offline/", "");
+        console.log("res: ", res);
     }
 }
 customElements.define("root-content", Root)
