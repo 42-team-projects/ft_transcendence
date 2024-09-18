@@ -269,10 +269,8 @@ export class GameTable extends HTMLElement {
                 form.append('loss', 1);
             const updateResponse =  await updateApiData(PROFILE_API_URL + "me/stats/", form);
             await updateCurrentPlayer();
-            console.log("GameOver updateApiData response: ", updateResponse);
 
             const response = await createApiData(HOST + '/game/game_history/me/', body);
-            console.log("GameOver createApiData response: ", response);
         }
         //redirect to last url in hesory
         setTimeout(() => {
