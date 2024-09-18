@@ -1,5 +1,7 @@
+import { deleteApiData } from "/Utils/APIManager.js";
 import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
+import { HOST } from "/Utils/GlobalVariables.js";
 
 let notificationInterval;
 export function displayNotification(notificationContent, notifType) {
@@ -35,4 +37,19 @@ export function displayNotification(notificationContent, notifType) {
     // increment the notification counter.
     const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
     notificationIcon.textContent = Number(notificationIcon.textContent) + 1;
+}
+
+
+
+export async function removeNotification(id) {
+    console.log("this.id: ", id);
+    const response = await deleteApiData(HOST + "/notification/remove/" + id + "/");
+    console.log("response : ", response);
+    const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
+    if (notificationIcon) {
+        notificationIcon.textContent = Number(notificationIcon.textContent) - 1;
+        if (notificationIcon.textContent < 0)
+            notificationIcon.textContent = 0;
+    }
+    
 }

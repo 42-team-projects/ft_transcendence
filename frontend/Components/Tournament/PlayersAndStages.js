@@ -5,7 +5,7 @@ export class PlayersAndStages extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style> ${cssContent} </style>
             <div class="item">
-                <h1>Number Of Players</h1>
+                <h2>Number Of Players</h2>
                 <div class="settingsform" id="choices"></div>
             </div>
         `;

@@ -66,6 +66,19 @@ export class Router {
         this.randred = false;
     }
     
+    renderNotificatonAndFriendList() {
+        const rightSideBar = document.querySelector(".right-sidebar");
+        rightSideBar.innerHTML = `
+            <friends-request-list class="transform-1s" style="display: none;"></friends-request-list>
+            <notifications-list class="transform-1s" style="display: none;"></notifications-list>
+        `;
+    }
+
+    removeNotificatonAndFriendList() {
+        const rightSideBar = document.querySelector(".right-sidebar");
+        rightSideBar.innerHTML = ``;
+    }
+
     async changeStyle(access_token, path){
         let matchedRoute = this.routes.find((route) => path.startsWith(route.path));
         // let matchedRoute = this.routes.find((route) => route.path === path);
@@ -80,6 +93,9 @@ export class Router {
             
             const isValid = await isTokenValid(access_token);
             if (isValid) {
+
+                this.renderNotificatonAndFriendList();
+
                 if(this.randred === false)
                     this.randring();
                 this.rootContent.innerHTML = "";
@@ -126,6 +142,9 @@ export class Router {
             })
             .then(response => {
                 if (response.ok) {
+
+                    this.removeNotificatonAndFriendList();
+
                     localStorage.removeItem('accessToken');
                     this.handleRoute('/login')
                 } else {

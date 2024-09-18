@@ -1,10 +1,11 @@
-import { HOST } from "/Utils/GlobalVariables.js";
+import { HOST, PROFILE_API_URL, getNotificationWebSocket, getCurrentPlayerId } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { getApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { router } from "/root/Router.js";
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { deleteApiData } from "/Utils/APIManager.js";
+import { removeNotification } from "/Components/Notification/configs/NotificationUtils.js";
 
 export class GameNotification extends HTMLElement {
     constructor() {
@@ -29,6 +30,8 @@ export class GameNotification extends HTMLElement {
 
 
     async initProfileImage(user_name) {
+        const currentPlayerId = await getCurrentPlayerId();
+
         const profile = this.querySelector(".message c-hexagon");
         const sender = await getApiData(PROFILE_API_URL + user_name + "/");
         profile.bcolor = getLeagueColor(sender.stats.league);
@@ -37,6 +40,11 @@ export class GameNotification extends HTMLElement {
         messageOwner.textContent = sender.user.username;
         const playButton = this.querySelector(".notification-actions img");
         playButton.addEventListener("click", async (event) => {
+            const websocket = await getNotificationWebSocket();
+            console.log("sender.user.id: ", sender.user.id);
+            websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': sender.user.id, 'is_signal': true, "type": "game", "data": currentPlayerId}));
+            removeNotification(this.id);
+            this.parentElement.remove();
             new Lobby(sender.id, 30);
         });
     }

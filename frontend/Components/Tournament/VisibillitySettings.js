@@ -7,7 +7,7 @@ export class Visibility extends HTMLElement {
                 ${cssContent}
             </style>
             <div class="item">
-                <h1>Visibility</h1>
+                <h2>Visibility</h2>
                 <div class="settingsform">
                     <div class="chooseContainer" id="public">
                         <div class="checkbox aqua-border"></div>
