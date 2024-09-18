@@ -3,6 +3,7 @@ import { getApiData, createApiData, deleteApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
 import { removeNotification } from "/Components/Notification/configs/NotificationUtils.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export class NewFriendNotification extends HTMLElement {
     constructor() {
@@ -72,9 +73,13 @@ export class NewFriendNotification extends HTMLElement {
         if (accept) {
             accept.addEventListener("click", async () => {
                 const acceptResponse = await createApiData(HOST + "/friend/accept/" + this.id + "/", "");
+                const res = await acceptResponse.json();
+                if (acceptResponse.ok)
+                    displayToast("success", res.requests);
+                else
+                    displayToast("error", res.requests);
 
-
-
+                
                 const websocket = await getNotificationWebSocket();
                 websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "friend", "data": `/Chat/` + this.sender.user.username}));
                 this.parentElement.remove();
@@ -90,6 +95,12 @@ export class NewFriendNotification extends HTMLElement {
         if (reject) {
             reject.addEventListener("click", async () => {
                 const acceptResponse = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
+                const res = await acceptResponse.json();
+                if (acceptResponse.ok)
+                    displayToast("success", res.requests);
+                else
+                    displayToast("error", res.requests);
+
                 this.parentElement.remove();
 
                 removeNotification(this.id);

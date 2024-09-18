@@ -42,9 +42,7 @@ export function displayNotification(notificationContent, notifType) {
 
 
 export async function removeNotification(id) {
-    console.log("this.id: ", id);
-    const response = await deleteApiData(HOST + "/notification/remove/" + id + "/");
-    console.log("response : ", response);
+    await deleteApiData(HOST + "/notification/remove/" + id + "/");
     const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
     if (notificationIcon) {
         notificationIcon.textContent = Number(notificationIcon.textContent) - 1;

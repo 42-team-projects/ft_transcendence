@@ -82,7 +82,7 @@ export class TournamentsTable extends HTMLElement {
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
-                        const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({nickname: data.nickname, tournament_id: tournamentResponse.tournament_id}));
+                        await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({nickname: data.nickname, tournament_id: tournamentResponse.tournament_id}));
                         /**
                          * 
                          * @author rida
