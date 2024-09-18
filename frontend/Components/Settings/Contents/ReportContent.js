@@ -3,6 +3,7 @@ import { CustomInputField } from "/Components/CustomElements/CustomInputField.js
 import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
 import { createApiData } from "/Utils/APIManager.js";
 import { HOST } from "/Utils/GlobalVariables.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export class ReportContent extends HTMLElement {
     constructor() {
