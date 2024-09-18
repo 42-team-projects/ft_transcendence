@@ -7,7 +7,8 @@ import { GenerateRounds } from "/Components/Tournament/GenerateRounds.js";
 import { closeWebSocket, initWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { createTournamentTable } from "/Components/Tournament/configs/TournamentUtils.js";
 import { router } from "/root/Router.js";
-import { HOST } from "/Utils/GlobalVariables.js";
+import { HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { createApiData } from "/Utils/APIManager.js";
 
 
 export class TournamentsTable extends HTMLElement {
@@ -81,6 +82,8 @@ export class TournamentsTable extends HTMLElement {
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
+                        const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({nickname: data.nickname, tournament_id: tournamentResponse.tournament_id}));
+                        console.log("setNicknameResponse: ", setNicknameResponse);
                         /**
                          * 
                          * @author rida

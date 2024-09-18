@@ -1,6 +1,8 @@
 import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
 import { CustomInputField } from "/Components/CustomElements/CustomInputField.js";
 import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
+import { createApiData } from "/Utils/APIManager.js";
+import { HOST } from "/Utils/GlobalVariables.js";
 
 export class ReportContent extends HTMLElement {
     constructor() {
@@ -35,9 +37,10 @@ export class ReportContent extends HTMLElement {
         const message = this.shadowRoot.querySelector(".box textarea");
         const action = this.shadowRoot.querySelector(".actions settings-item");
         let oldMessage = message.value;
-        action.addEventListener("click", () => {
+        action.addEventListener("click", async () => {
             if (message.value && oldMessage != message.value) {
-                // put here send email logic.
+                const response = await createApiData(HOST + "/api/v1/auth/report/",  JSON.stringify({name: playerData.user.username, email: playerData.user.email, message: message.value}));
+                console.log("report message: ", response);
             }
         });
     }
