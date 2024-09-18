@@ -54,17 +54,18 @@ export class ChatHeaderComponent extends HTMLElement {
                 if (blockResponse)
                     router.handleRoute(window.location.pathname);
                 displayToast("success", "unblock player " + this.userName);
-                return;
             }
-            const blockResponse = await createApiData(HOST + "/friend/block/" + this.userId + "/", "");
-            const res = await blockResponse.json();
-            if (blockResponse.ok) {
-                displayToast("success", res.response);
-                router.handleRoute(window.location.pathname);
+            else {
+                const blockResponse = await createApiData(HOST + "/friend/block/" + this.userId + "/", "");
+                const res = await blockResponse.json();
+                if (blockResponse.ok) {
+                    displayToast("success", res.response);
+                    router.handleRoute(window.location.pathname);
+                }
+                else
+                    displayToast("error", res.response);
             }
-            else
-                displayToast("error", res.response);
-
+            router.handleRoute(window.location.pathname);
         })
 
 
