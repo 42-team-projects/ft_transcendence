@@ -1,6 +1,6 @@
 import { getCurrentUserId } from "/Utils/GlobalVariables.js";
 import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
-import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { displayNotification } from "/Components/Notification/configs/NotificationUtils.js";
 import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { NOTIFICATIONS_API_URL } from "/Utils/GlobalVariables.js";

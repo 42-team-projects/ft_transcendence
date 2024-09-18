@@ -63,11 +63,12 @@ export async function getCurrentUserId() {
 }
 
 
-import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { displayNotification } from "/Components/Notification/configs/NotificationUtils.js";
 import { createNotification } from "/Components/Notification/configs/NotificationManager.js";
 import { router } from "/root/Router.js";
 
 import { Profile } from "/Components/Header/profile.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
 
 
 export const PROFILE_COMPONENT = document.createElement("c-profile");
@@ -131,6 +132,8 @@ export function handleSignals(signalData) {
             console.log("heyyyyyyyyy =>");
             const messageNotification = createNotification(signalData.id, signalData.sender, signalData.content, "message", signalData.data);
             displayNotification(messageNotification);
+        case "game":
+            new Lobby(Number(signalData.data), 29);
         default:
             break;
     }
