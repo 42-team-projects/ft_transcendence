@@ -1,6 +1,6 @@
 import { getCurrentUserId } from "/Utils/GlobalVariables.js";
 import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
-import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { displayNotification } from "/Components/Notification/configs/NotificationUtils.js";
 import { MessageNotification } from "/Components/Notification/templates/MessageNotification.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { NOTIFICATIONS_API_URL } from "/Utils/GlobalVariables.js";
@@ -34,19 +34,21 @@ export class NotificationsList extends HTMLElement {
 
         const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
         console.log("notifications: ", notifications);
+        let counter = 0;
         if (notifications && notifications.length != 0) {
             notificationList.innerHTML = "";
-
-            Array.from(notifications).forEach( notif => {
-                const notification = createNotification(notif.id, notif.sender.username, notif.content, notif.type, notif.data);
+            Array.from(notifications).forEach( async (notif) => {
+                const notification = await createNotification(notif.id, notif.sender.username, notif.content, notif.type, notif.data);
                 this.appendNotification(notification);
+                counter++;
             });
             // increment the notification counter.
-            const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
-            if (notificationIcon)
-                notificationIcon.textContent = Number(notifications.length);
             notificationList.scrollTop = notificationList.scrollHeight;
         }
+        
+        const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
+        if (notificationIcon)
+            notificationIcon.textContent = counter;
 
         this.querySelector(".close-button").addEventListener("click", () => {
             hideNotificationsList();

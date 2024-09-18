@@ -10,6 +10,8 @@ import { CustomSelect } from "/Components/CustomElements/CustomSelect.js";
 import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
 
 
+// <custom-select label="LANGUAGE" description="Select your favorite language."></custom-select>
+
 
 export class ProfileContent extends HTMLElement {
     constructor() {
@@ -28,7 +30,7 @@ export class ProfileContent extends HTMLElement {
                 </div>
                 <custom-input-field class="full-name-field" label="FULL NAME" type="text"></custom-input-field>
                 <custom-input-field class="cover-field" label="COVER" description="Supported extenstions: JPEG JPG PNG SVG. and the size most be less than 2 MB." type="file"></custom-input-field>
-                <custom-select label="LANGUAGE" description="Select your favorite language."></custom-select>
+
                 <custom-unordered-list label="LINKS" description="Max links you can add is 4."></custom-unordered-list>
             </div>
             <div class="actions">

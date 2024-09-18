@@ -1,9 +1,8 @@
-// Player == Profile Page
-import { fetchWithToken } from "/root/fetchWithToken.js"
+import { fetchWithToken, isTokenValid } from "/root/fetchWithToken.js"
 
 export async function getApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    if (!accessToken || !isTokenValid(accessToken)) {
         console.log("Access token is missing.");
         return null;
     }
@@ -15,6 +14,7 @@ export async function getApiData(APIUrl) {
             Authorization: `Bearer ${accessToken}`,
         },
     });
+    console.log("GET response: ", response);
     if (!response.ok)
         return null;
     const apiData = await response.json();
@@ -27,7 +27,7 @@ export async function getApiData(APIUrl) {
 export async function createApiData(APIUrl, body) {
     
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    if (!accessToken || !isTokenValid(accessToken)) {
         console.log("Access token is missing.");
         return null;
     }
@@ -40,6 +40,7 @@ export async function createApiData(APIUrl, body) {
         },
         body: body,
     });
+    console.log("POST response: ", response);
     if (!response.ok)
         return null;
     return await response.json();
@@ -48,7 +49,7 @@ export async function createApiData(APIUrl, body) {
 
 export async function updateApiData(APIUrl, body) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    if (!accessToken || !isTokenValid(accessToken)) {
         console.log("Access token is missing.");
         return null;
     }
@@ -60,6 +61,7 @@ export async function updateApiData(APIUrl, body) {
         },
         body: body,
     });
+    console.log("PUT response: ", response);
     if (!response.ok)
         return null;
     return await response.json();
@@ -68,7 +70,7 @@ export async function updateApiData(APIUrl, body) {
 
 export async function deleteApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    if (!accessToken || !isTokenValid(accessToken)) {
         console.log("Access token is missing.");
         return null;
     }
@@ -80,6 +82,7 @@ export async function deleteApiData(APIUrl) {
             "Content-Type": "application/json"
         }
     });
+    console.log("DELETE response: ", response);
     if (!response.ok)
         return null;
     return await response.json();
