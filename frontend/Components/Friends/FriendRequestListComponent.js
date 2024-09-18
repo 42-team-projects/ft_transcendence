@@ -21,10 +21,6 @@ export class FriendRequestListComponent extends HTMLElement {
             <div class="notificationsBar-body">
                 <div class="notification-list"></div>
             </div>
-            <div class="notificationsBar-footer">
-                <h4 class="accept-all">Accept All</h4>
-                <h4 class="reject-all">Reject All</h4>
-            </div>
         `;
     }
 
@@ -47,18 +43,7 @@ export class FriendRequestListComponent extends HTMLElement {
         this.querySelector(".close-button").addEventListener("click", () => {
             hideFriendsRequestList();
         });
-        this.querySelector(".accept-all").addEventListener("click", async (e) => {
-            const accept_all_response = await createApiData(HOST + "/friend/accept_all/", "");
-            this.querySelector(".notification-list").innerHTML = '';
-            if (window.location.pathname.includes("/Chat"))
-                router.handleRoute(window.location.pathname);
-        });
-        this.querySelector(".reject-all").addEventListener("click", async (e) => {
-            const accept_all_response = await createApiData(HOST + "/friend/decline_all/", "");
-            this.querySelector(".notification-list").innerHTML = '';
-            if (window.location.pathname.includes("/Chat"))
-                router.handleRoute(window.location.pathname);
-        });
+
         notificationList.scrollTop = notificationList.scrollHeight;
     }
     disconnectedCallback() {
