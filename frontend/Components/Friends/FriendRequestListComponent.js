@@ -49,14 +49,12 @@ export class FriendRequestListComponent extends HTMLElement {
         });
         this.querySelector(".accept-all").addEventListener("click", async (e) => {
             const accept_all_response = await createApiData(HOST + "/friend/accept_all/", "");
-            console.log("accept_all_response: ", accept_all_response);
             this.querySelector(".notification-list").innerHTML = '';
             if (window.location.pathname.includes("/Chat"))
                 router.handleRoute(window.location.pathname);
         });
         this.querySelector(".reject-all").addEventListener("click", async (e) => {
             const accept_all_response = await createApiData(HOST + "/friend/decline_all/", "");
-            console.log("accept_all_response: ", accept_all_response);
             this.querySelector(".notification-list").innerHTML = '';
             if (window.location.pathname.includes("/Chat"))
                 router.handleRoute(window.location.pathname);

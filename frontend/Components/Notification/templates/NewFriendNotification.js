@@ -62,7 +62,6 @@ export class NewFriendNotification extends HTMLElement {
 
         const profile = this.querySelector("a");
         profile.href = "/Profile/" + this.senderName;
-        console.log("profile.href: ", profile.href);
         profile.addEventListener("click", (event) => {
             event.preventDefault();
             const url = new URL(profile.href);
@@ -74,7 +73,7 @@ export class NewFriendNotification extends HTMLElement {
             accept.addEventListener("click", async () => {
                 const acceptResponse = await createApiData(HOST + "/friend/accept/" + this.id + "/", "");
 
-                console.log("acceptResponse: ", acceptResponse);
+
 
                 const websocket = await getNotificationWebSocket();
                 websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "friend", "data": `/Chat/` + this.sender.user.username}));
@@ -91,7 +90,6 @@ export class NewFriendNotification extends HTMLElement {
         if (reject) {
             reject.addEventListener("click", async () => {
                 const acceptResponse = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
-                console.log("acceptResponse: ", acceptResponse);
                 this.parentElement.remove();
 
                 removeNotification(this.id);

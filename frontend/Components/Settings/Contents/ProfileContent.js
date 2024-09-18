@@ -113,7 +113,6 @@ export class ProfileContent extends HTMLElement {
                 Array.from(list).forEach(async (item) => {
                     item.player = currentPlayerId;
                     const res = await createApiData(PROFILE_API_URL + "me/links/", JSON.stringify(item));
-                    console.log("res: ", res);
                     if (!res) {
                         displayToast("error", "somethings wrong happen!!!");
                         return ;

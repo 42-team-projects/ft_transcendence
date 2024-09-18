@@ -48,7 +48,6 @@ export class CustomToast extends HTMLElement {
 
     attributeChangedCallback(attrName, oldValue, newValue) {
         if (attrName === "status") {
-            console.log("attrName: ", attrName, "newVal: ", newValue);
             if (newValue === "error") {
                 this.shadowRoot.querySelector(".toast-icon").src = "/assets/icons/fail-icon.svg";
                 this.shadowRoot.querySelector(".toastContainer").style.background = "#D11313";
