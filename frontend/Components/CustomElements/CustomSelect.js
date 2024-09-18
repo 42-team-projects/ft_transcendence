@@ -1,3 +1,8 @@
+import { getCurrentPlayerData } from "/Utils/GlobalVariables.js";
+
+const nicknames = ["King", "strong", "brave", "killer", "friendly"];
+
+
 export class CustomSelect extends HTMLElement {
     constructor() {
         super();
@@ -12,26 +17,37 @@ export class CustomSelect extends HTMLElement {
                     <p></p>
                 </div>
                 <div class="box">
-                    <select name="cars" id="cars">
-                        <option value="english">🇺🇸 ENGLISH (EN)</option>
-                        <option value="french">🇫🇷 FRENCH (FR)</option>
-                        <option value="arabic">🇲🇦 ARABIC (AR)</option>
-                    </select>
+                    <select name="nicknameList" id="nicknameList"></select>
                 </div>
             </div>
         `;
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         this.shadowRoot.querySelector(".box").style.width = this.width;
         this.shadowRoot.querySelector(".box").style.height = this.height;
         this.shadowRoot.querySelector("h2").textContent = this.label;
         this.shadowRoot.querySelector("p").textContent = this.description;
+        await this.initNicknameList();
     }
 
     disconnectedCallback() {
         // Clean up if necessary
     }
+
+    async initNicknameList() {
+        let username = await getCurrentPlayerData();
+        username = username.user.username;
+
+        const nicknameList = this.shadowRoot.querySelector("#nicknameList")
+        nicknames.forEach(nickname => {
+            const option = document.createElement("option");
+            option.value = `${username} ${nickname}`;
+            option.textContent = `${username} ${nickname}`;
+            nicknameList.appendChild(option);
+        });
+    }
+
 
     static observedAttributes = ["width", "height", "label", "description"];
 
@@ -59,6 +75,9 @@ export class CustomSelect extends HTMLElement {
     set height(value) { this.setAttribute("height", value)};
     get height() { return this.getAttribute("height")};
 
+    get value() {
+        return this.shadowRoot.querySelector("#nicknameList").value;
+    }
 
 }
 

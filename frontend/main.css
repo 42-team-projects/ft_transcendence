@@ -80,26 +80,28 @@ body::before{
     content: "";
     background: url(/images/top.svg);
     background-size: contain;
-    background-position: center 4%;
+    background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    height: 100%;
+    height: 7%;
     position: absolute;
     opacity: 0.25;
     z-index: -1;
+    top: 1%;
 }
 
 body::after{
     content: "";
     background: url(/images/bottom.svg);
     background-size: contain;
-    background-position: center 96%;
+    background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    height: 100%;
+    height: 7%;
     position: absolute;
     opacity: 0.25;
     z-index: -1;
+    top: 93%;
 }
 
 img{
@@ -168,7 +170,6 @@ game-over{
 footer-bar{
     grid-area: foter;
     width: 100%;
-    height: 100%;
     display: flex;
 }
 footer-bar img{

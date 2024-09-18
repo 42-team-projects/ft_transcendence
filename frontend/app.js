@@ -61,6 +61,7 @@ import { ForgotPassword, ConfirmPassword } from "/Components/User/ForgotPassword
 import { TwoFactorAuth } from "/Components/User/TwoFactorAuth.js";
 import { router } from "/root/Router.js"
 import { FooterBar } from "/Utils/FooterBar.js"
+import { CustomToast } from "/Components/CustomElements/CustomToast.js";
 
 customElements.define("footer-bar", FooterBar);
 customElements.define("signup-page", SignupPage);

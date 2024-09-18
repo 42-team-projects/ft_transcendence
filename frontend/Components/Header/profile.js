@@ -37,7 +37,7 @@ export class Profile extends HTMLElement{
         super();
         this.appendChild(ProfileTemplate.content.cloneNode(true))
         this.querySelector('a').addEventListener('click', (event)=>{
-            console.log(this.querySelector('a').href)
+
             event.preventDefault()
             const url = new URL(this.querySelector('a').href)
             router.handleRoute(url.pathname)
@@ -55,9 +55,34 @@ export class Profile extends HTMLElement{
         userRank.bcolor = profileImage.bcolor;
     }
 
-    disconnectedCallback() {
+    static observedAttributes = ["profile-image", "league", "rank"];
 
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        if (attrName === "profile-image") {
+            const element = this.querySelector(".c-hexagon-content");
+            element.style.background = "url(" + HOST + newValue + ") center / cover no-repeat";
+        }
+        else if (attrName === "league") {
+            const profileImage = this.querySelector("c-hexagon");
+            profileImage.bcolor = getLeagueColor(newValue);
+            const userRank = this.querySelector("user-rank");
+            userRank.bcolor = profileImage.bcolor;
+        }
+        else if (attrName === "rank") {
+            const userRank = this.querySelector("user-rank");
+            userRank.querySelector("h2").textContent = newValue;
+        }
     }
+
+    set rank(val) {this.setAttribute("rank", val);}
+    get rank() { return this.getAttribute("rank");}
+
+    set league(val) {this.setAttribute("league", val);}
+    get league() { return this.getAttribute("league");}
+
+    set profileImage(val) {this.setAttribute("profile-image", val);}
+    get profileImage() { return this.getAttribute("profile-image");}
+    
 
 }
 

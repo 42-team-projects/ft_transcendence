@@ -1,11 +1,12 @@
 import { calculateTimeDifferents } from "/Utils/DateUtils.js";
-import { getCurrentPlayerId, wsUrl } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerId, wsUrl, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { hashPassword } from "/Utils/Hasher.js";
-import { initWebSocket } from "/Utils/TournamentWebSocketManager.js";
+import { CustomSelect } from "/Components/CustomElements/CustomSelect.js";
 import { get_Available_Tournaments, player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { createRow } from "/Components/Tournament/configs/TournamentUtils.js";
 import { createTournamentWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { checkIsTournamentFull } from "/Utils/TournamentManager.js";
+import { createApiData } from "/Utils/APIManager.js";
 
 export class JoinTournament extends HTMLElement {
     constructor() {
@@ -51,10 +52,56 @@ export class JoinTournament extends HTMLElement {
         if (tournamentData.is_accessible == false)
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
-            if (joinButton.className == "lock-button") 
-                this.joinToPrivateTournament(tournamentData);
-            else
-                await this.addPlayerToTournament(tournamentData);
+            const alertsConrtainer = window.document.querySelector("body .alerts");
+            alertsConrtainer.style.display = "flex";
+            const nicknameContainer = document.createElement("div");
+            nicknameContainer.className = "nickname-container"
+            nicknameContainer.innerHTML = `
+                <style>
+                    .nickname-container {
+                        position: relative;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 50px;
+                        background: #00142b;
+                        border: 1px solid aqua;
+                        padding: 20px;
+                        border-radius: 10px;
+                    }
+
+                    .close-button {
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        width: 16px;
+                        height: 16px;
+                    }
+                </style>
+                <img class="close-button" src="/assets/icons/close-x-icon.svg" width="16px" ></img>
+                <custom-select id="nickname" label="Nickname"></custom-select>
+                <custom-button class="save-button" width="200px" height="48px">Save</custom-button>
+            `;
+            nicknameContainer.querySelector(".close-button").addEventListener("click", () => {
+                nicknameContainer.remove();
+                alertsConrtainer.style.display = "none";
+            });
+            nicknameContainer.querySelector(".save-button").addEventListener("click", async () => {
+                const value = nicknameContainer.querySelector("custom-select").value;
+                if (value && value.length > 1) {
+                    const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": tournamentData.tournament_id}));
+                    if (setNicknameResponse) {
+                        await this.addPlayerToTournament(tournamentData);
+                        nicknameContainer.remove();
+                        alertsConrtainer.style.display = "none";
+                    }
+                }
+            });
+            alertsConrtainer.appendChild(nicknameContainer)
+            // if (joinButton.className == "lock-button") 
+            //     this.joinToPrivateTournament(tournamentData);
+            // else
         });
         return tournamentItem;
     }
@@ -400,6 +447,8 @@ const list = `
 
 
 const cssContent = /*css*/`
+
+
     * {
         margin: 0;
         padding: 0;
