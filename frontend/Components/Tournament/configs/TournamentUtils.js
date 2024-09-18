@@ -2,8 +2,9 @@ import { convertTimeStampIntoDate } from "/Utils/Convertor.js";
 import { calculateTimeDifferents } from "/Utils/DateUtils.js";
 import { closeWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { get_tournament_by_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
-import { getCurrentPlayerId, HOST } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerId, HOST, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { router } from "/root/Router.js";
+import { getApiData } from "/Utils/APIManager.js";
 
 
 const TABLEHEADER = `
@@ -11,6 +12,7 @@ const TABLEHEADER = `
     <thead>
         <tr>
             <th>NAME</th>
+            <th>NICKNAME</th>
             <th>OWNER</th>
             <th>CREATED AT</th>
             <th>NUMBER OF PLAYERS</th>
@@ -41,6 +43,13 @@ export async function createRow(parentNode, data) {
     {
         const td = document.createElement("td");
         td.textContent = data.tournament_name;
+        tr.appendChild(td);
+    }
+    {
+        const td = document.createElement("td");
+        const nickname = await getApiData(PROFILE_API_URL + "getNickname/" + data.tournament_id + "/");
+        if (nickname)
+            td.textContent = nickname.nickname;
         tr.appendChild(td);
     }
     {

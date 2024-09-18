@@ -6,11 +6,11 @@ import { wsUrl, HOST } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
 import { createApiData } from "/Utils/APIManager.js";
-import { svgFile, svgFile2 } from "../../../Slides.js";
-import { gameBard } from "../../CustomElements/CustomSliders.js";
+import { svgFile, svgFile2 } from "/Slides.js";
+import { gameBard } from "/Components/CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
-import { updateApiData } from "../../../Utils/APIManager.js";
-import { PROFILE_API_URL } from "../../../Utils/GlobalVariables.js";
+import { updateApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
 const game_page = document.createElement("template");
 
 let score = {
@@ -38,6 +38,8 @@ export class GameTable extends HTMLElement {
     constructor(state, room_name, game_play, save) {
         super();
         this.state = state;
+        score.player = 0;
+        score.opponent = 0;
         if(this.state !== "offline"){
 
             this.save_match = save;
@@ -275,7 +277,7 @@ export class GameTable extends HTMLElement {
             else
                 form.append('loss', 1);
             const updateResponse =  await updateApiData(PROFILE_API_URL + "me/stats/", form);
-
+            await updateCurrentPlayer();
 
             const response = await createApiData(HOST + '/game/game_history/me/', body);
         }
@@ -303,7 +305,8 @@ export class GameTable extends HTMLElement {
                 addEventListener("keyup", (event) => {
                     this.resetMove(event, this.getKeys());
                 });
-                document.body.querySelector("launching-game").remove();
+                const LunchingGame = document.body.querySelector("launching-game");
+                if (LunchingGame) LunchingGame.remove();
                 document.body
                     .querySelector("game-header")
                     .classList.toggle("blur", false);
@@ -353,7 +356,10 @@ export class GameTable extends HTMLElement {
         removeEventListener("keyup", (event) => {
             this.resetMove(event, this.getKeys());
         });
-        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 10, 7);
+        if (this.state === "offline")
+            this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 10, 7);
+        else 
+            this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 0, 0);
         this.updatePlayerPosition(CANVAS_HEIGHT / 2);
         this.updateOpponentPosition(CANVAS_HEIGHT / 2);
         this.Loop_state = true;
@@ -392,24 +398,21 @@ export class GameTable extends HTMLElement {
         if (this.pause === true) return;
         let { x, y, radius, dx, dy } = this.getCoordonates();
         let stop = false;
-        if (y + radius + dy >= CANVAS_HEIGHT || y - radius + dy <= 0) dy = -dy;
-        if (x + radius + dx >= opponent.x && y >= opponent.y && y <= opponent.y + this.racquet.height)
-            dx = -dx;
-        else if (this.state === "offline" && x + radius + dx >= CANVAS_WIDTH) {
-            score.player++;
-            stop = true;
-        }
-        if (x - radius + dx <= player.x + this.racquet.width && y >= player.y && y <= player.y + this.racquet.height)
-            dx = -dx;
-        else if ( this.state === "offline" && x - radius + dx <= 0)
-        {
-            score.opponent++;
-            stop = true;
-        }
-        x += dx;
-        y += dy;
-        this.setCoordonates(x, y, radius, dx, dy);
         if ( this.state === "offline" ) {
+            if (y + radius + dy >= CANVAS_HEIGHT || y - radius + dy <= 0) dy = -dy;
+            if (x + radius + dx >= opponent.x && y >= opponent.y && y <= opponent.y + this.racquet.height)
+                dx = -dx;
+            else if (x + radius + dx >= CANVAS_WIDTH) {
+                score.player++;
+                stop = true;
+            }
+            if (x - radius + dx <= player.x + this.racquet.width && y >= player.y && y <= player.y + this.racquet.height)
+                dx = -dx;
+            else if (x - radius + dx <= 0)
+            {
+                score.opponent++;
+                stop = true;
+            }
             if(stop === true){
                 if (this.round > 2) {
                     this.RoundOver(ctx);
@@ -429,6 +432,9 @@ export class GameTable extends HTMLElement {
                 }
             }
         }
+        x += dx;
+        y += dy;
+        this.setCoordonates(x, y, radius, dx, dy);
     }
 
     setMove = (event, keys) => {

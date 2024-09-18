@@ -1,9 +1,10 @@
 import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
-import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { displayNotification } from "/Components/Notification/configs/NotificationUtils.js";
 import { SearchBarComponent } from "/Components/Search/SearchBarComponent.js";
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 import { FriendRequestListComponent } from "/Components/Friends/FriendRequestListComponent.js";
 import { NotificationsList } from "/Components/Notification/NotificationsList.js";
+import { PROFILE_COMPONENT } from "/Utils/GlobalVariables.js";
 
 export class HeaderBar extends HTMLElement{
     constructor(){
@@ -39,6 +40,8 @@ export class HeaderBar extends HTMLElement{
     }
     render(){
         this.appendChild(HeaderTemplate.content.cloneNode(true));
+        const header = this.querySelector(".header-bar");
+        header.appendChild(PROFILE_COMPONENT);
         this.headerDown();
         const notificationIcon = this.querySelector(".notification-icon");
 
@@ -60,8 +63,6 @@ export class HeaderBar extends HTMLElement{
         });
     }
 
-    connectedCallback() {
-    }
     remove(){
         this.innerHTML = '';
     }
@@ -333,7 +334,9 @@ HeaderTemplate.innerHTML = /*html*/`
             ${cssContent}
         </style>
         <div id="pingpong-logo">
-            <img loading="lazy" draggable="false" src="/images/svg-header/pingpong-icon.svg" alt="pingpong">
+            <svg width="151" height="54" viewBox="0 0 151 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M113.116 0H121.572V36.4249H113.116V0ZM10.4217 9.08904H37.0899V18.1953H10.4217V9.08904ZM0 19.5264H8.45579V54H0V19.5264ZM37.0899 27.3298H10.4217V36.4361H37.0899V27.3298ZM27.9242 18.2094H37.0304V27.3157H27.9242V18.2094ZM39.7255 9.08904H39.0528V36.4246V45.514V45.5308H74.8273V36.4246H74.7777V18.2094H65.6714V36.4246H47.5086V18.1953H74.8496V9.08904H47.5086H39.7255ZM59.8329 24.0617H53.3285V30.5661H59.8329V24.0617ZM84.7238 9.08904H85.1822V9.65267L102.78 31.2872V9.08904H111.236V45.514H102.783H102.78V45.5103L85.1822 24.2138V45.514H76.076V9.08904H84.7238ZM150.292 9.08904H123.624V18.1953H150.292V9.08904ZM132.095 22.7547H150.308V31.8609H150.266V36.4246H150.292V45.5308H123.624V36.4246H141.16V31.8609H132.095V22.7547Z" fill="white"/>
+            </svg>           
         </div>
         <div class="notification-search">
             <div class="search-box">
@@ -349,6 +352,5 @@ HeaderTemplate.innerHTML = /*html*/`
                 <div class="notification-container">
             </div>
         </div>
-        <c-profile></c-profile>
     </div>
 `
