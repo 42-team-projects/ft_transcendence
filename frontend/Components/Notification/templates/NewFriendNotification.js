@@ -2,7 +2,7 @@ import { PROFILE_API_URL, HOST, getNotificationWebSocket } from "/Utils/GlobalVa
 import { getApiData, createApiData, deleteApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
-import { removeNotification } from "/Components/Notification/NotificationUtils.js";
+import { removeNotification } from "/Components/Notification/configs/NotificationUtils.js";
 
 export class NewFriendNotification extends HTMLElement {
     constructor() {

@@ -1,5 +1,5 @@
 import { NotificationComponent } from "/Components/Notification/NotificationComponent.js";
-import { displayNotification } from "/Components/Notification/NotificationUtils.js";
+import { displayNotification } from "/Components/Notification/configs/NotificationUtils.js";
 import { SearchBarComponent } from "/Components/Search/SearchBarComponent.js";
 import { NewFriendNotification } from "/Components/Notification/templates/NewFriendNotification.js";
 import { FriendRequestListComponent } from "/Components/Friends/FriendRequestListComponent.js";
