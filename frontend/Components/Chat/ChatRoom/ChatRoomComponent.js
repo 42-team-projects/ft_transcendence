@@ -59,7 +59,6 @@ export class ChatRoomComponent extends HTMLElement {
             return ;
         const player = await getApiData(PROFILE_API_URL + playerName);
         let is_blocked = await getApiData(HOST + "/friend/is_blocked/" + player.user.username);
-        console.log("is_blocked: ", is_blocked);
         if (is_blocked)
             is_blocked = is_blocked.response;
         await this.renderChatRoom(player, is_blocked);
