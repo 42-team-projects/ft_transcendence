@@ -171,8 +171,8 @@ def setNickname(request):
                 return JsonResponse({'statusText': 'Missing tournament_id or nickname'}, status=400)
 
             # Check if a nickname already exists for this player and tournament
-            if Nickname.objects.filter(player=player, tournamentid=tournament_id).exists():
-                return JsonResponse({'statusText': 'Nickname already exists for this tournament'}, status=400)
+            # if Nickname.objects.filter(player=player, tournamentid=tournament_id).exists():
+            #     return JsonResponse({'statusText': 'Nickname already exists for this tournament'}, status=400)
 
             # Create the new nickname for this player and tournament
             Nickname.objects.create(player=player, tournamentid=tournament_id, nickname=nickname)
@@ -186,6 +186,8 @@ def setNickname(request):
         return JsonResponse({'statusText': str(e)}, status=500)
 
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
+
+
 
 
 @csrf_exempt
