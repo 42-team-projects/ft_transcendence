@@ -6,6 +6,7 @@ import { getApiData, updateApiData, deleteApiData, createApiData} from "/Utils/A
 import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
 import { fetchWithToken } from "/root/fetchWithToken.js";
 import { router } from "/root/Router.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export class AccountContent extends HTMLElement {
     constructor() {
@@ -80,6 +81,11 @@ export class AccountContent extends HTMLElement {
             if (passwordField.value)
                 accountDataForm.append("password", passwordField.value)
             const res = await updateApiData(UPDATE_USER_API_URL, accountDataForm);
+            if (!res) {
+                displayToast("error", "Opps somethings wrong!!!");
+                return ;
+            }
+            displayToast(res.status, res.message);
             if (usernameField.value)
             {
                 playerData.user.username = usernameField.value;
