@@ -26,7 +26,7 @@ async function main() {
 
     // Retrieve scores
     const scores = await tournamentScores.getScores(1);
-    // console.log("Scores:", scores);
+    console.log("Scores:", scores);
   }
   
   // This pattern allows for proper error handling in async functions

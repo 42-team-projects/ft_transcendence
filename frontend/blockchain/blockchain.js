@@ -41,8 +41,6 @@ export async function getAbi() {
     const Response = await fetch('/usr/share/nginx/html/artifacts/contracts/TournamentScores.sol/TournamentScores.json');
 
     const json = await Response.json();
-    console.log("json: ", json);
     const ABI = json.abi;
-    console.log("ABI:  ", ABI);
     return ABI;
 }
