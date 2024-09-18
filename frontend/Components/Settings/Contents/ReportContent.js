@@ -3,6 +3,7 @@ import { CustomInputField } from "/Components/CustomElements/CustomInputField.js
 import { CustomToggleSwitch } from "/Components/CustomElements/CustomToggleSwitch.js";
 import { createApiData } from "/Utils/APIManager.js";
 import { HOST } from "/Utils/GlobalVariables.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export class ReportContent extends HTMLElement {
     constructor() {
@@ -40,7 +41,11 @@ export class ReportContent extends HTMLElement {
         action.addEventListener("click", async () => {
             if (message.value && oldMessage != message.value) {
                 const response = await createApiData(HOST + "/api/v1/auth/report/",  JSON.stringify({name: playerData.user.username, email: playerData.user.email, message: message.value}));
-                console.log("report message: ", response);
+                if (!response)
+                    displayToast("error", "Opps somethings wrong!!!");
+                else
+                    displayToast("success", "the email succefully sended");
+
             }
         });
     }

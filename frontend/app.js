@@ -60,6 +60,7 @@ import OAuth from "/Components/User/Oauth.js";
 import { ForgotPassword, ConfirmPassword } from "/Components/User/ForgotPassword.js";
 import { TwoFactorAuth } from "/Components/User/TwoFactorAuth.js";
 import { router } from "/root/Router.js"
+import { CustomToast } from "./Components/CustomElements/CustomToast.js";
 
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);

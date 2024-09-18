@@ -3,7 +3,7 @@ const MultiPlayerTemplate = document.createElement('template')
 MultiPlayerTemplate.innerHTML = /*html*/ `
 	<link rel="stylesheet" href="/Components/Game/GamePlay/GameOfline/GameOfline.css">
 	<img loading="lazy" class="BlueCartImg" src="/images/BlueCart/multi-playerImg.svg" alt="BlueImg">
-	<img loading="lazy" class="BlueCart" src="/images/BlueCart/GameOfline.svg" alt="Blue">
+	<img loading="lazy" class="BlueCart" src="/images/BlueCart/multiPlayerCart.svg" alt="Blue">
 	<div class="shapes2-3">
 		<div class="shapes4-5">
 			<div class="text">

@@ -33,7 +33,6 @@ export class NotificationsList extends HTMLElement {
         const notificationList = this.querySelector(".notification-list");
 
         const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
-        console.log("notifications: ", notifications);
         let counter = 0;
         if (notifications && notifications.length != 0) {
             notificationList.innerHTML = "";

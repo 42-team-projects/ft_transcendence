@@ -16,11 +16,10 @@ export class Router {
             { path: '/Home', view: 'home-page', isAccessed: true },
             { path: '/Game', view: 'game-selection', isAccessed: true },
             { path: '/Chat', view: 'chat-page', isAccessed: true },
-            { path: '/Ranking', view: 'ranking-page', isAccessed: true },
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
-            // { path: '/usr/share/nginx/html/artifacts/contracts/TournamentScores.sol/TournamentScores.json', view: 'profile-component', isAccessed: true },
+            // { path: '/Ranking', view: 'ranking-page', isAccessed: true },
         ];
         this.randred = false;
         this.rootContent = document.querySelector("root-content");
@@ -59,7 +58,6 @@ export class Router {
         })
     }
     removeRandring(){
-        console.log("removing...")
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()

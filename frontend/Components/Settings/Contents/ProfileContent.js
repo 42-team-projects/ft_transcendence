@@ -8,6 +8,8 @@ import { CustomUnorderedList } from "/Components/CustomElements/CustomUnorderedL
 import { CustomUnorderedListItem } from "/Components/CustomElements/CustomUnorderedListItem.js";
 import { CustomSelect } from "/Components/CustomElements/CustomSelect.js";
 import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
+import { CustomToast } from "/Components/CustomElements/CustomToast.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 
 // <custom-select label="LANGUAGE" description="Select your favorite language."></custom-select>
@@ -110,7 +112,12 @@ export class ProfileContent extends HTMLElement {
                 linksList = list.length;
                 Array.from(list).forEach(async (item) => {
                     item.player = currentPlayerId;
-                    await createApiData(PROFILE_API_URL + "me/links/", JSON.stringify(item));
+                    const res = await createApiData(PROFILE_API_URL + "me/links/", JSON.stringify(item));
+                    if (!res) {
+                        displayToast("error", "somethings wrong happen!!!");
+                        return ;
+                    }
+                    displayToast("success", res.message);
                 });
             }
             
@@ -127,6 +134,11 @@ export class ProfileContent extends HTMLElement {
                 }
                 const res = await updateApiData(PROFILE_API_URL + "me/", formData);
                 console.log("res: ", res);
+                if (!res) {
+                    displayToast("error", "somethings wrong happen!!!");
+                    return ;
+                }
+                displayToast("success", res.message);
             }
             await updateCurrentPlayer();
             refreshBox.display();
@@ -136,6 +148,7 @@ export class ProfileContent extends HTMLElement {
         });
 
     }
+
 
     disconnectedCallback() {
         clearInterval(this.interval);

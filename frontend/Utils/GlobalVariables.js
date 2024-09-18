@@ -80,11 +80,9 @@ export async function createNotificationWebSocket() {
 
     const userId = await getCurrentUserId();
     let websocket = `${wsUrl}ws/user/notification/${userId}/`;
-    console.log("wsUrl: ", websocket);
     notificationWebSocket = new WebSocket(websocket)
-    notificationWebSocket.onopen = () => {
-        console.log('WebSocket connection of notification is opened');
-    };
+    notificationWebSocket.onopen = () => {};
+    
     notificationWebSocket.onerror = (error) => {
         console.log('WebSocket encountered an error: ', error);
     };
