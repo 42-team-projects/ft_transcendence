@@ -25,7 +25,7 @@ class Root extends HTMLElement{
     }
     async connectedCallback() {
         const accessToken = localStorage.getItem('accessToken');
-        if (accessToken && isTokenValid(accessToken))
+        if (accessToken && await isTokenValid(accessToken))
         {
             await getCurrentPlayerData();
             const res = await updateApiData(PROFILE_API_URL + "online/", "");
