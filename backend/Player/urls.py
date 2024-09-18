@@ -2,6 +2,13 @@ from django.urls import path
 from .Views import PlayerView, StatsView, GraphView, AchievementsView, LinksView
 
 urlpatterns = [
+
+
+
+    path('online/', PlayerView.online, name='online'),
+    path('offline/', PlayerView.offline, name='offline'),
+
+
     path('setNickname/', PlayerView.setNickname, name='setnickname'),
     path('getNickname/<int:tournament_id>/', PlayerView.getNicknameForTournament, name='getnickname'),
 

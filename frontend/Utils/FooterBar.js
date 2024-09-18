@@ -8,11 +8,13 @@ template.innerHTML = /*html */`
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			width: 100%;
 			height: 60px;
 			padding: 0 20px;
 			color: white;
 			font-size: 1.2rem;
 			font-weight: 500;
+
 		}
 		.logout {
 			display: flex;
@@ -25,13 +27,21 @@ template.innerHTML = /*html */`
 			font-size: 1.3rem;
 			font-weight: 500;
 		}
+		.display-errors {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 	</style>
 	<footer>
 		<div class="logout">
 			<img loading="lazy" src="/images/logout.svg" alt=""/>
 			<div class="logoutText"> logout </div>
 		</div>
-		<div class="display-errors"></div>
+		<div class="display-errors">
+			<div class="display-toast"></div>
+		</div>
 	</footer>
 `;
 
@@ -67,28 +77,33 @@ export class FooterBar extends HTMLElement {
 		this.appendChild(template.content.cloneNode(true));
         const accessToken = localStorage.getItem('accessToken');
 		let logout = document.querySelector('.logout')
-		logout.addEventListener('click', () => {
-			fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
-				method: 'POST',
-				headers: {
-					'Authorization': `Bearer ${accessToken}`
-				},
-				credentials: 'include'
-			})
-			.then(response => {
-				if (response.ok) {
-					localStorage.removeItem('accessToken');
-					router.handleRoute('/login')
-				} else {
-					response.json().then(errorData => {
-						console.error('Logout failed:', errorData);
-					});
-				}
-			})
-			.catch(error => {
-				console.error('catch ->', error);
-			});
-		});
+        logout.addEventListener('click', () => {
+            fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+                credentials: 'include'
+            })
+            .then(async (response) => {
+                if (response.ok) {
+
+                    router.removeNotificatonAndFriendList();
+
+                    const res = await updateApiData(PROFILE_API_URL + "offline/", "");
+
+                    localStorage.removeItem('accessToken');
+                    router.handleRoute('/login')
+                } else {
+                    response.json().then(errorData => {
+                        console.error('Logout failed:', errorData);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('catch ->', error);
+            });
+        });
 	}
 	setExitEventListeners() {
 		document.querySelector('.logout').remove();

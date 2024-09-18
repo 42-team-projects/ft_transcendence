@@ -88,6 +88,7 @@ export function hideRightSideBar() {
 }
 
 export function showNotificationsList() {
+    renderNotificatonAndFriendList();
     const notificationList = window.document.querySelector(".right-sidebar notifications-list");
     notificationList.style.display = "flex";
     hideFriendsRequestList();
@@ -101,9 +102,16 @@ export function hideNotificationsList() {
 }
 
 
-
+function renderNotificatonAndFriendList() {
+    const rightSideBar = document.querySelector(".right-sidebar");
+    rightSideBar.innerHTML = `
+        <friends-request-list class="transform-1s" style="display: none;"></friends-request-list>
+        <notifications-list class="transform-1s" style="display: none;"></notifications-list>
+    `;
+}
 
 export function showFriendsRequestList() {
+    renderNotificatonAndFriendList();
     const friends = window.document.querySelector(".right-sidebar friends-request-list");
     friends.style.display = "flex";
     hideNotificationsList();
