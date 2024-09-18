@@ -2,6 +2,7 @@ import { CustomSliders } from "/Components/CustomElements/CustomSliders.js"
 import { CustomField } from "/Components/CustomElements/CustomField.js"
 import { getApiData, updateApiData } from "/Utils/APIManager.js";
 import { HOST } from "/Utils/GlobalVariables.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 
 export class GameContent extends HTMLElement {
@@ -40,7 +41,6 @@ export class GameContent extends HTMLElement {
     init(gameplayData) {
         const slider = this.shadowRoot.querySelector("custom-sliders");
         slider.board = gameplayData.board;
-        console.log("slider.board: ", slider.board);
         slider.gameColor = gameplayData.board_color;
         const gamePlayColor = this.shadowRoot.querySelector("#gamePlayColor");
         gamePlayColor.value = gameplayData.board_color;
@@ -106,8 +106,10 @@ export class GameContent extends HTMLElement {
         action.addEventListener("click", async () => {
             const form = this.getGamePlayData();
             const response = await updateApiData(HOST + "/game/game_play/", form);
-            console.log("response: ", response);
+            if (!response)
+                displayToast("error", "Opps somethings wrong!!!");
             refreshBox.display();
+            displayToast("success", "The Game Play has  succefully updated!!!");
         });
     }
 

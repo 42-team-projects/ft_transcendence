@@ -9,48 +9,49 @@ export default class LoginPage extends HTMLElement {
 	}
 	connectedCallback() {
 		this.shadowRoot.innerHTML = `
-			<style>${css}</style>
+		<style>${css}</style>
+		
+		<header-cpn></header-cpn>
+		
+		<div id="test">
+		
+		<div id="background"></div>
+		
+		<form id="content">
+			<div id="inner-header">
+				<h1>Login</h1>
+			</div>
 			
-			<header-cpn></header-cpn>
+			<div id="error-message"></div>
+			
+			<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
+			<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
+			
+			<div id="forget-password">
+				<a href="/forgot-password">Forgot Password?</a>
+			</div>
+			
+			<submit-button
+				title="Login"
+				account-text="Don't have an account? <a href='/signup'>Sign Up</a>">
+			</submit-button>
+			
+			<div class="oauth-footer">
+				<img src="/assets/auth-svg/orLine.svg" alt="Or">
 
-			<div id="test">
-				<div id="background"></div>
+				<div class="button-container">
 
-				<form id="content">
-					<div id="inner-header">
-						<h1>Login</h1>
-					</div>
+					<button class="oauth-button google">
+						<img src="/assets/auth-svg/google.svg" alt="Google">
+					</button>
 					
-					<div id="error-message"></div>
-					
-					<input-field placeholder="Email" icon="/assets/auth-svg/email.svg"></input-field>
-					<input-field placeholder="Password" icon="/assets/auth-svg/pwd.svg" eye="/assets/auth-svg/eyeClosed.svg"></input-field>
-					
-					<div id="forget-password">
-						<a href="/forgot-password">Forgot Password?</a>
-					</div>
-					
-					<submit-button
-						title="Login"
-						account-text="Don't have an account? <a href='/signup'>Sign Up</a>">
-					</submit-button>
-					
-					<div class="oauth-footer">
-						<img src="/assets/auth-svg/orLine.svg" alt="Or">
-
-						<div class="button-container">
-
-							<button class="oauth-button google">
-								<img src="/assets/auth-svg/google.svg" alt="Google">
-							</button>
-							
-							<button class="oauth-button intra">
-								<img src="/assets/auth-svg/42.svg" alt="Intra">
-							</button>
-						</div>
-					</div>
-				
-				</form>
+					<button class="oauth-button intra">
+						<img src="/assets/auth-svg/42.svg" alt="Intra">
+					</button>
+				</div>
+			</div>
+		
+		</form>
 						
 			</div>
 		`;

@@ -1,10 +1,11 @@
-// Player == Profile Page
-import { fetchWithToken } from "/root/fetchWithToken.js"
+import { fetchWithToken, isTokenValid } from "/root/fetchWithToken.js"
 
 export async function getApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken)
+    if (!accessToken || !isTokenValid(accessToken)) {
+        console.log("Access token is missing.");
         return null;
+    }
     const response = await fetchWithToken(APIUrl,
     {
         method: "GET",
@@ -16,7 +17,6 @@ export async function getApiData(APIUrl) {
     if (!response.ok)
         return null;
     const apiData = await response.json();
-    // console.log("getApiData => apiData: ", apiData);
     return apiData;
 }
 
@@ -25,6 +25,10 @@ export async function getApiData(APIUrl) {
 export async function createApiData(APIUrl, body) {
     
     const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken || !isTokenValid(accessToken)) {
+        console.log("Access token is missing.");
+        return null;
+    }
     const response = await fetchWithToken(APIUrl,
     {
         method: "POST",
@@ -34,14 +38,16 @@ export async function createApiData(APIUrl, body) {
         },
         body: body,
     });
+    if (!response.ok)
+        return null;
     return await response.json();
 
 }
 
 export async function updateApiData(APIUrl, body) {
     const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-        console.error("Access token is missing.");
+    if (!accessToken || !isTokenValid(accessToken)) {
+        console.log("Access token is missing.");
         return null;
     }
     const response = await fetchWithToken(APIUrl,
@@ -52,12 +58,18 @@ export async function updateApiData(APIUrl, body) {
         },
         body: body,
     });
+    if (!response.ok)
+        return null;
     return await response.json();
 
 }
 
 export async function deleteApiData(APIUrl) {
     const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken || !isTokenValid(accessToken)) {
+        console.log("Access token is missing.");
+        return null;
+    }
     const response = await fetchWithToken(APIUrl,
     {
         method: "DELETE",
@@ -66,5 +78,7 @@ export async function deleteApiData(APIUrl) {
             "Content-Type": "application/json"
         }
     });
+    if (!response.ok)
+        return null;
     return await response.json();
 }

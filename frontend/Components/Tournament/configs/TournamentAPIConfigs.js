@@ -52,8 +52,6 @@ export async function createTournament(data) {
 export async function player_leave_tournament(tournamentId) {
     try {
         const response = await createApiData(`${TOURNAMENT_API_URL}tournament/${tournamentId}/player/leave/`, "");
-        console.log("response: ", response);
-        // handle response message
     } catch (error) {
         console.error('Error of player leave tournament: ', error);
     }
@@ -62,17 +60,6 @@ export async function player_leave_tournament(tournamentId) {
 export async function get_tournament_by_id(id) {
     try {
         return await getApiData(`${TOURNAMENT_API_URL}${id}/`);
-        // const accessToken = localStorage.getItem('accessToken');
-        // const response = await fetch(`${TOURNAMENT_API_URL}${id}/`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         Authorization: `Bearer ${accessToken}`
-        //     }
-        // });
-        // if (!response.ok)
-        //     throw new Error(`${response.status}  ${response.statusText}`);
-        // return await response.json();
     } catch(error) {
         console.error('Error of tournament list: ', error);
     }
@@ -96,7 +83,6 @@ export async function player_join_tournament(tournamentId)
 {
     try {
         const response = await createApiData(`${TOURNAMENT_API_URL}tournament/${tournamentId}/player/`, "");
-        console.log("response: ", response);
         return response;
     } catch(error) {
         console.log('You already join to this tournament : ', error);

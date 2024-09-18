@@ -15,7 +15,6 @@ export class Router {
             { path: '/Home', view: 'home-page', isAccessed: true },
             { path: '/Game', view: 'game-selection', isAccessed: true },
             { path: '/Chat', view: 'chat-page', isAccessed: true },
-            { path: '/Ranking', view: 'ranking-page', isAccessed: true },
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
@@ -35,28 +34,7 @@ export class Router {
         this.footerBar.render()
         this.randred = true;
     }
-    profileRandring(){
-        const profile = header.querySelector('c-profile')
-        const userRunk = header.querySelector('user-rank');
-        profile.addEventListener('click', () => {
-            if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
-                this.ChangeRootContent = 'profile-component'
-            if(sideBar.activeButton.classList.length)
-            {
-                userRunk.classList.toggle('drop-100', false);
-                userRunk.classList.toggle('transform-1s', true);
-                userRunk.classList.toggle('down-60', false);
-                userRunk.classList.toggle('rise-0', true);
-                sideBar.activeButton.classList.toggle('on')
-                sideBar.activeButton.shadowRoot.querySelector('sb-icon').classList.toggle('on')
-                sideBar.activeButton.shadowRoot.querySelector('.c-sb-text').classList.toggle('on')
-                sideBar.activeButton.querySelector('h1').classList.toggle('on')
-                sideBar.activeButton.querySelector('img').classList.toggle('on')
-            }
-        })
-    }
     removeRandring(){
-        console.log("removing...")
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()
@@ -64,6 +42,19 @@ export class Router {
         this.randred = false;
     }
     
+    renderNotificatonAndFriendList() {
+        const rightSideBar = document.querySelector(".right-sidebar");
+        rightSideBar.innerHTML = `
+            <friends-request-list class="transform-1s" style="display: none;"></friends-request-list>
+            <notifications-list class="transform-1s" style="display: none;"></notifications-list>
+        `;
+    }
+
+    removeNotificatonAndFriendList() {
+        const rightSideBar = document.querySelector(".right-sidebar");
+        rightSideBar.innerHTML = ``;
+    }
+
     async changeStyle(access_token, path){
         let matchedRoute = this.routes.find((route) => path.startsWith(route.path));
         // let matchedRoute = this.routes.find((route) => route.path === path);
@@ -78,6 +69,8 @@ export class Router {
             
             const isValid = await isTokenValid(access_token);
             if (isValid) {
+                this.renderNotificatonAndFriendList();
+
                 if(this.randred === false)
                     this.randring();
                 this.rootContent.innerHTML = "";
@@ -89,6 +82,17 @@ export class Router {
                         this.sideBar.clickEvent = index;
                     }
                 });
+                if (path === "/Profile/me")
+                {
+                    if(this.sideBar.activeButton && this.sideBar.activeButton.classList.length)
+                    {
+                        this.sideBar.activeButton.classList.toggle('on')
+                        this.sideBar.activeButton.shadowRoot.querySelector('sb-icon').classList.toggle('on')
+                        this.sideBar.activeButton.shadowRoot.querySelector('.c-sb-text').classList.toggle('on')
+                        this.sideBar.activeButton.querySelector('h1').classList.toggle('on')
+                        this.sideBar.activeButton.querySelector('img').classList.toggle('on')
+                    }
+                }
             } else {
                 // setTimeout(() => {
                     matchedRoute = this.routes.find((route) => route.view === "login-page");
@@ -122,6 +126,18 @@ export class Router {
                 event.preventDefault();
                 this.handleRoute(link.getAttribute('href'));
             });
+        });
+    
+        // add by oussama to fix the problem of refreshing the page
+        this.rootContent.querySelectorAll('*').forEach(element => {
+            if (element.shadowRoot) {
+                element.shadowRoot.querySelectorAll('a[href^="/"]').forEach(link => {
+                    link.addEventListener('click', event => {
+                        event.preventDefault();
+                        this.handleRoute(link.getAttribute('href'));
+                    });
+                });
+            }
         });
     }
 }
