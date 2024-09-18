@@ -43,19 +43,6 @@
     right: 7%;
     top: 92.4%;
 }
-.multiPlayer{
-    grid-area : multiple;
-}
-.online{
-    grid-area : online;
-    display: flex;
-    align-items: center;
-}
-
-.multiPlayer img {
-    margin-top: 7rem;
-    width: 100%;
-}
 
 .online img{
     width: 100%;
