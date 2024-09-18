@@ -10,9 +10,36 @@ export class HeaderBar extends HTMLElement{
         super();
         // this.attachShadow({mode : 'open'})
     }
+    headerDown(){
+        const profile = this.querySelector('c-profile');
+		const userRunk = profile.querySelector('user-rank');
+	
+		userRunk.classList.toggle('drop-100', true);
+		userRunk.classList.toggle('transform-1s', false);
+		userRunk.classList.toggle('down-60', true);
+		userRunk.classList.toggle('rise-0', false);
+		this.classList.toggle('transform-1s', false);
+		this.classList.toggle('up-100', false);
+		this.classList.toggle('p-animation', false);
+    }
+    headerUp(){
+        const profile = this.querySelector('c-profile');
+        const userRunk = profile.querySelector('user-rank');
+        userRunk.classList.toggle('drop-100', false);
+        userRunk.classList.toggle('transform-1s', true);
+        userRunk.classList.toggle('down-60', false);
+        userRunk.classList.toggle('rise-0', true);
+        this.classList.toggle('transform-1s', true);
+        this.classList.toggle('up-100', true);
+        this.classList.toggle('p-animation', true);
+        setTimeout(() => {
+			this.innerHTML = '';
+            this
+        }, 1000);
+    }
     render(){
-        // this.shadowRoot.appendChild(HeaderTemplate.content.cloneNode(true));
         this.appendChild(HeaderTemplate.content.cloneNode(true));
+        this.headerDown();
         const notificationIcon = this.querySelector(".notification-icon");
 
         let notificationChecker = window.document.querySelector(".right-sidebar notifications-list");;

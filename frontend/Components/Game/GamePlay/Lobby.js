@@ -99,39 +99,32 @@ export class Lobby extends HTMLElement{
 	constructor(opponentId, time){
 		super();
 		this.socket = null;
-		this.time = 0;
+		this.time = undefined;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
 		this.setSlots(playerSlot.content, 'false')
 		this.setSlots(opponentSlot.content, 'true')
 		setTimeout(() => {
+			console.log('shrink')
 			document.body.classList.toggle('body-game-shrink', true);
-			// console.log("Hello from Lobby constructor !!!");
 		}, 1000);
 		this.headerAnimation();
 		this.sidebarAnimation();
+		this.footerAnimation();
 		if(opponentId && time)
 		{
 			this.time = time;
 			this.OnlineGame(opponentId);
 		}
 	}
-
+	footerAnimation(){
+		const footerBar = document.body.querySelector('footer-bar');
+		footerBar.setText('Quit');
+		footerBar.quitEventListener();
+	}
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
-		const profile = headerBar.querySelector('c-profile');
-		const userRunk = profile.querySelector('user-rank');
-	
-		userRunk.classList.toggle('drop-100', false);
-		userRunk.classList.toggle('transform-1s', true);
-		userRunk.classList.toggle('down-60', false);
-		userRunk.classList.toggle('rise-0', true);
-		headerBar.classList.toggle('transform-1s', true);
-		headerBar.classList.toggle('up-100', true);
-		headerBar.classList.toggle('p-animation', true);
-		setTimeout(() => {
-			headerBar.innerHTML = '';
-		}, 1000);
+		headerBar.headerUp();
 	}
 
 	sidebarAnimation(){
@@ -174,8 +167,7 @@ export class Lobby extends HTMLElement{
 	}
 
 	async openSocket(userId){
-		//set access token on the cocokies
-		// isValidToken (accessToken); => if expired => refresh token => get new access token else return true
+		// this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
 		this.socket = new WebSocket(`${wsUrl}ws/matchmaking/${userId}/`);
 		this.socket.onopen = (e) => {
 			console.log('socket open');
@@ -184,19 +176,12 @@ export class Lobby extends HTMLElement{
 
 		this.socket.onmessage = (e) => {
 			var data = JSON.parse(e.data).message;
-			const endTime = new Date().getTime();
-			const time = endTime - startTime; // Get the time in milliseconds
-			const decimalPart = time % 500
 			if (Number(data.user_1) === userId) {
-				setTimeout(() => {
 					setTimeout(() => this.setPlayer(data.user_2), 5000);
-					setTimeout(() => this.gameMode(data.room_group_name), 5500);
-				}, 500 - decimalPart);
+					setTimeout(() => this.gameMode(data.room_group_name), 6000);
 			} else if (Number(data.user_2) === userId) {
-				setTimeout(() => {
 					setTimeout(() => this.setPlayer(data.user_1), 5000);
-					setTimeout(() => this.gameMode(data.room_group_name), 5500);
-				}, 500 - decimalPart);
+					setTimeout(() => this.gameMode(data.room_group_name), 6000);
 			} else {
 				this.time = data.time;
 				this.updateTimer();
@@ -204,9 +189,8 @@ export class Lobby extends HTMLElement{
 		};
 		this.socket.onclose = (e) => {
 			console.log('socket close 1');
-			router.handleRoute(window.location.pathname);
-			router.randring();
 			this.socket = null;
+			this.remove();
 		};
 		this.socket.onerror = (e) => {
 			console.log('socket error');
@@ -245,7 +229,9 @@ export class Lobby extends HTMLElement{
 		p_h1.textContent = userInfo.username;
 		if(!opponentId){
 			await this.setSearchImages();
-			await this.openSocket(userInfo.id);
+			setTimeout(async () => {
+				await this.openSocket(userInfo.id);
+			}, 1500);
 			this.appendChild(OnlineGameTemplate.content.cloneNode(true));
 		}
 		else {
@@ -272,34 +258,28 @@ export class Lobby extends HTMLElement{
 	async setPlayer(opponentId){
 		const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
+		console.log(opponentId)
+		const turnTime = 10;
+		let delay = 0;
+		let delayNumber = (turnTime / 2) / Players.length;
 		const opponent = await getApiData(PROFILE_API_URL + `${opponentId}/`);
 		opponentInfo.id = opponentId;
 		opponentInfo.picture = HOST + opponent.user.avatar;
 		opponentInfo.username = opponent.user.username;
-		console.log(opponentId)
-		const turnTime = 1;
 		h1.id = 'NOpponent';
 		h1.classList = 'Name';
 		h1.slot = 'OpponentName';
 		h1.textContent = opponentInfo.username;
 		Players[0].src = opponentInfo.picture
-		let delay = 0;
-		let delayNumber = (turnTime / 2) / Players.length;
-
-		Players.forEach((element, index)=>{
+		Players.forEach((element)=>{
+			// element.style.animation = 'none';
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
 			element.style.opacity = '1';
 			delay += delayNumber;
-				
 		})
 		this.appendChild(h1.cloneNode(true));
-		// setTimeout(() => {
-		// 	Players.forEach((element, index)=>{
-		// 		element.style.animation = 'none';
-		// 	})
-		// }, 5000);
 	}
 	SinglePlayer()
 	{
@@ -376,9 +356,9 @@ export class Lobby extends HTMLElement{
 		h1.textContent = this.time;
 	}
 	disconnectedCallback(){
-		if(this.time > 0){
-			if(this.socket)
-				this.socket.close();
+		if(this.time > 0 || this.time === undefined){
+			router.handleRoute(window.location.pathname);
+			router.randring();
 		}
 		
 	}
