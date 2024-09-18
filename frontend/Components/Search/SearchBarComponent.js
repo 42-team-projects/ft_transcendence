@@ -7,7 +7,7 @@ import { getApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, getCurrentPlayerId } from "/Utils/GlobalVariables.js";
 
 
-const menu = ["Home", "Game", "Chat", "Friends", "Tournament", "Settings", "Profile"];
+const menu = ["Home", "Game", "Chat", "Tournament", "Settings", "Profile"];
 
 let oldInputValue;
 export class SearchBarComponent extends HTMLElement {

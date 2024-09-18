@@ -11,7 +11,7 @@ import { gameBard } from "/Components/CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
 import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
-plate");
+const game_page = document.createElement("template");
 
 let score = {
     player: 0,
