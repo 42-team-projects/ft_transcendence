@@ -1,7 +1,8 @@
 import { PROFILE_API_URL, HOST, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
-import { getApiData, createApiData } from "/Utils/APIManager.js";
+import { getApiData, createApiData, deleteApiData } from "/Utils/APIManager.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
+import { removeNotification } from "/Components/Notification/NotificationUtils.js";
 
 export class NewFriendNotification extends HTMLElement {
     constructor() {
@@ -78,6 +79,9 @@ export class NewFriendNotification extends HTMLElement {
                 const websocket = await getNotificationWebSocket();
                 websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "friend", "data": `/Chat/` + this.sender.user.username}));
                 this.parentElement.remove();
+
+                removeNotification(this.id);
+
                 if (window.location.pathname.includes("/Chat"))
                     router.handleRoute(window.location.pathname);
             });
@@ -89,6 +93,9 @@ export class NewFriendNotification extends HTMLElement {
                 const acceptResponse = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
                 console.log("acceptResponse: ", acceptResponse);
                 this.parentElement.remove();
+
+                removeNotification(this.id);
+                
             });
         }
 
