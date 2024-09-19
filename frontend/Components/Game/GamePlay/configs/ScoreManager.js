@@ -27,7 +27,6 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
                     console.log("you win !!!");
                     return;
                 }
-                // Initialize a new WebSocket connection or re-establish if necessary
                 initTournamentWebSocket(newTournamentData);
                 
             }, 5000);
