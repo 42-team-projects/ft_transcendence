@@ -59,7 +59,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def waiting(self):
         try:
-            await asyncio.wait_for(self.start(), timeout=5)
+            await asyncio.wait_for(self.start(), timeout=10)
         except asyncio.TimeoutError:
             await self.close()
         except asyncio.CancelledError:

@@ -111,6 +111,7 @@ export class SideBar extends HTMLElement {
         // this.clickEvent = 0;
     }
     remove(){
+        this.shadowRoot.classList = '';
         this.shadowRoot.innerHTML = '';
     }
 }

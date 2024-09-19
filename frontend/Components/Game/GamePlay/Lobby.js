@@ -101,14 +101,16 @@ export class Lobby extends HTMLElement{
 
 	constructor(opponentId, time){
 		super();
+		console.log('lobby')
 		this.socket = null;
 		this.time = -1;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
 		this.setSlots(playerSlot.content, 'false')
 		this.setSlots(opponentSlot.content, 'true')
-		setTimeout(() => {
+		this.game_shrink_interval = setInterval(() => {
 			console.log('shrink')
+			clearInterval(this.game_shrink_interval);
 			document.body.classList.toggle('body-game-shrink', true);
 		}, 1000);
 		this.headerAnimation();
@@ -119,6 +121,7 @@ export class Lobby extends HTMLElement{
 			this.time = time;
 			this.OnlineGame(opponentId);
 		}
+		console.log('lobby')
 	}
 	footerAnimation(){
 		const footerBar = document.body.querySelector('footer-bar');
@@ -179,11 +182,23 @@ export class Lobby extends HTMLElement{
 		this.socket.onmessage = (e) => {
 			var data = JSON.parse(e.data).message;
 			if (Number(data.user_1) === userId) {
-					setTimeout(() => this.setPlayer(data.user_2), 5000);
-					setTimeout(() => this.gameMode(data.room_group_name), 6000);
+				this.set_player_interval = setInterval(() => {
+					clearInterval(this.set_player_interval);
+					this.setPlayer(data.user_2)
+				}, 5000);
+				this.game_mode_interval = setInterval(() => {
+					clearInterval(this.game_mode_interval);
+					this.gameMode(data.room_group_name)
+				}, 6000);
 			} else if (Number(data.user_2) === userId) {
-					setTimeout(() => this.setPlayer(data.user_1), 5000);
-					setTimeout(() => this.gameMode(data.room_group_name), 6000);
+				this.set_player_interval = setInterval(() => {
+					clearInterval(this.set_player_interval);
+					this.setPlayer(data.user_1)
+				}, 5000);
+				this.game_mode_interval = setInterval(() => {
+					clearInterval(this.game_mode_interval);
+					this.gameMode(data.room_group_name)
+				}, 6000);
 			} else {
 				this.time = data.time;
 				this.updateTimer();
@@ -228,7 +243,8 @@ export class Lobby extends HTMLElement{
 		p_h1.textContent = userInfo.username;
 		if(!opponentId){
 			await this.setSearchImages();
-			setTimeout(async () => {
+			this.open_socket_interval = setInterval(async () => {
+				clearInterval(this.open_socket_interval);
 				await this.openSocket(userInfo.id);
 			}, 1500);
 			this.appendChild(OnlineGameTemplate.content.cloneNode(true));
@@ -253,7 +269,18 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
-
+	OflineGame(){
+		const root = document.querySelector('root-content')
+		this.shadowRoot.innerHTML = ``;
+		root.innerHTML = ``;
+		root.appendChild(this);
+		this.interval = setInterval(() => {
+			console.log('offline')
+			clearInterval(this.interval)
+			this.time = 0;
+			this.playeGame('offline', '', false)
+		}, 1000);
+	}
 	async setPlayer(opponentId){
 		const h1 = document.createElement('h1');
 		const Players = this.querySelectorAll('.PlayerS');
@@ -279,18 +306,22 @@ export class Lobby extends HTMLElement{
 		})
 		this.appendChild(h1.cloneNode(true));
 	}
-	SinglePlayer()
+	async SinglePlayer()
 	{
 		const root = document.querySelector('root-content')
 		const p_img = AiGameTemplate.content.getElementById('Player')
 		const p_h1 = AiGameTemplate.content.getElementById('NPlayer')
 		const o_img = AiGameTemplate.content.getElementById('Opponent')
 		const o_h1 = AiGameTemplate.content.getElementById('NOpponent')
-
+		const user_data = await getCurrentPlayerData();
+		userInfo.id = user_data.id;
+		userInfo.picture = HOST + user_data.user.avatar;
+		userInfo.username = user_data.user.username;
 		p_h1.textContent = userInfo.username;
 		p_img.src = userInfo.picture;
 		o_img.textContent = 'AI';
 		o_h1.textContent = 'AI';
+		this.createTimer('coming soon');
 		this.appendChild(AiGameTemplate.content.cloneNode(true));
 		root.innerHTML = ``;
 		root.appendChild(this);
@@ -358,14 +389,18 @@ export class Lobby extends HTMLElement{
 		h1.textContent = this.time;
 	}
 	disconnectedCallback(){
+		clearInterval(this.interval)
+		clearInterval(this.set_player_interval);
+		clearInterval(this.game_mode_interval);
+		clearInterval(this.game_shrink_interval);
+		clearInterval(this.open_socket_interval);
 		console.log('disconnectedCallback')
+		router.randred = false;
 		if(this.time > 0 || this.time === -1){
 			if(this.socket)
 				this.socket.close();
 			router.handleRoute(window.location.pathname);
-			router.randring();
 		}
-		
 	}
 }
 
