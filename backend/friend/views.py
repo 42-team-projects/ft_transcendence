@@ -31,6 +31,12 @@ def get_friends_list(request):
     friendship_serializer = FriendshipSerializer(friendship, read_only=True)
     return Response({'response': friendship_serializer.data})
 
+def is_block(current_user, receiver_user):
+    blocked = BlockUser.objects.filter(blocker=current_user, blocked=receiver_user).first()
+    block = BlockUser.objects.filter(blocker=receiver_user, blocked=current_user).first()
+    if blocked or block:
+        return True
+    return False
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -39,6 +45,11 @@ def send_friend_request(request, receiver_id):
     if receiver_id == current_user.id:
         return Response({'response': 'You cannot send a friend request to yourself.'}, status=400)
     receiver_user = get_object_or_404(User, id=receiver_id)
+
+    # handle block user here
+    if is_block(current_user, receiver_user):
+        return Response({'response': 'You can\'t send friend request'}, status=400)
+
     # Check for any existing friend request from the receiver to the sender
     reverse_request = FriendRequest.objects.filter(sender=receiver_user, receiver=current_user, is_active=True)
     if reverse_request.exists():
@@ -129,7 +140,7 @@ def block_user(request, user_id):
     if unfriend(current_user, blocked_user):
         block = BlockUser.objects.create(blocker=current_user, blocked=blocked_user)
         return Response({'response': 'User blocked and unfriended successfully.'}, status=201)
-    return Response({'response': 'No existing friendship was found to Block.'}, status=200)
+    return Response({'response': 'No existing friendship was found to Block.'}, status=400)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -145,7 +156,7 @@ def unblock_user(request, user_id):
         block.delete()
         return Response({'response': 'User unblocked successfully.'})
     except BlockUser.DoesNotExist:
-        return Response({'response': 'No blocking action found for this user.'})
+        return Response({'response': 'No blocking action found for this user.'}, status=400)
 
 
 def accept_or_decline(user, action):
