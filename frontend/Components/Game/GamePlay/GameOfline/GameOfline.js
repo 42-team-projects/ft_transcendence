@@ -13,7 +13,7 @@ OflineGameTemplate.innerHTML = /*html*/ `
 			</div>
 			<div class="M-buttonC">
 				<p>
-				Lorem ipsum dolor sit amet. Ut facere consequatur est dolore placeat rem accusamus quae est odit dolore. Id impedit molestiae vel voluptates repellendus ut perferendis libero et blanditiis dolor est dolorum molestiae. 
+				In offline mode, you can challenge your friends in local multiplayer ping pong matches. Grab a friend, take turns, and compete in five exciting rounds to see who’s the ultimate champion. It’s all about skill and fun – play together!
 				</p>
 				<c-button bcolor="#2EA4E1" Hcolor="#197fb3"> 
 					<h1 slot="text">START</h1>

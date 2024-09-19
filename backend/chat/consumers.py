@@ -39,9 +39,9 @@ class ChatConsumer(WebsocketConsumer):
 
             # handle block user here
             blocked = BlockUser.objects.filter(blocker=self.current_user, blocked=self.receiver).first()
-            block = BlockUser.objects.filter(blocker=self.receiver, blocked=self.current_user).first()
+            blocker = BlockUser.objects.filter(blocker=self.receiver, blocked=self.current_user).first()
             
-            if blocked and block:
+            if blocked or blocker:
                 self.send_error(f'can\'t send message, block!')
             else:
                 self.save_and_broadcast_message(data['message'])

@@ -279,7 +279,7 @@ export class Lobby extends HTMLElement{
 		})
 		this.appendChild(h1.cloneNode(true));
 	}
-	SinglePlayer()
+	async SinglePlayer()
 	{
 		const root = document.querySelector('root-content')
 		const p_img = AiGameTemplate.content.getElementById('Player')
@@ -287,11 +287,16 @@ export class Lobby extends HTMLElement{
 		const o_img = AiGameTemplate.content.getElementById('Opponent')
 		const o_h1 = AiGameTemplate.content.getElementById('NOpponent')
 
+		const user_data = await getCurrentPlayerData();
+		userInfo.id = user_data.id;
+		userInfo.picture = HOST + user_data.user.avatar;
+		userInfo.username = user_data.user.username;
 		p_h1.textContent = userInfo.username;
 		p_img.src = userInfo.picture;
 		o_img.textContent = 'AI';
 		o_h1.textContent = 'AI';
 		this.appendChild(AiGameTemplate.content.cloneNode(true));
+		this.createTimer('comming soon');
 		root.innerHTML = ``;
 		root.appendChild(this);
 	}
@@ -299,6 +304,7 @@ export class Lobby extends HTMLElement{
 		let game_play = undefined; 
 		if(this.state !== 'offline')
 			game_play = await getApiData(HOST + `/game/game_play/`);
+		console.log(state, room_group_name, game_play, save);
 		const header = new GameHeader(state);
 		const game = new GameTable(state, room_group_name, game_play, save);
 		const root = document.body.querySelector('root-content');

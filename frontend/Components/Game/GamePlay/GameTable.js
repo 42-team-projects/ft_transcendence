@@ -250,13 +250,7 @@ export class GameTable extends HTMLElement {
     getCoordonates(){return this.concoordonate;}
     
     async GameOver(playerState, score, opponent_score, opponent_player){
-        this.Loop_state = false;
-        const Pause = document.body.querySelector("pause-page");
-        const game_over = document.body.querySelector("game-over");
-        const Launching = document.body.querySelector("launching-game");
-        if (Launching) Launching.remove();
-        if (game_over) game_over.remove();
-        if (Pause) Pause.remove();
+        this.reset();
         if (this.id && this.id !== "undefined")
             await goNextStage(
                 playerState,
@@ -419,7 +413,7 @@ export class GameTable extends HTMLElement {
         this.setCoordonates(x, y, radius, dx, dy);
         if (this.state === "offline") {
             if(stop === true){
-                if (this.round > 2) {
+                if (this.round > 4) {
                     this.RoundOver(ctx);
                     this.loop_state = false;
                     this.luanching = false;
@@ -513,13 +507,22 @@ export class GameTable extends HTMLElement {
         };
         this.socket.send(JSON.stringify(message));
     }
-    disconnectedCallback() {
+    reset() {
+        this.Loop_state = false;
+        this.runder_call = false;
+        this.pause = false;
+        this.luanching = false;
         const Pause = document.body.querySelector("pause-page");
         const GameOver = document.body.querySelector("game-over");
         const Launching = document.body.querySelector("launching-game");
         if (Launching) Launching.remove();
         if (GameOver) GameOver.remove();
         if (Pause) Pause.remove();
+
+    }
+    disconnectedCallback() {
+        console.log("disconnected");
+        this.reset();
         if (this.state !== "offline") {
             this.socket.onclose = () => {
             };
