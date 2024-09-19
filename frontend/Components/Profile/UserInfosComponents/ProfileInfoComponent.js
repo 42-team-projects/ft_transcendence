@@ -130,13 +130,26 @@ export class ProfileInfoComponent extends HTMLElement {
                 
                 if (sendRequestResponse.ok) {
                     addFriend.src = "/assets/icons/wait-time-icon.svg";
+                    addFriend.id = "waiting";
                     const notificationWS = await getNotificationWebSocket()
                     if (notificationWS.readyState === WebSocket.OPEN) {
                         notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
                         displayToast("success", res.response);
+                        
                     } else {
                         console.error('WebSocket is not open. readyState = ' + notificationWS.readyState);
                     };
+                }
+                else
+                    displayToast("error", res.response);
+            }
+            else if (addFriend.id === "waiting") {
+                const cancelRequest = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
+                const res = await cancelRequest.json();
+                if (cancelRequest.ok) {
+                    displayToast("success", res.response);
+                    addFriend.id = "friend";
+                    addFriend.src = "/assets/images/profile/add-friends-icon.svg";
                 }
                 else
                     displayToast("error", res.response);
@@ -146,6 +159,7 @@ export class ProfileInfoComponent extends HTMLElement {
                 if (unfriendResponse) {
                     addFriend.src = "/assets/images/profile/add-friends-icon.svg";
                     displayToast("success", "your unfriended " + this.username);
+                    addFriend.id = "friend";
                 }
             }
         });

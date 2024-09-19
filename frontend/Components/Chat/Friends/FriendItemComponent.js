@@ -53,9 +53,6 @@ export class FriendItemComponent extends HTMLElement {
             this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + newValue + ") center / cover no-repeat";
         else if (name === "status")
         {
-            console.log("name: ", newValue);
-            console.log("comp: ", newValue === "true" );
-            console.log("res: ", (newValue === "true" ? "#00fffc" : "#d9d9d9"));
             const statusElement = this.shadowRoot.querySelector(".status");
             if (newValue === "true") {
                 statusElement.bcolor = "aqua";

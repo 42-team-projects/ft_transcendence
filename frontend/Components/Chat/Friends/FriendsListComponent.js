@@ -33,7 +33,6 @@ export class FriendsListComponent extends HTMLElement {
         friendItem.league = playerData.stats.league;
         friendItem.profileImage = HOST + playerData.user.avatar;
         friendItem.status = playerData.active;
-        console.log("status: ", friendItem.status);
         friendItem.userName = playerData.user.username;
         friendItem.addEventListener("click", (event) => {
             event.preventDefault();

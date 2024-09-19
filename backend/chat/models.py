@@ -1,11 +1,5 @@
 from django.db import models
-# from django.core.exceptions import ValidationError
-# from django.contrib.auth.models import User
 from accounts.models import User
-
-
-
-    
 
 class Conversation(models.Model):
     """
@@ -31,7 +25,6 @@ class Conversation(models.Model):
     def get_all_messages(self):
         return self.messages
 
-    
 class Message(models.Model):
     """
     Represents a message sent by a user in a conversation.
@@ -52,5 +45,3 @@ class Message(models.Model):
         
     def __str__(self):
         return f'{self.user.username} sent a message to conversation {self.conversation.title}'
-
-
