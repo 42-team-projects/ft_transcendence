@@ -114,11 +114,12 @@ export class FooterBar extends HTMLElement {
             });
         });
 	}
-	setExitEventListeners(component) {
-		document.querySelector('.logout').remove();
+	setExitEventListeners() {
+		if (this.querySelector('.logout')) 
+			this.querySelector('.logout').remove();
 		this.querySelector('footer').insertBefore(exit.content.cloneNode(true), this.querySelector('.display-errors'));
 		this.querySelector('.exit').addEventListener('click', () => {
-			component.remove();
+			router.handleRoute(window.location.pathname);
 		});
 		const icon = this.querySelector('object');
 		const text = this.querySelector('.exitText');
