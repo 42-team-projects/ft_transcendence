@@ -43,7 +43,10 @@ def store_tournament_score_on_blockchain(request):
             loser_id = int(request.data.get('loserId'))
             loser_score = int(request.data.get('loserIdScore'))
             CONTRACT_ABI = request.data.get('abi')
-            player = Player.objects.get(user=request.user)
+            # get tournament
+            tournament = Tournament.objects.get(tournament_id=tournament_id)
+            # delete tournament
+            tournament.delete()
             # Create contract instance
             contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
             # Create account from private key
