@@ -36,7 +36,7 @@ def is_block(current_user, receiver_user):
     block = BlockUser.objects.filter(blocker=receiver_user, blocked=current_user).first()
     if blocked or block:
         return True
-    return True
+    return False
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
