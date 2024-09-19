@@ -60,6 +60,8 @@ export class TournamentNotification extends HTMLElement {
             if (data)
             {
                 const alertsConrtainer = window.document.querySelector("body .alerts");
+                if (!alertsConrtainer)
+                    return;
                 alertsConrtainer.innerHTML = "";
                 alertsConrtainer.style.display = "flex";
                 const nicknameContainer = document.createElement("div");

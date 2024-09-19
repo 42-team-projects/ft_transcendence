@@ -117,6 +117,9 @@ async function displayAlert(message, data) {
     data = await getTournamentData(data.tournament_id); // use uuid instead of primary id key
 
     const alertsConrtainer = window.document.querySelector("body .alerts");
+    if (!alertsConrtainer)
+        return;
+
     alertsConrtainer.style.display = "flex";
     const oldAlert = alertsConrtainer.querySelector(".id_" + data.tournament_id);
     if (oldAlert)
@@ -278,8 +281,10 @@ function startCountdown(cDownContainer, tournament_id) {
             countdownInterval = -1;
             closeAndRemovePlayerFromTournament(tournament_id);
             const alertsConrtainer = window.document.querySelector("body .alerts");
-            alertsConrtainer.style.display = "none";
-            alertsConrtainer.innerHTML = '';
+            if (alertsConrtainer) {
+                alertsConrtainer.style.display = "none";
+                alertsConrtainer.innerHTML = '';
+            }
         }
         timeLeft--;
     }, 1000);

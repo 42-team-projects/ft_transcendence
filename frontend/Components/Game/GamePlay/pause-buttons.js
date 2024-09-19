@@ -42,7 +42,6 @@ export class PauseButtons extends HTMLElement{
         this.addEventListener('click', () => {
             const text = this.shadowRoot.querySelector('slot[name="text"]');
             const textObject = text.assignedElements()[0];
-            console.log(textObject.textContent)
             if (textObject.textContent == 'RESTART')
                 document.body.dispatchEvent(new CustomEvent('restart-game'))
             else if (textObject.textContent == 'RESUME')

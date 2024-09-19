@@ -129,6 +129,7 @@ export default class LoginPage extends HTMLElement {
 			else {
 				const eMsg = this.shadowRoot.querySelector('#error-message');
 				eMsg.textContent = data.detail;
+				eMsg.classList.remove('success');
 				eMsg.classList.add('show');
 			}
 		} catch (error) {
