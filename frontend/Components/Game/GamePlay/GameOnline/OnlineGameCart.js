@@ -29,19 +29,17 @@ export class OnlineGame extends HTMLElement{
 		this.attachShadow({mode:'open'})
 		this.shadowRoot.appendChild(OnlineGameTemplate.content.cloneNode(true))
 		const button = this.shadowRoot.querySelector('c-button')
-		// setTimeout(() => {
-			button.addEventListener('click', async ()=>{
-				if(isTokenValid(localStorage.getItem('accessToken')) == false)
-				{
-					router.handleRoute('/login')
-					return
-				}
-				if(this.is_clicked) return
-				this.is_clicked = true
-				const lobby = new Lobby();
-				lobby.OnlineGame();
-			})
-		// }, 4000);
+		button.addEventListener('click', async ()=>{
+			if(isTokenValid(localStorage.getItem('accessToken')) == false)
+			{
+				router.handleRoute('/login')
+				return
+			}
+			if(this.is_clicked) return
+			this.is_clicked = true
+			const lobby = new Lobby();
+			lobby.OnlineGame();
+		})
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
         setTimeout(() => {
