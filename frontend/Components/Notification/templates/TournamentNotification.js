@@ -60,6 +60,7 @@ export class TournamentNotification extends HTMLElement {
             if (data)
             {
                 const alertsConrtainer = window.document.querySelector("body .alerts");
+                alertsConrtainer.innerHTML = "";
                 alertsConrtainer.style.display = "flex";
                 const nicknameContainer = document.createElement("div");
                 nicknameContainer.className = "nickname-container"
@@ -111,7 +112,7 @@ export class TournamentNotification extends HTMLElement {
                             router.handleRoute(url.pathname);
                             this.parentElement.remove();
 
-                            nicknameContainer.remove();
+                            // nicknameContainer.remove();
                             alertsConrtainer.style.display = "none";
                         }
                     }
