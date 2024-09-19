@@ -448,5 +448,18 @@ custom-input input {
 }
 
 .btk:hover {
-    background-color: #00ccca;
+    background-color: #1966b1;
+}
+
+.support {
+    font-size: 0.8rem !important;
+}
+
+.support a {
+    color: #00FFFC;
+    font-size: 0.8rem;
+}
+
+.support a:hover {
+    color: #1966b1;
 }
