@@ -33,12 +33,9 @@ PlayerInfoTemplate.innerHTML = /*html*/ `
 `
 
 export class PlayerInfo extends HTMLElement {
-    constructor(state){
+    constructor(){
         super();
-        this.states = state
         this.appendChild(PlayerInfoTemplate.content.cloneNode(true))
-        if(this.states == 'offline')
-            this.querySelector('img').remove()
     }
     newScore(score, userInfo){
         const player = this.querySelector('.playerscor')
@@ -46,10 +43,8 @@ export class PlayerInfo extends HTMLElement {
         const playerName = this.querySelector('.playerinfo')
         const rackita = this.querySelector('.rackita')
         player.querySelector('h1').textContent = score
-        if(this.states != 'offline'){
-            playerImg.src = userInfo.picture;
-            rackita.style.backgroundColor = userInfo.color
-        }
+        playerImg.src = userInfo.picture;
+        rackita.style.backgroundColor = userInfo.color
         playerName.querySelector('p').textContent = userInfo.username
     }
 
@@ -60,8 +55,7 @@ export class PlayerInfo extends HTMLElement {
 
     connectedCallback(){
         if(this.state == 'reverse'){
-            if(this.states != 'offline')
-                this.querySelector('img').style.transform = 'scaleX(-1)';
+            this.querySelector('img').style.transform = 'scaleX(-1)';
             this.querySelector('.playerinfo').style.transform = 'translateY(0%) scaleX(-1)';
             this.querySelector('.playerscor').style.transform = 'translateY(0%) scaleX(-1)';
             this.style.transform = 'translateY(0%) scaleX(-1)';

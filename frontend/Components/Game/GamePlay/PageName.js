@@ -34,7 +34,6 @@ export class PageName extends HTMLElement{
         super();
         this.attachShadow({ mode: 'open' });
         
-        // Clone the template content and append it to the shadow DOM
         this.shadowRoot.appendChild(page_name.content.cloneNode(true));
     }
     get width(){

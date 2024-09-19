@@ -61,11 +61,10 @@ export class Router {
 
     async changeStyle(access_token, path){
         let matchedRoute = this.routes.find((route) => path.startsWith(route.path));
-        // let matchedRoute = this.routes.find((route) => route.path === path);
         if (!matchedRoute)
         {
             matchedRoute = this.routes.find((route) => route.view === "home-page");
-            window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
+            window.history.pushState({}, "", matchedRoute.path);
         }
     
         if (matchedRoute.isAccessed) {
@@ -97,13 +96,11 @@ export class Router {
                     }
                 }
             } else {
-                // setTimeout(() => {
-                    matchedRoute = this.routes.find((route) => route.view === "login-page");
-                    window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
-                    this.removeRandring();
-                    this.rootContent.innerHTML = "";
-                    this.rootContent.appendChild(document.createElement(matchedRoute.view));
-                // }, 2000);    
+                matchedRoute = this.routes.find((route) => route.view === "login-page");
+                window.history.pushState({}, "", matchedRoute.path);
+                this.removeRandring();
+                this.rootContent.innerHTML = "";
+                this.rootContent.appendChild(document.createElement(matchedRoute.view));
             }
         } else {
             this.removeRandring();
@@ -119,7 +116,6 @@ export class Router {
         this.changeStyle(accessToken, path);
         this.addLinkEventListeners();
 
-        // tmp place should be in function and called somewhere
     }
 
     addLinkEventListeners() {
@@ -130,7 +126,6 @@ export class Router {
             });
         });
     
-        // add by oussama to fix the problem of refreshing the page
         this.rootContent.querySelectorAll('*').forEach(element => {
             if (element.shadowRoot) {
                 element.shadowRoot.querySelectorAll('a[href^="/"]').forEach(link => {

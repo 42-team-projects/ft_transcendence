@@ -97,13 +97,16 @@ lobby.innerHTML =  /* html */ `
 
 export class Lobby extends HTMLElement{
 	tournament_id;
-	// set tournament_id(val) {this.tournament_id = val;}
 	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){
 		super();
 		this.socket = null;
 		this.time = -1;
+		userInfo.username = 'Player1';
+		userInfo.picture = HOST + `/media/defaults/ace.jpeg`;
+		opponentInfo.username = 'Player2';
+		opponentInfo.picture = HOST + `/media/defaults/ace.jpeg`;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
 		this.setSlots(playerSlot.content, 'false')
@@ -124,7 +127,7 @@ export class Lobby extends HTMLElement{
 	}
 	footerAnimation(){
 		const footerBar = document.body.querySelector('footer-bar');
-		footerBar.setExitEventListeners(this);
+		footerBar.setExitEventListeners();
 	}
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
@@ -217,7 +220,6 @@ export class Lobby extends HTMLElement{
 		const turnTime = 1;
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
 		let delayNumber = (turnTime / 2) / Players.length;
-		// searching_images = await this.getData(HOST + `/game/players/`);
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
@@ -292,7 +294,6 @@ export class Lobby extends HTMLElement{
 		h1.textContent = opponentInfo.username;
 		Players[0].src = opponentInfo.picture
 		Players.forEach((element)=>{
-			// element.style.animation = 'none';
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
@@ -395,6 +396,9 @@ export class Lobby extends HTMLElement{
 		if(this.time > 0 || this.time === -1){
 			if(this.socket)
 				this.socket.close();
+			document.body.addEventListener('exit-game', ()=>{
+				return;
+			})
 			router.handleRoute(window.location.pathname);
 		}
 	}

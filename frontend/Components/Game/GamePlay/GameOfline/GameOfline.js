@@ -9,11 +9,11 @@ OflineGameTemplate.innerHTML = /*html*/ `
 	<div class="shapes2-3">
 		<div class="shapes4-5">
 			<div class="text">
-				<h1>OFLINE GAME</h1>
+				<h1>LOCAL GAME</h1>
 			</div>
 			<div class="M-buttonC">
 				<p>
-					In offline mode, you can challenge your friends in local multiplayer ping pong matches. Grab a friend, take turns, and compete in five exciting rounds to see who’s the ultimate champion. It’s all about skill and fun – play together!
+					In local game, you can challenge your friends in local multiplayer ping pong matches. Grab a friend, take turns, and compete in five exciting rounds to see who’s the ultimate champion. It’s all about skill and fun – play together!
 				</p>
 				<c-button bcolor="#2EA4E1" Hcolor="#197fb3"> 
 					<h1 slot="text">START</h1>

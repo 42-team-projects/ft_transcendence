@@ -29,8 +29,6 @@ template.innerHTML = /*html*/`
 </div> 
 
 `
-// background-color: #021f38; 
-// background-color: #205997;
 export class PauseButtons extends HTMLElement{
     constructor(){
         super();
