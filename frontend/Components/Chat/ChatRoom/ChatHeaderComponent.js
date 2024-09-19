@@ -42,9 +42,8 @@ export class ChatHeaderComponent extends HTMLElement {
         })
         const playgame = this.querySelector(".play-game");
         playgame.addEventListener("click", async (e) => {
-            const websocket = await getNotificationWebSocket();;
-            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, 'is_signal': false, "type": "game", "infos": "hello world"}));
-            new Lobby(this.playerId, 30);
+            const websocket = await getNotificationWebSocket();
+            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, 'is_signal': false, "type": "game", "data": ""}));
         })
 
         const blockProfile = this.querySelector(".block-profile");

@@ -121,7 +121,6 @@ async function displayAlert(message, data) {
     const oldAlert = alertsConrtainer.querySelector(".id_" + data.tournament_id);
     if (oldAlert)
         oldAlert.remove();
-    console.log("\nhelloo test\n");
     const customAlert = new CustomAlert();
     customAlert.className = "id_" + data.tournament_id;
     customAlert.innerHTML = `
@@ -200,7 +199,6 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
         let now = new Date();
         now.setSeconds(now.getSeconds() + timeAppend);
         const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
-        console.log("start_date: ", start_date);
         const Tournament = {
             tournamentId: tournamentId,
             start_date: start_date,
@@ -214,7 +212,6 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
         });
         if (!response.ok) {
             const responseData = await response.json();
-            console.log(JSON.stringify(responseData, null, 2));
             throw new Error(`${response.status}  ${responseData.statusText}`);
         }
     } catch(error) {
@@ -253,9 +250,6 @@ async function getTournamentData(tournament_id) {
 
 function findOpponentId(playerId, playerIds, totalPlayers)
 {
-    console.log("\nplayerIds ==> ", playerIds);
-    console.log("\ntotalPlayers ==> ", totalPlayers);
-    console.log("\nplayerId ==> ", playerId);
     const pairing_sum = totalPlayers - 1;
     const index = playerIds.indexOf(playerId);
     if (index === -1) return null; // Player ID not found in the list
