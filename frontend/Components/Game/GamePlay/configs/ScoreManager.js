@@ -22,8 +22,8 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
                 {
 
                     const abi = await getAbi();
-                    console.log(tournament_id, opponent_id, opponent_score, user_id, user_score);
-                    await leaveTournamentAndStoreScore(tournament_id, opponent_id, opponent_score, user_id, user_score, abi);
+                    console.log(tournament_id, user_id, user_score, opponent_id, opponent_score);
+                    await leaveTournamentAndStoreScore(tournament_id, user_id, user_score, opponent_id, opponent_score, abi);
                     console.log("you win !!!");
                     return;
                 }

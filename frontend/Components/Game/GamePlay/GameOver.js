@@ -30,8 +30,7 @@ export class GameOver extends HTMLElement{
         `
         const resultDiv = GameOverTamplate.content.querySelector('.result')
         const p = document.createElement('p')
-        // const Player2 = document.createElement('p')
-        // console.log(player_state)
+
         p.textContent = `YOU ${player_state.toUpperCase()}`
         p.classList.toggle(player_state, true)
         resultDiv.appendChild(p)

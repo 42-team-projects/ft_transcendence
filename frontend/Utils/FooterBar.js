@@ -1,6 +1,9 @@
 import { fetchWithToken } from "/root/fetchWithToken.js";
 import { HOST } from '/Utils/GlobalVariables.js';
 import { router } from "/root/Router.js";
+import { updateApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+
 const template = document.createElement('template');
 template.innerHTML = /*html */`
 	<style>
@@ -77,7 +80,8 @@ export class FooterBar extends HTMLElement {
 		this.appendChild(template.content.cloneNode(true));
         const accessToken = localStorage.getItem('accessToken');
 		let logout = document.querySelector('.logout')
-        logout.addEventListener('click', () => {
+        logout.addEventListener('click', async () => {
+
             fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
                 method: 'POST',
                 headers: {
@@ -88,10 +92,11 @@ export class FooterBar extends HTMLElement {
             .then(async (response) => {
                 if (response.ok) {
 
-                    router.removeNotificatonAndFriendList();
+			
+					router.removeNotificatonAndFriendList();
 
-                    const res = await updateApiData(PROFILE_API_URL + "offline/", "");
-
+					const res = await updateApiData(PROFILE_API_URL + "offline/", "");
+		
                     localStorage.removeItem('accessToken');
                     router.handleRoute('/login')
                 } else {

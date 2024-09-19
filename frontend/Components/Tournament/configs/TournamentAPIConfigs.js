@@ -1,6 +1,7 @@
 import { TOURNAMENT_API_URL } from "/Utils/GlobalVariables.js";
 import { createApiData, getApiData } from "/Utils/APIManager.js";
 import { hashPassword } from "/Utils/Hasher.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 
 export async function get_tournaments_by_player_id() {
@@ -87,6 +88,6 @@ export async function player_join_tournament(tournamentId)
             return null;
         return await response.json();
     } catch(error) {
-        console.log('You already join to this tournament : ', error);
+        displayToast("error", "You already join to this tournament");
     }
 }
