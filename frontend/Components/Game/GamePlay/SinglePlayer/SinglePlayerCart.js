@@ -1,4 +1,5 @@
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 const singlePlayerTemplate = document.createElement('template')
 
@@ -40,12 +41,9 @@ export class SinglePlayer extends HTMLElement{
         this.attachShadow({mode : 'open'})
         this.shadowRoot.appendChild(singlePlayerTemplate.content.cloneNode(true))
         const button = this.shadowRoot.querySelector('c-button')
-		// setTimeout(() => {
             button.addEventListener('click', ()=>{
-                const lobby = new Lobby()
-                lobby.SinglePlayer();
+                displayToast('error', 'Single Player Mode is not available yet')
             })
-        // }, 4000);
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
         setTimeout(() => {
