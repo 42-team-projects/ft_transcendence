@@ -53,6 +53,8 @@ export class JoinTournament extends HTMLElement {
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
             const alertsConrtainer = window.document.querySelector("body .alerts");
+            if (!alertsConrtainer)
+                return;
             alertsConrtainer.innerHTML = '';
             alertsConrtainer.style.display = "flex";
             const nicknameContainer = document.createElement("div");

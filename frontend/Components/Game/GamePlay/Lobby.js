@@ -102,7 +102,6 @@ export class Lobby extends HTMLElement{
 
 	constructor(opponentId, time){
 		super();
-		console.log('lobby')
 		this.socket = null;
 		this.time = -1;
 		this.attachShadow({ mode: 'open' });
@@ -110,19 +109,18 @@ export class Lobby extends HTMLElement{
 		this.setSlots(playerSlot.content, 'false')
 		this.setSlots(opponentSlot.content, 'true')
 		this.game_shrink_interval = setInterval(() => {
-			console.log('shrink')
 			clearInterval(this.game_shrink_interval);
 			document.body.classList.toggle('body-game-shrink', true);
 		}, 1000);
 		this.headerAnimation();
 		this.sidebarAnimation();
 		this.footerAnimation();
+		document.body.querySelector('.alerts').style.display = 'none';
 		if(opponentId && time)
 		{
 			this.time = time;
 			this.OnlineGame(opponentId);
 		}
-		console.log('lobby')
 	}
 	footerAnimation(){
 		const footerBar = document.body.querySelector('footer-bar');
@@ -174,10 +172,8 @@ export class Lobby extends HTMLElement{
 	}
 
 	async openSocket(userId){
-		// this.socket = new WebSocket(`ws://${ip}:8000/ws/matchmaking/${userId}/`);
 		this.socket = new WebSocket(`${wsUrl}ws/matchmaking/${userId}/`);
 		this.socket.onopen = (e) => {
-			console.log('socket open');
 		};
 		const startTime = new Date().getTime();
 
@@ -207,7 +203,6 @@ export class Lobby extends HTMLElement{
 			}
 		};
 		this.socket.onclose = (e) => {
-			console.log('socket close 1');
 			this.socket = null;
 			this.remove();
 		};
@@ -218,7 +213,6 @@ export class Lobby extends HTMLElement{
 	}
 
 	async setSearchImages(){
-		console.log('setSearchImages')
 		let delay = 0; 
 		const turnTime = 1;
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
@@ -265,7 +259,6 @@ export class Lobby extends HTMLElement{
 				if(this.time <= 0)
 					clearInterval(inter);
 				this.updateTimer();
-				// console.log("hello from OnlineGame !!!");
 			}, 1000);
 			this.gameMode(room_group_name);
 		}
@@ -278,7 +271,6 @@ export class Lobby extends HTMLElement{
 		root.innerHTML = ``;
 		root.appendChild(this);
 		this.interval = setInterval(() => {
-			console.log('offline')
 			clearInterval(this.interval)
 			this.time = 0;
 			this.playeGame('offline', '', false)
@@ -334,7 +326,6 @@ export class Lobby extends HTMLElement{
 		let game_play = undefined; 
 		if(this.state !== 'offline')
 			game_play = await getApiData(HOST + `/game/game_play/`);
-		console.log(state, room_group_name, game_play, save);
 		const header = new GameHeader(state);
 		const game = new GameTable(state, room_group_name, game_play, save);
 		const root = document.body.querySelector('root-content');
@@ -365,7 +356,6 @@ export class Lobby extends HTMLElement{
 				if(this.time <= 0){
 					if(this.socket){
 						this.socket.onclose = async (e) => {
-							console.log('socket close 2');
 							this.socket = null;
 							await this.playeGame(undefined, room_group_name, true);
 						};
@@ -401,7 +391,6 @@ export class Lobby extends HTMLElement{
 		clearInterval(this.open_socket_interval);
 		clearInterval(this.header_interval);
 		clearInterval(this.sid_bar_Intirval);
-		console.log('disconnectedCallback')
 		router.randred = false;
 		if(this.time > 0 || this.time === -1){
 			if(this.socket)
