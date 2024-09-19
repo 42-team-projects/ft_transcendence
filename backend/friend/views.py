@@ -1,5 +1,5 @@
 from accounts.models            import User
-from friend.models             import(FriendRequest, Friendship, BlockUser)
+from friend.models              import *
 from rest_framework.response    import Response
 from rest_framework.decorators  import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -77,10 +77,10 @@ def accept_friend_request(request, request_id):
         # check is my friend request to accept.
         if friend_request.receiver == request.user:
             friend_request.accept()
-            return Response({'requests': 'Friend request accepted.'})
-        return Response({'requests': 'That is not your friend request to accepte.'}, status=403)
+            return Response({'response': 'Friend request accepted.'})
+        return Response({'response': 'That is not your friend request to accepte.'}, status=403)
     except FriendRequest.DoesNotExist:
-        return Response({'requests': 'Friend request not found.'}, status=404)
+        return Response({'response': 'Friend request not found.'}, status=404)
     
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -101,10 +101,10 @@ def decline_friend_request(request, request_id):
         friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
         if friend_request.receiver == request.user:
             friend_request.decline()
-            return Response({'requests': 'Friend request declined.'})
-        return Response({'requests': 'That is not your friend request to decline.'}, status=403)
+            return Response({'response': 'Friend request declined.'})
+        return Response({'response': 'That is not your friend request to decline.'}, status=403)
     except FriendRequest.DoesNotExist:
-        return Response({'requests': 'Friend request not found.'}, status=404)
+        return Response({'response': 'Friend request not found.'}, status=404)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -113,10 +113,10 @@ def cancel_friend_request(request, request_id):
         friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
         if friend_request.sender == request.user:
             friend_request.cancel()
-            return Response({'requests': 'Friend request cancelled.'})
-        return Response({'requests': 'That is not your friend request to cancel.'}, status=403)
+            return Response({'response': 'Friend request cancelled.'})
+        return Response({'response': 'That is not your friend request to cancel.'}, status=403)
     except FriendRequest.DoesNotExist:
-        return Response({'requests': 'Friend request not found.'}, status=404)
+        return Response({'response': 'Friend request not found.'}, status=404)
 
 
 @api_view(['POST'])

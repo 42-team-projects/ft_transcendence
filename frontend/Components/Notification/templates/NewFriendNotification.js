@@ -75,9 +75,9 @@ export class NewFriendNotification extends HTMLElement {
                 const acceptResponse = await createApiData(HOST + "/friend/accept/" + this.id + "/", "");
                 const res = await acceptResponse.json();
                 if (acceptResponse.ok)
-                    displayToast("success", res.requests);
+                    displayToast("success", res.response);
                 else
-                    displayToast("error", res.requests);
+                    displayToast("error", res.response);
 
                 
                 const websocket = await getNotificationWebSocket();
@@ -97,9 +97,9 @@ export class NewFriendNotification extends HTMLElement {
                 const acceptResponse = await createApiData(HOST + "/friend/decline/" + this.id + "/", "");
                 const res = await acceptResponse.json();
                 if (acceptResponse.ok)
-                    displayToast("success", res.requests);
+                    displayToast("success", res.response);
                 else
-                    displayToast("error", res.requests);
+                    displayToast("error", res.response);
 
                 this.parentElement.remove();
 

@@ -31,7 +31,6 @@ export function displayNotification(notificationContent, notifType) {
         notificationContainer.innerHTML = '';
         clearInterval(notificationInterval);
         notificationInterval = 0;
-        console.log("helllo wolrllrlrlrlrl??");
     }, 5000);
 
     // increment the notification counter.

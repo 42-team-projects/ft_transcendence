@@ -29,7 +29,7 @@ class UserNotificationConsumer(WebsocketConsumer):
         try:
             receiver = self.get_user(data['receiver'])
             sender   = self.get_user(self.id)
-            if not self.is_signal and data['type'] != 'friend':
+            if not self.is_signal :
                 new_notification = Notification.objects.create(sender=sender, receiver=receiver, content=data['message'], type=data['type'], data=data['data'])
                 if new_notification:
                     self.broadcast_notification(NotificationSerializer(new_notification).data)
