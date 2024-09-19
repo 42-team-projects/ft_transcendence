@@ -260,7 +260,6 @@ export class GameTable extends HTMLElement {
                 score,
                 opponent_score
             );
-        console.log(winner)
         const gameOver = new GameOver(playerState, this.state, winner);
         document.body.appendChild(gameOver);
         if( this.save_match === true)

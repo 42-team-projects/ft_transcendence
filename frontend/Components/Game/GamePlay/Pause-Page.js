@@ -85,12 +85,10 @@ export class PausePage extends HTMLElement{
         this.addBlur()
     }
     addBlur(){
-        console.log('blur')
         document.body.querySelector('game-header').classList.add('blur')
         document.body.querySelector('game-table').classList.add('blur')
     }
     removeBlur(){
-        console.log('remove blur')
         document.body.querySelector('game-header').classList.remove('blur')
         document.body.querySelector('game-table').classList.remove('blur')
     }
