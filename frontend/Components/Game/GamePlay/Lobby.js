@@ -97,7 +97,6 @@ lobby.innerHTML =  /* html */ `
 
 export class Lobby extends HTMLElement{
 	tournament_id;
-	// set tournament_id(val) {this.tournament_id = val;}
 	get tournament_id() {return this.tournament_id;}
 
 	constructor(opponentId, time){
@@ -217,7 +216,6 @@ export class Lobby extends HTMLElement{
 		const turnTime = 1;
 		const Players = OnlineGameTemplate.content.querySelectorAll('.PlayerS');
 		let delayNumber = (turnTime / 2) / Players.length;
-		// searching_images = await this.getData(HOST + `/game/players/`);
 		Players.forEach((element, index)=>{
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');
@@ -292,7 +290,6 @@ export class Lobby extends HTMLElement{
 		h1.textContent = opponentInfo.username;
 		Players[0].src = opponentInfo.picture
 		Players.forEach((element)=>{
-			// element.style.animation = 'none';
 			element.style.animationDelay = `${delay}s`;
 			element.style.setProperty('--numsec', turnTime);
 			element.style.setProperty('--dest', ((Players.length - 1) * 100) + '%');

@@ -9,7 +9,6 @@ import { PROFILE_COMPONENT } from "/Utils/GlobalVariables.js";
 export class HeaderBar extends HTMLElement{
     constructor(){
         super();
-        // this.attachShadow({mode : 'open'})
     }
     headerDown(){
         const profile = this.querySelector('c-profile');
