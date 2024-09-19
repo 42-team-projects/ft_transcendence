@@ -1,4 +1,5 @@
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 const singlePlayerTemplate = document.createElement('template')
 
@@ -20,7 +21,7 @@ singlePlayerTemplate.innerHTML = /*html*/ `
                 </div>
                 <div class="buttonC">
                     <p>
-                    Lorem ipsum dolor sit amet. Ut facere consequatur est dolore placeat rem accusamus quae est odit dolore. Id impedit molestiae vel voluptates repellendus ut perferendis libero et blanditiis dolor est dolorum molestiae. 
+                    In single-player mode, you’ll face off against an AI opponent in a one-on-one ping pong match. Test your skills across five rounds, as the AI gets progressively tougher. Can you outsmart the computer and claim victory? Let’s find out!
                     </p>
                     <c-button bcolor="#47AF56" Hcolor="#3b9148"> 
                         <h1 slot="text" >START</h1>
@@ -40,12 +41,9 @@ export class SinglePlayer extends HTMLElement{
         this.attachShadow({mode : 'open'})
         this.shadowRoot.appendChild(singlePlayerTemplate.content.cloneNode(true))
         const button = this.shadowRoot.querySelector('c-button')
-		// setTimeout(() => {
             button.addEventListener('click', ()=>{
-                const lobby = new Lobby()
-                lobby.SinglePlayer();
+                displayToast('error', 'Single Player Mode is not available yet')
             })
-        // }, 4000);
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
         setTimeout(() => {

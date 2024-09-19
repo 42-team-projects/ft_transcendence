@@ -27,9 +27,9 @@ export class GameHeader extends HTMLElement{
     constructor(state){
         super();
         this.state = state
-        if (this.state == 'offline')
-            HeaderTemplate.content.querySelector('pause-game').remove()
         this.appendChild(HeaderTemplate.content.cloneNode(true))
+        if (this.state == 'offline')
+            this.querySelector('pause-game').remove()
     }
     updateScore(score){
         
@@ -46,5 +46,9 @@ export class GameHeader extends HTMLElement{
         opponent.newScore(0, opponentInfo)
         this.insertBefore(player, this.querySelector('pause-game'))
         this.appendChild(opponent)
+    }
+    disconnectedCallback(){
+        this.innerHTML = ''
+        this.state = ''
     }
 }

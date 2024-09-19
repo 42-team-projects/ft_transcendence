@@ -38,6 +38,7 @@ export class Router {
         this.randred = true;
     }
     removeRandring(){
+
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()
@@ -64,7 +65,6 @@ export class Router {
         if (!matchedRoute)
         {
             matchedRoute = this.routes.find((route) => route.view === "home-page");
-            console.log("matchedRoute: ", matchedRoute);
             window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
         }
     
@@ -74,7 +74,6 @@ export class Router {
             if (isValid) {
                 this.renderNotificatonAndFriendList();
                 await updateApiData(PROFILE_API_URL + "online/", "");
-
                 if(this.randred === false)
                     this.randring();
                 this.rootContent.innerHTML = "";

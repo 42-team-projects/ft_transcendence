@@ -50,7 +50,6 @@ export class PauseGame extends HTMLElement{
     connectedCallback(){
         this.addEventListener('click', () => {
             document.body.dispatchEvent(new CustomEvent('pause-game'))
-            console.log('pause game')
         })
     }
 }
