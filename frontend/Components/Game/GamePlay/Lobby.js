@@ -5,6 +5,7 @@ import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/Globa
 import { getApiData } from "/Utils/APIManager.js";
 import { router } from "/root/Router.js";
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
+import { hideFriendsRequestList, hideRightSideBar } from "/Components/Header/header-bar.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -119,6 +120,8 @@ export class Lobby extends HTMLElement{
 		this.sidebarAnimation();
 		this.footerAnimation();
 		document.body.querySelector('.alerts').style.display = 'none';
+		hideRightSideBar();
+		hideFriendsRequestList();
 		if(opponentId && time)
 		{
 			this.time = time;

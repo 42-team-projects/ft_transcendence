@@ -131,7 +131,8 @@ export class ProfileInfoComponent extends HTMLElement {
                 if (sendRequestResponse.ok) {
                     addFriend.src = "/assets/icons/wait-time-icon.svg";
                     addFriend.id = "waiting";
-                    const notificationWS = await getNotificationWebSocket()
+                    const notificationWS = await getNotificationWebSocket();
+                    console.log("WebSocket.OPEN: ", WebSocket.OPEN);
                     if (notificationWS.readyState === WebSocket.OPEN) {
                         notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
                         displayToast("success", res.response);
