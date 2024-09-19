@@ -78,7 +78,6 @@ export class TournamentsTable extends HTMLElement {
                 if (data) {
                     try {
                         const response = await createTournament(data);
-                        console.log("reponse: ", response);
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;

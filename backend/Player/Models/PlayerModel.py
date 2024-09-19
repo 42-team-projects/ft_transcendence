@@ -18,7 +18,7 @@ class Player(models.Model):
 
 
 class Nickname(models.Model):
-    nickname = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    nickname = models.CharField(max_length=255, null=True, blank=True)
     tournamentid = models.CharField(max_length=10)
     
     # one-to-many relationship
