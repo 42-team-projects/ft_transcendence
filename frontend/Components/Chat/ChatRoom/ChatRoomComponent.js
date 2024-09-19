@@ -50,7 +50,7 @@ export class ChatRoomComponent extends HTMLElement {
     static observedAttributes = [];
 
     async attributeChangedCallback(attrName, oldValue, newValue) {
-        console.log("attrName: ", attrName);
+        // console.log("attrName: ", attrName);
     }
 
     async connectedCallback() {
@@ -69,7 +69,6 @@ export class ChatRoomComponent extends HTMLElement {
     }
     
     adoptedCallback() {
-        console.log("Custom element moved to new page.");
     }
 }
 

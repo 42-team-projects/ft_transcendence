@@ -93,7 +93,6 @@ export class SearchBarComponent extends HTMLElement {
                 }
                 else if (!searchInput.value && checker)
                     checker = false;
-                console.log("interval: ", this.interval);
             }, 500);
         });
         searchIcon.addEventListener("click", () => {
