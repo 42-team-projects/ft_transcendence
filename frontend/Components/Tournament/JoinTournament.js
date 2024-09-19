@@ -53,6 +53,7 @@ export class JoinTournament extends HTMLElement {
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
             const alertsConrtainer = window.document.querySelector("body .alerts");
+            alertsConrtainer.innerHTML = '';
             alertsConrtainer.style.display = "flex";
             const nicknameContainer = document.createElement("div");
             nicknameContainer.className = "nickname-container"
@@ -92,9 +93,8 @@ export class JoinTournament extends HTMLElement {
                 if (value && value.length > 1) {
                     const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": tournamentData.tournament_id}));
                     if (setNicknameResponse.ok) {
-                        await this.addPlayerToTournament(tournamentData);
-                        nicknameContainer.remove();
                         alertsConrtainer.style.display = "none";
+                        await this.addPlayerToTournament(tournamentData);
                     }
                 }
             });
