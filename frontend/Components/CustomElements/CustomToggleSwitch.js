@@ -33,13 +33,11 @@ export class CustomToggleSwitch extends HTMLElement {
                 toggle.querySelector("div").style.background = "#d9d9d9";
                 this.active = false;
                 const disable = await getApiData(DISABLE_2FA_API_URL);
-                console.log(disable);
             }
             else {
                 const response = await getApiData(ENABLE_2FA_API_URL);
                 if (!response)
                     return ;
-                // console.log("Response: ", response);
 
                 const alertsConrtainer = window.document.querySelector("body .alerts");
                 alertsConrtainer.style.display = "flex";
@@ -113,12 +111,10 @@ export class CustomToggleSwitch extends HTMLElement {
         {
             const toggle = this.shadowRoot.querySelector(".toggle");
             if (newValue == "true") {
-                console.log("active ::: ", newValue);
                 toggle.classList.add("enable");
                 toggle.querySelector("div").style.background = "aqua";
             }
             else {
-                console.log("active ::: ", newValue);
                 toggle.classList.remove("enable");
                 toggle.querySelector("div").style.background = "#d9d9d9";
             }
