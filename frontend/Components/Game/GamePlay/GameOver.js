@@ -1,5 +1,5 @@
 export class GameOver extends HTMLElement{
-    constructor(player_state){
+    constructor(player_state, state, winner){
         super();
         const GameOverTamplate = document.createElement('template')
         GameOverTamplate.innerHTML = /*html*/ `
@@ -30,9 +30,11 @@ export class GameOver extends HTMLElement{
         `
         const resultDiv = GameOverTamplate.content.querySelector('.result')
         const p = document.createElement('p')
-        // const Player2 = document.createElement('p')
-        // console.log(player_state)
-        p.textContent = `YOU ${player_state.toUpperCase()}`
+        if(state == 'offline'){
+            p.textContent = `${winner} ${player_state.toUpperCase()}`
+        }
+        else
+            p.textContent = `YOU ${player_state.toUpperCase()}`
         p.classList.toggle(player_state, true)
         resultDiv.appendChild(p)
 

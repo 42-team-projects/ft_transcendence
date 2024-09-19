@@ -64,7 +64,6 @@ customElements.define("custom-toast", CustomToast);
 
 
 export function displayToast(status, message) {
-    console.log(document.body);
     const toast = document.body.querySelector(".display-toast");
     toast.innerHTML = '';
     const test = document.createElement("custom-toast");

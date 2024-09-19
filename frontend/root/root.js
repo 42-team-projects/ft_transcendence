@@ -29,7 +29,6 @@ class Root extends HTMLElement{
         {
             await getCurrentPlayerData();
             const res = await updateApiData(PROFILE_API_URL + "online/", "");
-            console.log("res: ", res);
             await createWebSocketsForTournaments();
             await createNotificationWebSocket(); 
         }
@@ -37,7 +36,6 @@ class Root extends HTMLElement{
     
     async disconnectedCallback() {
         const res = await updateApiData(PROFILE_API_URL + "offline/", "");
-        console.log("res: ", res);
     }
 }
 customElements.define("root-content", Root)

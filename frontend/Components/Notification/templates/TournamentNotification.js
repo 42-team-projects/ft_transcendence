@@ -5,6 +5,9 @@ import { PROFILE_API_URL, getNotificationWebSocket } from "/Utils/GlobalVariable
 import { player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { router } from "/root/Router.js";
 import { JoinTournament } from "/Components/Tournament/JoinTournament.js";
+import { createApiData } from "/Utils/APIManager.js";
+import { removeNotification } from "/Components/Notification/configs/NotificationUtils.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export class TournamentNotification extends HTMLElement {
     constructor() {
@@ -56,19 +59,69 @@ export class TournamentNotification extends HTMLElement {
             const data = await player_join_tournament(this.tournamentId);
             if (data)
             {
-                console.log("sender.user.id: ", this.sender.user.id);
+                const alertsConrtainer = window.document.querySelector("body .alerts");
+                alertsConrtainer.innerHTML = "";
+                alertsConrtainer.style.display = "flex";
+                const nicknameContainer = document.createElement("div");
+                nicknameContainer.className = "nickname-container"
+                nicknameContainer.innerHTML = `
+                    <style>
+                        .nickname-container {
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 50px;
+                            background: #00142b;
+                            border: 1px solid aqua;
+                            padding: 20px;
+                            border-radius: 10px;
+                        }
+    
+                        .close-button {
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                            width: 16px;
+                            height: 16px;
+                        }
+                    </style>
+                    <img class="close-button" src="/assets/icons/close-x-icon.svg" width="16px" ></img>
+                    <custom-select id="nickname" label="Nickname"></custom-select>
+                    <custom-button class="save-button" width="200px" height="48px">Save</custom-button>
+                `;
+                nicknameContainer.querySelector(".close-button").addEventListener("click", () => {
+                    nicknameContainer.remove();
+                    alertsConrtainer.style.display = "none";
+                });
+                nicknameContainer.querySelector(".save-button").addEventListener("click", async () => {
+                    const value = nicknameContainer.querySelector("custom-select").value;
+                    if (value && value.length > 1) {
+                        const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": this.tournamentId}));
+                        if (setNicknameResponse.ok) {
+                            
+                            const websocket = await getNotificationWebSocket();
+                            websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "tournament", "data": `/Tournament/${this.tournamentId}`}));
+                            
 
-                const websocket = await getNotificationWebSocket();
-                websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "tournament", "data": `/Tournament/${this.tournamentId}`}));
-                
-
-                await addPlayer.initTournamentSocket(data);
+                            await addPlayer.initTournamentSocket(data);
 
 
-                const url = new URL(joinButton.href);
-                router.handleRoute(url.pathname);
-                this.parentElement.remove();
+                            const url = new URL(joinButton.href);
+                            router.handleRoute(url.pathname);
+                            this.parentElement.remove();
+
+                            // nicknameContainer.remove();
+                            alertsConrtainer.style.display = "none";
+                        }
+                    }
+                });
+                alertsConrtainer.appendChild(nicknameContainer);
             }
+            else
+                displayToast("error", "you already join to this tournament !!");
+            removeNotification(this.id);
         });
     }
 

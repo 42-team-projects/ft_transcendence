@@ -249,7 +249,7 @@ export class GameTable extends HTMLElement {
     }
     getCoordonates(){return this.concoordonate;}
     
-    async GameOver(playerState, score, opponent_score, opponent_player){
+    async GameOver(playerState, score, opponent_score, opponent_player, winner) {
         this.reset();
         if (this.id && this.id !== "undefined")
             await goNextStage(
@@ -260,7 +260,8 @@ export class GameTable extends HTMLElement {
                 score,
                 opponent_score
             );
-        const gameOver = new GameOver(playerState);
+        console.log(winner)
+        const gameOver = new GameOver(playerState, this.state, winner);
         document.body.appendChild(gameOver);
         if( this.save_match === true)
         {
@@ -301,12 +302,10 @@ export class GameTable extends HTMLElement {
                 });
                 const LunchingGame = document.body.querySelector("launching-game");
                 if (LunchingGame) LunchingGame.remove();
-                document.body
-                    .querySelector("game-header")
-                    .classList.toggle("blur", false);
-                document.body
-                    .querySelector("game-table")
-                    .classList.toggle("blur", false);
+                const game_header = document.body.querySelector("game-header")
+                if(game_header) game_header.classList.toggle("blur", false);
+                const game_table = document.body.querySelector("game-table")
+                if(game_table) game_table.classList.toggle("blur", false);
                 this.gameLoop(ctx);
                 clearInterval(Lunching);
             } else LunchingGame.updateTimer(RoundTime, this.round);
@@ -418,10 +417,10 @@ export class GameTable extends HTMLElement {
                     this.loop_state = false;
                     this.luanching = false;
                     if (score.player > score.opponent) {
-                        this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+                        this.GameOver("win", score.player, score.opponent, opponentInfo.id, userInfo.username);
                     }
                     else {
-                        this.GameOver("loss", score.player, score.opponent, opponentInfo.id);
+                        this.GameOver("win", score.player, score.opponent, opponentInfo.id, opponentInfo.username);
                     }
                 }
                 else {
@@ -507,21 +506,22 @@ export class GameTable extends HTMLElement {
         };
         this.socket.send(JSON.stringify(message));
     }
+
     reset() {
         this.Loop_state = false;
-        this.runder_call = false;
         this.pause = false;
         this.luanching = false;
+        this.runder_call = false;
+
         const Pause = document.body.querySelector("pause-page");
         const GameOver = document.body.querySelector("game-over");
         const Launching = document.body.querySelector("launching-game");
         if (Launching) Launching.remove();
         if (GameOver) GameOver.remove();
         if (Pause) Pause.remove();
-
     }
     disconnectedCallback() {
-        console.log("disconnected");
+
         this.reset();
         if (this.state !== "offline") {
             this.socket.onclose = () => {
@@ -534,7 +534,7 @@ export class GameTable extends HTMLElement {
             score.opponent = 0;
             this.GameOver("win", score.player, score.opponent, opponentInfo.id);
         }
+        router.randred = false;
         router.handleRoute(window.location.pathname);
-        router.randring();
     }
 }

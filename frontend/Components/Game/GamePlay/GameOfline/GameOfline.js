@@ -1,5 +1,5 @@
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
-
+import { router } from "/root/Router.js";
 const OflineGameTemplate = document.createElement('template')
 
 OflineGameTemplate.innerHTML = /*html*/ `
@@ -13,7 +13,7 @@ OflineGameTemplate.innerHTML = /*html*/ `
 			</div>
 			<div class="M-buttonC">
 				<p>
-				In offline mode, you can challenge your friends in local multiplayer ping pong matches. Grab a friend, take turns, and compete in five exciting rounds to see who’s the ultimate champion. It’s all about skill and fun – play together!
+					In offline mode, you can challenge your friends in local multiplayer ping pong matches. Grab a friend, take turns, and compete in five exciting rounds to see who’s the ultimate champion. It’s all about skill and fun – play together!
 				</p>
 				<c-button bcolor="#2EA4E1" Hcolor="#197fb3"> 
 					<h1 slot="text">START</h1>
@@ -33,20 +33,17 @@ export class OflineGame extends HTMLElement{
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
 		const button = this.shadowRoot.querySelector('c-button')
+		
 		button.addEventListener('click', ()=>{
             if(this.clicked) return
             this.clicked = true
 			const lobby = new Lobby();
-            setTimeout(() => {
-                lobby.playeGame('offline', '', false)
-            }, 1000);
-			// const game = document.querySelector('game-play')
-			// game.MultiPlayer()
+			router.randred = false
+			lobby.OflineGame();
 		})
 		setTimeout(() => {
 			this.classList.toggle('opacity-0', false)
 			this.classList.toggle('opacity-1', true)
 		}, 4000);
 	}
-
 }

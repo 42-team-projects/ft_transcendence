@@ -27,7 +27,6 @@ export class GameHeader extends HTMLElement{
     constructor(state){
         super();
         this.state = state
-        console.log(this.state)
         this.appendChild(HeaderTemplate.content.cloneNode(true))
         if (this.state == 'offline')
             this.querySelector('pause-game').remove()

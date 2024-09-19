@@ -1,6 +1,9 @@
 import { fetchWithToken } from "/root/fetchWithToken.js";
 import { HOST } from '/Utils/GlobalVariables.js';
 import { router } from "/root/Router.js";
+import { updateApiData } from "/Utils/APIManager.js";
+import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+
 const template = document.createElement('template');
 template.innerHTML = /*html */`
 	<style>
@@ -16,35 +19,38 @@ template.innerHTML = /*html */`
 			font-weight: 500;
 
 		}
-		.logout {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			cursor: pointer;
-		}
-
-		.logoutText {
-			font-size: 1.3rem;
-			font-weight: 500;
-		}
-		.display-errors {
-			width: 100%;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
 	</style>
 	<footer>
-		<div class="logout">
-			<img loading="lazy" src="/images/logout.svg" alt=""/>
-			<div class="logoutText"> logout </div>
-		</div>
 		<div class="display-errors">
 			<div class="display-toast"></div>
 		</div>
 	</footer>
 `;
-
+const logoutT = document.createElement('template');
+logoutT.innerHTML = /*html */`
+<style>
+	.logout {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		cursor: pointer;
+	}
+	.logoutText {
+		font-size: 1.3rem;
+		font-weight: 500;
+	}
+	.display-errors {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+</style>
+<div class="logout">
+	<img loading="lazy" src="/images/logout.svg" alt=""/>
+	<div class="logoutText"> logout </div>
+</div>
+`
 
 const exit = document.createElement('template');
 exit.innerHTML = /*html */`
@@ -72,12 +78,14 @@ exit.innerHTML = /*html */`
 export class FooterBar extends HTMLElement {
 	constructor() {
 		super();
+		this.appendChild(template.content.cloneNode(true));
 	}
 	render() {
-		this.appendChild(template.content.cloneNode(true));
+		this.querySelector('footer').insertBefore(logoutT.content.cloneNode(true), this.querySelector('.display-errors'));
         const accessToken = localStorage.getItem('accessToken');
 		let logout = document.querySelector('.logout')
-        logout.addEventListener('click', () => {
+        logout.addEventListener('click', async () => {
+
             fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
                 method: 'POST',
                 headers: {
@@ -88,10 +96,11 @@ export class FooterBar extends HTMLElement {
             .then(async (response) => {
                 if (response.ok) {
 
-                    router.removeNotificatonAndFriendList();
+			
+					router.removeNotificatonAndFriendList();
 
-                    const res = await updateApiData(PROFILE_API_URL + "offline/", "");
-
+					const res = await updateApiData(PROFILE_API_URL + "offline/", "");
+		
                     localStorage.removeItem('accessToken');
                     router.handleRoute('/login')
                 } else {
@@ -105,11 +114,11 @@ export class FooterBar extends HTMLElement {
             });
         });
 	}
-	setExitEventListeners() {
+	setExitEventListeners(component) {
 		document.querySelector('.logout').remove();
 		this.querySelector('footer').insertBefore(exit.content.cloneNode(true), this.querySelector('.display-errors'));
 		this.querySelector('.exit').addEventListener('click', () => {
-			router.handleRoute(window.location.pathname);
+			component.remove();
 		});
 		const icon = this.querySelector('object');
 		const text = this.querySelector('.exitText');
@@ -129,6 +138,9 @@ export class FooterBar extends HTMLElement {
 		})
 	}
 	remove() {
-		this.innerHTML = "";
+		if (this.querySelector('.exit')) 
+			this.querySelector('.exit').remove();
+		if (this.querySelector('.logout')) 
+			this.querySelector('.logout').remove();
 	}
 }
