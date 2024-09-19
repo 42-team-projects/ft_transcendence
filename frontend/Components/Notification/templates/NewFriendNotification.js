@@ -94,7 +94,7 @@ export class NewFriendNotification extends HTMLElement {
         const reject = this.querySelector(".notification-actions .reject");
         if (reject) {
             reject.addEventListener("click", async () => {
-                const acceptResponse = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
+                const acceptResponse = await createApiData(HOST + "/friend/decline/" + this.id + "/", "");
                 const res = await acceptResponse.json();
                 if (acceptResponse.ok)
                     displayToast("success", res.requests);
