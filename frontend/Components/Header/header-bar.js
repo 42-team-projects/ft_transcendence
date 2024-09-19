@@ -64,6 +64,7 @@ export class HeaderBar extends HTMLElement{
     }
 
     remove(){
+        this.classList = '';
         this.innerHTML = '';
     }
 }

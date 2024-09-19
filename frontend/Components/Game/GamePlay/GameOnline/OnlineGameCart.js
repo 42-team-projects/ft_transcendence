@@ -12,7 +12,7 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 		</div>
 		<div class="O-buttonC">
 			<p>
-			Lorem ipsum dolor sit amet. Ut facere consequatur est dolore placeat rem accusamus quae est odit dolore. Id impedit molestiae vel voluptates repellendus ut perferendis libero et blanditiis dolor est dolorum molestiae. 
+			In this online ping pong game, you’ll be matched with a random player for a competitive match. The game consists of five rounds, and the player who wins the most rounds claims victory. Ready for a fun challenge? Let’s play!
 			</p>
 			<c-button bcolor="#EB9A45" Hcolor="#e98f2f"> 
 				<h1 slot="text">START</h1>
