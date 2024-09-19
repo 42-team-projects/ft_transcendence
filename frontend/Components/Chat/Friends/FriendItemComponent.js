@@ -35,12 +35,12 @@ export class FriendItemComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
-        this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
-        const statusElement = this.shadowRoot.querySelector(".status");
-        statusElement.bcolor = this.status === "true" ? "#d9d9d9" : "aqua";
-        statusElement.querySelector("div").style.backgroundColor = this.status === "true" ? "#d9d9d9" : "aqua"; 
-        this.shadowRoot.querySelector("p").textContent = this.userName;
+        // this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(this.league);
+        // this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + this.profileImage + ") center / cover no-repeat";
+        // const statusElement = this.shadowRoot.querySelector(".status");
+        // statusElement.bcolor = this.status === "true" ? "#d9d9d9" : "aqua";
+        // statusElement.querySelector("div").style.backgroundColor = this.status === "true" ? "#d9d9d9" : "aqua"; 
+        // this.shadowRoot.querySelector("p").textContent = this.userName;
     }
 
 
@@ -53,9 +53,18 @@ export class FriendItemComponent extends HTMLElement {
             this.shadowRoot.querySelector(".c-hexagon-content").style.background = "url(" + newValue + ") center / cover no-repeat";
         else if (name === "status")
         {
+            console.log("name: ", newValue);
+            console.log("comp: ", newValue === "true" );
+            console.log("res: ", (newValue === "true" ? "#00fffc" : "#d9d9d9"));
             const statusElement = this.shadowRoot.querySelector(".status");
-            statusElement.bcolor = newValue === "true" ? "#d9d9d9" : "aqua";
-            statusElement.querySelector("div").style.backgroundColor = newValue === "true" ? "#d9d9d9" : "aqua"; 
+            if (newValue === "true") {
+                statusElement.bcolor = "aqua";
+                statusElement.querySelector("div").style.backgroundColor = "aqua"; 
+            }
+            else {
+                statusElement.bcolor = "#d9d9d9";
+                statusElement.querySelector("div").style.backgroundColor = "#d9d9d9"; 
+            }
         }
         else if (name === "user-name")
             this.shadowRoot.querySelector("p").textContent = newValue;
