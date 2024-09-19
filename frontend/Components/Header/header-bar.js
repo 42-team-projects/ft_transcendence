@@ -33,10 +33,12 @@ export class HeaderBar extends HTMLElement{
         this.classList.toggle('transform-1s', true);
         this.classList.toggle('up-100', true);
         this.classList.toggle('p-animation', true);
-        setTimeout(() => {
+        const interval = setInterval(() => {
+            clearInterval(interval);
 			this.innerHTML = '';
-            this
+            this.classList = '';
         }, 1000);
+        return interval;
     }
     render(){
         this.appendChild(HeaderTemplate.content.cloneNode(true));
