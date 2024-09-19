@@ -11,7 +11,7 @@ export function renderChatHeader(chatContainer, conversationData, is_blocked) {
     header.userId = conversationData.user.id;
     header.userName = conversationData.user.username;
     header.league = conversationData.stats.league;
-    header.active = conversationData.user.is_active;
+    header.active = conversationData.active;
     header.profileImage = HOST + conversationData.user.avatar;
     header.isblocked = is_blocked;
 }
