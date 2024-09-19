@@ -61,6 +61,7 @@ import { TwoFactorAuth } from "/Components/User/TwoFactorAuth.js";
 import { router } from "/root/Router.js"
 import { FooterBar } from "/Utils/FooterBar.js"
 import { CustomToast } from "/Components/CustomElements/CustomToast.js";
+import { WaitingForOpponent } from "/Components/Game/GamePlay/WaitingForOpponent.js"
 
 customElements.define("footer-bar", FooterBar);
 customElements.define("signup-page", SignupPage);
@@ -70,6 +71,7 @@ customElements.define("oauth-callback", OAuth);
 customElements.define("forgot-password", ForgotPassword);
 customElements.define("confirm-password", ConfirmPassword);
 customElements.define("two-factor", TwoFactorAuth);
+customElements.define('waiting-for-opponent', WaitingForOpponent);
 
 document.addEventListener('DOMContentLoaded', async (event) => {
     window.addEventListener("popstate", () =>

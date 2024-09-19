@@ -11,6 +11,7 @@ import { gameBard } from "/Components/CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
 import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
+import { WaitingForOpponent } from "./WaitingForOpponent.js";
 const game_page = document.createElement("template");
 
 let score = {
@@ -45,6 +46,7 @@ export class GameTable extends HTMLElement {
             this.save_match = save;
             document.body.querySelector("footer-bar").remove();
             this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
+            document.body.appendChild(new WaitingForOpponent());
             
             this.socket.onopen = () => {
             };
@@ -60,7 +62,10 @@ export class GameTable extends HTMLElement {
             this.socket.onerror = (error) => {
             };
         }
+        
         this.racquet = { width: 8, height: 110 };
+        userInfo.color = game_play.first_racket_color ? game_play.first_racket_color : '#FF0000';
+        opponentInfo.color = game_play.second_racket_color ? game_play.second_racket_color : '#FF0000';
         this.player = {
             x: 0,
             y: CANVAS_HEIGHT / 2,
@@ -104,6 +109,7 @@ export class GameTable extends HTMLElement {
         await this.getMessages();
     }
     gameStart = () => {
+        document.body.querySelector("waiting-for-opponent").remove();
         const messages = {
             message: "firstdata",
             canvas_width: CANVAS_WIDTH,
@@ -515,6 +521,8 @@ export class GameTable extends HTMLElement {
         const Pause = document.body.querySelector("pause-page");
         const GameOver = document.body.querySelector("game-over");
         const Launching = document.body.querySelector("launching-game");
+        const Waiting = document.body.querySelector("waiting-for-opponent");
+        if (Waiting) Waiting.remove();
         if (Launching) Launching.remove();
         if (GameOver) GameOver.remove();
         if (Pause) Pause.remove();

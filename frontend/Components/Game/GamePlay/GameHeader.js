@@ -39,8 +39,8 @@ export class GameHeader extends HTMLElement{
         opponent.newScore(score.opponent, opponentInfo)
     }
     connectedCallback(){
-        const player = new PlayerInfo(this.state)
-        const opponent = new PlayerInfo(this.state)
+        const player = new PlayerInfo()
+        const opponent = new PlayerInfo()
         opponent.setAttribute('state', 'reverse')
         player.newScore(0, userInfo)
         opponent.newScore(0, opponentInfo)

@@ -103,6 +103,10 @@ export class Lobby extends HTMLElement{
 		super();
 		this.socket = null;
 		this.time = -1;
+		userInfo.username = 'Player1';
+		userInfo.picture = HOST + `/media/defaults/ace.jpeg`;
+		opponentInfo.username = 'Player2';
+		opponentInfo.picture = HOST + `/media/defaults/ace.jpeg`;
 		this.attachShadow({ mode: 'open' });
 		this.shadowRoot.appendChild(lobby.content.cloneNode(true));
 		this.setSlots(playerSlot.content, 'false')
@@ -123,7 +127,7 @@ export class Lobby extends HTMLElement{
 	}
 	footerAnimation(){
 		const footerBar = document.body.querySelector('footer-bar');
-		footerBar.setExitEventListeners(this);
+		footerBar.setExitEventListeners();
 	}
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
@@ -392,6 +396,9 @@ export class Lobby extends HTMLElement{
 		if(this.time > 0 || this.time === -1){
 			if(this.socket)
 				this.socket.close();
+			document.body.addEventListener('exit-game', ()=>{
+				return;
+			})
 			router.handleRoute(window.location.pathname);
 		}
 	}
