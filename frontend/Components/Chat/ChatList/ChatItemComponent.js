@@ -64,8 +64,8 @@ export class ChatItemComponent extends HTMLElement {
             this.shadowRoot.querySelector(".numberOfMessageAndTimeContainer p").textContent = newValue;
         else if (name === "active")
         {
-            this.shadowRoot.querySelector(".online").bcolor = newValue === "true" ? "#00ffff" : "#d9d9d9";
-            this.shadowRoot.querySelector(".online div").style.background = newValue === "true" ? "#00ffff" : "#d9d9d9";
+            this.shadowRoot.querySelector(".online").bcolor = (newValue === "true" ? "#00ffff" : "#d9d9d9");
+            this.shadowRoot.querySelector(".online div").style.background = (newValue === "true" ? "#00ffff" : "#d9d9d9");
         }
         else if (name === "league")
             this.shadowRoot.querySelector(".profile").bcolor = getLeagueColor(newValue);
