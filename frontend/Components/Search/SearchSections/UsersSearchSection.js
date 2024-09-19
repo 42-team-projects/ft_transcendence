@@ -71,7 +71,6 @@ export class UsersSearchSection extends HTMLElement {
         showProfile.addEventListener("click", e => {
             e.preventDefault()
             const url = new URL(showProfile.href)
-            console.log(url.pathname)
             router.handleRoute(url.pathname)
         });
 

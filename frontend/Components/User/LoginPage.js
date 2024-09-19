@@ -117,7 +117,6 @@ export default class LoginPage extends HTMLElement {
 			});
 	
 			const data = await response.json();
-			console.log(data);
 	
 			if (response.status == 200) {
 				localStorage.setItem('accessToken', data.access_token);

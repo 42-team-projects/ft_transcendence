@@ -36,7 +36,6 @@ export class TournamentsSearchSection extends HTMLElement {
             </div>
         `;
         item.addEventListener("click", () => {
-            console.log("hello from tournaments search section");
         });
         return item;
     }
