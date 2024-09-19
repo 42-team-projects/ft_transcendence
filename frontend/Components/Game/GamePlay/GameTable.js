@@ -11,7 +11,6 @@ import { gameBard } from "/Components/CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
 import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
-import { displayToast } from "/Components/CustomElements/CustomToast.js";
 const game_page = document.createElement("template");
 
 let score = {
@@ -59,7 +58,6 @@ export class GameTable extends HTMLElement {
             };
             
             this.socket.onerror = (error) => {
-                displayToast("error", "Already in game");
             };
         }
         this.racquet = { width: 8, height: 110 };
@@ -251,7 +249,7 @@ export class GameTable extends HTMLElement {
     }
     getCoordonates(){return this.concoordonate;}
     
-    async GameOver(playerState, score, opponent_score, opponent_player){
+    async GameOver(playerState, score, opponent_score, opponent_player, winner) {
         this.reset();
         if (this.id && this.id !== "undefined")
             await goNextStage(
@@ -262,7 +260,8 @@ export class GameTable extends HTMLElement {
                 score,
                 opponent_score
             );
-        const gameOver = new GameOver(playerState);
+        console.log(winner)
+        const gameOver = new GameOver(playerState, this.state, winner);
         document.body.appendChild(gameOver);
         if( this.save_match === true)
         {
@@ -413,15 +412,15 @@ export class GameTable extends HTMLElement {
         this.setCoordonates(x, y, radius, dx, dy);
         if (this.state === "offline") {
             if(stop === true){
-                if (this.round > 5) {
+                if (this.round > 4) {
                     this.RoundOver(ctx);
                     this.loop_state = false;
                     this.luanching = false;
                     if (score.player > score.opponent) {
-                        this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+                        this.GameOver("win", score.player, score.opponent, opponentInfo.id, userInfo.username);
                     }
                     else {
-                        this.GameOver("loss", score.player, score.opponent, opponentInfo.id);
+                        this.GameOver("win", score.player, score.opponent, opponentInfo.id, opponentInfo.username);
                     }
                 }
                 else {
@@ -535,7 +534,7 @@ export class GameTable extends HTMLElement {
             score.opponent = 0;
             this.GameOver("win", score.player, score.opponent, opponentInfo.id);
         }
+        router.randred = false;
         router.handleRoute(window.location.pathname);
-        router.randring();
     }
 }
