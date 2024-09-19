@@ -50,7 +50,6 @@ export class CustomInputField extends HTMLElement {
         {
             input.addEventListener( 'change', (e) => {
                 var fileName = '';
-                console.log("files : ", input.files, " files length : ", input.files.length);;
                 if (input.files && input.files.length && input.files[0].size < 2*1e6)
                     fileName = input.files[0].name;
                 if (fileName)
