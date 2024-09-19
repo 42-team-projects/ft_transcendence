@@ -23,12 +23,13 @@ export class ChatListComponent extends HTMLElement {
     }
     
     async createChatItem(item, user) {
+        const player = await getApiData(PROFILE_API_URL + user.username);
         const chatItem = document.createElement("chat-item");
         chatItem.id = "item_" + user.id;
         chatItem.userName = user.username;
         chatItem.profileImage = HOST + user.avatar;
-        chatItem.active = user.is_active;
-        chatItem.league = "gold";
+        chatItem.active = player.active;
+        chatItem.league = player.stats.league;
         
         if (user.username === this.playerName) {
             chatItem.backgroundColor = "#051d31";
