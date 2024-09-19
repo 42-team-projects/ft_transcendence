@@ -40,15 +40,10 @@ export class OflineGame extends HTMLElement{
 			const lobby = new Lobby();
 			router.randred = false
 			lobby.OflineGame();
-			// const game = document.querySelector('game-play')
-			// game.MultiPlayer()
 		})
 		setTimeout(() => {
 			this.classList.toggle('opacity-0', false)
 			this.classList.toggle('opacity-1', true)
 		}, 4000);
-	}
-	disconnectedCallback(){
-
 	}
 }

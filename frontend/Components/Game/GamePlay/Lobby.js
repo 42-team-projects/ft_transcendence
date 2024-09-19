@@ -4,6 +4,7 @@ import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
 import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { router } from "/root/Router.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -125,11 +126,11 @@ export class Lobby extends HTMLElement{
 	}
 	footerAnimation(){
 		const footerBar = document.body.querySelector('footer-bar');
-		footerBar.setExitEventListeners();
+		footerBar.setExitEventListeners(this);
 	}
 	headerAnimation(){
 		const headerBar = document.body.querySelector('header-bar');
-		headerBar.headerUp();
+		this.header_interval = headerBar.headerUp();
 	}
 
 	sidebarAnimation(){
@@ -142,7 +143,8 @@ export class Lobby extends HTMLElement{
 		if(clickedButtons)
 			clickedButtons.classList.toggle('on', false);
 		sideBar.classList.toggle('p-animation', true);
-		setTimeout(() => {
+		this.sid_bar_Intirval = setInterval(() => {
+			clearInterval(this.sid_bar_Intirval);
 			sideBar.shadowRoot.innerHTML = '';
 			sideBar.classList.toggle('left', false);
 		}, 1000);
@@ -210,7 +212,8 @@ export class Lobby extends HTMLElement{
 			this.remove();
 		};
 		this.socket.onerror = (e) => {
-			console.log('socket error');
+			displayToast("error", "You are Already Playing");
+
 		};
 	}
 
@@ -394,6 +397,8 @@ export class Lobby extends HTMLElement{
 		clearInterval(this.game_mode_interval);
 		clearInterval(this.game_shrink_interval);
 		clearInterval(this.open_socket_interval);
+		clearInterval(this.header_interval);
+		clearInterval(this.sid_bar_Intirval);
 		console.log('disconnectedCallback')
 		router.randred = false;
 		if(this.time > 0 || this.time === -1){
