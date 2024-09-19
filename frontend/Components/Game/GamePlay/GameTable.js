@@ -11,6 +11,7 @@ import { gameBard } from "/Components/CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
 import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 const game_page = document.createElement("template");
 
 let score = {
@@ -58,6 +59,7 @@ export class GameTable extends HTMLElement {
             };
             
             this.socket.onerror = (error) => {
+                displayToast("error", "Already in game");
             };
         }
         this.racquet = { width: 8, height: 110 };
@@ -250,13 +252,7 @@ export class GameTable extends HTMLElement {
     getCoordonates(){return this.concoordonate;}
     
     async GameOver(playerState, score, opponent_score, opponent_player){
-        this.Loop_state = false;
-        const Pause = document.body.querySelector("pause-page");
-        const game_over = document.body.querySelector("game-over");
-        const Launching = document.body.querySelector("launching-game");
-        if (Launching) Launching.remove();
-        if (game_over) game_over.remove();
-        if (Pause) Pause.remove();
+        this.reset();
         if (this.id && this.id !== "undefined")
             await goNextStage(
                 playerState,
@@ -307,12 +303,10 @@ export class GameTable extends HTMLElement {
                 });
                 const LunchingGame = document.body.querySelector("launching-game");
                 if (LunchingGame) LunchingGame.remove();
-                document.body
-                    .querySelector("game-header")
-                    .classList.toggle("blur", false);
-                document.body
-                    .querySelector("game-table")
-                    .classList.toggle("blur", false);
+                const game_header = document.body.querySelector("game-header")
+                if(game_header) game_header.classList.toggle("blur", false);
+                const game_table = document.body.querySelector("game-table")
+                if(game_table) game_table.classList.toggle("blur", false);
                 this.gameLoop(ctx);
                 clearInterval(Lunching);
             } else LunchingGame.updateTimer(RoundTime, this.round);
@@ -419,7 +413,7 @@ export class GameTable extends HTMLElement {
         this.setCoordonates(x, y, radius, dx, dy);
         if (this.state === "offline") {
             if(stop === true){
-                if (this.round > 2) {
+                if (this.round > 5) {
                     this.RoundOver(ctx);
                     this.loop_state = false;
                     this.luanching = false;
@@ -513,13 +507,23 @@ export class GameTable extends HTMLElement {
         };
         this.socket.send(JSON.stringify(message));
     }
-    disconnectedCallback() {
+
+    reset() {
+        this.Loop_state = false;
+        this.pause = false;
+        this.luanching = false;
+        this.runder_call = false;
+
         const Pause = document.body.querySelector("pause-page");
         const GameOver = document.body.querySelector("game-over");
         const Launching = document.body.querySelector("launching-game");
         if (Launching) Launching.remove();
         if (GameOver) GameOver.remove();
         if (Pause) Pause.remove();
+    }
+    disconnectedCallback() {
+
+        this.reset();
         if (this.state !== "offline") {
             this.socket.onclose = () => {
             };

@@ -20,7 +20,7 @@ singlePlayerTemplate.innerHTML = /*html*/ `
                 </div>
                 <div class="buttonC">
                     <p>
-                    Lorem ipsum dolor sit amet. Ut facere consequatur est dolore placeat rem accusamus quae est odit dolore. Id impedit molestiae vel voluptates repellendus ut perferendis libero et blanditiis dolor est dolorum molestiae. 
+                    In single-player mode, you’ll face off against an AI opponent in a one-on-one ping pong match. Test your skills across five rounds, as the AI gets progressively tougher. Can you outsmart the computer and claim victory? Let’s find out!
                     </p>
                     <c-button bcolor="#47AF56" Hcolor="#3b9148"> 
                         <h1 slot="text" >START</h1>

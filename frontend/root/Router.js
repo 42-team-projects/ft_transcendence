@@ -38,6 +38,7 @@ export class Router {
         this.randred = true;
     }
     removeRandring(){
+        
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()
@@ -74,7 +75,7 @@ export class Router {
             if (isValid) {
                 this.renderNotificatonAndFriendList();
                 await updateApiData(PROFILE_API_URL + "online/", "");
-
+                console.log("path: ", path);
                 if(this.randred === false)
                     this.randring();
                 this.rootContent.innerHTML = "";
