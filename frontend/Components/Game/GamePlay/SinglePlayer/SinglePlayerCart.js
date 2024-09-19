@@ -11,7 +11,7 @@ singlePlayerTemplate.innerHTML = /*html*/ `
         <div class="style-1">
             <div class="style-2">
                 <div class="style-2_1">
-                    <h1>SINGLE PLAYER</h1>
+                    <h1>AI GAME</h1>
                 </div>
                 <div class="box-container">
                     <div class="top-box">
