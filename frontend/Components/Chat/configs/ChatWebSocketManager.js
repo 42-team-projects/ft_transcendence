@@ -1,5 +1,6 @@
 import { wsUrl } from "/Utils/GlobalVariables.js";
 import { renderConversation } from "/Components/Chat/configs/ChatConfigs.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 export function setUpWebSocket(chatContainer, room_name) {
     const webSocket = createWebSocket(`${wsUrl}ws/chat/chat/${room_name}/`);
@@ -26,8 +27,10 @@ export function createWebSocket(wsUrl) {
 export function onmessage(webSocket, chatContainer) {
     webSocket.onmessage = (e) => {
         let data = JSON.parse(e.data)
-        if (data.Error) {
-            console.log(data.Error)
+        console.log(data);
+        if (data.error) {
+            displayToast("error", data.error);
+            // console.log(data.Error)
         }
         else {
             renderConversation(chatContainer, [data]);

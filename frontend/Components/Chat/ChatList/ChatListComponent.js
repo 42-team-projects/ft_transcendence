@@ -6,6 +6,7 @@ import { getCurrentUserId } from "/Utils/GlobalVariables.js";
 import { setUpWebSocket } from "/Components/Chat/configs/ChatWebSocketManager.js";
 import { router } from "/root/Router.js";
 import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 
 export class ChatListComponent extends HTMLElement {
@@ -64,6 +65,7 @@ export class ChatListComponent extends HTMLElement {
         let isPlayerExest = false;
         try {
             const data = await getApiData(HOST + "/chat/conversation_list/");
+            console.log("data: ", data);
             if (data) {
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item, item.reciever);
@@ -82,10 +84,7 @@ export class ChatListComponent extends HTMLElement {
                 list.prepend(chatItem);
             }
         } catch (error) {
-            const errorContainer = document.body.querySelector(".display-errors");
-            if (errorContainer) {
-                errorContainer.innerHTML = 'Error fetching chat data';
-            }
+            // displayToast("error", "there is no consersation list to display !!");
         }
     }
 }

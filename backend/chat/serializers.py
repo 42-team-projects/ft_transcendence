@@ -3,8 +3,6 @@ from .models import *
 from accounts.models import User
 import json 
 
-# from Player.Serializers.PlayerSerializer import UserSerializer
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

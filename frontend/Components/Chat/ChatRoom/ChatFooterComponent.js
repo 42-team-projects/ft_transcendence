@@ -50,6 +50,9 @@ export class ChatFooterComponent extends HTMLElement {
 
     async chat(sender_id, receiver_id, message) {
         if(ws.readyState === WebSocket.OPEN) {
+            // ws.onmessage = (data) => {
+            //     console.log(data);
+            // };
             ws.send(JSON.stringify({
                 'message' : message,
                 'sender' : sender_id,
