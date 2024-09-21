@@ -324,6 +324,8 @@ export class Lobby extends HTMLElement{
 		root.appendChild(this);
 	}
 	async playeGame(state, room_group_name, save){
+		clearInterval(this.interval)
+		clearInterval(this.set_player_interval);
 		let game_play = undefined; 
 		if(this.state !== 'offline')
 			game_play = await getApiData(HOST + `/game/game_play/`);

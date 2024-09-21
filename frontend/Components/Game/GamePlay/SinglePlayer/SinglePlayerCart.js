@@ -11,7 +11,7 @@ singlePlayerTemplate.innerHTML = /*html*/ `
         <div class="style-1">
             <div class="style-2">
                 <div class="style-2_1">
-                    <h1>SINGLE PLAYER</h1>
+                    <h1>AI GAME</h1>
                 </div>
                 <div class="box-container">
                     <div class="top-box">
@@ -21,7 +21,7 @@ singlePlayerTemplate.innerHTML = /*html*/ `
                 </div>
                 <div class="buttonC">
                     <p>
-                    In single-player mode, you’ll face off against an AI opponent in a one-on-one ping pong match. Test your skills across five rounds, as the AI gets progressively tougher. Can you outsmart the computer and claim victory? Let’s find out!
+                    In Ai-Game mode, you’ll face off against an AI opponent in a one-on-one ping pong match. Test your skills across five rounds, as the AI gets progressively tougher. Can you outsmart the computer and claim victory? Let’s find out!
                     </p>
                     <c-button bcolor="#47AF56" Hcolor="#3b9148"> 
                         <h1 slot="text" >START</h1>
