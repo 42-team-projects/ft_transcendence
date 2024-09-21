@@ -2,7 +2,7 @@ import { fetchWithToken } from "/root/fetchWithToken.js";
 import { HOST } from '/Utils/GlobalVariables.js';
 import { router } from "/root/Router.js";
 import { updateApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { PROFILE_API_URL, setCurrentPlayer } from "/Utils/GlobalVariables.js";
 
 const template = document.createElement('template');
 template.innerHTML = /*html */`
@@ -19,6 +19,8 @@ template.innerHTML = /*html */`
 			font-weight: 500;
 
 		}
+
+
 	</style>
 	<footer>
 		<div class="display-errors">
@@ -100,6 +102,7 @@ export class FooterBar extends HTMLElement {
 					router.removeNotificatonAndFriendList();
 
 					const res = await updateApiData(PROFILE_API_URL + "offline/", "");
+					setCurrentPlayer(null);
 		
                     localStorage.removeItem('accessToken');
                     router.handleRoute('/login')

@@ -28,7 +28,6 @@ export function displayNotification(notificationContent, notifType) {
         notificationContainer.innerHTML = '';
         clearInterval(notificationInterval);
         notificationInterval = 0;
-        console.log("notificationContent: ", notificationContent);
         if (notifType === "friend") {
             window.document.querySelector(".right-sidebar friends-request-list").appendFriendRequest(notificationContent);
             const notificationIcon = window.document.querySelector(".friends-icon .number-of-friend-requests");

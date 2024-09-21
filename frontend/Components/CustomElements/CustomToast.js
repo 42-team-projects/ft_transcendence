@@ -1,12 +1,14 @@
 const cssContent = /*css*/`
     :host {
-        height: 56px;
+        height: 32px;
         color: white;
         border-radius: 100px;
         padding: 10px 20px;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 14px;
+        font-family: 'Sansation Bold';
     }
 
     .toastContainer {
