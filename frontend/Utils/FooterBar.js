@@ -121,22 +121,22 @@ export class FooterBar extends HTMLElement {
 		this.querySelector('.exit').addEventListener('click', () => {
 			router.handleRoute(window.location.pathname);
 		});
-		// const icon = this.querySelector('object');
-		// const text = this.querySelector('.exitText');
-		// icon.addEventListener('load', () => {
-		// 	const iconObjectContent = icon.contentDocument;
-		// 	const path = iconObjectContent.querySelector('path');
-		// 	path.setAttribute('stroke', 'white');
-		// 	text.style.color = 'white';
-		// 	this.querySelector('.exit').addEventListener('mouseover', () => {
-		// 		path.setAttribute('stroke', 'red');
-		// 		text.style.color = 'red';
-		// 	})
-		// 	this.querySelector('.exit').addEventListener('mouseout', () => {
-		// 		path.setAttribute('stroke', 'white');
-		// 		text.style.color = 'white';
-		// 	})
-		// })
+		const icon = this.querySelector('object');
+		const text = this.querySelector('.exitText');
+		icon.addEventListener('load', () => {
+			const iconObjectContent = icon.contentDocument;
+			const path = iconObjectContent.querySelector('path');
+			path.setAttribute('stroke', 'white');
+			text.style.color = 'white';
+			this.querySelector('.exit').addEventListener('mouseover', () => {
+				path.setAttribute('stroke', 'red');
+				text.style.color = 'red';
+			})
+			this.querySelector('.exit').addEventListener('mouseout', () => {
+				path.setAttribute('stroke', 'white');
+				text.style.color = 'white';
+			})
+		})
 	}
 	remove() {
 		if (this.querySelector('.exit')) 
