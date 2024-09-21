@@ -117,7 +117,8 @@ export class FooterBar extends HTMLElement {
 	setExitEventListeners() {
 		if (this.querySelector('.logout')) 
 			this.querySelector('.logout').remove();
-		this.querySelector('footer').insertBefore(exit.content.cloneNode(true), this.querySelector('.display-errors'));
+		console.log("this.querySelector('footer'):: ", this.querySelector('footer'));
+		this.querySelector('footer').prepend(exit.content.cloneNode(true));
 		this.querySelector('.exit').addEventListener('click', () => {
 			router.handleRoute(window.location.pathname);
 		});

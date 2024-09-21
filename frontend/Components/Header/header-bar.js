@@ -260,6 +260,7 @@ const cssContent = /*css*/`
         position: relative;
     }
     
+    .number-of-friend-requests,
     .number-of-notifications {
         width: 16px;
         height: 16px;
@@ -353,6 +354,7 @@ HeaderTemplate.innerHTML = /*html*/`
                 <search-bar-component></search-bar-component>
                 <div class="friends-icon" >
                     <img loading="lazy" draggable="false" src="/assets/icons/user-octagon-icon.svg" alt="friends">
+                    <div class="number-of-friend-requests">0</div>
                 </div>
                 <div class="notification-icon" >
                     <img loading="lazy" draggable="false" src="/assets/icons/notification-icon.svg" alt="notification">

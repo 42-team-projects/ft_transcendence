@@ -99,7 +99,7 @@ export async function createNotificationWebSocket() {
             return ;
         }
         if (!data.is_signal) {
-            const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.data);
+            const messageNotification = createNotification(( data.type === 'friend' ? data.data : data.id), data.sender, data.content, data.type, data.data);
             displayNotification(messageNotification, data.type );
         }
         else
