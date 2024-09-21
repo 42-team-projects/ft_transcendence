@@ -43,6 +43,7 @@ export class SearchBarComponent extends HTMLElement {
     }
     interval;
     selectedItem;
+    currentPlayerId;
     async connectedCallback() {
         const searchInput = this.shadowRoot.querySelector(".search-input");
         const searchIcon = this.shadowRoot.querySelector(".search-icon");
@@ -50,7 +51,7 @@ export class SearchBarComponent extends HTMLElement {
         const searchContainer = this.shadowRoot.querySelector(".search-result");
 
         // const Users = this.shadowRoot.querySelector("users-search-section");
-        const currentPlayerId = await getCurrentPlayerId();
+        this.currentPlayerId = await getCurrentPlayerId();
         this.selectedItem = this.shadowRoot.querySelector(".select");
         let searchInputChecker = false;
         searchInput.addEventListener("click", () => {
@@ -69,7 +70,7 @@ export class SearchBarComponent extends HTMLElement {
                         players.clearPlayers();
                         oldInputValue = searchInput.value;
                         let playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
-                        playersData = Array.from(playersData).filter(player => player.id != currentPlayerId);
+                        playersData = Array.from(playersData).filter(player => player.id != this.currentPlayerId);
                         players.appendPlayers(playersData);
                     }
                     
@@ -155,7 +156,8 @@ export class SearchBarComponent extends HTMLElement {
         const usersSection = new UsersSearchSection();
         oldInputValue = searchInput.value;
         if (searchInput.value && searchInput.value !== "") {
-            const playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+            let playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+            playersData = Array.from(playersData).filter(player => player.id != this.currentPlayerId);
             usersSection.appendPlayers(playersData);
         }
         container.appendChild(usersSection);

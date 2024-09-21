@@ -41,7 +41,6 @@ export class GameNotification extends HTMLElement {
         const playButton = this.querySelector(".notification-actions img");
         playButton.addEventListener("click", async (event) => {
             const websocket = await getNotificationWebSocket();
-            console.log("sender.user.id: ", sender.user.id);
             websocket.send(JSON.stringify({'message': 'send you a friend request', 'receiver': sender.user.id, 'is_signal': true, "type": "game", "data": currentPlayerId}));
             removeNotification(this.id);
             this.parentElement.remove();

@@ -65,9 +65,9 @@ def send_friend_request(request, receiver_id):
         else:
             # Reactivate the friend request if it was previously deactivated
             friend_request.reactivate()
-            return Response({'response': 'Friend request reactivated.'}, status=200)
+            return Response(FriendRequestSerializer(friend_request).data, status=200)
     else:
-        return Response({'response': 'Friend request sent.'}, status=201)
+        return Response(FriendRequestSerializer(friend_request).data, status=201)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

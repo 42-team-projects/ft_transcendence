@@ -40,7 +40,9 @@ export class NewFriendNotification extends HTMLElement {
     }
 
     sender;
-  
+    requestId;
+
+
     async initProfileImage(user_name) {
         const profile = this.querySelector(".message c-hexagon");
         this.sender = await getApiData(PROFILE_API_URL + user_name + "/");
@@ -84,7 +86,7 @@ export class NewFriendNotification extends HTMLElement {
                 websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "friend", "data": `/Chat/` + this.sender.user.username}));
                 this.parentElement.remove();
 
-                removeNotification(this.id);
+                // removeNotification(this.id);
 
                 if (window.location.pathname.includes("/Chat"))
                     router.handleRoute(window.location.pathname);
@@ -103,7 +105,7 @@ export class NewFriendNotification extends HTMLElement {
 
                 this.parentElement.remove();
 
-                removeNotification(this.id);
+                // removeNotification(this.id);
                 
             });
         }
