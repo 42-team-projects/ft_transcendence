@@ -1,6 +1,5 @@
 import { UsersSearchSection } from "/Components/Search/SearchSections/UsersSearchSection.js";
 import { TournamentsSearchSection } from "/Components/Search/SearchSections/TournamentsSearchSection.js";
-import { ChannelsSearchSection } from "/Components/Search/SearchSections/ChannelsSearchSection.js";
 import { OthersSearchSection } from "/Components/Search/SearchSections/OthersSearchSection.js";
 import { get_Available_Tournaments } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { getApiData } from "/Utils/APIManager.js";

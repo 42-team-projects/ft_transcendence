@@ -27,6 +27,8 @@ export async function renderChatBody(chatContainer, conversationName) {
 
 
 function renderMessageComponent(chatBody, messageContainer, component, message, checker) {
+    console.log("message: ", message);
+    messageContainer.time = message.sent_at.slice(11, 16);
     messageContainer.textContent = message.content;
     if (checker != message.user)
     {

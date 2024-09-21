@@ -21,6 +21,10 @@ import { getApiData } from "/Utils/APIManager.js";
 
 let currentPlayer;
 
+export function setCurrentPlayer(val) {
+    currentPlayer = val;
+}
+
 export async function updateCurrentPlayer() {
     currentPlayer = await getApiData(PROFILE_API_URL + "me/");
     if (PROFILE_COMPONENT) {

@@ -39,7 +39,7 @@ export class NotificationsList extends HTMLElement {
                 const notification = await createNotification(notif.id, notif.sender.username, notif.content, notif.type, notif.data);
                 this.appendNotification(notification);
             });
-            const notificationIcon = headerBar.querySelector(".notification-search .number-of-notifications");
+            const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
             if (notificationIcon)
                 notificationIcon.textContent = notifications.length;
 

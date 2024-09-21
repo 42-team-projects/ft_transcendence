@@ -8,6 +8,7 @@ import { JoinTournament } from "/Components/Tournament/JoinTournament.js";
 import { createApiData } from "/Utils/APIManager.js";
 import { removeNotification } from "/Components/Notification/configs/NotificationUtils.js";
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
+import { hideRightSideBar } from "/Components/Header/header-bar.js";
 
 export class TournamentNotification extends HTMLElement {
     constructor() {
@@ -55,10 +56,7 @@ export class TournamentNotification extends HTMLElement {
         const joinButton = this.querySelector(".notification-actions a");
         joinButton.addEventListener("click", async (event) => {
             event.preventDefault();
-            const addPlayer = new JoinTournament();
-            const data = await player_join_tournament(this.tournamentId);
-            if (data)
-            {
+
                 const alertsConrtainer = window.document.querySelector("body .alerts");
                 if (!alertsConrtainer)
                     return;
@@ -100,30 +98,34 @@ export class TournamentNotification extends HTMLElement {
                 nicknameContainer.querySelector(".save-button").addEventListener("click", async () => {
                     const value = nicknameContainer.querySelector("custom-select").value;
                     if (value && value.length > 1) {
-                        const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": this.tournamentId}));
-                        if (setNicknameResponse.ok) {
-                            
-                            const websocket = await getNotificationWebSocket();
-                            websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "tournament", "data": `/Tournament/${this.tournamentId}`}));
-                            
+                        const addPlayer = new JoinTournament();
+                        const data = await player_join_tournament(this.tournamentId);
+                        if (data)
+                        {
+                            const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": this.tournamentId}));
+                            if (setNicknameResponse.ok) {
+                                const websocket = await getNotificationWebSocket();
+                                websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "tournament", "data": `/Tournament/${this.tournamentId}`}));
+                                
+                                await addPlayer.initTournamentSocket(data);
 
-                            await addPlayer.initTournamentSocket(data);
-
-
-                            const url = new URL(joinButton.href);
-                            router.handleRoute(url.pathname);
-                            this.parentElement.remove();
-
-                            // nicknameContainer.remove();
-                            alertsConrtainer.style.display = "none";
+                                hideRightSideBar();
+                                const url = new URL(joinButton.href);
+                                router.handleRoute(url.pathname);
+                                this.parentElement.remove();
+                            }
                         }
+                        else
+                            displayToast("error", "you already join to this tournament !!");
+                        alertsConrtainer.style.display = "none";
+                        removeNotification(this.id);
                     }
                 });
                 alertsConrtainer.appendChild(nicknameContainer);
-            }
-            else
-                displayToast("error", "you already join to this tournament !!");
-            removeNotification(this.id);
+
+
+
+
         });
     }
 
