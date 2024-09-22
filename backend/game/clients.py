@@ -85,7 +85,7 @@ class GameLoop :
             if self.break_loop:
                 raise Exception("Round Over")
             if(self.pause):
-                await asyncio.sleep(0.05)
+                await asyncio.sleep(0.0167)
                 continue
             # if(self.data['ball_dx'] < 0):
             #     self.data['ball_dx'] -= 0.05
@@ -95,7 +95,7 @@ class GameLoop :
             #     self.data['ball_dy'] -= 0.05
             # else:
             #     self.data['ball_dy'] += 0.05
-            await asyncio.gather(self.send_message(self.ball_data), asyncio.sleep(0.05))                 
+            await asyncio.gather(self.send_message(self.ball_data), asyncio.sleep(0.0167))                 
             # await self.send_message(self.ball_data)
             # await asyncio.sleep(0.05)
 

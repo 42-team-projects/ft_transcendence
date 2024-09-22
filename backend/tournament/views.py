@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .models import Tournament
 from .serializers import TournamentSerializer
 from django.views.decorators.csrf import csrf_exempt
-from Player.Models.PlayerModel import Player
+from Player.Models.PlayerModel import Player, Nickname
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 from asgiref.sync import async_to_sync
@@ -11,7 +11,6 @@ from channels.layers import get_channel_layer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from dotenv import load_dotenv
-
 
 from web3 import Web3
 import os
@@ -203,6 +202,7 @@ def player_leave_tournament(request, tournamentId):
     if request.method == 'POST':
         try:
             player = Player.objects.get(user=request.user)
+            Nickname.objects.filter(player=player, tournamentid=tournamentId).delete()
             tournament = Tournament.objects.get(tournament_id=tournamentId)
             tournament.players.remove(player)
             tournament.save()

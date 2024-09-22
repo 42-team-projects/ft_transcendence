@@ -167,7 +167,6 @@ export class JoinTournament extends HTMLElement {
                 tournamentPassword.style.border = "1px solid aqua";
                 mainContainer.innerHTML = list;
                 await this.addPlayerToTournament(tournamentData);
-                console.log("tournamentData: ", tournamentData);
                 this.remove();
             }
             else {
@@ -192,7 +191,6 @@ export class JoinTournament extends HTMLElement {
         const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
         tournamentsList.innerHTML = '';
         const tournaments = await get_Available_Tournaments();
-        console.log("available tournaments: ", tournaments);
         for (let index = tournaments.length - 1; index >= 0; index--) {
             const element = tournaments[index];
             const player_id = await getCurrentPlayerId();
@@ -215,7 +213,6 @@ export class JoinTournament extends HTMLElement {
         }
         if (accessible.length == 1)
             statement += "&accessible=" + accessible[0].id;
-        console.log("statement: ", statement);
         return statement;
     }
 

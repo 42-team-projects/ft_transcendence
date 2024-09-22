@@ -19,7 +19,9 @@ export class FriendRequestListComponent extends HTMLElement {
                 <h3>Friends Requests</h3>
             </div>
             <div class="notificationsBar-body">
-                <div class="notification-list"></div>
+                <div class="notification-list">
+                    <h5 style="display: flex;width: 100%; color: #d9d9d980; justify-content: center; align-items: center; height: 100%;">There's no friends requests right now.</h5>
+                </div>
             </div>
         `;
     }
@@ -34,10 +36,17 @@ export class FriendRequestListComponent extends HTMLElement {
             return ;
 
         if (requests.response) {
-            Array.from(requests.response).forEach( notif => {
+            const array = Array.from(requests.response);
+            if (array.length > 0)
+                this.querySelector(".notification-list").innerHTML = '';
+            array.forEach( notif => {
                 const notification = createNotification(notif.id, notif.sender.username, "want to be a friend", "friend");
                 this.appendFriendRequest(notification);
             });
+            const notificationIcon = window.document.querySelector(".friends-icon .number-of-friend-requests");
+            if (notificationIcon)
+                notificationIcon.textContent = array.length;
+
         }
         
         this.querySelector(".close-button").addEventListener("click", () => {
@@ -45,6 +54,7 @@ export class FriendRequestListComponent extends HTMLElement {
         });
 
         notificationList.scrollTop = notificationList.scrollHeight;
+
     }
     disconnectedCallback() {
     }

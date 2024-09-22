@@ -49,39 +49,35 @@ export class PauseButtons extends HTMLElement{
         })
         const icon = this.shadowRoot.querySelector('slot[name="icon"]');
         const text = this.shadowRoot.querySelector('slot[name="text"]');
-        const iconObject = icon.assignedElements()[0];
+        const svg = icon.assignedElements()[0];
         const textObject = text.assignedElements()[0];
-        iconObject.addEventListener('load', () => {
-            const iconObjectContent = iconObject.contentDocument;
-            const svg = iconObjectContent.querySelector('svg');
-            let color = '#00fffb90';
-            if(textObject.textContent == 'EXIT'){
-                iconObjectContent.querySelector('path').setAttribute('stroke', 'red');
-                textObject.style.color = 'red';
-                color = 'red';
+        let color = '#00fffb90';
+        if(textObject.textContent == 'EXIT'){
+            svg.querySelector('path').setAttribute('stroke', 'red');
+            textObject.style.color = 'red';
+            color = 'red';
+        }
+        this.addEventListener('mouseover', () => {
+            this.style.backgroundColor = '#00fffb90'
+            this.shadowRoot.querySelector('.child').style.backgroundColor = 'rgb(2 31 56 / 68%)'
+            if(svg.getAttribute('fill') == 'none'){
+                svg.querySelector('path').setAttribute('stroke', 'white');
             }
-            this.addEventListener('mouseover', () => {
-                this.style.backgroundColor = '#00fffb90'
-                this.shadowRoot.querySelector('.child').style.backgroundColor = 'rgb(2 31 56 / 68%)'
-                if(svg.getAttribute('fill') == 'none'){
-                    iconObjectContent.querySelector('path').setAttribute('stroke', 'white');
-                }
-                else{
-                    svg.setAttribute('fill', 'white');
-                }
-                textObject.style.color = 'white';
-            })
-            this.addEventListener('mouseout', () => {
-                this.style.backgroundColor = '#00fffb30'
-                this.shadowRoot.querySelector('.child').style.backgroundColor = '#021f38'
-                if(svg.getAttribute('fill') == 'none'){
-                    iconObjectContent.querySelector('path').setAttribute('stroke', color);
-                }
-                else{
-                    svg.setAttribute('fill', color);
-                }
-                textObject.style.color = color;
-            })
+            else{
+                svg.setAttribute('fill', 'white');
+            }
+            textObject.style.color = 'white';
+        })
+        this.addEventListener('mouseout', () => {
+            this.style.backgroundColor = '#00fffb30'
+            this.shadowRoot.querySelector('.child').style.backgroundColor = '#021f38'
+            if(svg.getAttribute('fill') == 'none'){
+                svg.querySelector('path').setAttribute('stroke', color);
+            }
+            else{
+                svg.setAttribute('fill', color);
+            }
+            textObject.style.color = color;
         })
     }
 }

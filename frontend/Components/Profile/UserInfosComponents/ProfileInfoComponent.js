@@ -120,23 +120,41 @@ export class ProfileInfoComponent extends HTMLElement {
     get friend() { return this.getAttribute("friend");}
     set friend(value) { this.setAttribute("friend", value);}
     
+
+    requestId;
+
     async connectedCallback() {
         const addFriend = this.shadowRoot.querySelector(".add-friend img");
         addFriend.addEventListener("click", async () => {
             if (addFriend.id === "friend") {
                 const sendRequestResponse = await createApiData(HOST + "/friend/send/" + this.id + "/", "");
                 const res = await sendRequestResponse.json();
-
+                console.log("res: ", res);
                 
                 if (sendRequestResponse.ok) {
                     addFriend.src = "/assets/icons/wait-time-icon.svg";
-                    const notificationWS = await getNotificationWebSocket()
+                    addFriend.id = "waiting";
+                    this.requestId = res.id;
+                    const notificationWS = await getNotificationWebSocket();
+                    console.log("WebSocket.OPEN: ", WebSocket.OPEN);
                     if (notificationWS.readyState === WebSocket.OPEN) {
-                        notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
-                        displayToast("success", res.response);
+                        notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": this.requestId}));
+                        displayToast("success", 'Friend request sent.');
+                        
                     } else {
                         console.error('WebSocket is not open. readyState = ' + notificationWS.readyState);
                     };
+                }
+                else
+                    displayToast("error", res.response);
+            }
+            else if (addFriend.id === "waiting") {
+                const cancelRequest = await createApiData(HOST + "/friend/cancel/" + this.requestId + "/", "");
+                const res = await cancelRequest.json();
+                if (cancelRequest.ok) {
+                    displayToast("success", res.response);
+                    addFriend.id = "friend";
+                    addFriend.src = "/assets/images/profile/add-friends-icon.svg";
                 }
                 else
                     displayToast("error", res.response);
@@ -146,6 +164,7 @@ export class ProfileInfoComponent extends HTMLElement {
                 if (unfriendResponse) {
                     addFriend.src = "/assets/images/profile/add-friends-icon.svg";
                     displayToast("success", "your unfriended " + this.username);
+                    addFriend.id = "friend";
                 }
             }
         });

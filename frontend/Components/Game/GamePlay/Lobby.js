@@ -5,6 +5,7 @@ import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/Globa
 import { getApiData } from "/Utils/APIManager.js";
 import { router } from "/root/Router.js";
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
+import { hideFriendsRequestList, hideRightSideBar } from "/Components/Header/header-bar.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -119,6 +120,8 @@ export class Lobby extends HTMLElement{
 		this.sidebarAnimation();
 		this.footerAnimation();
 		document.body.querySelector('.alerts').style.display = 'none';
+		hideRightSideBar();
+		hideFriendsRequestList();
 		if(opponentId && time)
 		{
 			this.time = time;
@@ -256,10 +259,10 @@ export class Lobby extends HTMLElement{
 				room_group_name = 'game_' + userInfo.id + '_' + opponentId;
 			else
 				room_group_name = 'game_' + opponentId + '_' + userInfo.id;
-			const inter = setInterval(() => {
+			this.inter = setInterval(() => {
 				this.time -= 1;
 				if(this.time <= 0)
-					clearInterval(inter);
+					clearInterval(this.inter);
 				this.updateTimer();
 			}, 1000);
 			this.gameMode(room_group_name);
@@ -355,7 +358,7 @@ export class Lobby extends HTMLElement{
 					this.createTimer(4);
 				else
 					this.createTimer(this.time);
-				const countdown = setInterval(async()=>{
+				this.countdown = setInterval(async()=>{
 				if(this.time <= 0){
 					if(this.socket){
 						this.socket.onclose = async (e) => {
@@ -367,7 +370,7 @@ export class Lobby extends HTMLElement{
 					}
 					else
 						await this.playeGame(undefined, room_group_name, false);
-					clearInterval(countdown)
+					clearInterval(this.countdown)
 				}
 				},1000)
 			}
@@ -387,6 +390,8 @@ export class Lobby extends HTMLElement{
 		h1.textContent = this.time;
 	}
 	disconnectedCallback(){
+		clearInterval(this.inter)
+		clearInterval(this.countdown)
 		clearInterval(this.interval)
 		clearInterval(this.set_player_interval);
 		clearInterval(this.game_mode_interval);

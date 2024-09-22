@@ -12,6 +12,7 @@ import { opponentInfo } from "./Lobby.js";
 import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
 import { WaitingForOpponent } from "./WaitingForOpponent.js";
+import { svgSlider } from "/Slides.js";
 const game_page = document.createElement("template");
 
 const RACKET_SPEED = 10;
@@ -22,16 +23,6 @@ let score = {
 };
 
 game_page.innerHTML = /*html*/ `
-    <link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
-    <link rel="stylesheet" href="/Utils/utils.css">
-    <div class="c_game">
-        ${svgFile2}
-        <div class="GameShapes">
-            <div class="table_container">
-                <canvas id="table" class="pingpongTable"></canvas>
-            </div>
-        </div>
-    </div>
 `;
 
 let CANVAS_WIDTH = 1900;
@@ -82,8 +73,19 @@ export class GameTable extends HTMLElement {
         this.round = 1;
         this.room_name = room_name;
         this.requestID = null;
-        gameBard(game_page.content.querySelector("svg"), game_play.board_color ? game_play.board_color : '#FF0000');
-        this.appendChild(game_page.content.cloneNode(true));
+        this.innerHTML = `
+            <link rel="stylesheet" href="/Components/Game/GamePlay/GameTable.css">
+            <link rel="stylesheet" href="/Utils/utils.css">
+            <div class="c_game">
+                ${svgSlider[game_play.board]}
+                <div class="GameShapes">
+                    <div class="table_container">
+                        <canvas id="table" class="pingpongTable"></canvas>
+                    </div>
+                </div>
+            </div>
+        `
+        gameBard(this.querySelector("svg"), game_play.board_color ? game_play.board_color : '#FF0000');
         this.setKeys(false, false, false, false);
         this.Loop_state = true;
         this.pause = false;

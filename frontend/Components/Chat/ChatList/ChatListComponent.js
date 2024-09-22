@@ -45,7 +45,7 @@ export class ChatListComponent extends HTMLElement {
                 chatItem.lastMessage = item.last_message.content.slice(0, 60) + "...";
             else
                 chatItem.lastMessage = item.last_message.content;
-            chatItem.time = item.last_message.sent_at.split("-")[0];
+            chatItem.time = item.last_message.sent_at.slice(0, 10) + " " + item.last_message.sent_at.slice(11, 19);
         }
         chatItem.numberOfMessage = "2";
         chatItem.addEventListener("click", async (e) => {
@@ -65,7 +65,6 @@ export class ChatListComponent extends HTMLElement {
         let isPlayerExest = false;
         try {
             const data = await getApiData(HOST + "/chat/conversation_list/");
-            console.log("data: ", data);
             if (data) {
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item, item.reciever);

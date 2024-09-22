@@ -13,12 +13,9 @@ export function displayNotification(notificationContent, notifType) {
     // create a new notification component.
     const notification = new NotificationComponent();
     notification.width = "100%";
-    notification.appendChild(notificationContent.cloneNode());
+    notification.appendChild(notificationContent);
 
-    if (notifType === "friend")
-        window.document.querySelector(".right-sidebar friends-request-list").appendFriendRequest(notificationContent);
-    else
-        window.document.querySelector(".right-sidebar notifications-list").appendNotification(notificationContent); // add notification to notification list.
+
 
     // display notification on the top corner.
     notificationContainer.appendChild(notification);
@@ -31,12 +28,19 @@ export function displayNotification(notificationContent, notifType) {
         notificationContainer.innerHTML = '';
         clearInterval(notificationInterval);
         notificationInterval = 0;
-        console.log("helllo wolrllrlrlrlrl??");
+        if (notifType === "friend") {
+            window.document.querySelector(".right-sidebar friends-request-list").appendFriendRequest(notificationContent);
+            const notificationIcon = window.document.querySelector(".friends-icon .number-of-friend-requests");
+            notificationIcon.textContent = Number(notificationIcon.textContent) + 1;
+        }
+        else {
+            window.document.querySelector(".right-sidebar notifications-list").appendNotification(notificationContent);
+            const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
+            if (notificationIcon)
+                notificationIcon.textContent = Number(notificationIcon.textContent) + 1;
+            
+        }
     }, 5000);
-
-    // increment the notification counter.
-    const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
-    notificationIcon.textContent = Number(notificationIcon.textContent) + 1;
 }
 
 

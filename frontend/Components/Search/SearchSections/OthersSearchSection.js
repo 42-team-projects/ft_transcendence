@@ -19,10 +19,8 @@ export class OthersSearchSection extends HTMLElement {
         const links = this.querySelectorAll('a');
         links.forEach(link => {
             link.addEventListener('click', (event)=>{
-                console.log(link.href)
                 event.preventDefault()
                 const url = new URL(link.href)
-                console.log(url.pathname)
                 router.handleRoute(url.pathname)
             })
         });
@@ -39,10 +37,8 @@ export class OthersSearchSection extends HTMLElement {
         const links = this.querySelectorAll('a');
         links.forEach(link => {
             link.addEventListener('click', (event)=>{
-                console.log(link.href)
                 event.preventDefault()
                 const url = new URL(link.href)
-                console.log(url.pathname)
                 router.handleRoute(url.pathname)
             })
         });

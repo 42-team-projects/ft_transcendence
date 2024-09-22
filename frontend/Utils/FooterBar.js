@@ -2,7 +2,7 @@ import { fetchWithToken } from "/root/fetchWithToken.js";
 import { HOST } from '/Utils/GlobalVariables.js';
 import { router } from "/root/Router.js";
 import { updateApiData } from "/Utils/APIManager.js";
-import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { PROFILE_API_URL, setCurrentPlayer } from "/Utils/GlobalVariables.js";
 
 const template = document.createElement('template');
 template.innerHTML = /*html */`
@@ -19,6 +19,8 @@ template.innerHTML = /*html */`
 			font-weight: 500;
 
 		}
+
+
 	</style>
 	<footer>
 		<div class="display-errors">
@@ -65,13 +67,16 @@ exit.innerHTML = /*html */`
 		font-size: 1.3rem;
 		font-weight: 500;
 	}
-	.exit object {
+	.exit svg {
 		width: 40px;
 		transform: scaleX(-1)
 	}
 </style>
 	<div class="exit">
-		<object type="image/svg+xml" data="/images/exit.svg"></object>
+		<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+		<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M10 12H18M18 12L15.5 9.77778M18 12L15.5 14.2222M18 7.11111V5C18 4.44772 17.5523 4 17 4H7C6.44772 4 6 4.44772 6 5V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V16.8889" stroke="#00fffb90" stroke-linecap="round" stroke-linejoin="round"/>
+		</svg>
 		<div class="exitText"> Exit </div>
 	</div>
 `;
@@ -100,6 +105,7 @@ export class FooterBar extends HTMLElement {
 					router.removeNotificatonAndFriendList();
 
 					const res = await updateApiData(PROFILE_API_URL + "offline/", "");
+					setCurrentPlayer(null);
 		
                     localStorage.removeItem('accessToken');
                     router.handleRoute('/login')
@@ -117,25 +123,23 @@ export class FooterBar extends HTMLElement {
 	setExitEventListeners() {
 		if (this.querySelector('.logout')) 
 			this.querySelector('.logout').remove();
-		this.querySelector('footer').insertBefore(exit.content.cloneNode(true), this.querySelector('.display-errors'));
+		console.log("this.querySelector('footer'):: ", this.querySelector('footer'));
+		this.querySelector('footer').prepend(exit.content.cloneNode(true));
 		this.querySelector('.exit').addEventListener('click', () => {
 			router.handleRoute(window.location.pathname);
 		});
-		const icon = this.querySelector('object');
+		const icon = this.querySelector('svg');
 		const text = this.querySelector('.exitText');
-		icon.addEventListener('load', () => {
-			const iconObjectContent = icon.contentDocument;
-			const path = iconObjectContent.querySelector('path');
+		const path = icon.querySelector('path');
+		path.setAttribute('stroke', 'white');
+		text.style.color = 'white';
+		this.querySelector('.exit').addEventListener('mouseover', () => {
+			path.setAttribute('stroke', 'red');
+			text.style.color = 'red';
+		})
+		this.querySelector('.exit').addEventListener('mouseout', () => {
 			path.setAttribute('stroke', 'white');
 			text.style.color = 'white';
-			this.querySelector('.exit').addEventListener('mouseover', () => {
-				path.setAttribute('stroke', 'red');
-				text.style.color = 'red';
-			})
-			this.querySelector('.exit').addEventListener('mouseout', () => {
-				path.setAttribute('stroke', 'white');
-				text.style.color = 'white';
-			})
 		})
 	}
 	remove() {

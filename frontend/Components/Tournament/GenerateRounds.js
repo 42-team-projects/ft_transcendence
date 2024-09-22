@@ -125,7 +125,6 @@ export class GenerateRounds extends HTMLElement {
     
     convertPlayersDataIntoRounds(players) {
         let rounds = [];
-        console.log(players);
     
         const numberOfPlayers = players.length;
         let middle = Math.floor(numberOfPlayers / 2);
