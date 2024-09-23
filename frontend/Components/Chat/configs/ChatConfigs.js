@@ -21,6 +21,8 @@ export function renderChatHeader(chatContainer, conversationData, is_blocked) {
 export async function renderChatBody(chatContainer, conversationName) {
     const messagesContainer = chatContainer.querySelector(".body");
     const messages = await getApiData(HOST + "/chat/messages?cn=" + conversationName);
+    if (messages && messages.length)
+        messagesContainer.innerHTML = '';
     renderConversation(messagesContainer, messages);
 }
 

@@ -1,6 +1,6 @@
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
 import { createApiData, deleteApiData } from "/Utils/APIManager.js";
-import { getNotificationWebSocket, HOST } from "/Utils/GlobalVariables.js";
+import { getNotificationWebSocket, HOST, getCurrentUserData } from "/Utils/GlobalVariables.js";
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 
 export class ProfileInfoComponent extends HTMLElement {
@@ -42,7 +42,13 @@ export class ProfileInfoComponent extends HTMLElement {
 
     static observedAttributes = ["src", "username", "joindate", "league", "active", "friend"];
 
-    attributeChangedCallback(attrName, oldValue, newValue) {
+
+    currentPlayerName;
+    async attributeChangedCallback(attrName, oldValue, newValue) {
+        if (!this.currentPlayerName) {
+            this.currentPlayerName = await getCurrentUserData();
+            this.currentPlayerName = this.currentPlayerName.username;
+        }
         if (attrName === "src")
         {
             const element = this.shadowRoot.querySelector(".c-hexagon-content");
@@ -57,7 +63,7 @@ export class ProfileInfoComponent extends HTMLElement {
                 return ;
             this.playerName = window.location.pathname.substring(9);
             this.playerName = this.playerName.replace(/^\/+|\/+$/g, '');
-            if (!this.playerName || this.playerName === "" || this.playerName === "me")
+            if (!this.playerName || this.playerName === "" || this.playerName === "me" || this.playerName === this.currentPlayerName)
             {
                 const element = this.shadowRoot.querySelector(".add-friend");
                 if (element)
@@ -124,6 +130,8 @@ export class ProfileInfoComponent extends HTMLElement {
     requestId;
 
     async connectedCallback() {
+        this.currentPlayerName = await getCurrentUserData();
+        this.currentPlayerName = this.currentPlayerName.username;
         const addFriend = this.shadowRoot.querySelector(".add-friend img");
         addFriend.addEventListener("click", async () => {
             if (addFriend.id === "friend") {

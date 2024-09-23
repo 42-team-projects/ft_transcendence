@@ -2,6 +2,7 @@ import { updateApiData } from '/Utils/APIManager.js';
 import { PROFILE_API_URL } from '/Utils/GlobalVariables.js';
 import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
 import { HOST } from '/Utils/GlobalVariables.js';
+import { hideRightSideBar } from '/Components/Header/header-bar.js';
 
 export class Router {
 
@@ -47,6 +48,7 @@ export class Router {
     }
     
     renderNotificatonAndFriendList() {
+        hideRightSideBar();
         const rightSideBar = document.querySelector(".right-sidebar");
         rightSideBar.innerHTML = `
             <friends-request-list class="transform-1s" style="display: none;"></friends-request-list>

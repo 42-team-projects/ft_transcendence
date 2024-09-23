@@ -11,5 +11,5 @@ class GraphSerializer(serializers.ModelSerializer):
                 'defense',
                 'offense',
                 'consistency',
-                'Strategy'
+                'strategy'
                 ]

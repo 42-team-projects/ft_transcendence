@@ -94,8 +94,8 @@ export class HomePage extends HTMLElement {
 
         const stats = this.shadowRoot.querySelector(".stats");
         stats.addEventListener("click", async () => {
-            const url = new URL(HOST + "/Game");
-            router.handleRoute(url.pathname);
+            // const url = new URL(HOST + "/Game");
+            // router.handleRoute(url.pathname);
         });
 
         const leaderboardList = this.shadowRoot.querySelector(".body-board");

@@ -66,7 +66,7 @@ export class CustomTable extends HTMLElement {
                 <p class="score">${gameData.player_score} - ${gameData.opponent_score}</p>
             </td>
             <td>
-                <p class="resulte">${gameData.result.toUpperCase()}</p>
+                <p class="resulte">YOU ${gameData.result.toUpperCase()}</p>
             </td>
         `;
 

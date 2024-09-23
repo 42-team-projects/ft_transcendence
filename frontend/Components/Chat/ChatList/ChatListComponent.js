@@ -18,7 +18,11 @@ export class ChatListComponent extends HTMLElement {
             </style>
             <div class="chat-list">
                 <div class="top-box"></div>
-                <div class="list-item"></div>
+                <div class="list-item">
+                    <div class="no-conversation">
+                        <p>No conversations yet</p> 
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -66,6 +70,7 @@ export class ChatListComponent extends HTMLElement {
         try {
             const data = await getApiData(HOST + "/chat/conversation_list/");
             if (data) {
+                list.innerHTML = '';
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item, item.reciever);
                     if (item.reciever.username === this.playerName)
@@ -113,9 +118,20 @@ const cssContent = /*css*/`
     .list-item {
         width: 100%;
         display: flex;
+        align-items: center;
         flex-direction: column;
         height: calc(100% - 100px);
         overflow-y: scroll;
+    }
+
+
+    .no-conversation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: center;
+        color: #d9d9d980;
     }
 
     .list-item::-webkit-scrollbar {

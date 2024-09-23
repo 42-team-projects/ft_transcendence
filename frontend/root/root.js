@@ -28,14 +28,14 @@ class Root extends HTMLElement{
         if (accessToken && await isTokenValid(accessToken))
         {
             await getCurrentPlayerData();
-            const res = await updateApiData(PROFILE_API_URL + "online/", "");
+            await updateApiData(PROFILE_API_URL + "online/", "");
             await createWebSocketsForTournaments();
             await createNotificationWebSocket(); 
         }
     }
     
     async disconnectedCallback() {
-        const res = await updateApiData(PROFILE_API_URL + "offline/", "");
+        await updateApiData(PROFILE_API_URL + "offline/", "");
     }
 }
 customElements.define("root-content", Root)
