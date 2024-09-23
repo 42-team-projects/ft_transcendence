@@ -22,18 +22,17 @@ class GameLoop :
             self.controler.y = data['y']
         else:
             self.opponent.y = data['y']
-        message = {
-            'status': 'move',
-            'player_1': {
-                'id': self.controler.id,
-                'y': self.controler.y
-            },
-            'player_2': {
-                'id': self.opponent.id,
-                'y': self.opponent.y
-            }
-        }
-        await self.send_message(message)
+        # message = {
+        #     'status': 'move',
+        #     'player_1': {
+        #         'id': self.controler.id,
+        #         'y': self.controler.y
+        #     },
+        #     'player_2': {
+        #         'id': self.opponent.id,
+        #     }
+        # }
+        # await self.send_message(message)
 
 
     async def rounds_loop(self):
@@ -86,18 +85,19 @@ class GameLoop :
             if self.break_loop:
                 raise Exception("Round Over")
             if(self.pause):
-                await asyncio.sleep(0.05)
+                await asyncio.sleep(0.0167)
                 continue
-            if(self.data['ball_dx'] < 0):
-                self.data['ball_dx'] -= 0.05
-            else:
-                self.data['ball_dx'] += 0.05
-            if(self.data['ball_dy'] < 0):
-                self.data['ball_dy'] -= 0.05
-            else:
-                self.data['ball_dy'] += 0.05                 
-            await self.send_message(self.ball_data)
-            await asyncio.sleep(0.05)
+            # if(self.data['ball_dx'] < 0):
+            #     self.data['ball_dx'] -= 0.05
+            # else:
+            #     self.data['ball_dx'] += 0.05
+            # if(self.data['ball_dy'] < 0):
+            #     self.data['ball_dy'] -= 0.05
+            # else:
+            #     self.data['ball_dy'] += 0.05
+            await asyncio.gather(self.send_message(self.ball_data), asyncio.sleep(0.0167))                 
+            # await self.send_message(self.ball_data)
+            # await asyncio.sleep(0.05)
 
 
     async def assign_data(self, data, ws):
@@ -138,11 +138,14 @@ class GameLoop :
                 'id': self.opponent.id,
                 'ball_x':  self.canvas_width - self.data['ball_x'],
                 'ball_dx': -self.data['ball_dx'],
+                'y': self.opponent.y
+                
             },
             'player_2': {
                 'id': self.controler.id,
                 'ball_x': self.data['ball_x'],
                 'ball_dx': self.data['ball_dx'],
+                'y': self.controler.y
             },
             'ball': {
                 'y': self.data['ball_y'],

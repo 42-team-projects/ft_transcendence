@@ -15,6 +15,8 @@ import { WaitingForOpponent } from "./WaitingForOpponent.js";
 import { svgSlider } from "/Slides.js";
 const game_page = document.createElement("template");
 
+const RACKET_SPEED = 10;
+
 let score = {
     player: 0,
     opponent: 0,
@@ -159,27 +161,31 @@ export class GameTable extends HTMLElement {
     };
     moveRacket = (player_1, player_2) => {
         if (userInfo.id === Number(player_1.id)) {
-            this.updatePlayerPosition(player_1.y);
-            this.updateOpponentPosition(player_2.y);
+
         } else if (userInfo.id === Number(player_2.id)) {
-            this.updatePlayerPosition(player_2.y);
-            this.updateOpponentPosition(player_1.y);
+
         }
     };
     gameData = async (message, player_1, player_2) => {
+        console.log("old : ", this.getCoordonates());
         const ball_y = message.ball.y;
         const ball_radius = message.ball.radius;
         const dy = message.ball.dy;
         let ball_x = 0;
         let dx = 0;
         if (userInfo.id === Number(player_1.id)) {
+            this.updatePlayerPosition(player_1.y);
+            this.updateOpponentPosition(player_2.y);
             ball_x = player_1.ball_x;
             dx = player_1.ball_dx;
         } else if (userInfo.id === Number(player_2.id)) {
+            this.updatePlayerPosition(player_2.y);
+            this.updateOpponentPosition(player_1.y);
             ball_x = player_2.ball_x;
             dx = player_2.ball_dx;
         }
         this.setCoordonates(ball_x, ball_y, ball_radius, dx, dy);
+        console.log("new : ",this.getCoordonates());
     };
     pauseGame = (message) => {
         this.pause = true;
@@ -209,7 +215,7 @@ export class GameTable extends HTMLElement {
             else if (status === "RoundStart") await this.roundStart(message);
             else if (status === "GameOver")
                 await this.gameEnd(player_1, player_2);
-            else if (status === "move") this.moveRacket(player_1, player_2);
+            // else if (status === "move") this.moveRacket(player_1, player_2);
             else if (status === "Game")
                 await this.gameData(message, player_1, player_2);
             else if (status === "Pause") this.pauseGame(message);
@@ -356,10 +362,7 @@ export class GameTable extends HTMLElement {
         removeEventListener("keyup", (event) => {
             this.resetMove(event, this.getKeys());
         });
-        if (this.state === "offline")
-            this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 10, 7);
-        else 
-            this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 0, 0);
+        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 12, 9);
         this.updatePlayerPosition(CANVAS_HEIGHT / 2);
         this.updateOpponentPosition(CANVAS_HEIGHT / 2);
         this.Loop_state = true;
@@ -488,7 +491,7 @@ export class GameTable extends HTMLElement {
 
     moveDown(player) {
         let y = player.y;
-        if (y + this.racquet.height <= CANVAS_HEIGHT) y += 10;
+        if (y + this.racquet.height <= CANVAS_HEIGHT) y += RACKET_SPEED;
         if (this.state === "offline") {
             player.y = y;
             return;
@@ -502,7 +505,7 @@ export class GameTable extends HTMLElement {
 
     moveUp(player) {
         let y = player.y;
-        if (y >= 0) y -= 10;
+        if (y >= 0) y -= RACKET_SPEED;
         if (this.state === "offline") {
             player.y = y;
             return;

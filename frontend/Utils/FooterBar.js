@@ -67,13 +67,16 @@ exit.innerHTML = /*html */`
 		font-size: 1.3rem;
 		font-weight: 500;
 	}
-	.exit object {
+	.exit svg {
 		width: 40px;
 		transform: scaleX(-1)
 	}
 </style>
 	<div class="exit">
-		<object type="image/svg+xml" data="/images/exit.svg"></object>
+		<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+		<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M10 12H18M18 12L15.5 9.77778M18 12L15.5 14.2222M18 7.11111V5C18 4.44772 17.5523 4 17 4H7C6.44772 4 6 4.44772 6 5V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V16.8889" stroke="#00fffb90" stroke-linecap="round" stroke-linejoin="round"/>
+		</svg>
 		<div class="exitText"> Exit </div>
 	</div>
 `;
@@ -124,21 +127,18 @@ export class FooterBar extends HTMLElement {
 		this.querySelector('.exit').addEventListener('click', () => {
 			router.handleRoute(window.location.pathname);
 		});
-		const icon = this.querySelector('object');
+		const icon = this.querySelector('svg');
 		const text = this.querySelector('.exitText');
-		icon.addEventListener('load', () => {
-			const iconObjectContent = icon.contentDocument;
-			const path = iconObjectContent.querySelector('path');
+		const path = icon.querySelector('path');
+		path.setAttribute('stroke', 'white');
+		text.style.color = 'white';
+		this.querySelector('.exit').addEventListener('mouseover', () => {
+			path.setAttribute('stroke', 'red');
+			text.style.color = 'red';
+		})
+		this.querySelector('.exit').addEventListener('mouseout', () => {
 			path.setAttribute('stroke', 'white');
 			text.style.color = 'white';
-			this.querySelector('.exit').addEventListener('mouseover', () => {
-				path.setAttribute('stroke', 'red');
-				text.style.color = 'red';
-			})
-			this.querySelector('.exit').addEventListener('mouseout', () => {
-				path.setAttribute('stroke', 'white');
-				text.style.color = 'white';
-			})
 		})
 	}
 	remove() {
