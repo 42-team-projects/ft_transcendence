@@ -25,9 +25,10 @@ new-toast {
 .toastBox {
     position: fixed;
     top: 30px;
-    right: 100px;
+    right: 30px;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     padding: 20px;
     border-radius: 10px;
     color: black;
@@ -130,7 +131,7 @@ new-toast {
 `;
 
 
-export class CustomToast extends HTMLElement {
+export class NewToast extends HTMLElement {
     constructor() {
         super();
         // this.attachShadow({mode: "open"});
@@ -148,7 +149,7 @@ export class CustomToast extends HTMLElement {
 
 }
 
-customElements.define("custom-toast", CustomToast);
+customElements.define("new-toast", NewToast);
 
 export function displayToast(status, message) {
     const toastBox = window.document.querySelector('.toastBox');

@@ -62,6 +62,8 @@ import { router } from "/root/Router.js"
 import { FooterBar } from "/Utils/FooterBar.js"
 import { CustomToast } from "/Components/CustomElements/CustomToast.js";
 import { WaitingForOpponent } from "/Components/Game/GamePlay/WaitingForOpponent.js"
+import { NewToast } from "/Components/CustomElements/NewToast.js";
+
 
 customElements.define("footer-bar", FooterBar);
 customElements.define("signup-page", SignupPage);
