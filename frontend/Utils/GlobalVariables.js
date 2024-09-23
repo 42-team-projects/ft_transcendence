@@ -97,7 +97,6 @@ export async function createNotificationWebSocket() {
     };
     notificationWebSocket.onmessage = async (event) => {
         let data = await JSON.parse(event.data)
-        console.log("data: ", data);
         if (data.error) {
             console.log(data.error)
             return ;
