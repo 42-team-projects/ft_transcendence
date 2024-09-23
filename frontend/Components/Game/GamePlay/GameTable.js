@@ -6,13 +6,12 @@ import { wsUrl, HOST } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
 import { createApiData } from "/Utils/APIManager.js";
-import { svgFile, svgFile2 } from "/Slides.js";
 import { gameBard } from "/Components/CustomElements/CustomSliders.js";
 import { opponentInfo } from "./Lobby.js";
 import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
-import { WaitingForOpponent } from "./WaitingForOpponent.js";
 import { svgSlider } from "/Slides.js";
+import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
 const game_page = document.createElement("template");
 
 const RACKET_SPEED = 10;
@@ -39,8 +38,11 @@ export class GameTable extends HTMLElement {
             this.save_match = save;
             document.body.querySelector("footer-bar").remove();
             this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
-            document.body.appendChild(new WaitingForOpponent());
-            
+            const spinner = new CustomSpinner();
+            spinner.label = "Waiting for opponent to join ...";
+            spinner.time = 150;
+            spinner.display();
+            document.body.appendChild(spinner);
             this.socket.onopen = () => {
             };
             
@@ -113,7 +115,7 @@ export class GameTable extends HTMLElement {
         await this.getMessages();
     }
     gameStart = () => {
-        document.body.querySelector("waiting-for-opponent").remove();
+        document.body.querySelector("custom-spinner").remove();
         const messages = {
             message: "firstdata",
             canvas_width: CANVAS_WIDTH,
@@ -167,7 +169,6 @@ export class GameTable extends HTMLElement {
         }
     };
     gameData = async (message, player_1, player_2) => {
-        console.log("old : ", this.getCoordonates());
         const ball_y = message.ball.y;
         const ball_radius = message.ball.radius;
         const dy = message.ball.dy;
@@ -185,7 +186,6 @@ export class GameTable extends HTMLElement {
             dx = player_2.ball_dx;
         }
         this.setCoordonates(ball_x, ball_y, ball_radius, dx, dy);
-        console.log("new : ",this.getCoordonates());
     };
     pauseGame = (message) => {
         this.pause = true;
@@ -215,7 +215,6 @@ export class GameTable extends HTMLElement {
             else if (status === "RoundStart") await this.roundStart(message);
             else if (status === "GameOver")
                 await this.gameEnd(player_1, player_2);
-            // else if (status === "move") this.moveRacket(player_1, player_2);
             else if (status === "Game")
                 await this.gameData(message, player_1, player_2);
             else if (status === "Pause") this.pauseGame(message);
@@ -362,7 +361,7 @@ export class GameTable extends HTMLElement {
         removeEventListener("keyup", (event) => {
             this.resetMove(event, this.getKeys());
         });
-        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 10, 12, 9);
+        this.setCoordonates(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 12, 10, 7);
         this.updatePlayerPosition(CANVAS_HEIGHT / 2);
         this.updateOpponentPosition(CANVAS_HEIGHT / 2);
         this.Loop_state = true;
@@ -399,9 +398,9 @@ export class GameTable extends HTMLElement {
     
     async moveBall(player, opponent, ctx) {
         if (this.pause === true) return;
-        let { x, y, radius, dx, dy } = this.getCoordonates();
-        let stop = false;
         if ( this.state === "offline" ) {
+            let { x, y, radius, dx, dy } = this.getCoordonates();
+            let stop = false;
             if (y + radius + dy >= CANVAS_HEIGHT || y - radius + dy <= 0) dy = -dy;
             if (x + radius + dx >= opponent.x && y >= opponent.y && y <= opponent.y + this.racquet.height)
                 dx = -dx;
@@ -416,27 +415,27 @@ export class GameTable extends HTMLElement {
                 score.opponent++;
                 stop = true;
             }
-        }
-        x += dx;
-        y += dy;
-        this.setCoordonates(x, y, radius, dx, dy);
-        if (this.state === "offline") {
-            if(stop === true){
-                if (this.round > 4) {
-                    this.RoundOver(ctx);
-                    this.loop_state = false;
-                    this.luanching = false;
-                    if (score.player > score.opponent) {
-                        this.GameOver("win", score.player, score.opponent, opponentInfo.id, userInfo.username);
+            x += dx;
+            y += dy;
+            this.setCoordonates(x, y, radius, dx, dy);
+            if (this.state === "offline") {
+                if(stop === true){
+                    if (this.round > 4) {
+                        this.RoundOver(ctx);
+                        this.loop_state = false;
+                        this.luanching = false;
+                        if (score.player > score.opponent) {
+                            this.GameOver("win", score.player, score.opponent, opponentInfo.id, userInfo.username);
+                        }
+                        else {
+                            this.GameOver("win", score.player, score.opponent, opponentInfo.id, opponentInfo.username);
+                        }
                     }
                     else {
-                        this.GameOver("win", score.player, score.opponent, opponentInfo.id, opponentInfo.username);
+                        this.RoundOver(ctx);
+                        this.round++;
+                        this.roundStart({ round: this.round });
                     }
-                }
-                else {
-                    this.RoundOver(ctx);
-                    this.round++;
-                    this.roundStart({ round: this.round });
                 }
             }
         }
@@ -526,7 +525,7 @@ export class GameTable extends HTMLElement {
         const Pause = document.body.querySelector("pause-page");
         const GameOver = document.body.querySelector("game-over");
         const Launching = document.body.querySelector("launching-game");
-        const Waiting = document.body.querySelector("waiting-for-opponent");
+        const Waiting = document.body.querySelector("custom-spinner");
         if (Waiting) Waiting.remove();
         if (Launching) Launching.remove();
         if (GameOver) GameOver.remove();

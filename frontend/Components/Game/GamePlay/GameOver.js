@@ -9,6 +9,11 @@ export class GameOver extends HTMLElement{
             color: white;
             text-shadow: 0 0 10px #00b9be;
         }
+        #game-over{
+            font-size: 5rem;
+            color: white;
+            text-shadow: 0 0 10px #00b9be;
+        }
         .result{
             display: flex;
             justify-content: space-around;
@@ -25,7 +30,7 @@ export class GameOver extends HTMLElement{
         }
         </style>
 
-        <p>Game Over</p>
+        <p id="game-over" >Game Over</p>
         <div class="result"></div>
         `
         const resultDiv = GameOverTamplate.content.querySelector('.result')

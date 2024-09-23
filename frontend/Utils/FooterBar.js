@@ -17,10 +17,7 @@ template.innerHTML = /*html */`
 			color: white;
 			font-size: 1.2rem;
 			font-weight: 500;
-
 		}
-
-
 	</style>
 	<footer>
 		<div class="display-errors">
@@ -69,6 +66,7 @@ exit.innerHTML = /*html */`
 	}
 	.exit svg {
 		width: 40px;
+		height: 40px;
 		transform: scaleX(-1)
 	}
 </style>

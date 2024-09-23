@@ -157,16 +157,7 @@ launching-game {
     background-color: rgba(230, 255, 255, 0.08); 
 }
 
-waiting-for-opponent{
-    position: absolute;
-    display: flex;
-    flex-direction: column  ;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(230, 255, 255, 0.08);
-}
+
 
 game-over{
     position: absolute;
@@ -176,6 +167,7 @@ game-over{
     width: 100vw;
     height: 100vh;
     flex-direction: column;
+    background-color: #00142b99; 
 }
 
 footer-bar{
