@@ -4,6 +4,9 @@ import { get_tournament_by_id } from "/Components/Tournament/configs/TournamentA
 import { leaveTournamentAndStoreScore, getAbi } from "/blockchain/blockchain.js";
 
 
+
+
+
 export async function goNextStage(playerState, tournament_id, user_id, opponent_id, user_score, opponent_score) {
     try {
         if (playerState === 'lose') {
@@ -12,7 +15,7 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
             return ;
 
         } else {
-
+            // player_leave_tournament_by_playerId(tournamentId, opponent_id)
             const interval = setInterval(async () => {
                 clearInterval(interval);
                 const newTournamentData = await get_tournament_by_id(tournament_id);

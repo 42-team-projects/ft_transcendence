@@ -212,3 +212,22 @@ def player_leave_tournament(request, tournamentId):
         except Tournament.DoesNotExist:
             return JsonResponse({'statusText': 'Tournament not found'}, status=404)
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
+
+
+# @csrf_exempt
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def player_leave_tournament2(request, tournamentId, playerId):
+#     if request.method == 'POST':
+#         try:
+#             player = Player.objects.get(id=playerId)
+#             Nickname.objects.filter(player=player, tournamentid=tournamentId).delete()
+#             tournament = Tournament.objects.get(tournament_id=tournamentId)
+#             tournament.players.remove(player)
+#             tournament.save()
+#             return JsonResponse({'success': 'Player successfully leaved the tournament'}, status=200)
+#         except Player.DoesNotExist:
+#             return JsonResponse({'statusText': 'Player not found'}, status=404)
+#         except Tournament.DoesNotExist:
+#             return JsonResponse({'statusText': 'Tournament not found'}, status=404)
+#     return JsonResponse({'statusText': 'Invalid request method'}, status=405)

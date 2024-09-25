@@ -12,6 +12,8 @@ import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
 import { svgSlider } from "/Slides.js";
 import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
+import { closeAndRemovePlayerFromTournament } from "/Utils/TournamentWebSocketManager.js";
+import { isTokenValid } from "/root/fetchWithToken.js";
 const game_page = document.createElement("template");
 
 const RACKET_SPEED = 10;
@@ -28,13 +30,15 @@ let CANVAS_WIDTH = 1900;
 let CANVAS_HEIGHT = 900;
 
 export class GameTable extends HTMLElement {
+    beforeunloadFunction;
     constructor(state, room_name, game_play, save) {
         super();
         this.state = state;
         score.player = 0;
         score.opponent = 0;
         if(this.state !== "offline"){
-
+            
+            this.forfitGame();
             this.save_match = save;
             document.body.querySelector("footer-bar").remove();
             this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
@@ -45,7 +49,6 @@ export class GameTable extends HTMLElement {
             document.body.appendChild(spinner);
             this.socket.onopen = () => {
             };
-            
             this.socket.onclose = () => {
                 if(this.Loop_state === true){
                     score.player = 5;
@@ -53,11 +56,9 @@ export class GameTable extends HTMLElement {
                     this.GameOver("win", score.player, score.opponent, opponentInfo.id);
                 }
             };
-            
             this.socket.onerror = (error) => {
             };
         }
-        
         this.racquet = { width: 8, height: 110 };
         userInfo.color = game_play.first_racket_color ? game_play.first_racket_color : '#FF0000';
         opponentInfo.color = game_play.second_racket_color ? game_play.second_racket_color : '#FF0000';
@@ -92,6 +93,26 @@ export class GameTable extends HTMLElement {
         this.Loop_state = true;
         this.pause = false;
 
+    }
+    async forfitGame () {
+        this.beforeunloadFunction = async function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+            score.player = 0;
+            score.opponent = 5;
+            const body = JSON.stringify({'player_score': score.player, 'opponent_score': score.opponent, 'result': 'lose', 'opponent_player': opponentInfo.id});
+            const xhr = new XMLHttpRequest();
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken || !(await isTokenValid(accessToken))) {
+                console.log("Access token is missing.");
+                return null;
+            }
+            xhr.open('POST', HOST + '/game/game_history/me/', true); // true makes it asynchronous
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+            xhr.send(body);
+        };
+        window.addEventListener('beforeunload', this.beforeunloadFunction);
     }
     async connectedCallback() {
         if (this.state === "offline") {
@@ -264,7 +285,7 @@ export class GameTable extends HTMLElement {
     
     async GameOver(playerState, score, opponent_score, opponent_player, winner) {
         this.reset();
-        if (this.id && this.id !== "undefined")
+        if (this.id && this.id !== "undefined"){
             await goNextStage(
                 playerState,
                 this.id,
@@ -272,7 +293,9 @@ export class GameTable extends HTMLElement {
                 opponentInfo.id,
                 score,
                 opponent_score
-            );
+                );
+            this.id = null;
+        }
         const gameOver = new GameOver(playerState, this.state, winner);
         document.body.appendChild(gameOver);
         if( this.save_match === true)
@@ -531,8 +554,9 @@ export class GameTable extends HTMLElement {
         if (GameOver) GameOver.remove();
         if (Pause) Pause.remove();
     }
-    disconnectedCallback() {
+    async disconnectedCallback() {
 
+		window.removeEventListener('beforeunload', this.beforeunloadFunction);
         this.reset();
         if (this.state !== "offline") {
             this.socket.onclose = () => {
@@ -545,6 +569,9 @@ export class GameTable extends HTMLElement {
             score.opponent = 0;
             this.GameOver("win", score.player, score.opponent, opponentInfo.id);
         }
+        console.log("disconnected : ", this.id);
+        if (this.id && this.id !== undefined)
+            await closeAndRemovePlayerFromTournament(this.id);
         router.randred = false;
         router.handleRoute(window.location.pathname);
     }

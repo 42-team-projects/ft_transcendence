@@ -1,11 +1,13 @@
 import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
 import { GameHeader } from "/Components/Game/GamePlay/GameHeader.js"
 import { GameTable } from "/Components/Game/GamePlay/GameTable.js"
-import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl } from "/Utils/GlobalVariables.js";
+import { getCurrentPlayerData, HOST, PROFILE_API_URL, wsUrl, TOURNAMENT_API_URL } from "/Utils/GlobalVariables.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { router } from "/root/Router.js";
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
 import { hideFriendsRequestList, hideRightSideBar } from "/Components/Header/header-bar.js";
+import { closeAndRemovePlayerFromTournament } from "/Utils/TournamentWebSocketManager.js";
+import { isTokenValid } from "/root/fetchWithToken.js";
 
 const lobby = document.createElement('template');
 const playerSlot = document.createElement('template');
@@ -98,12 +100,33 @@ lobby.innerHTML =  /* html */ `
 
 export class Lobby extends HTMLElement{
 	tournament_id;
+	beforeunloadFunction;
 	get tournament_id() {return this.tournament_id;}
 
-	constructor(opponentId, time){
+
+
+	constructor(opponentId, time, tournament_id){
 		super();
 		this.socket = null;
 		this.time = -1;
+		this.beforeunloadFunction = async function (e) {
+			e.preventDefault();
+			e.returnValue = '';
+			if (tournament_id && tournament_id !== undefined)
+			{
+				const xhr = new XMLHttpRequest();
+				const accessToken = localStorage.getItem('accessToken');
+				if (!accessToken || !(await isTokenValid(accessToken))) {
+					console.log("Access token is missing.");
+					return null;
+				}
+				xhr.open('POST', `${TOURNAMENT_API_URL}tournament/${tournament_id}/player/leave/`, true); // true makes it asynchronous
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+				xhr.send();
+			}
+		};
+		window.addEventListener('beforeunload', this.beforeunloadFunction);
 		userInfo.username = 'Player1';
 		userInfo.picture = HOST + `/media/defaults/ace.jpeg`;
 		opponentInfo.username = 'Player2';
@@ -161,9 +184,6 @@ export class Lobby extends HTMLElement{
 		border.appendChild(template.cloneNode(true))
 		this.shadowRoot.appendChild(border.cloneNode(true))
 	}
-
-
-
 	async getData(str)
 	{
 		try{
@@ -389,7 +409,7 @@ export class Lobby extends HTMLElement{
 		const h1 = this.shadowRoot.querySelector('.descounter h1');
 		h1.textContent = this.time;
 	}
-	disconnectedCallback(){
+	async disconnectedCallback(){
 		clearInterval(this.inter)
 		clearInterval(this.countdown)
 		clearInterval(this.interval)
@@ -399,13 +419,12 @@ export class Lobby extends HTMLElement{
 		clearInterval(this.open_socket_interval);
 		clearInterval(this.header_interval);
 		clearInterval(this.sid_bar_Intirval);
+		window.removeEventListener('beforeunload', this.beforeunloadFunction);
+		// Close WebSocket and remove the player
 		router.randred = false;
 		if(this.time > 0 || this.time === -1){
 			if(this.socket)
 				this.socket.close();
-			document.body.addEventListener('exit-game', ()=>{
-				return;
-			})
 			router.handleRoute(window.location.pathname);
 		}
 	}

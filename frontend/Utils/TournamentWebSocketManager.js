@@ -160,7 +160,7 @@ async function displayAlert(message, data) {
         /* -------   start call nordine code here -------- */
         if (opponentId) {
             clearInterval(countdownInterval);
-            const lobby = new Lobby(opponentId, timeLeft);
+            const lobby = new Lobby(opponentId, timeLeft, data.tournament_id);
             lobby.id = "tournament_lobby";
             lobby.tournament_id = data.tournament_id;
 
@@ -188,8 +188,11 @@ async function displayAlert(message, data) {
 
 
 export async function closeAndRemovePlayerFromTournament(tournament_id) {
+    console.log("response of player leave tournament");
     try {
-        await player_leave_tournament(tournament_id);
+        console.log("response of player leave tournament 2 ");
+        const res = await player_leave_tournament(tournament_id);
+        console.log("response of player leave tournament: ", res);
         await closeWebSocket(tournament_id);
     } catch (error) {
         console.error('Error of player leave tournament: ', error);

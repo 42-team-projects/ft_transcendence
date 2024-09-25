@@ -26,7 +26,7 @@ template.innerHTML = /*html*/`
         padding: 0;
         width: 100%;
         height: 30%;
-        background-image: url(../../images/pause_bar.svg);
+        background-image: url(/images/pause_bar.svg);
         filter: drop-shadow(0 0 10px #00b9be);
         background-size: contain;
         background-repeat: no-repeat;
