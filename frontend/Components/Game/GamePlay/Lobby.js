@@ -112,6 +112,7 @@ export class Lobby extends HTMLElement{
 		this.beforeunloadFunction = async function (e) {
 			e.preventDefault();
 			e.returnValue = '';
+			console.log("hellllllllllllo")
 			if (tournament_id && tournament_id !== undefined)
 			{
 				const xhr = new XMLHttpRequest();
@@ -124,6 +125,7 @@ export class Lobby extends HTMLElement{
 				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
 				xhr.send();
+				console.log("tournament_id: ", tournament_id);
 			}
 		};
 		window.addEventListener('beforeunload', this.beforeunloadFunction);
@@ -362,8 +364,8 @@ export class Lobby extends HTMLElement{
 		headerBar.innerHTML = '';
 		headerBar.appendChild(header);
 		root.innerHTML = ``;
-		root.appendChild(game);
 		game.id = this.tournament_id;
+		root.appendChild(game);
 	}
 	gameMode(room_group_name){
 		if (this.socket)
@@ -425,6 +427,8 @@ export class Lobby extends HTMLElement{
 		if(this.time > 0 || this.time === -1){
 			if(this.socket)
 				this.socket.close();
+			if (this.tournament_id && this.tournament_id != undefined)
+				await closeAndRemovePlayerFromTournament(this.tournament_id)
 			router.handleRoute(window.location.pathname);
 		}
 	}

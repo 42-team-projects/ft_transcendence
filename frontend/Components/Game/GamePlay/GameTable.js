@@ -2,7 +2,7 @@ import { GameOver } from "/Components/Game/GamePlay/GameOver.js";
 import { LaunchingGame } from "/Components/Game/GamePlay/launchingGame.js";
 import { userInfo } from "/Components/Game/GamePlay/Lobby.js";
 import { goNextStage } from "/Components/Game/GamePlay/configs/ScoreManager.js";
-import { wsUrl, HOST } from "/Utils/GlobalVariables.js";
+import { wsUrl, HOST, TOURNAMENT_API_URL } from "/Utils/GlobalVariables.js";
 import { PausePage } from "./Pause-Page.js";
 import { router } from "/root/Router.js";
 import { createApiData } from "/Utils/APIManager.js";
@@ -12,7 +12,6 @@ import { updateApiData } from "/Utils/APIManager.js";
 import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js";
 import { svgSlider } from "/Slides.js";
 import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
-import { closeAndRemovePlayerFromTournament } from "/Utils/TournamentWebSocketManager.js";
 import { isTokenValid } from "/root/fetchWithToken.js";
 const game_page = document.createElement("template");
 
@@ -38,7 +37,6 @@ export class GameTable extends HTMLElement {
         score.opponent = 0;
         if(this.state !== "offline"){
             
-            this.forfitGame();
             this.save_match = save;
             document.body.querySelector("footer-bar").remove();
             this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
@@ -95,23 +93,35 @@ export class GameTable extends HTMLElement {
 
     }
     async forfitGame () {
+        console.log("first this.id : ",    this.id)
         this.beforeunloadFunction = async function (e) {
             e.preventDefault();
             e.returnValue = '';
-            score.player = 0;
-            score.opponent = 5;
-            const body = JSON.stringify({'player_score': score.player, 'opponent_score': score.opponent, 'result': 'lose', 'opponent_player': opponentInfo.id});
             const xhr = new XMLHttpRequest();
             const accessToken = localStorage.getItem('accessToken');
             if (!accessToken || !(await isTokenValid(accessToken))) {
                 console.log("Access token is missing.");
                 return null;
             }
-            xhr.open('POST', HOST + '/game/game_history/me/', true); // true makes it asynchronous
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-            xhr.send(body);
-        };
+            console.log("last this.id : ",    this.id)
+            if (this.id && this.id !== undefined)
+			{
+				xhr.open('POST', `${TOURNAMENT_API_URL}tournament/${this.id}/player/leave/`, true); // true makes it asynchronous
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+				xhr.send();
+				console.log("this.id: ", this.id);
+			}
+            else{
+                score.player = 0;
+                score.opponent = 5;
+                const body = JSON.stringify({'player_score': score.player, 'opponent_score': score.opponent, 'result': 'lose', 'opponent_player': opponentInfo.id});
+                xhr.open('POST', HOST + '/game/game_history/me/', true); // true makes it asynchronous
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+                xhr.send(body);
+            };
+        }
         window.addEventListener('beforeunload', this.beforeunloadFunction);
     }
     async connectedCallback() {
@@ -119,6 +129,11 @@ export class GameTable extends HTMLElement {
             this.roundStart({ round: 1 });
             return;
         }
+        else{
+            console.log("fdvdfvdfvdfvdfvdf")
+            this.forfitGame();
+        }
+
         document.body.addEventListener("pause-game", () => {
             this.pauser = true;
             this.socket.send(
@@ -294,7 +309,6 @@ export class GameTable extends HTMLElement {
                 score,
                 opponent_score
                 );
-            this.id = null;
         }
         const gameOver = new GameOver(playerState, this.state, winner);
         document.body.appendChild(gameOver);
@@ -569,9 +583,9 @@ export class GameTable extends HTMLElement {
             score.opponent = 0;
             this.GameOver("win", score.player, score.opponent, opponentInfo.id);
         }
-        console.log("disconnected : ", this.id);
-        if (this.id && this.id !== undefined)
-            await closeAndRemovePlayerFromTournament(this.id);
+        // console.log("disconnected : ", this.id);
+        // if (this.id && this.id !== undefined)
+        //     await closeAndRemovePlayerFromTournament(this.id);
         router.randred = false;
         router.handleRoute(window.location.pathname);
     }

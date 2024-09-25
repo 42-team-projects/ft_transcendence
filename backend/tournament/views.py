@@ -77,10 +77,9 @@ def store_tournament_score_on_blockchain(request):
                     'scores': scores
                 }, status=200)
             except Exception as e:
-                return JsonResponse({'statusText': f'Error sending transaction: {str(e)}'}, status=500)
-
+                return JsonResponse({'statusText': f'Error sending transaction: {str(e)}'}, status=403)
         except Exception as e:
-            return JsonResponse({'statusText': str(e)}, status=500)
+            return JsonResponse({'statusText': str(e)}, status=404)
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
 
 
