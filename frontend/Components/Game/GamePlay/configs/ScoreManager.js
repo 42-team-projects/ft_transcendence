@@ -71,7 +71,7 @@ export async function goNextStage(playerState, tournament_id, user_id, opponent_
                                     </svg>
                                 </div>
                                 <h1>Congratulations!</h1>
-                                <p style="color: #d9d9d9;">You win the esalim tournament</p>
+                                <p style="color: #d9d9d9;">You win the tournament</p>
                             </div>
                             <button id="ok-button">OK</button>
                         </div>

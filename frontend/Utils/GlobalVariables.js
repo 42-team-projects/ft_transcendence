@@ -143,7 +143,6 @@ export function handleSignals(signalData) {
 
 
 export async function getNotificationWebSocket() {
-    console.log("notificationWebSocket: ", notificationWebSocket.readyState);
     if (notificationWebSocket)
         return notificationWebSocket;
     return await createNotificationWebSocket();   

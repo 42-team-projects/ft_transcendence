@@ -23,14 +23,19 @@ export class ChatFooterComponent extends HTMLElement {
         const inputArea = this.shadowRoot.querySelector("input");
         const currentUser = await getCurrentUserData();
         const websocket = await getNotificationWebSocket();
+        // Add keydown event listener
+        inputArea.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const message = inputArea.value.trim();
+                if (message.length)
+                    this.chat(currentUser.id, this.targetId, message);
+                inputArea.value = '';
+            }
+        });
         sendButton.addEventListener("click", () => {
             const message = inputArea.value.trim();
             if (message.length)
-            {
                 this.chat(currentUser.id, this.targetId, message);
-
-                // websocket.send(JSON.stringify({'message': `sent you a new message.`, 'receiver': this.targetId, 'is_signal': true, 'type': "message", "data": "/Chat/" + currentUser.username}));
-            }
             inputArea.value = '';
         });
     }
@@ -107,5 +112,6 @@ const cssContent = /*css*/ `
     img {
         width: 24px;
         padding: 0 20px;
+        cursor: pointer;
     }
 `;

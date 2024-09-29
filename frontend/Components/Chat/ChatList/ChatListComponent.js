@@ -18,11 +18,7 @@ export class ChatListComponent extends HTMLElement {
             </style>
             <div class="chat-list">
                 <div class="top-box"></div>
-                <div class="list-item">
-                    <div class="no-conversation">
-                        <p>No conversations yet</p> 
-                    </div>
-                </div>
+                <div class="list-item"></div>
             </div>
         `;
     }

@@ -9,6 +9,7 @@ const cssContent = /*css*/`
     align-items: center;
     justify-content: center;
     font-family: 'Sansation Bold';
+    cursor: pointer;
 }
 
 .center {

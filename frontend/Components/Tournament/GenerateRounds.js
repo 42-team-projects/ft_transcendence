@@ -192,8 +192,10 @@ export class GenerateRounds extends HTMLElement {
 
         const currentPlayerId = await getCurrentPlayerId();
         const tournamentData = await get_tournament_by_id(this.tournamentId);
+        if (!tournamentData)
+            return;
         const player = Array.from(tournamentData.players).find(player => player.id === currentPlayerId);
-        if (!tournamentData || !player || player === undefined) {
+        if (!tournamentData || !player || player === 'undefined') {
             const url = new URL(HOST + "/Tournament");
             router.handleRoute(url.pathname);
             return ;

@@ -25,6 +25,8 @@ load_dotenv()
 SEPOLIA_URL = os.getenv('SEPOLIA_URL')
 CONTRACT_ADDRESS = os.getenv('CONTRACT_ADDRESS')
 PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+GAS_LIMIT = int(os.getenv('GAS_LIMIT'))
+GAS_PRICE = int(os.getenv('GAS_PRICE'))
 
 w3 = Web3(Web3.HTTPProvider(SEPOLIA_URL))
 
@@ -60,8 +62,8 @@ def store_tournament_score_on_blockchain(request):
             ).buildTransaction({
                 'from': account.address,
                 'chainId': 11155111,  # Sepolia Testnet Chain ID
-                'gas': 2000000,
-                'gasPrice': w3.toWei('100', 'gwei'),
+                'gas': GAS_LIMIT,
+                'gasPrice': w3.toWei(GAS_PRICE, 'gwei'),
                 'nonce': w3.eth.getTransactionCount(account.address),
             })
             # Sign the transaction
@@ -69,7 +71,7 @@ def store_tournament_score_on_blockchain(request):
             # Send the transaction
             try:
                 tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-                receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+                receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=300)
                 scores = contract.functions.getScores(tournament_id).call()
                 return JsonResponse({
                     'success': 'Player successfully score stored on blockchain',
@@ -211,22 +213,3 @@ def player_leave_tournament(request, tournamentId):
         except Tournament.DoesNotExist:
             return JsonResponse({'statusText': 'Tournament not found'}, status=404)
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
-
-
-# @csrf_exempt
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def player_leave_tournament2(request, tournamentId, playerId):
-#     if request.method == 'POST':
-#         try:
-#             player = Player.objects.get(id=playerId)
-#             Nickname.objects.filter(player=player, tournamentid=tournamentId).delete()
-#             tournament = Tournament.objects.get(tournament_id=tournamentId)
-#             tournament.players.remove(player)
-#             tournament.save()
-#             return JsonResponse({'success': 'Player successfully leaved the tournament'}, status=200)
-#         except Player.DoesNotExist:
-#             return JsonResponse({'statusText': 'Player not found'}, status=404)
-#         except Tournament.DoesNotExist:
-#             return JsonResponse({'statusText': 'Tournament not found'}, status=404)
-#     return JsonResponse({'statusText': 'Invalid request method'}, status=405)

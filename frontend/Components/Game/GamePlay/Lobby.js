@@ -112,8 +112,7 @@ export class Lobby extends HTMLElement{
 		this.beforeunloadFunction = async function (e) {
 			e.preventDefault();
 			e.returnValue = '';
-			console.log("hellllllllllllo")
-			if (tournament_id && tournament_id !== undefined)
+			if (tournament_id && tournament_id !== 'null' && tournament_id !== 'undefined')
 			{
 				const xhr = new XMLHttpRequest();
 				const accessToken = localStorage.getItem('accessToken');
@@ -121,11 +120,10 @@ export class Lobby extends HTMLElement{
 					console.log("Access token is missing.");
 					return null;
 				}
-				xhr.open('POST', `${TOURNAMENT_API_URL}tournament/${tournament_id}/player/leave/`, true); // true makes it asynchronous
+				xhr.open('POST', `${TOURNAMENT_API_URL}tournament/${tournament_id}/player/leave/`, true);
 				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
 				xhr.send();
-				console.log("tournament_id: ", tournament_id);
 			}
 		};
 		window.addEventListener('beforeunload', this.beforeunloadFunction);
@@ -427,7 +425,7 @@ export class Lobby extends HTMLElement{
 		if(this.time > 0 || this.time === -1){
 			if(this.socket)
 				this.socket.close();
-			if (this.tournament_id && this.tournament_id != undefined)
+			if (this.tournament_id && this.tournament_id != 'null' && this.tournament_id != 'undefined')
 				await closeAndRemovePlayerFromTournament(this.tournament_id)
 			router.handleRoute(window.location.pathname);
 		}

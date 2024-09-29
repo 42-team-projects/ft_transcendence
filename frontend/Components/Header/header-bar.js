@@ -258,6 +258,7 @@ const cssContent = /*css*/`
         justify-content: center;
         align-items: center;
         position: relative;
+        cursor: pointer;
     }
     
     .number-of-friend-requests,
@@ -332,6 +333,7 @@ const cssContent = /*css*/`
     
     .actions img {
         width: 24px;
+        cursor: pointer;
     }
 
 

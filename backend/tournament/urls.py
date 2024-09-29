@@ -11,6 +11,5 @@ urlpatterns = [
     path('<int:tournamentId>/', views.get_tournament_by_id, name='get_tournament_by_id'),
     path("StoreScore/", views.store_tournament_score_on_blockchain, name='store_tournament_score_on_blockchain'),
     
-    # path('tournament/<int:tournamentId>/player/<int:playerId>/', views.player_leave_tournament2, name='player_leave_tournament2'),
 ]
 

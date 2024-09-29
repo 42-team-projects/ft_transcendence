@@ -40,12 +40,13 @@ export class PauseButtons extends HTMLElement{
         this.addEventListener('click', () => {
             const text = this.shadowRoot.querySelector('slot[name="text"]');
             const textObject = text.assignedElements()[0];
+            const game_table = document.body.querySelector('game-table');
             if (textObject.textContent == 'RESTART')
-                document.body.dispatchEvent(new CustomEvent('restart-game'))
+                game_table.dispatchEvent(new CustomEvent('restart-game'))
             else if (textObject.textContent == 'RESUME')
-                document.body.dispatchEvent(new CustomEvent('resume-game'))
+                game_table.dispatchEvent(new CustomEvent('resume-game'))
             else
-                document.body.dispatchEvent(new CustomEvent('exit-game'))
+                game_table.dispatchEvent(new CustomEvent('exit-game'))
         })
         const icon = this.shadowRoot.querySelector('slot[name="icon"]');
         const text = this.shadowRoot.querySelector('slot[name="text"]');

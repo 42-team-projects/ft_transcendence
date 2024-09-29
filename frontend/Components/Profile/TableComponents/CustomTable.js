@@ -16,7 +16,16 @@ export class CustomTable extends HTMLElement {
                     padding: 10px 0;
                     width: 100%;
                     height: 100%;
+                    max-height: 600px;
                 }
+
+                tbody {
+                    width: 100%;
+                    height: 100%;
+                    max-height: 500px;
+                    overflow-y: scroll;
+                }
+
             </style>
             <link href="/Components/Profile/TableComponents/CustomTable.css" rel="stylesheet"/>
             <div class="profile-data-stats-history">

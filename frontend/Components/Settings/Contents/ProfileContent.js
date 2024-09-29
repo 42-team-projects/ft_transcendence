@@ -187,6 +187,10 @@ const cssContent = /*css*/`
         justify-content: space-around;
     }
 
+    .actions * {
+        cursor: pointer;
+    }
+
     h3 {
         color: white;
     }

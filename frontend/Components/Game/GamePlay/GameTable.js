@@ -13,6 +13,8 @@ import { PROFILE_API_URL, updateCurrentPlayer } from "/Utils/GlobalVariables.js"
 import { svgSlider } from "/Slides.js";
 import { CustomSpinner } from "/Components/CustomElements/CustomSpinner.js";
 import { isTokenValid } from "/root/fetchWithToken.js";
+import { closeAndRemovePlayerFromTournament } from "/Utils/TournamentWebSocketManager.js";
+
 const game_page = document.createElement("template");
 
 const RACKET_SPEED = 10;
@@ -39,6 +41,7 @@ export class GameTable extends HTMLElement {
             
             this.save_match = save;
             document.body.querySelector("footer-bar").remove();
+            this.socket = null;
             this.socket = new WebSocket(`${wsUrl}ws/game/${room_name}/`);
             const spinner = new CustomSpinner();
             spinner.label = "Waiting for opponent to join ...";
@@ -51,7 +54,7 @@ export class GameTable extends HTMLElement {
                 if(this.Loop_state === true){
                     score.player = 5;
                     score.opponent = 0;
-                    this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+                    this.GameOver("win", score.player, score.opponent, opponentInfo.id, 5000);
                 }
             };
             this.socket.onerror = (error) => {
@@ -93,7 +96,6 @@ export class GameTable extends HTMLElement {
 
     }
     async forfitGame () {
-        console.log("first this.id : ",    this.id)
         this.beforeunloadFunction = async function (e) {
             e.preventDefault();
             e.returnValue = '';
@@ -103,14 +105,12 @@ export class GameTable extends HTMLElement {
                 console.log("Access token is missing.");
                 return null;
             }
-            console.log("last this.id : ",    this.id)
-            if (this.id && this.id !== undefined)
+            if (this.id && this.id !== 'null' && this.id !== 'undefined')
 			{
 				xhr.open('POST', `${TOURNAMENT_API_URL}tournament/${this.id}/player/leave/`, true); // true makes it asynchronous
 				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
 				xhr.send();
-				console.log("this.id: ", this.id);
 			}
             else{
                 score.player = 0;
@@ -130,22 +130,23 @@ export class GameTable extends HTMLElement {
             return;
         }
         else{
-            console.log("fdvdfvdfvdfvdfvdf")
             this.forfitGame();
         }
 
-        document.body.addEventListener("pause-game", () => {
+        this.addEventListener("pause-game", () => {
             this.pauser = true;
             this.socket.send(
                 JSON.stringify({ message: "pause", id: userInfo.id })
             );
         });
-        document.body.addEventListener("resume-game", () => {
+        this.addEventListener("resume-game", () => {
             if (this.pauser === true)
                 this.socket.send(JSON.stringify({ message: "resume" }));
         });
-        document.body.addEventListener("exit-game", () => {
-            this.remove();
+        this.addEventListener("exit-game", () => {
+            score.player = 0;
+            score.opponent = 5;
+            this.GameOver('lose', score.player, score.opponent, opponentInfo.id, 1, "")
         });
         this.runder_call = true;
         await this.getMessages();
@@ -195,7 +196,7 @@ export class GameTable extends HTMLElement {
             opponent_score = player_1.score;
         }
         this.luanching = false;
-        await this.GameOver(player_state, score, opponent_score, opponentInfo.id);
+        await this.GameOver(player_state, score, opponent_score, opponentInfo.id, 5000);
     };
     moveRacket = (player_1, player_2) => {
         if (userInfo.id === Number(player_1.id)) {
@@ -298,7 +299,7 @@ export class GameTable extends HTMLElement {
     }
     getCoordonates(){return this.concoordonate;}
     
-    async GameOver(playerState, score, opponent_score, opponent_player, winner) {
+    async GameOver(playerState, score, opponent_score, opponent_player, time, winner) {
         this.reset();
         if (this.id && this.id !== "undefined"){
             await goNextStage(
@@ -309,10 +310,11 @@ export class GameTable extends HTMLElement {
                 score,
                 opponent_score
                 );
+            this.id = null
         }
         const gameOver = new GameOver(playerState, this.state, winner);
         document.body.appendChild(gameOver);
-        if( this.save_match === true)
+        if(this.save_match === true)
         {
             const body = JSON.stringify({'player_score': score, 'opponent_score': opponent_score, 'result': playerState, 'opponent_player': opponent_player});
             const form = new FormData();
@@ -327,7 +329,7 @@ export class GameTable extends HTMLElement {
         }
         setTimeout(() => {
             this.remove();
-        }, 5000);
+        }, time);
     }
     async LuncheGame(ctx) {
         const game_header = document.body.querySelector("game-header")
@@ -459,13 +461,13 @@ export class GameTable extends HTMLElement {
                 if(stop === true){
                     if (this.round > 4) {
                         this.RoundOver(ctx);
-                        this.loop_state = false;
+                        this.Loop_state = false;
                         this.luanching = false;
                         if (score.player > score.opponent) {
-                            this.GameOver("win", score.player, score.opponent, opponentInfo.id, userInfo.username);
+                            this.GameOver("win", score.player, score.opponent, opponentInfo.id, 5000, userInfo.username);
                         }
                         else {
-                            this.GameOver("win", score.player, score.opponent, opponentInfo.id, opponentInfo.username);
+                            this.GameOver("win", score.player, score.opponent, opponentInfo.id, 5000, opponentInfo.username);
                         }
                     }
                     else {
@@ -574,18 +576,15 @@ export class GameTable extends HTMLElement {
         this.reset();
         if (this.state !== "offline") {
             this.socket.onclose = () => {
+                console.log("im closed")
             };
             if (this.socket.readyState === 1)
                 this.socket.close();
         }
-        if(this.loop_state === true){
-            score.player = 5;
-            score.opponent = 0;
-            this.GameOver("win", score.player, score.opponent, opponentInfo.id);
+        this.socket = null
+        if (this.id && this.id !== 'null' && this.id !== 'undefined'){
+            await closeAndRemovePlayerFromTournament(this.id);
         }
-        // console.log("disconnected : ", this.id);
-        // if (this.id && this.id !== undefined)
-        //     await closeAndRemovePlayerFromTournament(this.id);
         router.randred = false;
         router.handleRoute(window.location.pathname);
     }

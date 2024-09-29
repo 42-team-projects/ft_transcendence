@@ -44,10 +44,28 @@ export class SearchBarComponent extends HTMLElement {
     selectedItem;
     currentPlayerId;
     async connectedCallback() {
+        const mainContainer = this.shadowRoot.querySelector(".mainContainer")
+
         const searchInput = this.shadowRoot.querySelector(".search-input");
         const searchIcon = this.shadowRoot.querySelector(".search-icon");
         const searchBody = this.shadowRoot.querySelector(".search-body");
         const searchContainer = this.shadowRoot.querySelector(".search-result");
+
+        // show div on mouseout
+        mainContainer.addEventListener('mouseover', () => {
+            searchBody.style.display = "flex";
+            searchIcon.src = "/assets/icons/close-icon.svg";
+            searchIcon.id = "close";
+        });
+
+        // Hide div on mouseout
+        mainContainer.addEventListener('mouseout', () => {
+            searchBody.style.display = "none";
+            searchIcon.src = "/assets/icons/search-icon.svg";
+            searchIcon.id = "search";
+            clearInterval(this.interval);
+            searchInputChecker = false;
+        });
 
         // const Users = this.shadowRoot.querySelector("users-search-section");
         this.currentPlayerId = await getCurrentPlayerId();
@@ -62,6 +80,7 @@ export class SearchBarComponent extends HTMLElement {
             searchIcon.id = "close";
             let checker = false;
             this.interval = setInterval(async () => {
+                console.log("hello world");
                 if (searchInput.value && searchInput.value != oldInputValue) {
 
                     const players = this.shadowRoot.querySelector("users-search-section");
@@ -227,6 +246,7 @@ const cssContent = /*css*/`
     width: 32px;
     height: 32px;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .vertical-line {
@@ -248,6 +268,7 @@ const cssContent = /*css*/`
     margin-left: 10px;
     padding-left: 10px;
     outline: none;
+    cursor: text;
 }
 
 .search-input::placeholder{
@@ -261,6 +282,7 @@ const cssContent = /*css*/`
 .filter-button {
     width: 24px;
     height: 24px;
+    cursor: pointer;
 }
 
 .search-body {

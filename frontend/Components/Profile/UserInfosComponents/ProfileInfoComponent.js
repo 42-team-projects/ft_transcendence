@@ -144,14 +144,13 @@ export class ProfileInfoComponent extends HTMLElement {
                     addFriend.id = "waiting";
                     this.requestId = res.id;
                     const notificationWS = await getNotificationWebSocket();
-                    console.log("WebSocket.OPEN: ", WebSocket.OPEN);
                     if (notificationWS.readyState === WebSocket.OPEN) {
                         notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": this.requestId}));
-
-                        // displayToast("success", 'Friend request sent.');
+                        displayToast("success", 'Friend request sent.');
                         
                     } else {
                         console.error('WebSocket is not open. readyState = ' + notificationWS.readyState);
+                        
                     };
                 }
                 else
@@ -229,6 +228,7 @@ const cssContent = /*css*/`
     .add-friend img {
         width: 28px;
         height: 28px;
+        cursor: pointer;
     }
 
     .profile-image > .name {

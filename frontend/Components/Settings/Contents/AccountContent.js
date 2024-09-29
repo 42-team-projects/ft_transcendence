@@ -62,7 +62,7 @@ export class AccountContent extends HTMLElement {
 
 
         this.interval = setInterval(() => {
-            if (usernameField.value != playerData.user.username || passwordField.value)
+            if (usernameField.value != playerData.user.username || validatePassword(passwordField.value))
                 saveButton.classList.remove("disable");
             else
                 saveButton.classList.add("disable");
@@ -156,6 +156,13 @@ export class AccountContent extends HTMLElement {
     }
 }
 
+function validatePassword(password) {
+    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(\W|_)).{8,}$/;
+    return re.test(password);
+    // return true;
+}
+
+
 const cssContent = /*css*/ `
     * {
         margin: 0;
@@ -190,6 +197,11 @@ const cssContent = /*css*/ `
         align-items: center;
         justify-content: space-around;
     }
+    
+    .actions * {
+        cursor: pointer;
+    }
+
 
     h3 {
         color: white;

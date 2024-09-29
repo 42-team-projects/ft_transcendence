@@ -20,6 +20,10 @@ export class UsersSearchSection extends HTMLElement {
                     gap: 20px;
                 }
 
+                .search-actions * {
+                    cursor: pointer;
+                }
+
             </style>
             <div class="search-sections">
                 <h2 class="result-section-title">USERS</h2>
@@ -79,8 +83,10 @@ export class UsersSearchSection extends HTMLElement {
             console.log("WebSocket.OPEN: ", WebSocket.OPEN);
             if (websocket.readyState === WebSocket.OPEN) {
                 websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': playerData.user.id, 'is_signal': false, "type": "game", "data": ""}));
+                displayToast("success", "Your Request has been sended successfully.");
             } else {
                 console.log('WebSocket is not open. Current state is: ' + websocket.readyState);
+                displayToast("error", "We can't send your request right now.");
             }
         });
         return item;

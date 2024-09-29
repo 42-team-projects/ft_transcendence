@@ -70,6 +70,7 @@ export class ChatRoomComponent extends HTMLElement {
         let is_blocked = await getApiData(HOST + "/friend/is_blocked/" + player.user.username);
         if (is_blocked)
             is_blocked = is_blocked.response;
+        this.querySelector(".body").innerHTML = '';
         await this.renderChatRoom(player, is_blocked);
     }
 

@@ -44,6 +44,7 @@ export class ChatHeaderComponent extends HTMLElement {
         playgame.addEventListener("click", async (e) => {
             const websocket = await getNotificationWebSocket();
             websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, 'is_signal': false, "type": "game", "data": ""}));
+            displayToast("success", "Your Request has been sended successfully.");
         })
 
         const blockProfile = this.querySelector(".block-profile");
@@ -200,6 +201,7 @@ const cssContent = /*css*/ `
         flex: 1;
         width: 40px;
         height: 40px;
+        cursor: pointer;
     }
     
     .infos {

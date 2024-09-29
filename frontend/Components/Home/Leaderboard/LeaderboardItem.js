@@ -1,3 +1,5 @@
+import { HOST } from "/Utils/GlobalVariables.js";
+import { router } from "/root/Router.js";
 import { getLeagueColor, getLeagueImage } from "/Utils/LeaguesData.js";
 
 export class LeaderboardItem extends HTMLElement {
@@ -25,7 +27,10 @@ export class LeaderboardItem extends HTMLElement {
         `;
     }
     connectedCallback() {
-
+        this.querySelector("c-hexagon").addEventListener("click", (e) => {
+            const url = new URL(HOST + "/Profile/" + this.username);
+            router.handleRoute(url.pathname);
+        });
     }
 
 

@@ -88,6 +88,10 @@ const cssContent = /*css*/`
         align-items: center;
         justify-content: space-around;
     }
+    
+    .actions * {
+        cursor: pointer;
+    }
 
     h3 {
         color: white;

@@ -184,12 +184,18 @@ td {
     border-top: 0.1px solid #051d31;
 }
 
+.actions * {
+    cursor: pointer;
+}
+
 .actions {
     display: flex;
     gap: 40px;
     align-items: center;
     justify-content: center;
 }
+
+
 
 
 .tournament-actions {
