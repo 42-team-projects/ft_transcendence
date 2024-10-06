@@ -1,4 +1,4 @@
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby/Lobby.js";
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 const singlePlayerTemplate = document.createElement('template')

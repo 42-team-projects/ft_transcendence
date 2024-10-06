@@ -3,7 +3,7 @@ import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { ProfileComponent } from "/Components/Profile/ProfileComponent.js";
 import { router } from "/root/Router.js";
 import { getNotificationWebSocket } from "/Utils/GlobalVariables.js";
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby/Lobby.js";
 import { createApiData } from "/Utils/APIManager.js";
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
 

@@ -1,7 +1,7 @@
 import { CustomAlert } from "/Components/Alert/CustomAlert.js";
 import { get_tournaments_by_player_id, player_leave_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { getCurrentPlayerId, wsUrl, HOST } from "/Utils/GlobalVariables.js";
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby/Lobby.js";
 
 let countdownInterval = -1;
 

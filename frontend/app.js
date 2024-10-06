@@ -1,17 +1,17 @@
 
 
 
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
-import { Buttons } from "/Components/Game/GamePlay/buttons.js"
+import { Lobby } from "/Components/Game/GamePlay/Lobby/Lobby.js"
+import { Buttons } from "/Components/Game/GamePlay/GameTable/buttons.js"
 import { SinglePlayer } from '/Components/Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
 import { OflineGame } from '/Components/Game/GamePlay/GameOfline/GameOfline.js'
 import { OnlineGame } from '/Components/Game/GamePlay/GameOnline/OnlineGameCart.js'
-import { PageName } from "/Components/Game/GamePlay/PageName.js";
-import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
-import { LaunchingGame } from '/Components/Game/GamePlay/launchingGame.js'
-import { GameTable } from '/Components/Game/GamePlay/GameTable.js'
-import { GameHeader } from '/Components/Game/GamePlay/GameHeader.js'
-import { GameOver } from '/Components/Game/GamePlay/GameOver.js';
+import { PageName } from "/Components/Game/GamePlay/GameTable/PageName.js";
+import { PlayerBorder } from "/Components/Game/GamePlay/Lobby/PlayerBorder.js";
+import { LaunchingGame } from '/Components/Game/GamePlay/GameTable/launchingGame.js'
+import { GameTable } from '/Components/Game/GamePlay/GameTable/GameTable.js'
+import { GameHeader } from '/Components/Game/GamePlay/GameTable/GameHeader.js'
+import { GameOver } from '/Components/Game/GamePlay/GameTable/GameOver.js'
 import { GameSelection } from '/Components/Game/GameSelection.js'
 
 import { HeaderBar } from '/Components/Header/header-bar.js'

@@ -72,7 +72,7 @@ import { createNotification } from "/Components/Notification/configs/Notificatio
 import { router } from "/root/Router.js";
 
 import { Profile } from "/Components/Header/profile.js";
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby/Lobby.js";
 
 
 export const PROFILE_COMPONENT = document.createElement("c-profile");

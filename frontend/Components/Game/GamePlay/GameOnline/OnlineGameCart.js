@@ -1,4 +1,4 @@
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
+import { Lobby } from "/Components/Game/GamePlay/Lobby/Lobby.js"
 import { isTokenValid } from "/root/fetchWithToken.js";
 import { router } from "/root/Router.js";
 const OnlineGameTemplate = document.createElement('template')

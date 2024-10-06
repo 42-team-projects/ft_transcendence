@@ -3,7 +3,7 @@ import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { getApiData } from "/Utils/APIManager.js";
 import { player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { router } from "/root/Router.js";
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
+import { Lobby } from "/Components/Game/GamePlay/Lobby/Lobby.js";
 import { deleteApiData } from "/Utils/APIManager.js";
 import { removeNotification } from "/Components/Notification/configs/NotificationUtils.js";
 

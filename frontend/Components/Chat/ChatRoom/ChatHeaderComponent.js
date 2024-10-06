@@ -2,7 +2,6 @@
 import { getLeagueColor } from "/Utils/LeaguesData.js";
 import { router } from "/root/Router.js";
 import { HOST, getNotificationWebSocket } from "/Utils/GlobalVariables.js";
-import { Lobby } from "/Components/Game/GamePlay/Lobby.js";
 import { createApiData, deleteApiData } from "/Utils/APIManager.js";
 import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
