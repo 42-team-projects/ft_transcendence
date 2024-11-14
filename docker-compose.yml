@@ -74,8 +74,6 @@ services:
       - '--web.enable-lifecycle'
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.retention.time=1d'
-    # ports:
-    #   - 9090:9090 # ! should not be exposed (removed later)
     env_file:
       - .env
     restart: unless-stopped
@@ -133,8 +131,6 @@ services:
     volumes:
       - alertmanager_data:/alertmanager
     command: ["/opt/alertmanager-0.21.0.linux-amd64/alertmanager", "--config.file=/etc/alertmanager/alertmanager.yml"]
-    # ports:
-    #   - 9093:9093 # ! should not be exposed
     env_file:
       - .env
     restart: unless-stopped

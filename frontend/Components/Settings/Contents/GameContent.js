@@ -150,6 +150,10 @@ const cssContent = /*css*/`
         align-items: center;
         justify-content: space-around;
     }
+    
+    .actions * {
+        cursor: pointer;
+    }
 
     .active {
         border: 2px solid aqua;

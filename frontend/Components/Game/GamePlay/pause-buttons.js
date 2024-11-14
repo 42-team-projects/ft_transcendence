@@ -29,8 +29,6 @@ template.innerHTML = /*html*/`
 </div> 
 
 `
-// background-color: #021f38; 
-// background-color: #205997;
 export class PauseButtons extends HTMLElement{
     constructor(){
         super();
@@ -42,25 +40,29 @@ export class PauseButtons extends HTMLElement{
         this.addEventListener('click', () => {
             const text = this.shadowRoot.querySelector('slot[name="text"]');
             const textObject = text.assignedElements()[0];
-            console.log(textObject.textContent)
+            const game_table = document.body.querySelector('game-table');
             if (textObject.textContent == 'RESTART')
-                document.body.dispatchEvent(new CustomEvent('restart-game'))
+                game_table.dispatchEvent(new CustomEvent('restart-game'))
             else if (textObject.textContent == 'RESUME')
-                document.body.dispatchEvent(new CustomEvent('resume-game'))
+                game_table.dispatchEvent(new CustomEvent('resume-game'))
             else
-                document.body.dispatchEvent(new CustomEvent('exit-game'))
+                game_table.dispatchEvent(new CustomEvent('exit-game'))
         })
+        const icon = this.shadowRoot.querySelector('slot[name="icon"]');
+        const text = this.shadowRoot.querySelector('slot[name="text"]');
+        const svg = icon.assignedElements()[0];
+        const textObject = text.assignedElements()[0];
+        let color = '#00fffb90';
+        if(textObject.textContent == 'EXIT'){
+            svg.querySelector('path').setAttribute('stroke', 'red');
+            textObject.style.color = 'red';
+            color = 'red';
+        }
         this.addEventListener('mouseover', () => {
             this.style.backgroundColor = '#00fffb90'
             this.shadowRoot.querySelector('.child').style.backgroundColor = 'rgb(2 31 56 / 68%)'
-            const icon = this.shadowRoot.querySelector('slot[name="icon"]');
-            const text = this.shadowRoot.querySelector('slot[name="text"]');
-            const iconObject = icon.assignedElements()[0];
-            const textObject = text.assignedElements()[0];
-            const iconObjectContent = iconObject.contentDocument;
-            const svg = iconObjectContent.querySelector('svg');
             if(svg.getAttribute('fill') == 'none'){
-                iconObjectContent.querySelector('path').setAttribute('stroke', 'white');
+                svg.querySelector('path').setAttribute('stroke', 'white');
             }
             else{
                 svg.setAttribute('fill', 'white');
@@ -70,20 +72,13 @@ export class PauseButtons extends HTMLElement{
         this.addEventListener('mouseout', () => {
             this.style.backgroundColor = '#00fffb30'
             this.shadowRoot.querySelector('.child').style.backgroundColor = '#021f38'
-            const icon = this.shadowRoot.querySelector('slot[name="icon"]');
-            const text = this.shadowRoot.querySelector('slot[name="text"]');
-            const iconObject = icon.assignedElements()[0];
-            const textObject = text.assignedElements()[0];
-            const iconObjectContent = iconObject.contentDocument;
-            const svg = iconObjectContent.querySelector('svg');
-            console.log(svg.getAttribute('fill'));
             if(svg.getAttribute('fill') == 'none'){
-                iconObjectContent.querySelector('path').setAttribute('stroke', '#00fffb90');
+                svg.querySelector('path').setAttribute('stroke', color);
             }
             else{
-                svg.setAttribute('fill', '#00fffb90');
+                svg.setAttribute('fill', color);
             }
-            textObject.style.color = '#00fffb90';
+            textObject.style.color = color;
         })
     }
 }

@@ -4,15 +4,28 @@ from asgiref.sync import async_to_sync
 import django
 django.setup() # used to fix the error "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet." (ogorfti)
 from .models import *
-from friend.models import BlockUser
+from friend.models import *
 from .serializers import *
 
 from django.core.exceptions import ObjectDoesNotExist
 
+def is_block(current_user, receiver_user):
+    blocked = BlockUser.objects.filter(blocker=current_user, blocked=receiver_user).first()
+    block = BlockUser.objects.filter(blocker=receiver_user, blocked=current_user).first()
+    if blocked or block:
+        return True
+    return True
+
+def is_friend(current_user, receiver_user):
+    user_friends = Friendship.get_friendship(current_user)
+    if user_friends.is_friend(receiver_user):
+        recevier_friends = Friendship.get_friendship(receiver_user)
+        if recevier_friends.is_friend(current_user):
+            return True
+    return False
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        print(self.scope['user'].username)
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.group_name = f"chat_{self.room_name}"
         
@@ -38,11 +51,9 @@ class ChatConsumer(WebsocketConsumer):
             self.current_user = self.get_user(data['sender'])            
 
             # handle block user here
-            blocked = BlockUser.objects.filter(blocker=self.current_user, blocked=self.receiver).first()
-            block = BlockUser.objects.filter(blocker=self.receiver, blocked=self.current_user).first()
-            
-            if blocked and block:
-                self.send_error(f'can\'t send message, block!')
+            if is_block(self.current_user, self.receiver) and \
+                not is_friend(self.current_user, self.receiver):
+                self.send_error(f'You can\'t send message!')
             else:
                 self.save_and_broadcast_message(data['message'])
         except ObjectDoesNotExist:

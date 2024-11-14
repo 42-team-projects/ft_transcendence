@@ -33,21 +33,20 @@ export class NotificationsList extends HTMLElement {
         const notificationList = this.querySelector(".notification-list");
 
         const notifications = await getApiData(NOTIFICATIONS_API_URL + "notifications_list/");
-        let counter = 0;
         if (notifications && notifications.length != 0) {
             notificationList.innerHTML = "";
             Array.from(notifications).forEach( async (notif) => {
                 const notification = await createNotification(notif.id, notif.sender.username, notif.content, notif.type, notif.data);
                 this.appendNotification(notification);
-                counter++;
             });
+            const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
+            if (notificationIcon)
+                notificationIcon.textContent = notifications.length;
+
             // increment the notification counter.
             notificationList.scrollTop = notificationList.scrollHeight;
         }
-        
-        const notificationIcon = window.document.querySelector(".notification-search .number-of-notifications");
-        if (notificationIcon)
-            notificationIcon.textContent = counter;
+    
 
         this.querySelector(".close-button").addEventListener("click", () => {
             hideNotificationsList();

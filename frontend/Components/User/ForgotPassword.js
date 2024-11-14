@@ -35,6 +35,8 @@ export class ForgotPassword extends HTMLElement {
             </custom-input>            
             
             <button type="submit" class="btk">Send</button>
+            <p class="support">Need help ? <a href="mailto:ft.transcendencee.42@gmail.com">Contact support</a></p>        
+
             
             </div>
             `;
@@ -97,7 +99,6 @@ export class ConfirmPassword extends HTMLElement {
             }
         });
         const data = await response.json();
-        console.log(data);
 
         if (response.status === 200) {
             this.showForm();
@@ -168,7 +169,6 @@ export class ConfirmPassword extends HTMLElement {
                 });
 
                 const data = await response.json();
-                console.log(data);
 
                 if (response.status === 200) {
                     router.handleRoute('/login');

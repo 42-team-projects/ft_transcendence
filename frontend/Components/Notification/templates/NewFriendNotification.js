@@ -40,7 +40,9 @@ export class NewFriendNotification extends HTMLElement {
     }
 
     sender;
-  
+    requestId;
+
+
     async initProfileImage(user_name) {
         const profile = this.querySelector(".message c-hexagon");
         this.sender = await getApiData(PROFILE_API_URL + user_name + "/");
@@ -75,16 +77,16 @@ export class NewFriendNotification extends HTMLElement {
                 const acceptResponse = await createApiData(HOST + "/friend/accept/" + this.id + "/", "");
                 const res = await acceptResponse.json();
                 if (acceptResponse.ok)
-                    displayToast("success", res.requests);
+                    displayToast("success", res.response);
                 else
-                    displayToast("error", res.requests);
+                    displayToast("error", res.response);
 
                 
                 const websocket = await getNotificationWebSocket();
                 websocket.send(JSON.stringify({'message': 'the user accept your invetation.', 'receiver': this.sender.user.id, 'is_signal': true, 'type': "friend", "data": `/Chat/` + this.sender.user.username}));
                 this.parentElement.remove();
 
-                removeNotification(this.id);
+                // removeNotification(this.id);
 
                 if (window.location.pathname.includes("/Chat"))
                     router.handleRoute(window.location.pathname);
@@ -94,16 +96,16 @@ export class NewFriendNotification extends HTMLElement {
         const reject = this.querySelector(".notification-actions .reject");
         if (reject) {
             reject.addEventListener("click", async () => {
-                const acceptResponse = await createApiData(HOST + "/friend/cancel/" + this.id + "/", "");
+                const acceptResponse = await createApiData(HOST + "/friend/decline/" + this.id + "/", "");
                 const res = await acceptResponse.json();
                 if (acceptResponse.ok)
-                    displayToast("success", res.requests);
+                    displayToast("success", res.response);
                 else
-                    displayToast("error", res.requests);
+                    displayToast("error", res.response);
 
                 this.parentElement.remove();
 
-                removeNotification(this.id);
+                // removeNotification(this.id);
                 
             });
         }

@@ -20,6 +20,10 @@ export class UsersSearchSection extends HTMLElement {
                     gap: 20px;
                 }
 
+                .search-actions * {
+                    cursor: pointer;
+                }
+
             </style>
             <div class="search-sections">
                 <h2 class="result-section-title">USERS</h2>
@@ -65,43 +69,26 @@ export class UsersSearchSection extends HTMLElement {
             </div>
         `;
 
-        const chat = item.querySelector("#chat");
+        // const chat = item.querySelector("#chat");
         const playGame = item.querySelector("#play-game");
         const showProfile = item.querySelector("#show-profile");
         showProfile.addEventListener("click", e => {
             e.preventDefault()
             const url = new URL(showProfile.href)
-            console.log(url.pathname)
             router.handleRoute(url.pathname)
         });
 
         playGame.addEventListener("click", async () => {
             const websocket = await getNotificationWebSocket();
-            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': playerData.user.id, 'is_signal': false, "type": "game", "data": ""}));
-            // new Lobby(playerData.user.id, 30);
+            console.log("WebSocket.OPEN: ", WebSocket.OPEN);
+            if (websocket.readyState === WebSocket.OPEN) {
+                websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': playerData.user.id, 'is_signal': false, "type": "game", "data": ""}));
+                displayToast("success", "Your Request has been sended successfully.");
+            } else {
+                console.log('WebSocket is not open. Current state is: ' + websocket.readyState);
+                displayToast("error", "We can't send your request right now.");
+            }
         });
-
-        // chat.addEventListener("click", async () => {
-        //     if (playerData.is_friend) {
-        //         const url = new URL(HOST + "/Chat/" + playerData.user.username);
-        //         router.handleRoute(url.pathname);
-        //         return ;
-        //     }
-        //     const sendRequestResponse = await createApiData(HOST + "/friend/send/" + playerData.user.id + "/", "");
-
-        //     const res = await sendRequestResponse.json();
-
-        //     if (sendRequestResponse.ok) {
-        //         const notificationWS = await getNotificationWebSocket();
-        //         notificationWS.send(JSON.stringify({'message': 'want to be a friend.', 'receiver': this.id, 'is_signal': false, 'type': "friend", "data": ""}));
-        //         chat.src = "/assets/icons/wait-time-icon.svg";
-        //         displayToast("success", res.response);
-        //     }
-        //     else
-        //         displayToast("error", res.response);
-
-
-        // });
         return item;
     }
 

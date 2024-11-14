@@ -11,7 +11,7 @@ export function renderChatHeader(chatContainer, conversationData, is_blocked) {
     header.userId = conversationData.user.id;
     header.userName = conversationData.user.username;
     header.league = conversationData.stats.league;
-    header.active = conversationData.user.is_active;
+    header.active = conversationData.active;
     header.profileImage = HOST + conversationData.user.avatar;
     header.isblocked = is_blocked;
 }
@@ -21,12 +21,16 @@ export function renderChatHeader(chatContainer, conversationData, is_blocked) {
 export async function renderChatBody(chatContainer, conversationName) {
     const messagesContainer = chatContainer.querySelector(".body");
     const messages = await getApiData(HOST + "/chat/messages?cn=" + conversationName);
+    if (messages && messages.length)
+        messagesContainer.innerHTML = '';
     renderConversation(messagesContainer, messages);
 }
 
 
 
 function renderMessageComponent(chatBody, messageContainer, component, message, checker) {
+    console.log("message: ", message);
+    messageContainer.time = message.sent_at.slice(11, 16);
     messageContainer.textContent = message.content;
     if (checker != message.user)
     {

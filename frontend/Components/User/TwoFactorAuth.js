@@ -40,8 +40,10 @@ export class TwoFactorAuth extends HTMLElement {
             </custom-input>
             
             <button type="submit" class="btk">Submit</button>
+            
+            <p class="support">Need help ? <a href="mailto:ft.transcendencee.42@gmail.com">Contact support</a></p>        
         </div>
-        
+            
         `;
 
         this.shadowRoot.querySelector('.btk').addEventListener('click', async (event) => {

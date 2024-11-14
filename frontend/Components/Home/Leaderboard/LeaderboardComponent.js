@@ -49,7 +49,7 @@ export class LeaderboardComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log("welcome to leaderboard component !!");
+        // console.log("welcome to leaderboard component !!");
     }
 
 }

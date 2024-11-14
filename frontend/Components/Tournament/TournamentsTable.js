@@ -78,7 +78,6 @@ export class TournamentsTable extends HTMLElement {
                 if (data) {
                     try {
                         const response = await createTournament(data);
-                        console.log("reponse: ", response);
                         if (!response)
                             throw new Error(`${response.status}  ${response.statusText}`);
                         const tournamentResponse = await response.tournament;
@@ -185,12 +184,18 @@ td {
     border-top: 0.1px solid #051d31;
 }
 
+.actions * {
+    cursor: pointer;
+}
+
 .actions {
     display: flex;
     gap: 40px;
     align-items: center;
     justify-content: center;
 }
+
+
 
 
 .tournament-actions {

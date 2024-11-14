@@ -33,7 +33,7 @@ export async function leaveTournamentAndStoreScore(tournamentId, winnerId, winne
         }
     } catch (error) {
         console.error('Error:', error);
-        // alert('An error occurred while leaving tournament and storing score.');
+        alert('An error occurred while leaving tournament and storing score.');
     }
 }
 

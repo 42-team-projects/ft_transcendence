@@ -21,6 +21,10 @@ import { getApiData } from "/Utils/APIManager.js";
 
 let currentPlayer;
 
+export function setCurrentPlayer(val) {
+    currentPlayer = val;
+}
+
 export async function updateCurrentPlayer() {
     currentPlayer = await getApiData(PROFILE_API_URL + "me/");
     if (PROFILE_COMPONENT) {
@@ -81,25 +85,25 @@ export async function createNotificationWebSocket() {
     const userId = await getCurrentUserId();
     let websocket = `${wsUrl}ws/user/notification/${userId}/`;
     notificationWebSocket = new WebSocket(websocket)
-    notificationWebSocket.onopen = () => {};
+    notificationWebSocket.onopen = () => {
+        console.log('WebSocket has been opened');
+    };
     
     notificationWebSocket.onerror = (error) => {
         console.log('WebSocket encountered an error: ', error);
     };
     notificationWebSocket.onclose = (event) => {
-        console.log('WebSocket connection of notification is closed: ', event);
+        console.log('WebSocket connection of notification is close');
     };
     notificationWebSocket.onmessage = async (event) => {
         let data = await JSON.parse(event.data)
-        console.log("data: ", data);
-        if (data.Error) {
-            console.log(data.Error)
+        if (data.error) {
+            console.log(data.error)
             return ;
         }
         if (!data.is_signal) {
-            const messageNotification = createNotification(data.id, data.sender, data.content, data.type, data.data);
+            const messageNotification = createNotification(( data.type === 'friend' ? data.data : data.id), data.sender, data.content, data.type, data.data);
             displayNotification(messageNotification, data.type );
-            
         }
         else
             handleSignals(data);
@@ -128,7 +132,7 @@ export function handleSignals(signalData) {
             displayNotification(messageNotification);
             break;
         case "game":
-            new Lobby(Number(signalData.data), 29);
+            new Lobby(Number(signalData.data), 30);
             break;
         default:
             break;

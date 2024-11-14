@@ -117,11 +117,13 @@ async function displayAlert(message, data) {
     data = await getTournamentData(data.tournament_id); // use uuid instead of primary id key
 
     const alertsConrtainer = window.document.querySelector("body .alerts");
+    if (!alertsConrtainer)
+        return;
+
     alertsConrtainer.style.display = "flex";
     const oldAlert = alertsConrtainer.querySelector(".id_" + data.tournament_id);
     if (oldAlert)
         oldAlert.remove();
-    console.log("\nhelloo test\n");
     const customAlert = new CustomAlert();
     customAlert.className = "id_" + data.tournament_id;
     customAlert.innerHTML = `
@@ -158,7 +160,7 @@ async function displayAlert(message, data) {
         /* -------   start call nordine code here -------- */
         if (opponentId) {
             clearInterval(countdownInterval);
-            const lobby = new Lobby(opponentId, timeLeft);
+            const lobby = new Lobby(opponentId, timeLeft, data.tournament_id);
             lobby.id = "tournament_lobby";
             lobby.tournament_id = data.tournament_id;
 
@@ -186,8 +188,11 @@ async function displayAlert(message, data) {
 
 
 export async function closeAndRemovePlayerFromTournament(tournament_id) {
+    console.log("response of player leave tournament");
     try {
-        await player_leave_tournament(tournament_id);
+        console.log("response of player leave tournament 2 ");
+        const res = await player_leave_tournament(tournament_id);
+        console.log("response of player leave tournament: ", res);
         await closeWebSocket(tournament_id);
     } catch (error) {
         console.error('Error of player leave tournament: ', error);
@@ -200,7 +205,6 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
         let now = new Date();
         now.setSeconds(now.getSeconds() + timeAppend);
         const start_date = now.toISOString().replace('T', ' ').substring(0, 19); // Converts to YYYY-MM-DD HH:MM:SS
-        console.log("start_date: ", start_date);
         const Tournament = {
             tournamentId: tournamentId,
             start_date: start_date,
@@ -214,7 +218,6 @@ export async function closeAndRemovePlayerFromTournament(tournament_id) {
         });
         if (!response.ok) {
             const responseData = await response.json();
-            console.log(JSON.stringify(responseData, null, 2));
             throw new Error(`${response.status}  ${responseData.statusText}`);
         }
     } catch(error) {
@@ -253,9 +256,6 @@ async function getTournamentData(tournament_id) {
 
 function findOpponentId(playerId, playerIds, totalPlayers)
 {
-    console.log("\nplayerIds ==> ", playerIds);
-    console.log("\ntotalPlayers ==> ", totalPlayers);
-    console.log("\nplayerId ==> ", playerId);
     const pairing_sum = totalPlayers - 1;
     const index = playerIds.indexOf(playerId);
     if (index === -1) return null; // Player ID not found in the list
@@ -284,8 +284,10 @@ function startCountdown(cDownContainer, tournament_id) {
             countdownInterval = -1;
             closeAndRemovePlayerFromTournament(tournament_id);
             const alertsConrtainer = window.document.querySelector("body .alerts");
-            alertsConrtainer.style.display = "none";
-            alertsConrtainer.innerHTML = '';
+            if (alertsConrtainer) {
+                alertsConrtainer.style.display = "none";
+                alertsConrtainer.innerHTML = '';
+            }
         }
         timeLeft--;
     }, 1000);

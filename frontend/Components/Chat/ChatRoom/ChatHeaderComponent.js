@@ -42,9 +42,9 @@ export class ChatHeaderComponent extends HTMLElement {
         })
         const playgame = this.querySelector(".play-game");
         playgame.addEventListener("click", async (e) => {
-            const websocket = await getNotificationWebSocket();;
-            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, 'is_signal': false, "type": "game", "infos": "hello world"}));
-            new Lobby(this.playerId, 30);
+            const websocket = await getNotificationWebSocket();
+            websocket.send(JSON.stringify({'message': 'want to play with you.', 'receiver': this.userId, 'is_signal': false, "type": "game", "data": ""}));
+            displayToast("success", "Your Request has been sended successfully.");
         })
 
         const blockProfile = this.querySelector(".block-profile");
@@ -201,6 +201,7 @@ const cssContent = /*css*/ `
         flex: 1;
         width: 40px;
         height: 40px;
+        cursor: pointer;
     }
     
     .infos {

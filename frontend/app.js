@@ -1,11 +1,10 @@
 
 
 
-// Game
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
 import { Buttons } from "/Components/Game/GamePlay/buttons.js"
 import { SinglePlayer } from '/Components/Game/GamePlay/SinglePlayer/SinglePlayerCart.js'
-import { MultiPlayer } from '/Components/Game/GamePlay/GameOfline/GameOfline.js'
+import { OflineGame } from '/Components/Game/GamePlay/GameOfline/GameOfline.js'
 import { OnlineGame } from '/Components/Game/GamePlay/GameOnline/OnlineGameCart.js'
 import { PageName } from "/Components/Game/GamePlay/PageName.js";
 import { PlayerBorder } from "/Components/Game/GamePlay/PlayerBorder.js";
@@ -48,7 +47,7 @@ customElements.define('page-name',PageName)
 customElements.define('player-border',PlayerBorder)
 customElements.define('game-lobby', Lobby)
 customElements.define("single-player", SinglePlayer)
-customElements.define("multi-player", MultiPlayer)
+customElements.define("multi-player", OflineGame)
 customElements.define("online-game", OnlineGame)
 customElements.define('c-button', Buttons)
 customElements.define('game-selection', GameSelection)
@@ -60,8 +59,12 @@ import OAuth from "/Components/User/Oauth.js";
 import { ForgotPassword, ConfirmPassword } from "/Components/User/ForgotPassword.js";
 import { TwoFactorAuth } from "/Components/User/TwoFactorAuth.js";
 import { router } from "/root/Router.js"
-import { CustomToast } from "./Components/CustomElements/CustomToast.js";
+import { FooterBar } from "/Utils/FooterBar.js"
+import { CustomToast } from "/Components/CustomElements/CustomToast.js";
+import { NewToast } from "/Components/CustomElements/NewToast.js";
 
+
+customElements.define("footer-bar", FooterBar);
 customElements.define("signup-page", SignupPage);
 customElements.define("login-page", LoginPage);
 customElements.define("email-page", EmailConf);

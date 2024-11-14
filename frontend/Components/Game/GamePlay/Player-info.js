@@ -41,8 +41,10 @@ export class PlayerInfo extends HTMLElement {
         const player = this.querySelector('.playerscor')
         const playerImg = this.querySelector('img')
         const playerName = this.querySelector('.playerinfo')
+        const rackita = this.querySelector('.rackita')
         player.querySelector('h1').textContent = score
         playerImg.src = userInfo.picture;
+        rackita.style.backgroundColor = userInfo.color
         playerName.querySelector('p').textContent = userInfo.username
     }
 
@@ -53,7 +55,6 @@ export class PlayerInfo extends HTMLElement {
 
     connectedCallback(){
         if(this.state == 'reverse'){
-            // console.log('reverse');
             this.querySelector('img').style.transform = 'scaleX(-1)';
             this.querySelector('.playerinfo').style.transform = 'translateY(0%) scaleX(-1)';
             this.querySelector('.playerscor').style.transform = 'translateY(0%) scaleX(-1)';

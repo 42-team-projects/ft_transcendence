@@ -104,7 +104,6 @@ export class ProfileContent extends HTMLElement {
                 const avatarForm = new FormData();
                 avatarForm.append("avatar", profileImageFile);
                 const apiResponse = await updateApiData(UPDATE_USER_API_URL, avatarForm);
-                console.log("apiResponse: ", apiResponse);
                 profileImageFile = null;
             }
      
@@ -133,7 +132,6 @@ export class ProfileContent extends HTMLElement {
                     playerCover = coverField.file[0].name;
                 }
                 const res = await updateApiData(PROFILE_API_URL + "me/", formData);
-                console.log("res: ", res);
                 if (!res) {
                     displayToast("error", "somethings wrong happen!!!");
                     return ;
@@ -187,6 +185,10 @@ const cssContent = /*css*/`
         width: 90%;
         align-items: center;
         justify-content: space-around;
+    }
+
+    .actions * {
+        cursor: pointer;
     }
 
     h3 {

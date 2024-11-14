@@ -27,10 +27,6 @@ const Sidebar_button_contetn = [
         src : '/assets/icons/message-icon.svg',
         text : "Chat",
     },
-    // {
-    //     src : '/assets/icons/leaderboard-icon.svg',
-    //     text : "Ranking",
-    // },
     {
         src : '/assets/icons/champion-cup-icon.svg',
         text : "Tournament",
@@ -107,10 +103,9 @@ export class SideBar extends HTMLElement {
         this.shadowRoot.appendChild(SideBarTemplate.content.cloneNode(true));
         this.classList.toggle('left', false)
         this.setbuttons()
-        // this.activeButton = this.shadowRoot.querySelectorAll('sb-button')[0]
-        // this.clickEvent = 0;
     }
     remove(){
+        this.shadowRoot.classList = '';
         this.shadowRoot.innerHTML = '';
     }
 }

@@ -2,6 +2,7 @@ import { updateApiData } from '/Utils/APIManager.js';
 import { PROFILE_API_URL } from '/Utils/GlobalVariables.js';
 import { fetchWithToken, isTokenValid} from '/root/fetchWithToken.js'
 import { HOST } from '/Utils/GlobalVariables.js';
+import { hideRightSideBar } from '/Components/Header/header-bar.js';
 
 export class Router {
 
@@ -21,52 +22,33 @@ export class Router {
             { path: '/Tournament', view: 'tournament-page', isAccessed: true },
             { path: '/Settings', view: 'settings-page', isAccessed: true },
             { path: '/Profile', view: 'profile-component', isAccessed: true },
-            // { path: '/Ranking', view: 'ranking-page', isAccessed: true },
         ];
         this.randred = false;
         this.rootContent = document.querySelector("root-content");
         this.header = document.querySelector("header-bar");
         this.sideBar = document.querySelector("side-bar");
+        this.footerBar = document.querySelector("footer-bar");
         this.handleRoute(window.location.pathname);
     }
     randring(){
         this.removeRandring();
         document.body.classList = 'body-default-shrink'
-        // setTimeout(() => {
-            this.header.render()
-            this.sideBar.render()
-            this.randred = true;
-        // }, 1000);
-
-    }
-    profileRandring(){
-        const profile = header.querySelector('c-profile')
-        const userRunk = header.querySelector('user-rank');
-        profile.addEventListener('click', () => {
-            if(this.firstChild.nodeName !== 'PROFILE-COMPONENT')
-                this.ChangeRootContent = 'profile-component'
-            if(sideBar.activeButton.classList.length)
-            {
-                userRunk.classList.toggle('drop-100', false);
-                userRunk.classList.toggle('transform-1s', true);
-                userRunk.classList.toggle('down-60', false);
-                userRunk.classList.toggle('rise-0', true);
-                sideBar.activeButton.classList.toggle('on')
-                sideBar.activeButton.shadowRoot.querySelector('sb-icon').classList.toggle('on')
-                sideBar.activeButton.shadowRoot.querySelector('.c-sb-text').classList.toggle('on')
-                sideBar.activeButton.querySelector('h1').classList.toggle('on')
-                sideBar.activeButton.querySelector('img').classList.toggle('on')
-            }
-        })
+        this.header.render()
+        this.sideBar.render()
+        this.footerBar.render()
+        this.randred = true;
     }
     removeRandring(){
+
         document.body.classList.remove('body-default-shrink')
         this.header.remove()
         this.sideBar.remove()
+        this.footerBar.remove()
         this.randred = false;
     }
     
     renderNotificatonAndFriendList() {
+        hideRightSideBar();
         const rightSideBar = document.querySelector(".right-sidebar");
         rightSideBar.innerHTML = `
             <friends-request-list class="transform-1s" style="display: none;"></friends-request-list>
@@ -81,22 +63,18 @@ export class Router {
 
     async changeStyle(access_token, path){
         let matchedRoute = this.routes.find((route) => path.startsWith(route.path));
-        // let matchedRoute = this.routes.find((route) => route.path === path);
         if (!matchedRoute)
         {
             matchedRoute = this.routes.find((route) => route.view === "home-page");
-            console.log("matchedRoute: ", matchedRoute);
-            window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
+            window.history.pushState({}, "", matchedRoute.path);
         }
     
         if (matchedRoute.isAccessed) {
             
             const isValid = await isTokenValid(access_token);
             if (isValid) {
-
                 this.renderNotificatonAndFriendList();
                 await updateApiData(PROFILE_API_URL + "online/", "");
-
                 if(this.randred === false)
                     this.randring();
                 this.rootContent.innerHTML = "";
@@ -108,14 +86,23 @@ export class Router {
                         this.sideBar.clickEvent = index;
                     }
                 });
+                if (path.includes("/Profile"))
+                {
+                    if(this.sideBar.activeButton && this.sideBar.activeButton.classList.length)
+                    {
+                        this.sideBar.activeButton.classList.toggle('on')
+                        this.sideBar.activeButton.shadowRoot.querySelector('sb-icon').classList.toggle('on')
+                        this.sideBar.activeButton.shadowRoot.querySelector('.c-sb-text').classList.toggle('on')
+                        this.sideBar.activeButton.querySelector('h1').classList.toggle('on')
+                        this.sideBar.activeButton.querySelector('img').classList.toggle('on')
+                    }
+                }
             } else {
-                // setTimeout(() => {
-                    matchedRoute = this.routes.find((route) => route.view === "login-page");
-                    window.history.pushState({}, "", matchedRoute.path); // for search bar to get updated
-                    this.removeRandring();
-                    this.rootContent.innerHTML = "";
-                    this.rootContent.appendChild(document.createElement(matchedRoute.view));
-                // }, 2000);    
+                matchedRoute = this.routes.find((route) => route.view === "login-page");
+                window.history.pushState({}, "", matchedRoute.path);
+                this.removeRandring();
+                this.rootContent.innerHTML = "";
+                this.rootContent.appendChild(document.createElement(matchedRoute.view));
             }
         } else {
             this.removeRandring();
@@ -131,35 +118,6 @@ export class Router {
         this.changeStyle(accessToken, path);
         this.addLinkEventListeners();
 
-        // tmp place should be in function and called somewhere
-        let logout = document.querySelector('.logout')
-        logout.addEventListener('click', () => {
-            fetchWithToken(`${HOST}/api/v1/auth/logout/`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                },
-                credentials: 'include'
-            })
-            .then(async (response) => {
-                if (response.ok) {
-
-                    this.removeNotificatonAndFriendList();
-
-                    const res = await updateApiData(PROFILE_API_URL + "offline/", "");
-
-                    localStorage.removeItem('accessToken');
-                    this.handleRoute('/login')
-                } else {
-                    response.json().then(errorData => {
-                        console.error('Logout failed:', errorData);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('catch ->', error);
-            });
-        });
     }
 
     addLinkEventListeners() {
@@ -170,7 +128,6 @@ export class Router {
             });
         });
     
-        // add by oussama to fix the problem of refreshing the page
         this.rootContent.querySelectorAll('*').forEach(element => {
             if (element.shadowRoot) {
                 element.shadowRoot.querySelectorAll('a[href^="/"]').forEach(link => {

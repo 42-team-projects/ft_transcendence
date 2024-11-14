@@ -2,7 +2,7 @@ import { calculateTimeDifferents } from "/Utils/DateUtils.js";
 import { getCurrentPlayerId, wsUrl, PROFILE_API_URL } from "/Utils/GlobalVariables.js";
 import { hashPassword } from "/Utils/Hasher.js";
 import { CustomSelect } from "/Components/CustomElements/CustomSelect.js";
-import { get_Available_Tournaments, player_join_tournament } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
+import { get_Available_Tournaments, player_join_tournament, get_tournament_by_id } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { createRow } from "/Components/Tournament/configs/TournamentUtils.js";
 import { createTournamentWebSocket } from "/Utils/TournamentWebSocketManager.js";
 import { checkIsTournamentFull } from "/Utils/TournamentManager.js";
@@ -52,60 +52,69 @@ export class JoinTournament extends HTMLElement {
         if (tournamentData.is_accessible == false)
             joinButton.className = "lock-button";
         joinButton.addEventListener("click", async () => {
-            const alertsConrtainer = window.document.querySelector("body .alerts");
-            alertsConrtainer.style.display = "flex";
-            const nicknameContainer = document.createElement("div");
-            nicknameContainer.className = "nickname-container"
-            nicknameContainer.innerHTML = `
-                <style>
-                    .nickname-container {
-                        position: relative;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 50px;
-                        background: #00142b;
-                        border: 1px solid aqua;
-                        padding: 20px;
-                        border-radius: 10px;
-                    }
 
-                    .close-button {
-                        position: absolute;
-                        top: 10px;
-                        right: 10px;
-                        width: 16px;
-                        height: 16px;
-                    }
-                </style>
-                <img class="close-button" src="/assets/icons/close-x-icon.svg" width="16px" ></img>
-                <custom-select id="nickname" label="Nickname"></custom-select>
-                <custom-button class="save-button" width="200px" height="48px">Save</custom-button>
-            `;
-            nicknameContainer.querySelector(".close-button").addEventListener("click", () => {
-                nicknameContainer.remove();
-                alertsConrtainer.style.display = "none";
-            });
-            nicknameContainer.querySelector(".save-button").addEventListener("click", async () => {
-                const value = nicknameContainer.querySelector("custom-select").value;
-                if (value && value.length > 1) {
-                    const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": tournamentData.tournament_id}));
-                    if (setNicknameResponse.ok) {
-                        await this.addPlayerToTournament(tournamentData);
-                        nicknameContainer.remove();
-                        alertsConrtainer.style.display = "none";
-                    }
-                }
-            });
-            alertsConrtainer.appendChild(nicknameContainer)
-            // if (joinButton.className == "lock-button") 
-            //     this.joinToPrivateTournament(tournamentData);
-            // else
+            if (joinButton.className == "lock-button") 
+                this.joinToPrivateTournament(tournamentData);
+            else {
+                this.displayNicknameAlert(tournamentData);
+            }
         });
         return tournamentItem;
     }
 
+
+    displayNicknameAlert(tournamentData) {
+        const tbody = this.parentElement.querySelector("tbody");
+        const alertsConrtainer = window.document.querySelector("body .alerts");
+        if (!alertsConrtainer)
+            return;
+        alertsConrtainer.innerHTML = '';
+        alertsConrtainer.style.display = "flex";
+        const nicknameContainer = document.createElement("div");
+        nicknameContainer.className = "nickname-container"
+        nicknameContainer.innerHTML = `
+            <style>
+                .nickname-container {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 50px;
+                    background: #00142b;
+                    border: 1px solid aqua;
+                    padding: 20px;
+                    border-radius: 10px;
+                }
+
+                .close-button {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    width: 16px;
+                    height: 16px;
+                }
+            </style>
+            <img class="close-button" src="/assets/icons/close-x-icon.svg" width="16px" ></img>
+            <custom-select id="nickname" label="Nickname"></custom-select>
+            <custom-button class="save-button" width="200px" height="48px">Save</custom-button>
+        `;
+        nicknameContainer.querySelector(".close-button").addEventListener("click", () => {
+            nicknameContainer.remove();
+            alertsConrtainer.style.display = "none";
+        });
+        nicknameContainer.querySelector(".save-button").addEventListener("click", async () => {
+            const value = nicknameContainer.querySelector("custom-select").value;
+            if (value && value.length > 1) {
+                const setNicknameResponse = await createApiData(PROFILE_API_URL + "setNickname/", JSON.stringify({"nickname": value, "tournament_id": tournamentData.tournament_id}));
+                if (setNicknameResponse.ok) {
+                    alertsConrtainer.style.display = "none";
+                    await this.addPlayerToTournament(tournamentData, tbody);
+                }
+            }
+        });
+        alertsConrtainer.appendChild(nicknameContainer)
+    }
 
     async initTournamentSocket(tournamentData) {
         const ws = await createTournamentWebSocket(tournamentData.tournament_id, tournamentData);
@@ -123,11 +132,10 @@ export class JoinTournament extends HTMLElement {
         
     }
 
-    async addPlayerToTournament(tournamentData) {
+    async addPlayerToTournament(tournamentData, tbody) {
         const data = await player_join_tournament(tournamentData.tournament_id);
         if (data)
         {
-            const tbody = this.parentElement.querySelector("tbody");
             const deadlineTimeNodes = tbody.querySelectorAll(".deadLineTime");
             const unfinishedTournament = Array.from(deadlineTimeNodes).filter((time) => time.textContent !== "finished");
             await this.updateTournamentsTable(data, tbody);
@@ -142,7 +150,7 @@ export class JoinTournament extends HTMLElement {
         }
     }
 
-    joinToPrivateTournament(tournamentData) {
+    async joinToPrivateTournament(tournamentData) {
         const mainContainer = this.shadowRoot.querySelector(".mainContainer");
         mainContainer.innerHTML = forms;
         mainContainer.querySelector("#back").addEventListener("click", () => {
@@ -155,17 +163,18 @@ export class JoinTournament extends HTMLElement {
             tournamentId.value = tournamentData.tournament_id;
             tournamentId.setAttribute("readonly", true);
         }
-        else {
-            // tournamentData = get_tournament_by_tournament_id();
-
-        }
         mainContainer.querySelector(".join-private-tournament").addEventListener("click", async () => {
+            if (!tournamentData) {
+                tournamentData = await get_tournament_by_id(tournamentId.value);
+                if (!tournamentData)
+                    return ;
+            }
             const passValue = await hashPassword(tournamentPassword.value);
             if (tournamentData && passValue == tournamentData.access_password) {
                 tournamentPassword.style.border = "1px solid aqua";
                 mainContainer.innerHTML = list;
-                await this.addPlayerToTournament(tournamentData);
-                console.log("tournamentData: ", tournamentData);
+                // await this.addPlayerToTournament(tournamentData);
+                this.displayNicknameAlert(tournamentData);
                 this.remove();
             }
             else {
@@ -190,7 +199,6 @@ export class JoinTournament extends HTMLElement {
         const tournamentsList = this.shadowRoot.querySelector(".tournaments-list");
         tournamentsList.innerHTML = '';
         const tournaments = await get_Available_Tournaments();
-        console.log("available tournaments: ", tournaments);
         for (let index = tournaments.length - 1; index >= 0; index--) {
             const element = tournaments[index];
             const player_id = await getCurrentPlayerId();
@@ -213,7 +221,6 @@ export class JoinTournament extends HTMLElement {
         }
         if (accessible.length == 1)
             statement += "&accessible=" + accessible[0].id;
-        console.log("statement: ", statement);
         return statement;
     }
 
@@ -364,7 +371,7 @@ const forms = `
 <div class="join-form">
 <div class="tournamentId">
     <h2>Tournament ID:</h2>
-    <input id="tournamentId" type="text" placeholder="Enter Tournament Id"/>
+    <input id="tournamentId" type="numric" placeholder="Enter Tournament Id"/>
 </div>
 <div class="password">
     <h2>Password:</h2>

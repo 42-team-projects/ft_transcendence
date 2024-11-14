@@ -9,11 +9,41 @@ import { PROFILE_COMPONENT } from "/Utils/GlobalVariables.js";
 export class HeaderBar extends HTMLElement{
     constructor(){
         super();
-        // this.attachShadow({mode : 'open'})
+    }
+    headerDown(){
+        const profile = this.querySelector('c-profile');
+		const userRunk = profile.querySelector('user-rank');
+	
+		userRunk.classList.toggle('drop-100', true);
+		userRunk.classList.toggle('transform-1s', false);
+		userRunk.classList.toggle('down-60', true);
+		userRunk.classList.toggle('rise-0', false);
+		this.classList.toggle('transform-1s', false);
+		this.classList.toggle('up-100', false);
+		this.classList.toggle('p-animation', false);
+    }
+    headerUp(){
+        const profile = this.querySelector('c-profile');
+        const userRunk = profile.querySelector('user-rank');
+        userRunk.classList.toggle('drop-100', false);
+        userRunk.classList.toggle('transform-1s', true);
+        userRunk.classList.toggle('down-60', false);
+        userRunk.classList.toggle('rise-0', true);
+        this.classList.toggle('transform-1s', true);
+        this.classList.toggle('up-100', true);
+        this.classList.toggle('p-animation', true);
+        const interval = setInterval(() => {
+            clearInterval(interval);
+			this.innerHTML = '';
+            this.classList = '';
+        }, 1000);
+        return interval;
     }
     render(){
-        // this.shadowRoot.appendChild(HeaderTemplate.content.cloneNode(true));
         this.appendChild(HeaderTemplate.content.cloneNode(true));
+        const header = this.querySelector(".header-bar");
+        header.appendChild(PROFILE_COMPONENT);
+        this.headerDown();
         const notificationIcon = this.querySelector(".notification-icon");
 
         let notificationChecker = window.document.querySelector(".right-sidebar notifications-list");;
@@ -32,17 +62,10 @@ export class HeaderBar extends HTMLElement{
             else
                 hideFriendsRequestList();
         });
-
-        const header = this.querySelector(".header-bar");
-        header.appendChild(PROFILE_COMPONENT);
     }
 
-    connectedCallback() {
-
-      
-
-    }
     remove(){
+        this.classList = '';
         this.innerHTML = '';
     }
 }
@@ -235,8 +258,10 @@ const cssContent = /*css*/`
         justify-content: center;
         align-items: center;
         position: relative;
+        cursor: pointer;
     }
     
+    .number-of-friend-requests,
     .number-of-notifications {
         width: 16px;
         height: 16px;
@@ -308,6 +333,7 @@ const cssContent = /*css*/`
     
     .actions img {
         width: 24px;
+        cursor: pointer;
     }
 
 
@@ -330,6 +356,7 @@ HeaderTemplate.innerHTML = /*html*/`
                 <search-bar-component></search-bar-component>
                 <div class="friends-icon" >
                     <img loading="lazy" draggable="false" src="/assets/icons/user-octagon-icon.svg" alt="friends">
+                    <div class="number-of-friend-requests">0</div>
                 </div>
                 <div class="notification-icon" >
                     <img loading="lazy" draggable="false" src="/assets/icons/notification-icon.svg" alt="notification">

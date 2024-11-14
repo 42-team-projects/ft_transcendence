@@ -50,6 +50,9 @@
 .down-60{
     transform: translateY(60%);
 }
+.down-100{
+    transform: translateY(100%);
+}
 .down-50{
     transform: translateY(50%);
 }

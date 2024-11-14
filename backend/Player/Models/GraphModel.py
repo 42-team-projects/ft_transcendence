@@ -7,7 +7,7 @@ class Graph(models.Model):
     defense = models.IntegerField(default=0)
     offense = models.IntegerField(default=0)
     consistency = models.IntegerField(default=0)
-    Strategy = models.IntegerField(default=0)
+    strategy = models.IntegerField(default=0)
 
 
     def __str__(self):

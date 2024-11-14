@@ -10,5 +10,6 @@ urlpatterns = [
     path('tournament/<int:tournamentId>/player/leave/', views.player_leave_tournament, name='player_leave_tournament'),
     path('<int:tournamentId>/', views.get_tournament_by_id, name='get_tournament_by_id'),
     path("StoreScore/", views.store_tournament_score_on_blockchain, name='store_tournament_score_on_blockchain'),
+    
 ]
 

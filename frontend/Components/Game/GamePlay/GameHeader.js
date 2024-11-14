@@ -24,9 +24,12 @@ HeaderTemplate.innerHTML = /*html*/ `
 `
 
 export class GameHeader extends HTMLElement{
-    constructor(){
+    constructor(state){
         super();
+        this.state = state
         this.appendChild(HeaderTemplate.content.cloneNode(true))
+        if (this.state == 'offline')
+            this.querySelector('pause-game').remove()
     }
     updateScore(score){
         
@@ -34,30 +37,18 @@ export class GameHeader extends HTMLElement{
         player.newScore(score.player, userInfo)
         const opponent = this.querySelector('player-info[state="reverse"]')
         opponent.newScore(score.opponent, opponentInfo)
-        // console.log('update : ', score);
-        // const player1 = this.querySelector('.playerscor')
-        // const player1Img = this.querySelector('.GamePlayer')
-        // const player1Name = this.querySelector('.playerinfo')
-        // player1.querySelector('h1').textContent = score.player
-        // player1Img.src = userInfo.picture;
-        // player1Name.querySelector('p').textContent = userInfo.username
-
-        // const player2 = this.querySelector('.playerscor1')
-        // const player2Img = this.querySelector('.GamePlayer1')
-        // const player2Name = this.querySelector('.playerinfo1')
-        // player2.querySelector('h1').textContent = score.opponent
-        // player2Img.src = opponentInfo.picture;
-        // console.log(player1Name);
-        // console.log(player2Name);
-        // player2Name.querySelector('p').textContent = opponentInfo.username
     }
     connectedCallback(){
         const player = new PlayerInfo()
-        player.newScore(0, userInfo)
-        this.insertBefore(player, this.querySelector('pause-game'))
         const opponent = new PlayerInfo()
         opponent.setAttribute('state', 'reverse')
+        player.newScore(0, userInfo)
         opponent.newScore(0, opponentInfo)
+        this.insertBefore(player, this.querySelector('pause-game'))
         this.appendChild(opponent)
+    }
+    disconnectedCallback(){
+        this.innerHTML = ''
+        this.state = ''
     }
 }

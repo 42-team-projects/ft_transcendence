@@ -140,6 +140,7 @@ const cssContent = /*css*/`
         width: 20px;
         height: 20px;
         opacity: 0.7;
+        cursor: pointer;
     }
 
     p {

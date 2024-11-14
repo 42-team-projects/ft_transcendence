@@ -1,5 +1,5 @@
 from accounts.models            import User
-from friend.models             import(FriendRequest, Friendship, BlockUser)
+from friend.models              import *
 from rest_framework.response    import Response
 from rest_framework.decorators  import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -31,6 +31,12 @@ def get_friends_list(request):
     friendship_serializer = FriendshipSerializer(friendship, read_only=True)
     return Response({'response': friendship_serializer.data})
 
+def is_block(current_user, receiver_user):
+    blocked = BlockUser.objects.filter(blocker=current_user, blocked=receiver_user).first()
+    block = BlockUser.objects.filter(blocker=receiver_user, blocked=current_user).first()
+    if blocked or block:
+        return True
+    return False
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -39,6 +45,11 @@ def send_friend_request(request, receiver_id):
     if receiver_id == current_user.id:
         return Response({'response': 'You cannot send a friend request to yourself.'}, status=400)
     receiver_user = get_object_or_404(User, id=receiver_id)
+
+    # handle block user here
+    if is_block(current_user, receiver_user):
+        return Response({'response': 'You can\'t send friend request'}, status=400)
+
     # Check for any existing friend request from the receiver to the sender
     reverse_request = FriendRequest.objects.filter(sender=receiver_user, receiver=current_user, is_active=True)
     if reverse_request.exists():
@@ -54,9 +65,9 @@ def send_friend_request(request, receiver_id):
         else:
             # Reactivate the friend request if it was previously deactivated
             friend_request.reactivate()
-            return Response({'response': 'Friend request reactivated.'}, status=200)
+            return Response(FriendRequestSerializer(friend_request).data, status=200)
     else:
-        return Response({'response': 'Friend request sent.'}, status=201)
+        return Response(FriendRequestSerializer(friend_request).data, status=201)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -66,10 +77,10 @@ def accept_friend_request(request, request_id):
         # check is my friend request to accept.
         if friend_request.receiver == request.user:
             friend_request.accept()
-            return Response({'requests': 'Friend request accepted.'})
-        return Response({'requests': 'That is not your friend request to accepte.'}, status=403)
+            return Response({'response': 'Friend request accepted.'})
+        return Response({'response': 'That is not your friend request to accepte.'}, status=403)
     except FriendRequest.DoesNotExist:
-        return Response({'requests': 'Friend request not found.'}, status=404)
+        return Response({'response': 'Friend request not found.'}, status=404)
     
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -90,10 +101,10 @@ def decline_friend_request(request, request_id):
         friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
         if friend_request.receiver == request.user:
             friend_request.decline()
-            return Response({'requests': 'Friend request declined.'})
-        return Response({'requests': 'That is not your friend request to decline.'}, status=403)
+            return Response({'response': 'Friend request declined.'})
+        return Response({'response': 'That is not your friend request to decline.'}, status=403)
     except FriendRequest.DoesNotExist:
-        return Response({'requests': 'Friend request not found.'}, status=404)
+        return Response({'response': 'Friend request not found.'}, status=404)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -102,10 +113,10 @@ def cancel_friend_request(request, request_id):
         friend_request = FriendRequest.objects.get(id=request_id, is_active=True)
         if friend_request.sender == request.user:
             friend_request.cancel()
-            return Response({'requests': 'Friend request cancelled.'})
-        return Response({'requests': 'That is not your friend request to cancel.'}, status=403)
+            return Response({'response': 'Friend request cancelled.'})
+        return Response({'response': 'That is not your friend request to cancel.'}, status=403)
     except FriendRequest.DoesNotExist:
-        return Response({'requests': 'Friend request not found.'}, status=404)
+        return Response({'response': 'Friend request not found.'}, status=404)
 
 
 @api_view(['POST'])
@@ -129,7 +140,7 @@ def block_user(request, user_id):
     if unfriend(current_user, blocked_user):
         block = BlockUser.objects.create(blocker=current_user, blocked=blocked_user)
         return Response({'response': 'User blocked and unfriended successfully.'}, status=201)
-    return Response({'response': 'No existing friendship was found to Block.'}, status=200)
+    return Response({'response': 'No existing friendship was found to Block.'}, status=400)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -145,7 +156,7 @@ def unblock_user(request, user_id):
         block.delete()
         return Response({'response': 'User unblocked successfully.'})
     except BlockUser.DoesNotExist:
-        return Response({'response': 'No blocking action found for this user.'})
+        return Response({'response': 'No blocking action found for this user.'}, status=400)
 
 
 def accept_or_decline(user, action):

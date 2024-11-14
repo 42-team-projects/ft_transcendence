@@ -10,7 +10,8 @@
     margin-left: 20px;
     margin-right: 20px;
     width: 100%;
-    
+    max-height: 500px;
+    overflow-y: scroll;
 }
 
 .profile-data-stats-history > table {
@@ -18,12 +19,16 @@
     font-family: 'Sansation Bold', 'Sansation';
     font-size: 26px;
     color: white;
+    position: relative;
 }
 
 .profile-data-stats-history > table > thead > tr {
     background-image: linear-gradient(to right, #00ffff50 , #00ffff20);
     width: calc(100% - 20px);
     height: 56px;
+    z-index: 2;
+    position: sticky;
+    top: 0;
 }
 
 .profile-data-stats-history > table > tbody > tr {
@@ -85,4 +90,22 @@ date-component {
     justify-content: center;
     width: 100%;
     margin: 0;
+}
+
+
+*::-webkit-scrollbar {
+    opacity: 0.7;
+    background-color: transparent;
+    width: 1px;
+}
+
+*::-webkit-scrollbar-track {
+    opacity: 0.7;
+    border-radius: 100px;
+}
+
+*::-webkit-scrollbar-thumb {
+    opacity: 0.7;
+    background-color: aqua;
+    border-radius: 100px;
 }

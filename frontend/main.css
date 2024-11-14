@@ -33,24 +33,14 @@ html, body {
 
 .body-game-shrink{
     grid-template-columns: 0rem 1fr !important;
-    grid-template-rows: 10rem 1fr 4rem !important;
+    grid-template-rows: 10rem 1fr !important;
     grid-template-areas: 
     "head head"
     "sidebar content"
-    "foter foter" !important;
+    "content content" !important;
     transition: grid 1s ease;
-    /* justify-content: center;
-    align-items: center; */
 }
 
-/* .body-default-shrink{
-    grid-template-columns: 14% 1fr;
-    grid-template-rows: 12rem 1fr 4rem;
-    grid-template-areas:
-        "head head"
-        "sidebar content"
-        "foter foter";
-} */
 
 .body-default-shrink{
     grid-template-columns: 20rem 1fr;
@@ -90,35 +80,28 @@ body::before{
     content: "";
     background: url(/images/top.svg);
     background-size: contain;
-    background-position: center 4%;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    opacity: 0.25;
-    z-index: -1;
-}
-footer{
-    grid-area: foter;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-.underbar{
-    
-    background: url(/images/bottom.svg);
     background-position: center;
-    background-size: contain;
     background-repeat: no-repeat;
-    position: absolute;
-    bottom: 50%;
     width: 100%;
-    height: 100%;
+    height: 7%;
+    position: absolute;
     opacity: 0.25;
     z-index: -1;
+    top: 1%;
+}
+
+body::after{
+    content: "";
+    background: url(/images/bottom.svg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 7%;
+    position: absolute;
+    opacity: 0.25;
+    z-index: -1;
+    top: 93%;
 }
 
 img{
@@ -174,6 +157,8 @@ launching-game {
     background-color: rgba(230, 255, 255, 0.08); 
 }
 
+
+
 game-over{
     position: absolute;
     display: flex;
@@ -182,21 +167,18 @@ game-over{
     width: 100vw;
     height: 100vh;
     flex-direction: column;
+    background-color: #00142b99; 
 }
 
-.logout{
-    position: absolute;
+footer-bar{
+    grid-area: foter;
+    width: 100%;
     display: flex;
-    gap: 10px;
-    margin-left: 1%;
-    left: 0;
-    top: 0;
-    cursor: pointer;
 }
-.logout img{
+footer-bar img{
     width: 30%;
 }
-.logoutText{
+footer-bar{
     color : white;
     font-size: 1.5rem;
 }
@@ -345,3 +327,5 @@ friends-request-list {
     font-size: 24px;
     font-family: 'Sansation Bold';
 }
+
+

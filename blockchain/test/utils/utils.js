@@ -1,5 +1,4 @@
 export async function printAllTournaments(contract) {
-    // Retrieve all tournament IDs
     const tournamentIds = await contract.getAllTournamentIds();
     console.log("\n=======================   All Tournaments  ========================\n");
     for (let i = 0; i < tournamentIds.length; i++) {

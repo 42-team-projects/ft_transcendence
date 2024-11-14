@@ -6,6 +6,7 @@ import { getCurrentUserId } from "/Utils/GlobalVariables.js";
 import { setUpWebSocket } from "/Components/Chat/configs/ChatWebSocketManager.js";
 import { router } from "/root/Router.js";
 import { PROFILE_API_URL } from "/Utils/GlobalVariables.js";
+import { displayToast } from "/Components/CustomElements/CustomToast.js";
 
 
 export class ChatListComponent extends HTMLElement {
@@ -23,12 +24,13 @@ export class ChatListComponent extends HTMLElement {
     }
     
     async createChatItem(item, user) {
+        const player = await getApiData(PROFILE_API_URL + user.username);
         const chatItem = document.createElement("chat-item");
         chatItem.id = "item_" + user.id;
         chatItem.userName = user.username;
         chatItem.profileImage = HOST + user.avatar;
-        chatItem.active = user.is_active;
-        chatItem.league = "gold";
+        chatItem.active = player.active;
+        chatItem.league = player.stats.league;
         
         if (user.username === this.playerName) {
             chatItem.backgroundColor = "#051d31";
@@ -43,7 +45,7 @@ export class ChatListComponent extends HTMLElement {
                 chatItem.lastMessage = item.last_message.content.slice(0, 60) + "...";
             else
                 chatItem.lastMessage = item.last_message.content;
-            chatItem.time = item.last_message.sent_at.split("-")[0];
+            chatItem.time = item.last_message.sent_at.slice(0, 10) + " " + item.last_message.sent_at.slice(11, 19);
         }
         chatItem.numberOfMessage = "2";
         chatItem.addEventListener("click", async (e) => {
@@ -64,6 +66,7 @@ export class ChatListComponent extends HTMLElement {
         try {
             const data = await getApiData(HOST + "/chat/conversation_list/");
             if (data) {
+                list.innerHTML = '';
                 for (const item of data) {
                     const chatItem = await this.createChatItem(item, item.reciever);
                     if (item.reciever.username === this.playerName)
@@ -81,10 +84,7 @@ export class ChatListComponent extends HTMLElement {
                 list.prepend(chatItem);
             }
         } catch (error) {
-            const errorContainer = document.body.querySelector(".display-errors");
-            if (errorContainer) {
-                errorContainer.innerHTML = 'Error fetching chat data';
-            }
+            // displayToast("error", "there is no consersation list to display !!");
         }
     }
 }
@@ -114,9 +114,20 @@ const cssContent = /*css*/`
     .list-item {
         width: 100%;
         display: flex;
+        align-items: center;
         flex-direction: column;
         height: calc(100% - 100px);
         overflow-y: scroll;
+    }
+
+
+    .no-conversation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: center;
+        color: #d9d9d980;
     }
 
     .list-item::-webkit-scrollbar {

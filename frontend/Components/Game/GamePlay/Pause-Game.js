@@ -49,8 +49,8 @@ export class PauseGame extends HTMLElement{
     }
     connectedCallback(){
         this.addEventListener('click', () => {
-            document.body.dispatchEvent(new CustomEvent('pause-game'))
-            console.log('pause game')
+            const game_table = document.body.querySelector('game-table');
+            game_table.dispatchEvent(new CustomEvent('pause-game'))
         })
     }
 }

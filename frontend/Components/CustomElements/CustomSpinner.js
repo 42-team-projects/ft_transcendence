@@ -36,11 +36,16 @@ export class CustomSpinner extends HTMLElement {
 
     set time(val) {this.setAttribute("time", val);}
     get time() {return this.getAttribute("time");}
+    
+    set label(val) {this.setAttribute("label", val);}
+    get label() {return this.getAttribute("label");}
 
 
-    static observedAttributes = ["time"];
+    static observedAttributes = ["time", "label"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
+        if (attrName === "label")
+            this.shadowRoot.querySelector("#html-para").innerText = newValue;
     }
 
 

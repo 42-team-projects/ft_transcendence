@@ -1,6 +1,5 @@
 import { UsersSearchSection } from "/Components/Search/SearchSections/UsersSearchSection.js";
 import { TournamentsSearchSection } from "/Components/Search/SearchSections/TournamentsSearchSection.js";
-import { ChannelsSearchSection } from "/Components/Search/SearchSections/ChannelsSearchSection.js";
 import { OthersSearchSection } from "/Components/Search/SearchSections/OthersSearchSection.js";
 import { get_Available_Tournaments } from "/Components/Tournament/configs/TournamentAPIConfigs.js";
 import { getApiData } from "/Utils/APIManager.js";
@@ -43,14 +42,33 @@ export class SearchBarComponent extends HTMLElement {
     }
     interval;
     selectedItem;
+    currentPlayerId;
     async connectedCallback() {
+        const mainContainer = this.shadowRoot.querySelector(".mainContainer")
+
         const searchInput = this.shadowRoot.querySelector(".search-input");
         const searchIcon = this.shadowRoot.querySelector(".search-icon");
         const searchBody = this.shadowRoot.querySelector(".search-body");
         const searchContainer = this.shadowRoot.querySelector(".search-result");
 
+        // show div on mouseout
+        mainContainer.addEventListener('mouseover', () => {
+            searchBody.style.display = "flex";
+            searchIcon.src = "/assets/icons/close-icon.svg";
+            searchIcon.id = "close";
+        });
+
+        // Hide div on mouseout
+        mainContainer.addEventListener('mouseout', () => {
+            searchBody.style.display = "none";
+            searchIcon.src = "/assets/icons/search-icon.svg";
+            searchIcon.id = "search";
+            clearInterval(this.interval);
+            searchInputChecker = false;
+        });
+
         // const Users = this.shadowRoot.querySelector("users-search-section");
-        const currentPlayerId = await getCurrentPlayerId();
+        this.currentPlayerId = await getCurrentPlayerId();
         this.selectedItem = this.shadowRoot.querySelector(".select");
         let searchInputChecker = false;
         searchInput.addEventListener("click", () => {
@@ -62,6 +80,7 @@ export class SearchBarComponent extends HTMLElement {
             searchIcon.id = "close";
             let checker = false;
             this.interval = setInterval(async () => {
+                console.log("hello world");
                 if (searchInput.value && searchInput.value != oldInputValue) {
 
                     const players = this.shadowRoot.querySelector("users-search-section");
@@ -69,7 +88,7 @@ export class SearchBarComponent extends HTMLElement {
                         players.clearPlayers();
                         oldInputValue = searchInput.value;
                         let playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
-                        playersData = Array.from(playersData).filter(player => player.id != currentPlayerId);
+                        playersData = Array.from(playersData).filter(player => player.id != this.currentPlayerId);
                         players.appendPlayers(playersData);
                     }
                     
@@ -93,7 +112,6 @@ export class SearchBarComponent extends HTMLElement {
                 }
                 else if (!searchInput.value && checker)
                     checker = false;
-                console.log("interval: ", this.interval);
             }, 500);
         });
         searchIcon.addEventListener("click", () => {
@@ -156,7 +174,8 @@ export class SearchBarComponent extends HTMLElement {
         const usersSection = new UsersSearchSection();
         oldInputValue = searchInput.value;
         if (searchInput.value && searchInput.value !== "") {
-            const playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+            let playersData = await getApiData(PROFILE_API_URL + "search/?username=" + searchInput.value);
+            playersData = Array.from(playersData).filter(player => player.id != this.currentPlayerId);
             usersSection.appendPlayers(playersData);
         }
         container.appendChild(usersSection);
@@ -227,6 +246,7 @@ const cssContent = /*css*/`
     width: 32px;
     height: 32px;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .vertical-line {
@@ -248,6 +268,7 @@ const cssContent = /*css*/`
     margin-left: 10px;
     padding-left: 10px;
     outline: none;
+    cursor: text;
 }
 
 .search-input::placeholder{
@@ -261,6 +282,7 @@ const cssContent = /*css*/`
 .filter-button {
     width: 24px;
     height: 24px;
+    cursor: pointer;
 }
 
 .search-body {

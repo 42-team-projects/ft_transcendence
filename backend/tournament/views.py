@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .models import Tournament
 from .serializers import TournamentSerializer
 from django.views.decorators.csrf import csrf_exempt
-from Player.Models.PlayerModel import Player
+from Player.Models.PlayerModel import Player, Nickname
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 from asgiref.sync import async_to_sync
@@ -11,7 +11,6 @@ from channels.layers import get_channel_layer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from dotenv import load_dotenv
-
 
 from web3 import Web3
 import os
@@ -26,6 +25,8 @@ load_dotenv()
 SEPOLIA_URL = os.getenv('SEPOLIA_URL')
 CONTRACT_ADDRESS = os.getenv('CONTRACT_ADDRESS')
 PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+GAS_LIMIT = int(os.getenv('GAS_LIMIT'))
+GAS_PRICE = int(os.getenv('GAS_PRICE'))
 
 w3 = Web3(Web3.HTTPProvider(SEPOLIA_URL))
 
@@ -43,7 +44,10 @@ def store_tournament_score_on_blockchain(request):
             loser_id = int(request.data.get('loserId'))
             loser_score = int(request.data.get('loserIdScore'))
             CONTRACT_ABI = request.data.get('abi')
-            player = Player.objects.get(user=request.user)
+            # get tournament
+            tournament = Tournament.objects.get(tournament_id=tournament_id)
+            # delete tournament
+            tournament.delete()
             # Create contract instance
             contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
             # Create account from private key
@@ -58,8 +62,8 @@ def store_tournament_score_on_blockchain(request):
             ).buildTransaction({
                 'from': account.address,
                 'chainId': 11155111,  # Sepolia Testnet Chain ID
-                'gas': 2000000,
-                'gasPrice': w3.toWei('100', 'gwei'),
+                'gas': GAS_LIMIT,
+                'gasPrice': w3.toWei(GAS_PRICE, 'gwei'),
                 'nonce': w3.eth.getTransactionCount(account.address),
             })
             # Sign the transaction
@@ -67,7 +71,7 @@ def store_tournament_score_on_blockchain(request):
             # Send the transaction
             try:
                 tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-                receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+                receipt = w3.eth.waitForTransactionReceipt(tx_hash, timeout=300)
                 scores = contract.functions.getScores(tournament_id).call()
                 return JsonResponse({
                     'success': 'Player successfully score stored on blockchain',
@@ -75,10 +79,9 @@ def store_tournament_score_on_blockchain(request):
                     'scores': scores
                 }, status=200)
             except Exception as e:
-                return JsonResponse({'statusText': f'Error sending transaction: {str(e)}'}, status=500)
-
+                return JsonResponse({'statusText': f'Error sending transaction: {str(e)}'}, status=403)
         except Exception as e:
-            return JsonResponse({'statusText': str(e)}, status=500)
+            return JsonResponse({'statusText': str(e)}, status=404)
     return JsonResponse({'statusText': 'Invalid request method'}, status=405)
 
 
@@ -200,6 +203,7 @@ def player_leave_tournament(request, tournamentId):
     if request.method == 'POST':
         try:
             player = Player.objects.get(user=request.user)
+            Nickname.objects.filter(player=player, tournamentid=tournamentId).delete()
             tournament = Tournament.objects.get(tournament_id=tournamentId)
             tournament.players.remove(player)
             tournament.save()

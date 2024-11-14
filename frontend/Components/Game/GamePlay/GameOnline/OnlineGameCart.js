@@ -1,5 +1,6 @@
 import { Lobby } from "/Components/Game/GamePlay/Lobby.js"
-
+import { isTokenValid } from "/root/fetchWithToken.js";
+import { router } from "/root/Router.js";
 const OnlineGameTemplate = document.createElement('template')
 
 OnlineGameTemplate.innerHTML = /*html*/ `
@@ -11,7 +12,7 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 		</div>
 		<div class="O-buttonC">
 			<p>
-			Lorem ipsum dolor sit amet. Ut facere consequatur est dolore placeat rem accusamus quae est odit dolore. Id impedit molestiae vel voluptates repellendus ut perferendis libero et blanditiis dolor est dolorum molestiae. 
+				In this online ping pong game, you’ll be matched with a random player for a competitive match. The game consists of five rounds, and the player who wins the most rounds claims victory. Ready for a fun challenge? Let’s play!
 			</p>
 			<c-button bcolor="#EB9A45" Hcolor="#e98f2f"> 
 				<h1 slot="text">START</h1>
@@ -24,15 +25,21 @@ OnlineGameTemplate.innerHTML = /*html*/ `
 export class OnlineGame extends HTMLElement{
 	constructor (){
 		super();
+		this.is_clicked = false
 		this.attachShadow({mode:'open'})
 		this.shadowRoot.appendChild(OnlineGameTemplate.content.cloneNode(true))
 		const button = this.shadowRoot.querySelector('c-button')
-		// setTimeout(() => {
-			button.addEventListener('click', ()=>{
-				const lobby = new Lobby();
-				lobby.OnlineGame();
-			})
-		// }, 4000);
+		button.addEventListener('click', async ()=>{
+			if(isTokenValid(localStorage.getItem('accessToken')) == false)
+			{
+				router.handleRoute('/login')
+				return
+			}
+			if(this.is_clicked) return
+			this.is_clicked = true
+			const lobby = new Lobby();
+			lobby.OnlineGame();
+		})
         this.classList.toggle('cart-animation', true)
         this.classList.toggle('opacity-0', true)
         setTimeout(() => {

@@ -19,12 +19,13 @@ export default class SignupPage extends HTMLElement {
                 account-text="Already have an account?" 
                 account-link="/login">
             </shape-cpn>
+            <custom-spinner time="50" style="display: none;"></custom-spinner>
         `;
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.shadowRoot.querySelector('shape-cpn').addEventListener('submit', this.handleSubmit);
     }
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
     
         const inputFields = this.shadowRoot.querySelectorAll('input-field');
@@ -50,7 +51,7 @@ export default class SignupPage extends HTMLElement {
                     errorMessage.classList.add('show');
                     hasError = true;
                 } else if ((placeholder === 'Password' || placeholder === 'Repeat password') && !validatePassword(input.value)) {
-                    errorMessage.textContent = 'Invalid password';
+                    errorMessage.textContent = 'Invalid password eg: Abc@1234';
                     errorMessage.classList.add('show');
                     hasError = true;
                 } else {
@@ -72,9 +73,11 @@ export default class SignupPage extends HTMLElement {
             console.log("something wrong!")
         else
         {
-            // console.log("all good !")
-            this.submitForm(formData);
-            // console.log(formData)
+            const refreshBox = this.shadowRoot.querySelector("custom-spinner");
+            refreshBox.label = "Waiting..."
+            refreshBox.display();
+            await this.submitForm(formData);
+            refreshBox.close();
         }
     }
     
@@ -129,7 +132,7 @@ function validateUsername(username) {
 }
 
 function validatePassword(password) {
-    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(\W|_)).{5,}$/;
+    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(\W|_)).{8,}$/;
     return re.test(password);
     // return true;
 }

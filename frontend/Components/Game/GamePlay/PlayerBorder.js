@@ -47,7 +47,6 @@ export class PlayerBorder extends HTMLElement{
         super();
         this.attachShadow({ mode: 'open' });
 
-        // Clone the template content and append it to the shadow DOM
         this.shadowRoot.appendChild(player_border.content.cloneNode(true));
     }
     get revers(){

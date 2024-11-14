@@ -18,6 +18,6 @@ def list_user_notifications(request):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def remove_notification(request, notification_id):
-    notification = get_object_or_404(Notification, id=notification_id) # receiver=request.user
+    notification = get_object_or_404(Notification, id=notification_id, receiver=request.user)
     notification.delete()
     return Response({'response': 'notification deleted successfuly.'})

@@ -13,7 +13,11 @@ export class FriendsListComponent extends HTMLElement {
             ${cssContent}
         </style>
         <h1>FRIENDS</h1>
-        <div class="friends-list-container"></div>
+        <div class="friends-list-container">
+            <div class="no-conversation">
+                <p>No Friends yet</p> 
+            </div>
+        </div>
     `;
     }
 
@@ -22,6 +26,7 @@ export class FriendsListComponent extends HTMLElement {
         const friends = await getApiData(HOST + "/friend/friends/");
         if (!friends.response.friends || friends.response.friends === undefined)
             return ;
+        listContaier.innerHTML = '';
         Array.from(friends.response.friends).forEach(async (item) => {
             const playerData = await getApiData(PROFILE_API_URL + item.username);
             listContaier.appendChild(this.createFriendItem(playerData));
@@ -79,8 +84,18 @@ const cssContent = /*css*/`
         height: calc(100% - 80px);
         flex-direction: column;
         overflow-y: scroll;
+        font-family: 'Sansation bold'
     }
     
+    .no-conversation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: center;
+        color: #d9d9d980;
+    }
+
 
     .friends-list-container::-webkit-scrollbar {
         opacity: 0.7;

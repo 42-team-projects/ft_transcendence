@@ -59,7 +59,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def waiting(self):
         try:
-            await asyncio.wait_for(self.start(), timeout=5)
+            await asyncio.wait_for(self.start(), timeout=10)
         except asyncio.TimeoutError:
             await self.close()
         except asyncio.CancelledError:
@@ -145,12 +145,20 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
         self.close_code = 0
         self.room_group_name = 0
         self.task = None
-        add_to_match_making_queue(self, match_making_queue)
-        await self.accept()
+        if not await self.is_already_in_queue(match_making_queue):
+            add_to_match_making_queue(self, match_making_queue)
+            await self.accept()
+            if len(match_making_queue) == 1:
+                self.task = asyncio.create_task(self.waiting())
+        else:
+            self.close_code = 4001
+            await self.close()
+    async def is_already_in_queue(self, queue):
+        for client in queue:
+            if client.id == self.id:
+                return True
+        return False
 
-        if len(match_making_queue) == 1:
-            self.task = asyncio.create_task(self.waiting())
-    
     async def receive(self, text_data):
         data = json.loads(text_data)
         if data['message'] == 'start':
@@ -165,22 +173,23 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
             await self.close()
 
     async def disconnect(self, close_code):
-        self.close_code = close_code
-        if self.task:
-            self.task.cancel()
-        if self in match_making_queue:
-            match_making_queue.remove(self)
-        if self.room_group_name and self.room_group_name in MatchMaikingConsumer.rooms:
-            await remove_from_channel_layer(self)
-            MatchMaikingConsumer.rooms[self.room_group_name] -= 1
-            if MatchMaikingConsumer.rooms[self.room_group_name] == 0:
-                del MatchMaikingConsumer.rooms[self.room_group_name]
-            # await self.channel_layer.group_send(
-            #     self.room_group_name,
-            #     {
-            #         'type': 'terminate_game',
-            #     }
-            # )
+        if self.close_code == 0:
+            self.close_code = close_code
+            if self.task:
+                self.task.cancel()
+            if self in match_making_queue:
+                match_making_queue.remove(self)
+            if self.room_group_name and self.room_group_name in MatchMaikingConsumer.rooms:
+                await remove_from_channel_layer(self)
+                MatchMaikingConsumer.rooms[self.room_group_name] -= 1
+                if MatchMaikingConsumer.rooms[self.room_group_name] == 0:
+                    del MatchMaikingConsumer.rooms[self.room_group_name]
+                # await self.channel_layer.group_send(
+                #     self.room_group_name,
+                #     {
+                #         'type': 'terminate_game',
+                #     }
+                # )
   
 
     async def terminate_game(self, event):
@@ -217,7 +226,6 @@ class MatchMaikingConsumer(AsyncWebsocketConsumer):
     async def match_maiking_message(self, event):
         message = event['message']
         if self.close_code:
-            raise Exception('disconnected: ', self.close_code, message)
             return
         try:
             await self.send(text_data=json.dumps({

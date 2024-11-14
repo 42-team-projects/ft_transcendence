@@ -55,10 +55,6 @@ export class Profile extends HTMLElement{
         userRank.bcolor = profileImage.bcolor;
     }
 
-    disconnectedCallback() {
-
-    }
-
     static observedAttributes = ["profile-image", "league", "rank"];
 
     attributeChangedCallback(attrName, oldValue, newValue) {
