@@ -21,7 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_2fa_enabled = models.BooleanField(default=False)
 
     # new
-    avatar = models.ImageField(upload_to='avatars/', default=get_default_avatar, blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', default=get_default_avatar, blank=True, null=True, max_length=5000)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
