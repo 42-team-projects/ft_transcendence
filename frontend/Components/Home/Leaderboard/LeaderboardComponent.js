@@ -3,7 +3,7 @@ import { LeaderboardItem } from "/Components/Home/Leaderboard/LeaderboardItem.js
 export class LeaderboardComponent extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({mode: "open"});
+        this.attachShadow({ mode: "open" });
         this.shadowRoot.innerHTML = `
                 <style> ${cssContent} </style>
                 <div class="leaderboard">
@@ -57,7 +57,7 @@ export class LeaderboardComponent extends HTMLElement {
 customElements.define("leaderboard-component", LeaderboardComponent);
 
 
-const cssContent = /*css*/`
+const cssContent = /*css*/ `
 :host {
     flex: 1;
     height: 100%;
