@@ -3,6 +3,10 @@
 
 **ft_transcendence** is a project developed as part of the 42 coding school curriculum. This application delivers a fully functional multiplayer online Pong game built with modern web development practices and a secure, robust backend.
 
+## Demo Video
+
+[![Demo Video](https://github.com/42-team-projects/ft_transcendence/blob/main/frontend/images/Profile%20Page.png)](https://www.youtube.com/watch?v=bXRbh0gd8fU)
+
 ## Table of Contents
 
 - [About the Project](#about-the-project)
