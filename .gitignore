@@ -36,7 +36,7 @@ node_modules
 __pycache__/
 
 *backend/media/avatars/
-*backend/media/cover/
+*backend/media/covers/
 *backend/static/*
 
 backend/static
