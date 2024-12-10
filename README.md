@@ -5,7 +5,7 @@
 
 ## Demo Video
 
-[![Demo Video](https://github.com/42-team-projects/ft_transcendence/blob/main/frontend/images/Profile%20Page.png)](https://www.youtube.com/watch?v=bXRbh0gd8fU)
+[![Demo Video](./ScreenShots/Profile.png)](https://www.youtube.com/watch?v=bXRbh0gd8fU)
 
 ## Table of Contents
 
@@ -113,7 +113,14 @@ The application will be accessible at `https://localhost`.
 
 ## Screenshots
 
-_Add screenshots of the application in action here._
+![Login](./ScreenShots/Login.png)
+![Home](./ScreenShots/Home.png)
+![Profile](./ScreenShots/Profile.png)
+![Profile2](./ScreenShots/Profile2.png)
+![Game](./ScreenShots/Game.png)
+![Chat](./ScreenShots/Chat.png)
+![Tournament](./ScreenShots/Tournament.png)
+![Monitoring](./ScreenShots/Monitoring.png)
 
 ---
 
