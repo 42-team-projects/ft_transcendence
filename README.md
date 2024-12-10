@@ -113,14 +113,14 @@ The application will be accessible at `https://localhost`.
 
 ## Screenshots
 
-![Login](./ScreenShots/Login.png)
+![Login](./ScreenShots/Login.jpg)
 ![Home](./ScreenShots/Home.png)
 ![Profile](./ScreenShots/Profile.png)
-![Profile2](./ScreenShots/Profile2.png)
-![Game](./ScreenShots/Game.png)
-![Chat](./ScreenShots/Chat.png)
-![Tournament](./ScreenShots/Tournament.png)
-![Monitoring](./ScreenShots/Monitoring.png)
+![Profile2](./ScreenShots/Profile2.jpg)
+![Game](./ScreenShots/Game.jpg)
+![Chat](./ScreenShots/Chat.jpg)
+![Tournament](./ScreenShots/Tournament.jpg)
+![Monitoring](./ScreenShots/Monitoring.jpg)
 
 ---
 
