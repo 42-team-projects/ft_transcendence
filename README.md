@@ -5,7 +5,7 @@
 
 ## Demo Video
 
-[![Demo Video](https://www.youtube.com/watch?v=bXRbh0gd8fU/0.jpg)](https://www.youtube.com/watch?v=bXRbh0gd8fU)
+[![Demo Video](https://github.com/42-team-projects/ft_transcendence/blob/main/frontend/images/Profile%20Page.png)](https://www.youtube.com/watch?v=bXRbh0gd8fU)
 
 ## Table of Contents
 
